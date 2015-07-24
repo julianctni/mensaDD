@@ -1,0 +1,73 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    tools:context="com.pasta.mensadd.activity.MealsActivity" >
+
+    <include
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar" />
+
+    <TextView
+        android:id="@+id/mensaName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginBottom="2dp"
+        android:background="#bbffb248"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/mensaName"
+        android:background="@color/tile_pink"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/arrow_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_back_white_18dp"
+            android:textColor="#FFFFFF" />
+
+        <ImageView
+            android:id="@+id/arrow_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_forward_white_18dp"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/dateOfDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/arrow_right"
+            android:layout_toRightOf="@id/arrow_left"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/mensaName" />
+
+</RelativeLayout><!-- From: file:/home/julian/dev/mensaDD/app/src/main/res/layout/activity_meals.xml -->

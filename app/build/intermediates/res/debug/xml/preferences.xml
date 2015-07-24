@@ -1,0 +1,63 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="pref_key_lieblings_mensa">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_neue_mensa"
+            android:title="@string/name_neuemensa" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_alte_mensa"
+            android:title="@string/name_altemensa" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_siedepunkt"
+            android:title="@string/name_siedepunkt" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_mensologie"
+            android:title="@string/name_mensologie" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_uboot"
+            android:title="@string/name_uboot" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_reichenbach"
+            android:title="@string/name_reichenbach" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_tellerrandt"
+            android:title="@string/name_tellerrandt" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_wueins"
+            android:title="@string/name_wueins" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_stimmgabel"
+            android:title="@string/name_stimmgabel" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_palucca"
+            android:title="@string/name_palucca" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_bruehl"
+            android:title="@string/name_bruehl" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_johannstadt"
+            android:title="@string/name_johannstadt" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_sport"
+            android:title="@string/name_sport" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_kreuz"
+            android:title="@string/name_kreuz" />
+    </PreferenceCategory>
+
+</PreferenceScreen><!-- From: file:/home/julian/dev/mensaDD/app/src/main/res/xml/preferences.xml -->

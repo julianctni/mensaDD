@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">mensaDD</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_mensa_detail">MensaDetailActivity</string>
+    <string name="title_activity_settings">Lieblingsmensen</string>
+    <string name="title_activity_mensa_info">MensaInfoActivity</string>
+    <string name="about_content">mensaDD\nVersion 1.1 / 09.12.2014\n\nPasta Software\naka Julian Catoni\n\nFür Ungenauigkeiten bei den Speiseplänen und anderen Angaben zu den Mensen übernehme ich keine Haftung.\n\nDie Speisepläne werden von der Webseite des Studentenwerks heruntergeladen. Die Daten zu den Mensen sind statisch in der App gespeichert.\n\nBei Fragen, Wünschen und Anregungen einfach über den Briefumschlag oben rechts Kontakt aufnehmen!\n\nlove pasta, hate racism.\n\nGuten Appetit! / Enjoy your meal!</string>
+    <string name="about_sourcecode">Diese App beinhaltet Code von <![CDATA[<a href="https://github.com/jakobwenzel/MensaGuthaben">Jakob Wenzel</a>]]> und <![CDATA[<a href="https://github.com/codebutler/farebot">Farebot</a>]]>, lizenziert unter GPL. Der Quelltext ist auf <![CDATA[<a href="https://bitbucket.org/juliandipasta/mensadd">Bitbucket</a>]]> verfügbar.</string>
+    <string name="welcome_text">Hallo und herzlich willkommen zur neuen Mensa App für Dresden.\n\nKlicke auf das Zahnrad oben rechts, um deine Lieblingsmensen auszuwählen.\n\nSobald die Daten für eine Woche heruntergeladen wurden, sind diese auch offline verfügbar.\n\nViel Spaß und guten Appetit!</string>
+    <string name="name_neuemensa">Zeltschlösschen</string>
+    <string name="name_altemensa">Alte Mensa</string>
+    <string name="name_siedepunkt">Siedepunkt Mensa</string>
+    <string name="name_mensologie">Mensologie</string>
+    <string name="name_uboot">Biomensa U-Boot</string>
+    <string name="name_reichenbach">Mensa Reichenbachstraße</string>
+    <string name="name_wueins">Wu Eins</string>
+    <string name="name_stimmgabel">Stimmgabel</string>
+    <string name="name_palucca">Mensa Gret Palucca</string>
+    <string name="name_bruehl">Mensa Brühl</string>
+    <string name="name_johannstadt">Mensa Johannstadt</string>
+    <string name="name_tellerrandt">Tellerrandt</string>
+    <string name="name_sport">Mensa Sport</string>
+    <string name="name_kreuz">Mensa Kreuzgymnasium</string>
+    <string name="nfc_disabled">Für diese Funktion benötigst du NFC. Klicke hier, um zu den NFC Einstellungen zu gelangen.</string>
+    <string name="guthaben_aufforderung">Lege dein Smartphone auf deine eMeal Karte, um dein Guthaben abzufragen.</string>
+    <string name="guthaben_antwort">Dein aktuelles Guthaben beträgt</string>
+    <string name="guthaben_title">Guthabencheck</string>
+    <string name="no_food_today">Hier gibt es heute leider nichts zu essen! :(</string>
+    <string name="parse_no_internet_meal_detail">Um die Details zu den Mahlzeiten anzuzeigen, ist eine Internetverbindung notwendig.</string>
+    <string name="parse_downloaded_single_mealtable">Speiseplan wurde aktualisiert.</string>
+    <string name="parse_no_internet_general">Speisepläne konnten wegen fehlender Internetverbindung nicht aktualisiert werden.</string>
+    <string name="parse_no_internet_single">Speiseplan kann wegen fehlender Internetverbindung nicht aktualisiert werden.</string>
+    <string name="parse_error_mealdetail">Hier ging wohl etwas schief. Vielleicht hat sich der Speiseplan geändert. Aktualisiere diesen und probiere es dann nochmal!;)</string>
+    <string name="settings_coachmark">Wähle hier die Mensen aus, deren Speiseplan beim Starten der App heruntergeladen werden soll.\n\nAlle anderen Speisepläne werden erst dann heruntergeladen, wenn die Mensa angewählt wird.\n\nSo können Datenvolumen und Ressourcen gespart werden.\n\nDie Änderungen sind ab dem nächsten wöchentlichen Speiseplan-Update der App aktiv.</string>
+    <string name="settings_title">Lieblingsmensen</string>
+    <string name="mensa_info_where_header">Wo?</string>
+    <string name="mensa_info_when_header">Wann?*</string>
+    <string name="mensa_info_when_disclaimer">Die hier angegebenen Öffnungszeiten berücksichtigen keine vorlesungsfreien Tage/Zeiten und Ähnliches.</string>
+    <string name="mensa_info_who_header">Wer?</string>
+    <string name="mensa_info_what_header">Was?</string>
+    <string name="title_activity_meal_detail">MealDetailActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>

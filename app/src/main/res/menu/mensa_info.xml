@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.pasta.mensadd.MensaInfoActivity" >
+
+    <item
+        android:id="@+id/showMap"
+        android:icon="@drawable/ic_room_white_36dp"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="always"/>
+
+</menu>
