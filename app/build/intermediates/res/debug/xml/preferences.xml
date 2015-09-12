@@ -60,4 +60,4 @@
             android:title="@string/name_kreuz" />
     </PreferenceCategory>
 
-</PreferenceScreen><!-- From: file:/home/julian/dev/mensaDD/app/src/main/res/xml/preferences.xml -->
+</PreferenceScreen><!-- From: file:/home/julian/dev/mensadd/app/src/main/res/xml/preferences.xml -->

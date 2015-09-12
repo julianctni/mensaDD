@@ -89,33 +89,20 @@ public class MealsFragment extends ListFragment {
 	}
 
 	public ArrayList<Meal> getMeals(int position, int mId) {
-		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-		//dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-		if (dayOfWeek == 1)
-			dayOfWeek = 6;
-		else
-			dayOfWeek -= 2;
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+        if (dayOfWeek == 1)
+            dayOfWeek = 6;
+        else
+            dayOfWeek -= 2;
 
-		cal.add(Calendar.DAY_OF_YEAR, (position - dayOfWeek));
-		
-		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-		
-		/*	dayOfYear -= Math.abs(position - dayOfWeek);
-		else
-			dayOfYear += Math.abs(position - dayOfWeek);
-		
-		if (dayOfYear != 366 && Constants.checkSchaltJahr(cal.get(Calendar.YEAR)))
-			dayOfYear = dayOfYear%366;
-		else if (dayOfYear != 365 && !Constants.checkSchaltJahr(cal.get(Calendar.YEAR)))
-			dayOfYear = dayOfYear%365;
-		cal.set(Calendar.DAY_OF_YEAR, dayOfYear);
-		*/
-		ArrayList<Meal> meals = MensaRepo.getMensaRepo().getMensaMap().get(mId)
-				.getmealMap().get(dayOfYear);
-		if (meals == null)
-			return new ArrayList<Meal>();
-		else
-			return meals;
+        cal.add(Calendar.DAY_OF_YEAR, (position - dayOfWeek));
+
+        int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+        try {
+            return MensaRepo.getMensaRepo().getMensaMap().get(mId).getmealMap().get(dayOfYear);
+        } catch (Exception e){
+            return new ArrayList<Meal>();
+        }
 	}
 
 	@Override
@@ -145,9 +132,10 @@ public class MealsFragment extends ListFragment {
 					long id) {
 				currentMeal = (Meal) getListView().getAdapter().getItem(
 						position);
-				new MealDetailParser()
-						.execute("http://www.studentenwerk-dresden.de/mensen/speiseplan/"
-								+ currentMeal.getDetailLink());
+				if (!currentMeal.getDetailLink().isEmpty())
+					new MealDetailParser()
+							.execute("http://www.studentenwerk-dresden.de/mensen/speiseplan/"
+                                    + currentMeal.getDetailLink());
 			}
 		});
 	}
@@ -288,9 +276,10 @@ public class MealsFragment extends ListFragment {
 		Document doc = null;
 		try {
 			doc = Jsoup.connect(url).get();
+            return doc.select("#speiseplandetails");
 		} catch (Exception e) {
+            return null;
 		}
-		return doc.select("#speiseplandetails");
 	}
 
 }

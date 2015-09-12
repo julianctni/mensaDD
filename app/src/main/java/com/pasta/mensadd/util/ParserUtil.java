@@ -120,7 +120,7 @@ public class ParserUtil {
 					}
 				}
 			}
-			Log.i("PARSING","parsing day nr "+dayNr);
+			Log.i("PARSING", "parsing day nr " + dayNr);
 			foodMap.put(dayNr, tempList);
 			dayNr++;
 			if (dayNr != 366 && Constants.checkSchaltJahr(cal.get(Calendar.YEAR)))
@@ -144,7 +144,12 @@ public class ParserUtil {
 	}
 	
 	public String getDetailLink(Element element) {
-		return element.getElementsByClass("text").first().getElementsByTag("a").first().attr("href");
+		Log.i("PARSING", element.toString());
+		try {
+			return element.getElementsByClass("text").first().getElementsByTag("a").first().attr("href");
+		} catch (Exception e) {
+			return "";
+		}
 	}
 	
 	public ArrayList<String> getFoodNotes(Element element) {
