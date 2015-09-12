@@ -84,6 +84,8 @@ public class MealsFragment extends ListFragment {
 		mId = getArguments().getInt("mensaId");
 		position = getArguments().getInt("position");
 		meals = this.getMeals(position, mId);
+        if (meals == null)
+            meals = new ArrayList<>();
 		this.setListAdapter(new MealListAdapter(getActivity()
 				.getApplicationContext(), meals));
 	}
@@ -165,9 +167,9 @@ public class MealsFragment extends ListFragment {
 		Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
 		shareIntent.putExtra(Intent.EXTRA_TEXT, currentMeal.getName()
-				+ "\n#"
-				+ MensaRepo.getMensaRepo().getMensaMap().get(mId).getName()
-						.replaceAll("\\s+", "") + " #Hunger #mensaDD");
+                + "\n#"
+                + MensaRepo.getMensaRepo().getMensaMap().get(mId).getName()
+                .replaceAll("\\s+", "") + " #Hunger #mensaDD");
 		startActivity(Intent.createChooser(shareIntent, "Teilen"));
 	}
 
