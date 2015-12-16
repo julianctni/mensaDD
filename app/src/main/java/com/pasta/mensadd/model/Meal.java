@@ -132,7 +132,8 @@ public class Meal {
 	public void checkContent(ArrayList<String> notes) {
 		for (String temp : notes) {
 			if (temp.equals("Menü enthält kein Fleisch")
-					|| temp.equals("Menü ist vegan")) {
+					|| temp.equals("Menü ist vegan")
+					|| temp.equals("Menü ist vegetarisch")) {
 				this.vegetarian = true;
 				if (temp.equals("Menü ist vegan"))
 					this.vegan = true;

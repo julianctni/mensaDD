@@ -24,6 +24,7 @@ package com.pasta.mensadd.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -85,7 +86,11 @@ public class MainActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_main);
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		toolbar.setLogo(R.drawable.banner);
+		Calendar cal = Calendar.getInstance();
+		if (cal.get(Calendar.MONTH) == 11)
+			toolbar.setLogo(R.drawable.banner_christmas);
+		else
+			toolbar.setLogo(R.drawable.banner);
 		toolbar.setTitle("");
 		if (toolbar != null) {
 			setSupportActionBar(toolbar);
