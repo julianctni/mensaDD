@@ -1,9 +1,12 @@
-package com.pasta.mensadd;
+package com.pasta.mensadd.controller;
 
 import android.app.FragmentManager;
 import android.util.Log;
 
-import com.mapbox.mapboxsdk.maps.MapFragment;
+import com.pasta.mensadd.R;
+import com.pasta.mensadd.fragments.CardCheckFragment;
+import com.pasta.mensadd.fragments.MensaListFragment;
+import com.pasta.mensadd.fragments.MensaMapFragment;
 
 public class FragmentController {
 
@@ -18,6 +21,14 @@ public class FragmentController {
             Log.i("FRAGMENT-CONTROLLER", "NOT NULL");
         } else {
             fragmentManager.beginTransaction().replace(R.id.mainContainer, new MensaMapFragment(), "MAP_FRAGMENT").commit();
+            Log.i("FRAGMENT-CONTROLLER", "NULL");
+        }
+    }
+
+    public static void showCardCheckFragment(FragmentManager fragmentManager){
+        CardCheckFragment fragment = (CardCheckFragment) fragmentManager.findFragmentByTag("CARD_CHECK_FRAGMENT");
+        if (fragment == null) {
+            fragmentManager.beginTransaction().add(R.id.cardCheckContainer, new CardCheckFragment(), "CARD_CHECK_FRAGMENT").commit();
             Log.i("FRAGMENT-CONTROLLER", "NULL");
         }
     }

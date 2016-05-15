@@ -7,11 +7,23 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.widget.RelativeLayout;
+
+import com.pasta.mensadd.controller.FragmentController;
+import com.pasta.mensadd.fragments.MensaListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private RelativeLayout mainContainer;
+    private RelativeLayout cardCheckContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +31,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        mainContainer = (RelativeLayout) findViewById(R.id.mainContainer);
+        cardCheckContainer = (RelativeLayout) findViewById(R.id.cardCheckContainer);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -60,9 +73,75 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        if (id == R.id.nfcCheck){
+            float translation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 140, getResources().getDisplayMetrics());
+            FragmentController.showCardCheckFragment(getFragmentManager());
+            Animation animation;
+            if (cardCheckContainer.getVisibility() == View.GONE) {
+                animation = new SlideAnimation(cardCheckContainer, 0, (int)translation);
+            } else {
+                animation = new SlideAnimation(cardCheckContainer, (int)translation, 0);
+            }
+            cardCheckContainer.setAnimation(animation);
+            cardCheckContainer.startAnimation(animation);
+        }
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class SlideAnimation extends Animation {
+
+        int mFromHeight;
+        int mToHeight;
+        View mView;
+
+        public SlideAnimation(final View view, final int fromHeight, final int toHeight) {
+            this.mView = view;
+            this.mFromHeight = fromHeight;
+            this.mToHeight = toHeight;
+            this.setDuration(200);
+            this.setAnimationListener(new AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    if (fromHeight == 0)
+                        view.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    if (toHeight == 0)
+                        view.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+        }
+
+
+        @Override
+        protected void applyTransformation(float interpolatedTime, Transformation transformation) {
+            int newHeight;
+
+            if (mView.getHeight() != mToHeight) {
+                newHeight = (int) (mFromHeight + ((mToHeight - mFromHeight) * interpolatedTime));
+                mView.getLayoutParams().height = newHeight;
+                mView.requestLayout();
+            }
+        }
+
+        @Override
+        public void initialize(int width, int height, int parentWidth, int parentHeight) {
+            super.initialize(width, height, parentWidth, parentHeight);
+        }
+
+        @Override
+        public boolean willChangeBounds() {
+            return true;
+        }
     }
 
 

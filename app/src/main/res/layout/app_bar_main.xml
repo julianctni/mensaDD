@@ -30,14 +30,36 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/mainContainer"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.pasta.mensadd.MainActivity"
-        tools:showIn="@layout/app_bar_main">
-    </FrameLayout>
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/cardCheckContainer"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:background="#EEEEEE"
+            android:elevation="10dp"/>
+
+        <RelativeLayout
+            android:id="@+id/mainContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:layout_below="@id/cardCheckContainer"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context="com.pasta.mensadd.MainActivity"
+            tools:showIn="@layout/app_bar_main">
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+
 
     <!--
     <android.support.design.widget.FloatingActionButton

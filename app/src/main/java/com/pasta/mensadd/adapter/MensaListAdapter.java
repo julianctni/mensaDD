@@ -1,4 +1,4 @@
-package com.pasta.mensadd;
+package com.pasta.mensadd.adapter;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -8,10 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pasta.mensadd.R;
+import com.pasta.mensadd.fragments.MensaListFragment;
+import com.pasta.mensadd.model.Mensa;
+
 import java.util.ArrayList;
 
 
-public class MensaListAdapter extends RecyclerView.Adapter<com.pasta.mensadd.MensaListAdapter.ViewHolder> {
+public class MensaListAdapter extends RecyclerView.Adapter<MensaListAdapter.ViewHolder> {
 
     public ArrayList<Mensa> items;
     public MensaListFragment fragment;
