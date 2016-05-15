@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    boolean visible;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -77,11 +79,12 @@ public class MainActivity extends AppCompatActivity
             float translation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 140, getResources().getDisplayMetrics());
             FragmentController.showCardCheckFragment(getFragmentManager());
             Animation animation;
-            if (cardCheckContainer.getVisibility() == View.GONE) {
+            if (!visible) {
                 animation = new SlideAnimation(cardCheckContainer, 0, (int)translation);
             } else {
                 animation = new SlideAnimation(cardCheckContainer, (int)translation, 0);
             }
+            visible = !visible;
             cardCheckContainer.setAnimation(animation);
             cardCheckContainer.startAnimation(animation);
         }
@@ -100,18 +103,15 @@ public class MainActivity extends AppCompatActivity
             this.mView = view;
             this.mFromHeight = fromHeight;
             this.mToHeight = toHeight;
-            this.setDuration(200);
+            this.setDuration(150);
+            this.setInterpolator(new AccelerateInterpolator());
             this.setAnimationListener(new AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
-                    if (fromHeight == 0)
-                        view.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    if (toHeight == 0)
-                        view.setVisibility(View.GONE);
                 }
 
                 @Override
