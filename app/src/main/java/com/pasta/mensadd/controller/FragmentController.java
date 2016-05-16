@@ -7,29 +7,39 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.CardCheckFragment;
 import com.pasta.mensadd.fragments.MensaListFragment;
 import com.pasta.mensadd.fragments.MensaMapFragment;
+import com.pasta.mensadd.fragments.SettingsFragment;
 
 public class FragmentController {
 
-    public static void showMensaListFragment(FragmentManager fragmentManager){
-        fragmentManager.beginTransaction().add(R.id.mainContainer, new MensaListFragment()).commit();
+    public static void showMensaListFragment(FragmentManager fm){
+        fm.beginTransaction().replace(R.id.mainContainer, new MensaListFragment()).commit();
     }
 
-    public static void showMapFragment(FragmentManager fragmentManager){
-        MensaMapFragment fragment = (MensaMapFragment)fragmentManager.findFragmentByTag("MAP_FRAGMENT");
+    public static void showMapFragment(FragmentManager fm){
+        MensaMapFragment fragment = (MensaMapFragment)fm.findFragmentByTag("MAP_FRAGMENT");
         if (fragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.mainContainer, fragment, "MAP_FRAGMENT").commit();
+            fm.beginTransaction().replace(R.id.mainContainer, fragment, "MAP_FRAGMENT").commit();
             Log.i("FRAGMENT-CONTROLLER", "NOT NULL");
         } else {
-            fragmentManager.beginTransaction().replace(R.id.mainContainer, new MensaMapFragment(), "MAP_FRAGMENT").commit();
+            fm.beginTransaction().replace(R.id.mainContainer, new MensaMapFragment(), "MAP_FRAGMENT").commit();
             Log.i("FRAGMENT-CONTROLLER", "NULL");
         }
     }
 
-    public static void showCardCheckFragment(FragmentManager fragmentManager){
-        CardCheckFragment fragment = (CardCheckFragment) fragmentManager.findFragmentByTag("CARD_CHECK_FRAGMENT");
-        if (fragment == null) {
-            fragmentManager.beginTransaction().add(R.id.cardCheckContainer, new CardCheckFragment(), "CARD_CHECK_FRAGMENT").commit();
-            Log.i("FRAGMENT-CONTROLLER", "NULL");
+    public static void showCardCheckFragment(FragmentManager fm, String current, String lastTransaction){
+        CardCheckFragment fragment = CardCheckFragment.newInstance(current, lastTransaction);
+        fm.beginTransaction().replace(R.id.cardCheckContainer, fragment, "CARD_CHECK_FRAGMENT").commit();
+    }
+
+    public static void updateCardCheckFragment(FragmentManager fm, String current, String lastTransaction){
+        CardCheckFragment fragment = (CardCheckFragment) fm.findFragmentByTag("CARD_CHECK_FRAGMENT");
+        if (fragment != null){
+            fragment.updateContent(current, lastTransaction);
         }
+    }
+    
+    public static void showSettingsFragment(FragmentManager fm){
+        fm.beginTransaction().replace(R.id.mainContainer, new SettingsFragment()).commit();
+
     }
 }

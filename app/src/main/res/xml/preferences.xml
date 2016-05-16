@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="nfc_autostart"
+        android:title="NFC-Autostart"
+        android:summary="App wird automatisch gestartet, sobald eine eMeal-Karte erkannt wurde."
+        android:defaultValue="false" />
+
+    <CheckBoxPreference
+        android:key="offline-map"
+        android:title="Offline-Karte"
+        android:summary="Bei Wlan-Verbindung wird die Dresden-Karte beim Start der Kartenansicht auf das Gerät heruntergeladen."
+        android:defaultValue="false" />
+</PreferenceScreen>

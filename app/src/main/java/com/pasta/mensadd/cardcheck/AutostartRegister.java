@@ -31,14 +31,14 @@ import android.util.Log;
  */
 public class AutostartRegister {
 	private static final String TAG = AutostartRegister.class.getName();
-    static void register(PackageManager pm, boolean autostart) {
+    public static void register(PackageManager pm, boolean autostart) {
         Log.i(TAG, "Autostart is " + autostart);
         int enabled = autostart ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 
         Log.i(TAG,"Setting to "+enabled);
         pm.setComponentEnabledSetting(
-                new ComponentName("de.yazo_games.mensaguthaben", "de.yazo_games.mensaguthaben.ActivityAlias"),
+                new ComponentName("com.pasta.mensadd", "com.pasta.mensadd.ActivityAlias"),
                 enabled,
                 PackageManager.DONT_KILL_APP);
     }
