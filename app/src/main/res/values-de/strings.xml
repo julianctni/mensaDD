@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">mensaDD</string>
+    <string name="nav_drawer_food">Mensen</string>
+    <string name="nav_drawer_map">Karte</string>
+    <string name="nav_drawer_settings">Einstellungen</string>
+    <string name="nav_drawer_imprint">Impressum</string>
+    <string name="nav_drawer_license">Lizenzen</string>
+    <string name="pref_autostart_summary">App wird automatisch gestartet, sobald eine eMeal-Karte erkannt wurde.</string>
+    <string name="pref_map_summary">Bei WLan-Verbindung wird die Dresdenkarte beim Start der Kartenansicht auf das Gerät heruntergeladen.</string>
+    <string name="pref_autostart_title">NFC-Autostart</string>
+    <string name="pref_map_title">Offline-Karte</string>
+    <string name="card_check_balance">Aktuelles Guthaben</string>
+    <string name="card_check_last_transaction">Letzte Abbuchung</string>
+
+</resources>

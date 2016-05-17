@@ -32,6 +32,8 @@ public class Mensa {
 
     public Mensa(String name){
         mName = name;
+        mHours = "test_mensa_hours";
+        mAddress = "test_mensa_address";
     }
 
     public HashMap<Integer, ArrayList<Meal>> getmealMap() {

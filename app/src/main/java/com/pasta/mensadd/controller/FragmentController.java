@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.CardCheckFragment;
+import com.pasta.mensadd.fragments.ImprintFragment;
+import com.pasta.mensadd.fragments.MealListFragment;
 import com.pasta.mensadd.fragments.MensaListFragment;
 import com.pasta.mensadd.fragments.MensaMapFragment;
 import com.pasta.mensadd.fragments.SettingsFragment;
@@ -40,6 +42,13 @@ public class FragmentController {
     
     public static void showSettingsFragment(FragmentManager fm){
         fm.beginTransaction().replace(R.id.mainContainer, new SettingsFragment()).commit();
+    }
 
+    public static void showMealListFragment(FragmentManager fm, int mensaId){
+        fm.beginTransaction().replace(R.id.mainContainer, MealListFragment.newInstance(mensaId)).commit();
+    }
+
+    public static void showImprintFragment(FragmentManager fm){
+        fm.beginTransaction().replace(R.id.mainContainer, ImprintFragment.newInstance()).commit();
     }
 }

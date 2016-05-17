@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/mensaCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="6dp"
@@ -21,26 +20,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/tile_pink"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/mensaName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Zeltschlösschen"
                 android:textAllCaps="true"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/mensaAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:text="Mensastraße 12, 01069 Dresden"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -49,9 +47,9 @@
             android:padding="10dp">
 
             <TextView
+                android:id="@+id/mensaHours"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Mittagstisch: Mo - Fr 14:00 - 15:00 Uhr\nÖffnungszeiten: Mo - Fr 08:00 - 12:00 Uhr" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </LinearLayout>

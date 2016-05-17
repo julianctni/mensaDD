@@ -1,17 +1,14 @@
 package com.pasta.mensadd.adapter;
 
-import android.support.annotation.ColorRes;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.fragments.MensaListFragment;
 import com.pasta.mensadd.model.Mensa;
 
@@ -45,9 +42,10 @@ public class MensaListAdapter extends RecyclerView.Adapter<MensaListAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         Mensa item = items.get(position);
         int colorIndex = position%(headerColors.size());
-        Log.i("MENSALIST", colorIndex+"");
-        holder.header.setBackgroundColor(fragment.getResources().getColor(headerColors.get(colorIndex)));
-        holder.name.setText(item.getName());
+        holder.mListItemHeader.setBackgroundColor(fragment.getResources().getColor(headerColors.get(colorIndex)));
+        holder.mName.setText(item.getName());
+        holder.mAddress.setText(item.getAddress());
+        holder.mHours.setText(item.getHours());
     }
 
     @Override
@@ -55,19 +53,24 @@ public class MensaListAdapter extends RecyclerView.Adapter<MensaListAdapter.View
         return items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView name;
-        public LinearLayout header;
-        public TextView address;
-        public TextView distance;
-        public ImageView openSign;
-        public CardView card;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public TextView mName;
+        public TextView mAddress;
+        public TextView mHours;
+        public LinearLayout mListItemHeader;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.mensaName);
-            card = (CardView) itemView.findViewById(R.id.mensaCardView);
-            header = (LinearLayout) itemView.findViewById(R.id.mensaListItemHeader);
+            mName = (TextView) itemView.findViewById(R.id.mensaName);
+            mAddress = (TextView) itemView.findViewById(R.id.mensaAddress);
+            mHours = (TextView) itemView.findViewById(R.id.mensaHours);
+            mListItemHeader = (LinearLayout) itemView.findViewById(R.id.mensaListItemHeader);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int mensaId = items.get(getAdapterPosition()).getId();
+            FragmentController.showMealListFragment(fragment.getFragmentManager(),mensaId);
         }
     }
 }

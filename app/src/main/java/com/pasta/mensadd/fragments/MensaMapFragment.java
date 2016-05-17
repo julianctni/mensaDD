@@ -29,16 +29,16 @@ import org.json.JSONObject;
 
 
 public class MensaMapFragment extends Fragment {
-    MapView mapView;
+    private MapView mapView;
 
     private boolean isEndNotified;
     private ProgressBar progressBar;
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "MAPFRAGMENT";
-    private String mParam1;
-    private String mParam2;
+    private static final String TAG_MENSA_ID = "mensaId";
+
+    private int mMensaId;
+
 
     // JSON encoding/decoding
     public final static String JSON_CHARSET = "UTF-8";
@@ -47,11 +47,10 @@ public class MensaMapFragment extends Fragment {
 
     public MensaMapFragment() {}
 
-    public static MensaMapFragment newInstance(String param1, String param2) {
+    public static MensaMapFragment newInstance(int mensaId) {
         MensaMapFragment fragment = new MensaMapFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(TAG_MENSA_ID, mensaId);
         fragment.setArguments(args);
         return fragment;
     }

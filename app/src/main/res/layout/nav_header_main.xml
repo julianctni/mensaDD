@@ -16,8 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:paddingEnd="30dp"
-        android:paddingRight="30dp"
+        android:contentDescription="@string/content_app_logo"
         android:src="@drawable/banner" />
 
 </LinearLayout>

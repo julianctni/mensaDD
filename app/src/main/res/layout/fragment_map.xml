@@ -24,6 +24,7 @@
         android:layout_centerHorizontal="true"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        style="@android:style/Widget.Material.ProgressBar.Horizontal" />
+        style="@android:style/Widget.Material.ProgressBar.Horizontal"
+        tools:targetApi="lollipop" />
 
 </RelativeLayout>

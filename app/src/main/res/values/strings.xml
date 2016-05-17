@@ -1,11 +1,21 @@
 <resources>
+
+
+    <!-- CONTENT DESCRIPTIONS -->
+    <string name="content_app_logo">app_logo</string>
     <string name="app_name">mensaDD</string>
+    <string name="nav_drawer_food">Mensen</string>
+    <string name="nav_drawer_map">Map</string>
+    <string name="nav_drawer_settings">Settings</string>
+    <string name="nav_drawer_imprint">Imprint</string>
+    <string name="nav_drawer_license">Licenses</string>
+    <string name="pref_autostart_summary">App opens automatically as soon as an eMeal card is discovered.</string>
+    <string name="pref_autostart_key">nfc_autostart</string>
+    <string name="pref_map_key">offline-map</string>
+    <string name="pref_map_summary">If there is a WiFi connection, the map of Dresden gets downloaded to the device when you start the map.</string>
+    <string name="pref_autostart_title">Auto start on NFC</string>
+    <string name="pref_map_title">Offline map</string>
+    <string name="card_check_balance">Current balance</string>
+    <string name="card_check_last_transaction">Last transaction</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

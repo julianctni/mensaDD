@@ -26,7 +26,6 @@ import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.pasta.mensadd.cardcheck.AutostartRegister;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
 import com.pasta.mensadd.cardcheck.cardreader.Readers;
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -139,6 +138,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_settings:
                 FragmentController.showSettingsFragment(getFragmentManager());
+                break;
+            case R.id.nav_imprint:
+                FragmentController.showImprintFragment(getFragmentManager());
                 break;
         }
 
