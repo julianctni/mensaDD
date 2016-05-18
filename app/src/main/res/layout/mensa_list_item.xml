@@ -8,6 +8,9 @@
     android:layout_marginRight="8dp"
     android:layout_marginTop="6dp"
     android:clickable="true"
+    android:longClickable="false"
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardElevation="3dp"
     card_view:cardCornerRadius="2dp">
 
     <LinearLayout
@@ -19,35 +22,35 @@
             android:id="@+id/mensaListItemHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/tile_pink"
+            android:background="#F8F8F8"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/mensaName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAllCaps="true"
-                android:textColor="#FFFFFF"
-                android:textSize="25sp"
+                android:textSize="26sp"
+                android:includeFontPadding="false"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/mensaAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:includeFontPadding="false"
+                android:textSize="16sp"
+                android:textStyle="normal" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/mensaHours"
+                android:textSize="12sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

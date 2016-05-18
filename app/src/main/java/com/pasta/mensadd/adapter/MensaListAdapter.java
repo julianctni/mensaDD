@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.FragmentController;
-import com.pasta.mensadd.fragments.MensaListFragment;
+import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.model.Mensa;
 
 import java.util.ArrayList;
@@ -18,17 +18,17 @@ import java.util.ArrayList;
 public class MensaListAdapter extends RecyclerView.Adapter<MensaListAdapter.ViewHolder> {
 
     public ArrayList<Mensa> items;
-    public MensaListFragment fragment;
+    public CanteenListFragment fragment;
     public ArrayList<Integer> headerColors;
 
-    public MensaListAdapter(ArrayList<Mensa> items, MensaListFragment fragment) {
+    public MensaListAdapter(ArrayList<Mensa> items, CanteenListFragment fragment) {
         this.items = items;
         this.fragment = fragment;
         headerColors = new ArrayList<>();
-        headerColors.add(R.color.tile_blue);
-        headerColors.add(R.color.tile_pink);
-        headerColors.add(R.color.tile_orange);
-        headerColors.add(R.color.tile_cyan);
+        headerColors.add(R.color.tile_blue1);
+        headerColors.add(R.color.tile_pink1);
+        headerColors.add(R.color.tile_orange1);
+        headerColors.add(R.color.tile_cyan1);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class MensaListAdapter extends RecyclerView.Adapter<MensaListAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         Mensa item = items.get(position);
         int colorIndex = position%(headerColors.size());
-        holder.mListItemHeader.setBackgroundColor(fragment.getResources().getColor(headerColors.get(colorIndex)));
+        //holder.mListItemHeader.setBackgroundColor(fragment.getResources().getColor(headerColors.get(colorIndex)));
         holder.mName.setText(item.getName());
         holder.mAddress.setText(item.getAddress());
         holder.mHours.setText(item.getHours());

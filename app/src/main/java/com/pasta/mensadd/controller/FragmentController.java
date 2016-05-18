@@ -7,14 +7,14 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.CardCheckFragment;
 import com.pasta.mensadd.fragments.ImprintFragment;
 import com.pasta.mensadd.fragments.MealListFragment;
-import com.pasta.mensadd.fragments.MensaListFragment;
+import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.MensaMapFragment;
 import com.pasta.mensadd.fragments.SettingsFragment;
 
 public class FragmentController {
 
     public static void showMensaListFragment(FragmentManager fm){
-        fm.beginTransaction().replace(R.id.mainContainer, new MensaListFragment()).commit();
+        fm.beginTransaction().replace(R.id.mainContainer, new CanteenListFragment()).commit();
     }
 
     public static void showMapFragment(FragmentManager fm){

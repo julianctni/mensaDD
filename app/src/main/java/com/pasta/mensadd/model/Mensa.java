@@ -14,6 +14,7 @@ public class Mensa {
     private String mName;
     private String mHours;
     private String mAddress;
+    private String mCode;
     private String mInfo;
     private LatLng mPosition;
     private String mContactData;
@@ -30,10 +31,11 @@ public class Mensa {
         mPosition = position;
     }
 
-    public Mensa(String name){
+    public Mensa(String name, String code, String address, String hour){
         mName = name;
-        mHours = "test_mensa_hours";
-        mAddress = "test_mensa_address";
+        mCode = code;
+        mHours = hour;
+        mAddress = address;
     }
 
     public HashMap<Integer, ArrayList<Meal>> getmealMap() {

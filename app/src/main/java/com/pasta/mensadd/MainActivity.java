@@ -31,7 +31,7 @@ import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
 import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.controller.FragmentController;
-import com.pasta.mensadd.fragments.MensaListFragment;
+import com.pasta.mensadd.fragments.CanteenListFragment;
 
 import java.io.IOException;
 
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
 
         if (getFragmentManager().findFragmentById(R.id.mainContainer) == null) {
-            MensaListFragment fragment = new MensaListFragment();
+            CanteenListFragment fragment = new CanteenListFragment();
             getFragmentManager().beginTransaction().add(R.id.mainContainer, fragment, "MensaList").commit();
         }
 
