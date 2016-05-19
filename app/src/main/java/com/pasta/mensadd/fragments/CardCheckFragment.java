@@ -2,7 +2,7 @@ package com.pasta.mensadd.fragments;
 
 
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.pasta.mensadd.R;
 
-public class CardCheckFragment extends Fragment{
+public class CardCheckFragment extends Fragment {
 
     private String mCardBalance;
     private String mLastTransaction;

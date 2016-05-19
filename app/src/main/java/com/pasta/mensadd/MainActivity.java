@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity
 
         if (getFragmentManager().findFragmentById(R.id.mainContainer) == null) {
             CanteenListFragment fragment = new CanteenListFragment();
-            getFragmentManager().beginTransaction().add(R.id.mainContainer, fragment, "MensaList").commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.mainContainer, fragment, "MensaList").commit();
         }
 
         mAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -131,16 +131,16 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_map:
-                FragmentController.showMapFragment(getFragmentManager());
+                FragmentController.showMapFragment(getSupportFragmentManager());
                 break;
             case R.id.nav_mensa:
-                FragmentController.showMensaListFragment(getFragmentManager());
+                FragmentController.showMensaListFragment(getSupportFragmentManager());
                 break;
             case R.id.nav_settings:
-                FragmentController.showSettingsFragment(getFragmentManager());
+                FragmentController.showSettingsFragment(getSupportFragmentManager());
                 break;
             case R.id.nav_imprint:
-                FragmentController.showImprintFragment(getFragmentManager());
+                FragmentController.showImprintFragment(getSupportFragmentManager());
                 break;
         }
 
@@ -173,13 +173,13 @@ public class MainActivity extends AppCompatActivity
 
     private void updateCardCheckFragment(ValueData value) {
         if (!mCardCheckVisible) {
-            FragmentController.showCardCheckFragment(getFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
+            FragmentController.showCardCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
             Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight);
             mCardCheckContainer.setAnimation(animation);
             mCardCheckContainer.startAnimation(animation);
             mCardCheckVisible = true;
         } else {
-            FragmentController.updateCardCheckFragment(getFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
+            FragmentController.updateCardCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
         }
     }
 

@@ -1,17 +1,18 @@
 package com.pasta.mensadd.fragments;
 
-import android.app.Fragment;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pasta.mensadd.model.Mensa;
-import com.pasta.mensadd.adapter.MensaListAdapter;
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.adapter.MensaListAdapter;
+import com.pasta.mensadd.model.Mensa;
 import com.pasta.mensadd.networking.LoadCanteensCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
@@ -28,6 +29,8 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     private LinearLayoutManager layoutParams;
     public static MensaListAdapter mMensaListAdapter;
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mCanteenListRefresher;
+    private final String URL_CANTEEN_LIST = "http://ctni.sabic.uberspace.de/mensadd/canteen-list.json";
 
 
     public CanteenListFragment() {
@@ -48,8 +51,20 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         mRecyclerView = (RecyclerView) view.findViewById(R.id.mensaList);
         mRecyclerView.setAdapter(mMensaListAdapter);
         mRecyclerView.setLayoutManager(layoutParams);
-        NetworkController network = NetworkController.getInstance(getActivity());
-        network.doJSONArrayRequest("http://ctni.sabic.uberspace.de/mensadd/canteen-list.json","",this);
+        mCanteenListRefresher = (SwipeRefreshLayout) view.findViewById(R.id.canteenListRefresher);
+        int colorArray[] = {R.color.tile_cyan1, R.color.tile_orange1, R.color.tile_blue1, R.color.tile_pink1};
+        mCanteenListRefresher.setColorSchemeResources(colorArray);
+        mCanteenListRefresher.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        NetworkController.getInstance(getActivity()).getCanteenList(URL_CANTEEN_LIST, CanteenListFragment.this);
+                    }
+                }
+        );
+
+
+        NetworkController.getInstance(getActivity()).getCanteenList(URL_CANTEEN_LIST,this);
         return view;
     }
 
@@ -77,6 +92,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            mCanteenListRefresher.setRefreshing(false);
             mMensaListAdapter.notifyDataSetChanged();
         }
     }

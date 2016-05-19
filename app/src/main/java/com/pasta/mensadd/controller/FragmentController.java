@@ -1,13 +1,14 @@
 package com.pasta.mensadd.controller;
 
-import android.app.FragmentManager;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.CardCheckFragment;
 import com.pasta.mensadd.fragments.ImprintFragment;
-import com.pasta.mensadd.fragments.MealListFragment;
+import com.pasta.mensadd.fragments.MealDayFragment;
 import com.pasta.mensadd.fragments.CanteenListFragment;
+import com.pasta.mensadd.fragments.MealWeekFragment;
 import com.pasta.mensadd.fragments.MensaMapFragment;
 import com.pasta.mensadd.fragments.SettingsFragment;
 
@@ -44,8 +45,8 @@ public class FragmentController {
         fm.beginTransaction().replace(R.id.mainContainer, new SettingsFragment()).commit();
     }
 
-    public static void showMealListFragment(FragmentManager fm, int mensaId){
-        fm.beginTransaction().replace(R.id.mainContainer, MealListFragment.newInstance(mensaId)).commit();
+    public static void showMealWeekFragment(FragmentManager fm, String mensaId){
+        fm.beginTransaction().addToBackStack("test").replace(R.id.mainContainer, MealWeekFragment.newInstance(mensaId)).commit();
     }
 
     public static void showImprintFragment(FragmentManager fm){

@@ -11,5 +11,8 @@
     <string name="pref_map_title">Offline-Karte</string>
     <string name="card_check_balance">Aktuelles Guthaben</string>
     <string name="card_check_last_transaction">Letzte Abbuchung</string>
+    <string name="content_app_logo">app_logo</string>
+    <string name="pref_autostart_key">nfc_autostart</string>
+    <string name="pref_map_key">offline-map</string>
 
 </resources>

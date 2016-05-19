@@ -87,9 +87,12 @@ public class NetworkController {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         callback.onResponseMessage(1, error.getMessage());
-                        Log.i("JSON-ARRAY", error.getMessage());
                     }
                 });
         mRequestQueue.add(jsObjRequest);
+    }
+
+    public void getCanteenList(String url, AbstractCallback callback) {
+        doJSONArrayRequest(url, "", callback);
     }
 }

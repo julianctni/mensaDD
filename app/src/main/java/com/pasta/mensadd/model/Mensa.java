@@ -38,6 +38,10 @@ public class Mensa {
         mAddress = address;
     }
 
+    public String getCode(){
+        return mCode;
+    }
+
     public HashMap<Integer, ArrayList<Meal>> getmealMap() {
         return mealMap;
     }

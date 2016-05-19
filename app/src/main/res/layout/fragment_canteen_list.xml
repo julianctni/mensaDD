@@ -1,13 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/canteenListRefresher"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FEFEFE"
-    tools:context=".fragments.CanteenListFragment">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
+<android.support.v7.widget.RecyclerView
         android:id="@+id/mensaList"
+        android:background="#FEFEFE"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</FrameLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

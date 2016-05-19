@@ -41,8 +41,6 @@ public class MensaListAdapter extends RecyclerView.Adapter<MensaListAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Mensa item = items.get(position);
-        int colorIndex = position%(headerColors.size());
-        //holder.mListItemHeader.setBackgroundColor(fragment.getResources().getColor(headerColors.get(colorIndex)));
         holder.mName.setText(item.getName());
         holder.mAddress.setText(item.getAddress());
         holder.mHours.setText(item.getHours());
@@ -65,12 +63,13 @@ public class MensaListAdapter extends RecyclerView.Adapter<MensaListAdapter.View
             mAddress = (TextView) itemView.findViewById(R.id.mensaAddress);
             mHours = (TextView) itemView.findViewById(R.id.mensaHours);
             mListItemHeader = (LinearLayout) itemView.findViewById(R.id.mensaListItemHeader);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            int mensaId = items.get(getAdapterPosition()).getId();
-            FragmentController.showMealListFragment(fragment.getFragmentManager(),mensaId);
+            String mensaId = items.get(getAdapterPosition()).getCode();
+            FragmentController.showMealWeekFragment(fragment.getFragmentManager(),mensaId);
         }
     }
 }
