@@ -2,12 +2,15 @@ package com.pasta.mensadd.adapter;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -73,11 +76,9 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         if (item.isVegan() || item.isVegetarian()) {
             holder.mHeaderLayout.setBackgroundColor(Color.parseColor("#7fb29b"));
             holder.mName.setTextColor(Color.parseColor("#FFFFFF"));
-            holder.mMealContent.setTextColor(Color.parseColor("#FFFFFF"));
         } else {
             holder.mHeaderLayout.setBackgroundColor(Color.parseColor("#F1F1F1"));
             holder.mName.setTextColor(Color.parseColor("#333333"));
-            holder.mMealContent.setTextColor(Color.parseColor("#333333"));
         }
     }
 
@@ -99,6 +100,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         public TextView mMealContent;
         public LinearLayout mListItemHeader;
         public LinearLayout mMealDetails;
+        public FloatingActionButton mShareButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -114,6 +116,8 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mGarlic = (ImageView) itemView.findViewById(R.id.garlic);
             mMealContent = (TextView) itemView.findViewById(R.id.mealContent);
             mListItemHeader = (LinearLayout) itemView.findViewById(R.id.mensaListItemHeader);
+            mShareButton = (FloatingActionButton) itemView.findViewById(R.id.shareButton);
+            mShareButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ff4b66")));
             itemView.setOnClickListener(this);
         }
 
@@ -133,6 +137,10 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             v.measure(widthSpec, heightSpec);
             ValueAnimator mAnimator = slideAnimator(v, v.getHeight(), v.getMeasuredHeight());
             mAnimator.setDuration(250);
+            ScaleAnimation showAnim = new ScaleAnimation(0,1,0,1,50,50);
+            showAnim.setDuration(250);
+            mShareButton.setVisibility(View.VISIBLE);
+            mShareButton.startAnimation(showAnim);
             mAnimator.start();
         }
 
@@ -143,12 +151,15 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mAnimator.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-
+                    ScaleAnimation showAnim = new ScaleAnimation(1,0,1,0,50,50);
+                    showAnim.setDuration(250);
+                    mShareButton.startAnimation(showAnim);
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     v.setVisibility(View.GONE);
+                    mShareButton.setVisibility(View.GONE);
                 }
 
                 @Override
