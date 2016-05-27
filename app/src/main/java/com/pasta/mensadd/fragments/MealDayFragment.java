@@ -3,12 +3,18 @@ package com.pasta.mensadd.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.adapter.MealListAdapter;
+import com.pasta.mensadd.adapter.MensaListAdapter;
+import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
 
 import java.text.SimpleDateFormat;
@@ -23,14 +29,12 @@ public class MealDayFragment extends Fragment {
     private static final String TAG_MENSA_ID = "mensaId";
     private static final String TAG_PAGER_POSITION = "pagerPosition";
     private String mMensaId;
+    private LinearLayoutManager layoutParams;
     Calendar cal = Calendar.getInstance();
+    public static MealListAdapter mMealListAdapter;
+    private RecyclerView mRecyclerView;
     ArrayList<Meal> meals = new ArrayList<Meal>();
-    Date dateOfYear;
-    int mId;
-    SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd.MM.yyyy",
-            Locale.GERMANY);
-    Meal currentMeal;
-    int mPagerPositon;
+    int mPagerPositon = 10;
 
 
     public MealDayFragment() {}
@@ -57,38 +61,21 @@ public class MealDayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meal_day, container, false);
-        getMeals(mPagerPositon,0);
-        TextView tv = (TextView) view.findViewById(R.id.dateOfDay);
-        this.setDate(tv);
-        TextView v = (TextView) view.findViewById(R.id.no_food_today);
-        if (meals.isEmpty())
-            v.setVisibility(View.VISIBLE);
-
+        layoutParams = new LinearLayoutManager(getActivity());
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.mealList);
+        mMealListAdapter = new MealListAdapter(getMeals(mPagerPositon),this);
+        mRecyclerView.setAdapter(mMealListAdapter);
+        mRecyclerView.setLayoutManager(layoutParams);
         return view;
     }
 
-    public ArrayList<Meal> getMeals(int position, int mId) {
-        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-        if (dayOfWeek == 1)
-            dayOfWeek = 6;
-        else
-            dayOfWeek -= 2;
-
-        cal.add(Calendar.DAY_OF_YEAR, (position - dayOfWeek));
-
+    public ArrayList<Meal> getMeals(int position) {
         int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-        /*
+
         try {
-            return MensaRepo.getMensaRepo().getMensaMap().get(mId).getmealMap().get(dayOfYear);
+            return DataHolder.getInstance().getMensa(mMensaId).getmealMap().get(mPagerPositon);
         } catch (Exception e){
             return new ArrayList<Meal>();
         }
-        */
-        return new ArrayList<Meal>();
-    }
-
-    public void setDate(TextView tv) {
-        // TextView tv = (TextView)getActivity().findViewById(R.id.dateOfDay);
-        tv.setText(sdf.format(cal.getTime()));
     }
 }

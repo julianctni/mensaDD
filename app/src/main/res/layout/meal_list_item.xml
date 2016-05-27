@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:longClickable="false"
+    card_view:cardCornerRadius="2dp"
+    card_view:cardElevation="3dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/mealListItemHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F0F0F0"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/mealName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="POMMES"
+                android:textSize="19sp"
+                android:textStyle="normal" />
+
+            <LinearLayout
+                android:id="@+id/mealDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/meal_example"/>
+
+                <TextView
+                    android:id="@+id/mealContent"
+                    android:layout_marginTop="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/mealListItemInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/mealPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="2,34€/1,50€"
+                android:textStyle="normal"
+                android:textColor="#666666"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:id="@+id/mealIcons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/vegetarian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:adjustViewBounds="true"
+                    android:alpha="0.4"
+                    android:paddingLeft="8dp"
+                    android:src="@drawable/vegetarian" />
+
+                <ImageView
+                    android:id="@+id/pork"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:adjustViewBounds="true"
+                    android:alpha="0.4"
+                    android:paddingLeft="8dp"
+                    android:src="@drawable/pork" />
+
+                <ImageView
+                    android:id="@+id/beef"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:adjustViewBounds="true"
+                    android:alpha="0.4"
+                    android:paddingLeft="8dp"
+                    android:src="@drawable/beef" />
+
+                <ImageView
+                    android:id="@+id/alcohol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:adjustViewBounds="true"
+                    android:alpha="0.4"
+                    android:paddingLeft="8dp"
+                    android:src="@drawable/alcohol" />
+
+                <ImageView
+                    android:id="@+id/garlic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:adjustViewBounds="true"
+                    android:alpha="0.4"
+                    android:paddingLeft="8dp"
+                    android:src="@drawable/garlic" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/vegan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:includeFontPadding="false"
+                android:layout_toLeftOf="@id/mealIcons"
+                android:layout_alignBaseline="@id/mealPrice"
+                android:textColor="@android:color/black"
+                android:textAllCaps="true"
+                android:text="vegan"
+                android:alpha="0.4"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

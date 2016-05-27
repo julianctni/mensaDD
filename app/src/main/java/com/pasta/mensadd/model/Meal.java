@@ -1,9 +1,12 @@
 package com.pasta.mensadd.model;
 
+import android.text.Html;
+
 public class Meal {
     private String mName;
     private String mPrice;
-    private String mDetailLink;
+    private String mDetails;
+    private String mImgLink;
     private boolean mVegetarian;
     private boolean mVegan;
     private boolean mPork;
@@ -11,10 +14,11 @@ public class Meal {
     private boolean mGarlic;
     private boolean mAlcohol;
 
-    public Meal(String name, String detailLink, String price, boolean vegan, boolean vegetarian, boolean pork, boolean beef, boolean garlic, boolean alcohol) {
+    public Meal(String name, String imgLink, String details, String price, boolean vegan, boolean vegetarian, boolean pork, boolean beef, boolean garlic, boolean alcohol) {
         mName = name;
         mPrice = price;
-        mDetailLink = detailLink;
+        mImgLink = imgLink;
+        mDetails = formatDetails(details);
         mVegan = vegan;
         mVegetarian = vegetarian;
         mPork = pork;
@@ -55,24 +59,12 @@ public class Meal {
         return mAlcohol;
     }
 
-    public String getDetailLink() {
-        return mDetailLink;
+    public String getDetails() {
+        return mDetails;
     }
 
-    public String getStringNotes() {
-        String result = "";
-        if (this.isVegan())
-            result += "\nMenü ist vegan";
-        else if (this.isVegetarian())
-            result += "\nMenü ist vegetarisch";
-        if (this.containsAlcohol())
-            result += "\nMenü enthält Alkohol";
-        if (this.containsGarlic())
-            result += "\nMenü enthält Knoblauch";
-        if (this.containsPork())
-            result += "\nMenü enthält Schweinefleisch";
-        if (this.containsBeef())
-            result += "\nMenü enthält Rindfleisch";
-        return result;
+
+    public String formatDetails(String content){
+        return Html.fromHtml("&#149;").toString()+" "+content.replace(", ","\n"+Html.fromHtml("&#149;").toString()+" ");
     }
 }

@@ -22,7 +22,7 @@
             android:id="@+id/mensaListItemHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F8F8F8"
+            android:background="#F1F1F1"
             android:orientation="vertical"
             android:padding="8dp">
 
@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="26sp"
                 android:includeFontPadding="false"
+                android:textColor="#444444"
                 android:textStyle="bold" />
 
             <TextView
@@ -39,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
+                android:textColor="#444444"
                 android:textSize="16sp"
                 android:textStyle="normal" />
         </LinearLayout>
@@ -51,6 +53,7 @@
             <TextView
                 android:id="@+id/mensaHours"
                 android:textSize="12sp"
+                android:textColor="#444444"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

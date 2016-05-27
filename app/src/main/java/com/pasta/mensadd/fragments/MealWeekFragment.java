@@ -1,38 +1,53 @@
 package com.pasta.mensadd.fragments;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.model.DataHolder;
+import com.pasta.mensadd.model.Meal;
+import com.pasta.mensadd.model.Mensa;
+import com.pasta.mensadd.networking.LoadMealsCallback;
+import com.pasta.mensadd.networking.NetworkController;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
-public class MealWeekFragment extends Fragment {
+public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
     private static final String TAG_MENSA_ID = "mensaId";
     private String mMensaId;
-    private FragmentStatePagerAdapter mPagerAdapter;
-    private ImageView mArrowLeft;
-    private ImageView mArrowRight;
-    private TextView mMensaName;
+    private Mensa mMensa;
+    private MealDayPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
-    private TabLayout mTabLayout;
     private Calendar mCalendar = Calendar.getInstance();
+    private PagerTabStrip mTabStrip;
+    private DateFormat mDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private Date mFirstDayOfWeekDate;
+    private int mFirstDayOfWeekInt;
 
 
     public MealWeekFragment() {
@@ -52,6 +67,7 @@ public class MealWeekFragment extends Fragment {
         if (getArguments() != null) {
             mMensaId = getArguments().getString(TAG_MENSA_ID);
         }
+        mMensa = DataHolder.getInstance().getMensa(mMensaId);
     }
 
     @Override
@@ -62,81 +78,82 @@ public class MealWeekFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
+        mCalendar.set(Calendar.DAY_OF_WEEK, 2);
+        mFirstDayOfWeekDate = mCalendar.getTime();
+        mFirstDayOfWeekInt = mCalendar.get(Calendar.DAY_OF_YEAR);
         mViewPager = (ViewPager) view.findViewById(R.id.mealViewPager);
-        mViewPager.setAdapter(mPagerAdapter);
-        mArrowLeft = (ImageView) view.findViewById(R.id.arrow_left);
-        mArrowRight = (ImageView) view.findViewById(R.id.arrow_right);
-        //mTabLayout = (TabLayout) view.findViewById(R.id.tabs);
-        //mTabLayout.setupWithViewPager(mViewPager);
-        PagerTabStrip tabStrip = (PagerTabStrip)view.findViewById(R.id.pager_tab_strip);
-        tabStrip.setTabIndicatorColorResource(R.color.colorPrimaryDark);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mTabStrip = (PagerTabStrip)view.findViewById(R.id.pager_tab_strip);
+        mTabStrip.setTabIndicatorColorResource(R.color.colorPrimaryDark);
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
-
-                if (0.0 != positionOffset && positionOffset <= 0.25f) {
-                    if (position == 5)
-                        mArrowRight.setVisibility(View.VISIBLE);
-                    if (position == 0)
-                        mArrowLeft.setVisibility(View.INVISIBLE);
-                    mArrowLeft.setAlpha(1 - 4 * positionOffset);
-                    mArrowRight.setAlpha(1 - 4 * positionOffset);
-                } else if (0.0 != positionOffset && positionOffset >= 0.75f) {
-                    if (position == 0)
-                        mArrowLeft.setVisibility(View.VISIBLE);
-                    if (position == 5)
-                        mArrowRight.setVisibility(View.INVISIBLE);
-                    mArrowRight.setAlpha((-0.75f + positionOffset) * 4);
-                    mArrowLeft.setAlpha((-0.75f + positionOffset) * 4);
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-            }
-        });
-        int dayOfWeek = mCalendar.get(Calendar.DAY_OF_WEEK);
-        if (dayOfWeek == 1)
-            dayOfWeek = 6;
-        else
-            dayOfWeek -= 2;
-        mViewPager.setCurrentItem(dayOfWeek, true);
-
-        if (dayOfWeek == 0)
-            mArrowLeft.setVisibility(View.INVISIBLE);
-        if (dayOfWeek == 6)
-            mArrowRight.setVisibility(View.INVISIBLE);
-        mMensaName = (TextView) view.findViewById(R.id.mensaName);
-        mMensaName.setText(mMensaId);
+        TextView header = (TextView)getActivity().findViewById(R.id.heading_toolbar);
+        header.setText(mMensa.getName());
+        header.setVisibility(View.VISIBLE);
+        ImageView appLogo = (ImageView)getActivity().findViewById(R.id.home_button);
+        appLogo.setVisibility(View.GONE);
+        NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen("http://www.julianctni.xyz/mensadd/meals/"+mMensa.getCode()+".json", this);
     }
 
-    class MealDayPagerAdapter extends FragmentStatePagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
+    @Override
+    public void onResponseMessage(int responseType, String message) {
+        if (responseType == NetworkController.SUCCESS) {
+            try {
+                JSONArray mealDays = new JSONArray(message);
+                mCalendar.set(Calendar.DAY_OF_WEEK, 2);
+                for (int i=0; i<mealDays.length();i++){
+                    Log.i("MEAL-PARSING", "Parsing "+mDateFormat.format(mCalendar.getTime()));
+                    Log.i("MEAL-PARSING", "Parsing "+mCalendar.get(Calendar.DAY_OF_YEAR));
+                    JSONObject mealDay = mealDays.getJSONObject(i);
+                    JSONArray meals = mealDay.getJSONArray(mDateFormat.format(mCalendar.getTime()));
+                    ArrayList<Meal> mealList = new ArrayList<>();
+                    for (int j=0; j<meals.length(); j++){
+                        JSONObject jsonMeal = meals.getJSONObject(j);
+                        int vegan = jsonMeal.getInt("vegan");
+                        int vegetarian = jsonMeal.getInt("vegetarian");
+                        int beef = jsonMeal.getInt("beef");
+                        int pork = jsonMeal.getInt("porc");
+                        int garlic = jsonMeal.getInt("garlic");
+                        int alcohol = jsonMeal.getInt("alcohol");
+                        String imgLink = jsonMeal.getString("imgLink");
+                        String details = jsonMeal.getString("mealDetails");
+                        String name = jsonMeal.getString("name");
+                        String price = jsonMeal.getString("price");
+                        Meal meal = new Meal(name, imgLink, details, price, vegan==1, vegetarian==1, pork==1, beef==1, garlic==1, alcohol==1);
+                        mealList.add(meal);
+                    }
+                    mMensa.getmealMap().put(mCalendar.get(Calendar.DAY_OF_YEAR), mealList);
+                    mCalendar.add(Calendar.DATE, 1);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
+            mViewPager.setAdapter(mPagerAdapter);
+            mCalendar.setTime(new Date());
+            int today = mCalendar.get(Calendar.DAY_OF_WEEK);
+            if (today == 1)
+                today = 8;
+            Log.i("CALENDAR", mCalendar.get(Calendar.DAY_OF_WEEK)+"");
+            mViewPager.setCurrentItem(today-2, true);
+        }
+    }
+
+    class MealDayPagerAdapter extends FragmentPagerAdapter {
+        private final List<MealDayFragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
+
+
         public MealDayPagerAdapter(FragmentManager fm) {
             super(fm);
-            mFragmentList.add(new MealDayFragment());
-            mFragmentList.add(new MealDayFragment());
-            mFragmentList.add(new MealDayFragment());
-            mFragmentList.add(new MealDayFragment());
-            mFragmentList.add(new MealDayFragment());
-            mFragmentList.add(new MealDayFragment());
-            mFragmentList.add(new MealDayFragment());
-            mFragmentTitleList.add("Montag, 1. April 2016");
-            mFragmentTitleList.add("Dienstag, 2. April 2016");
-            mFragmentTitleList.add("Mittwoch, 3. April 2016");
-            mFragmentTitleList.add("Donnerstag, 4. April 2016");
-            mFragmentTitleList.add("Freitag, 5. April 2016");
-            mFragmentTitleList.add("Samstag, 6. April 2016");
-            mFragmentTitleList.add("Sonntag, 7. April 2016");
-
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd.MM.yyyy",
+                    Locale.GERMANY);
+            mCalendar.setTime(new Date());
+            mCalendar.set(Calendar.DAY_OF_WEEK, 2);
+            for (int d = 0; d<7; d++) {
+                mFragmentList.add(MealDayFragment.newInstance(mMensaId,mFirstDayOfWeekInt+d));
+                mFragmentTitleList.add(sdf.format(mCalendar.getTime()));
+                mCalendar.add(Calendar.DATE,1);
+            }
         }
 
         @Override
@@ -146,7 +163,7 @@ public class MealWeekFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return new MealDayFragment();
+            return mFragmentList.get(position);
         }
         @Override
         public CharSequence getPageTitle(int position) {

@@ -9,6 +9,7 @@
     tools:context="com.pasta.mensadd.MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -26,7 +27,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/content_app_logo"
+                android:visibility="visible"
                 android:src="@drawable/banner"/>
+
+            <TextView
+                android:id="@+id/heading_toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:textColor="#EEE"
+                android:visibility="gone"
+                android:text="Zeltschlösschen"/>
 
         </android.support.v7.widget.Toolbar>
 

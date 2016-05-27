@@ -29,6 +29,8 @@ public class NetworkController {
     private RequestQueue mRequestQueue;
     private static Context mCtx;
 
+    public static int SUCCESS = 1;
+
     private NetworkController(Context context) {
         mCtx = context;
         mRequestQueue = getRequestQueue();
@@ -80,7 +82,7 @@ public class NetworkController {
 
                     @Override
                     public void onResponse(JSONArray response) {
-                        callback.onResponseMessage(1, response.toString());
+                        callback.onResponseMessage(SUCCESS, response.toString());
                     }
                 }, new Response.ErrorListener() {
 
@@ -93,6 +95,10 @@ public class NetworkController {
     }
 
     public void getCanteenList(String url, AbstractCallback callback) {
+        doJSONArrayRequest(url, "", callback);
+    }
+
+    public void getMealsForCanteen(String url, AbstractCallback callback) {
         doJSONArrayRequest(url, "", callback);
     }
 }

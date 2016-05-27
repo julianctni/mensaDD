@@ -5,49 +5,9 @@
     android:orientation="vertical"
     android:textColor="#EEEEEE" >
 
-    <RelativeLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mealList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/dateLayout"
-        android:layout_marginBottom="5dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp" >
-
-        <TextView
-            android:id="@+id/dateOfDay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:textColor="#EEEEEE"
-            android:text="10.Februar"
-            android:textSize="16sp" />
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/no_food_today"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/tile_cyan"
-        android:gravity="center_horizontal"
-        android:padding="20dp"
-        android:text="no_food_today"
-        android:textColor="#FFFFFF"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
-
-    <ListView
-        android:id="@id/android:list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:divider="#00FFFFFF"
-        android:dividerHeight="20dp"
-        android:textColor="#FFFFFF" />
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

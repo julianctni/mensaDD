@@ -9,8 +9,10 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -23,7 +25,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
@@ -44,6 +48,9 @@ public class MainActivity extends AppCompatActivity
     private boolean mCardCheckVisible;
     private ActionBarDrawerToggle toggle;
     private NfcAdapter mAdapter;
+    private TextView mHeadingToolbar;
+    private ImageView mAppLogoToolbar;
+    private static AppBarLayout barLayout;
     private static final String TAG = MainActivity.class.getName();
 
     @Override
@@ -53,8 +60,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            if (getSupportActionBar() != null) getSupportActionBar().setTitle(null);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(null);
+            }
         }
+        barLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
+        mHeadingToolbar = (TextView) findViewById(R.id.heading_toolbar);
+        mAppLogoToolbar = (ImageView) findViewById(R.id.home_button);
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mCardCheckContainer = (RelativeLayout) findViewById(R.id.cardCheckContainer);
         if (mCardCheckContainer != null) mCardCheckContainer.setOnClickListener(this);
@@ -79,6 +91,18 @@ public class MainActivity extends AppCompatActivity
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
             onNewIntent(getIntent());
         }
+    }
+
+    public static void setToolbarShadow(boolean shadow){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Log.i("Old Elevation", barLayout.getElevation()+"");
+            if (shadow)
+                barLayout.setElevation(8);
+            else
+                barLayout.setElevation(0);
+            Log.i("New Elevation", barLayout.getElevation()+"");
+        }
+
     }
 
     @Override
@@ -132,15 +156,26 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.nav_map:
                 FragmentController.showMapFragment(getSupportFragmentManager());
+                mAppLogoToolbar.setVisibility(View.GONE);
+                mHeadingToolbar.setText(getString(R.string.nav_drawer_map));
+                mHeadingToolbar.setVisibility(View.VISIBLE);
                 break;
             case R.id.nav_mensa:
                 FragmentController.showMensaListFragment(getSupportFragmentManager());
+                mAppLogoToolbar.setVisibility(View.VISIBLE);
+                mHeadingToolbar.setVisibility(View.GONE);
                 break;
             case R.id.nav_settings:
                 FragmentController.showSettingsFragment(getSupportFragmentManager());
+                mAppLogoToolbar.setVisibility(View.GONE);
+                mHeadingToolbar.setText(getString(R.string.nav_drawer_settings));
+                mHeadingToolbar.setVisibility(View.VISIBLE);
                 break;
             case R.id.nav_imprint:
                 FragmentController.showImprintFragment(getSupportFragmentManager());
+                mAppLogoToolbar.setVisibility(View.GONE);
+                mHeadingToolbar.setText(getString(R.string.nav_drawer_imprint));
+                mHeadingToolbar.setVisibility(View.VISIBLE);
                 break;
         }
 
