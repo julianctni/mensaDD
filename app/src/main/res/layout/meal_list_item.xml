@@ -45,6 +45,7 @@
             android:layout_marginTop="-25dp"
             android:layout_below="@id/mealListItemHeader"
             android:src="@drawable/ic_share_black_24dp"
+            android:clickable="true"
             android:tint="#FFFFFF"
             android:visibility="gone" />
 

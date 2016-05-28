@@ -78,4 +78,8 @@ public class MealDayFragment extends Fragment {
             return new ArrayList<Meal>();
         }
     }
+
+    public String getCanteenId(){
+        return mMensaId;
+    }
 }

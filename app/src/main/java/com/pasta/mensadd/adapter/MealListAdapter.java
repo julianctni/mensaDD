@@ -2,6 +2,7 @@ package com.pasta.mensadd.adapter;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,7 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.MealDayFragment;
+import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
 import com.pasta.mensadd.model.Mensa;
 
@@ -51,7 +53,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Meal item = items.get(position);
-        Log.i("ADAPTER",item.getName());
+        Log.i("ADAPTER", item.getName());
         holder.mName.setText(item.getName());
         holder.mPrice.setText(item.getPrice());
         holder.mMealContent.setText(item.getDetails());
@@ -87,7 +89,8 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         return items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public LinearLayout mHeaderLayout;
         public TextView mName;
         public TextView mPrice;
@@ -118,15 +121,27 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mListItemHeader = (LinearLayout) itemView.findViewById(R.id.mensaListItemHeader);
             mShareButton = (FloatingActionButton) itemView.findViewById(R.id.shareButton);
             mShareButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ff4b66")));
+            mShareButton.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if (mMealDetails.getVisibility() == View.GONE)
-                expandLayout(mMealDetails);
-            else
-                collapseLayout(mMealDetails);
+            if (v.getId() == R.id.shareButton) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, items.get(getAdapterPosition()).getName()
+                        + "\n"+ items.get(getAdapterPosition()).getPrice()+"\n#"
+                        + DataHolder.getInstance().getMensa(fragment.getCanteenId()).getName()
+                        .replaceAll("\\s+", "") + " #Hunger #mensaDD");
+                fragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Teilen"));
+            } else {
+                if (mMealDetails.getVisibility() == View.GONE)
+                    expandLayout(mMealDetails);
+                else
+                    collapseLayout(mMealDetails);
+            }
+
         }
 
 
@@ -137,7 +152,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             v.measure(widthSpec, heightSpec);
             ValueAnimator mAnimator = slideAnimator(v, v.getHeight(), v.getMeasuredHeight());
             mAnimator.setDuration(250);
-            ScaleAnimation showAnim = new ScaleAnimation(0,1,0,1,50,50);
+            ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, 50, 50);
             showAnim.setDuration(250);
             mShareButton.setVisibility(View.VISIBLE);
             mShareButton.startAnimation(showAnim);
@@ -151,7 +166,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mAnimator.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    ScaleAnimation showAnim = new ScaleAnimation(1,0,1,0,50,50);
+                    ScaleAnimation showAnim = new ScaleAnimation(1, 0, 1, 0, 50, 50);
                     showAnim.setDuration(250);
                     mShareButton.startAnimation(showAnim);
                 }
@@ -164,12 +179,10 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
                 @Override
                 public void onAnimationCancel(Animator animation) {
-
                 }
 
                 @Override
                 public void onAnimationRepeat(Animator animation) {
-
                 }
             });
             mAnimator.setDuration(250);
@@ -177,7 +190,6 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         }
 
         private ValueAnimator slideAnimator(final View v, int start, int end) {
-
             ValueAnimator animator = ValueAnimator.ofInt(start, end);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
