@@ -53,7 +53,6 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Meal item = items.get(position);
-        Log.i("ADAPTER", item.getName());
         holder.mName.setText(item.getName());
         holder.mPrice.setText(item.getPrice());
         holder.mMealContent.setText(item.getDetails());

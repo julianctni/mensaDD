@@ -1,11 +1,12 @@
 package com.pasta.mensadd.fragments;
 
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -13,9 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
@@ -48,6 +51,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
     private DateFormat mDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Date mFirstDayOfWeekDate;
     private int mFirstDayOfWeekInt;
+    private LinearLayout mProgressLayout;
 
 
     public MealWeekFragment() {
@@ -90,6 +94,9 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         header.setVisibility(View.VISIBLE);
         ImageView appLogo = (ImageView)getActivity().findViewById(R.id.home_button);
         appLogo.setVisibility(View.GONE);
+        mProgressLayout = (LinearLayout) view.findViewById(R.id.mealListProgressLayout);
+        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.mealListrogressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
         NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen("http://www.julianctni.xyz/mensadd/meals/"+mMensa.getCode()+".json", this);
     }
 
@@ -126,7 +133,8 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            mProgressLayout.setVisibility(View.GONE);
+            mViewPager.setVisibility(View.VISIBLE);
             mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
             mViewPager.setAdapter(mPagerAdapter);
             mCalendar.setTime(new Date());
@@ -135,6 +143,8 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
                 today = 8;
             Log.i("CALENDAR", mCalendar.get(Calendar.DAY_OF_WEEK)+"");
             mViewPager.setCurrentItem(today-2, true);
+        } else {
+            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         }
     }
 

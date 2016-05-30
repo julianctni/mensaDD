@@ -1,13 +1,37 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.MealWeekFragment" >
+    android:orientation="vertical"
+    tools:context=".fragments.MealWeekFragment">
+
+    <LinearLayout
+        android:id="@+id/mealListProgressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/mealListrogressBar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Speiseplan wird geladen..."
+            android:textColor="#AAAAAA"
+            android:textSize="18sp" />
+    </LinearLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/mealViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <android.support.v4.view.PagerTabStrip
             android:id="@+id/pager_tab_strip"
@@ -15,10 +39,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:background="@color/colorPrimary"
-            android:textColor="#EEEEEE"
+            android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp"/>
+            android:textColor="#EEEEEE" />
 
     </android.support.v4.view.ViewPager>
 
-</RelativeLayout>
+</LinearLayout>

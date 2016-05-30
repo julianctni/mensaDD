@@ -3,12 +3,14 @@ package com.pasta.mensadd.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
@@ -23,18 +25,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-
 public class MealDayFragment extends Fragment {
 
     private static final String TAG_MENSA_ID = "mensaId";
     private static final String TAG_PAGER_POSITION = "pagerPosition";
     private String mMensaId;
     private LinearLayoutManager layoutParams;
-    Calendar cal = Calendar.getInstance();
+    private Calendar cal = Calendar.getInstance();
     public static MealListAdapter mMealListAdapter;
     private RecyclerView mRecyclerView;
-    ArrayList<Meal> meals = new ArrayList<Meal>();
-    int mPagerPositon = 10;
+    private int mPagerPositon = 10;
+
 
 
     public MealDayFragment() {}
@@ -54,6 +55,7 @@ public class MealDayFragment extends Fragment {
         if (getArguments() != null) {
             mMensaId = getArguments().getString(TAG_MENSA_ID);
             mPagerPositon = getArguments().getInt(TAG_PAGER_POSITION);
+            Log.i("MEALDAYFRAGMENT", "Creating MealDayFragment Nr. "+mPagerPositon);
         }
     }
 
@@ -63,21 +65,20 @@ public class MealDayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_meal_day, container, false);
         layoutParams = new LinearLayoutManager(getActivity());
         mRecyclerView = (RecyclerView) view.findViewById(R.id.mealList);
-        mMealListAdapter = new MealListAdapter(getMeals(mPagerPositon),this);
+        mMealListAdapter = new MealListAdapter(getMeals(),this);
         mRecyclerView.setAdapter(mMealListAdapter);
         mRecyclerView.setLayoutManager(layoutParams);
+        Log.i("MEALDAYFRAGMENT", "Creating View of MealDayFragment Nr. "+mPagerPositon);
         return view;
     }
 
-    public ArrayList<Meal> getMeals(int position) {
+    public ArrayList<Meal> getMeals() {
         int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-
-        try {
-            return DataHolder.getInstance().getMensa(mMensaId).getmealMap().get(mPagerPositon);
-        } catch (Exception e){
-            return new ArrayList<Meal>();
-        }
+        if (DataHolder.getInstance().getMensa(mMensaId).getmealMap().get(mPagerPositon) == null)
+            DataHolder.getInstance().getMensa(mMensaId).getmealMap().put(mPagerPositon, new ArrayList<Meal>());
+        return DataHolder.getInstance().getMensa(mMensaId).getmealMap().get(mPagerPositon);
     }
+
 
     public String getCanteenId(){
         return mMensaId;

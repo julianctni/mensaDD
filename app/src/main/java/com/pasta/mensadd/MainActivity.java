@@ -197,9 +197,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private String moneyStr(int i) {
-        int euros = i / 100;
-        int cents = i % 100;
-
+        int euros = i / 1000;
+        int cents = i/10 % 100;
+        Log.i("CARD-CHECK", i + "Euro "+euros+" Cent "+cents);
         String centsStr = Integer.toString(cents);
         if (cents < 10)
             centsStr = "0" + centsStr;

@@ -30,6 +30,7 @@ public class NetworkController {
     private static Context mCtx;
 
     public static int SUCCESS = 1;
+    public static int ERROR = 0;
 
     private NetworkController(Context context) {
         mCtx = context;
@@ -69,7 +70,7 @@ public class NetworkController {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callback.onResponseMessage(0, error.getMessage());
+                callback.onResponseMessage(ERROR, error.getMessage());
             }
         });
         mRequestQueue.add(stringRequest);
@@ -88,7 +89,7 @@ public class NetworkController {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onResponseMessage(1, error.getMessage());
+                        callback.onResponseMessage(ERROR, error.getMessage().toString());
                     }
                 });
         mRequestQueue.add(jsObjRequest);
