@@ -4,16 +4,21 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
@@ -23,7 +28,11 @@ import com.pasta.mensadd.fragments.MealDayFragment;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
 import com.pasta.mensadd.model.Mensa;
+import com.pasta.mensadd.networking.LoadImageCallback;
+import com.pasta.mensadd.networking.NetworkController;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -89,7 +98,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, LoadImageCallback {
         public LinearLayout mHeaderLayout;
         public TextView mName;
         public TextView mPrice;
@@ -103,6 +112,8 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         public LinearLayout mListItemHeader;
         public LinearLayout mMealDetails;
         public FloatingActionButton mShareButton;
+        public ImageView mMealImage;
+        public ProgressBar mMealImageProgress;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -117,6 +128,8 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mAlcohol = (ImageView) itemView.findViewById(R.id.alcohol);
             mGarlic = (ImageView) itemView.findViewById(R.id.garlic);
             mMealContent = (TextView) itemView.findViewById(R.id.mealContent);
+            mMealImage = (ImageView) itemView.findViewById(R.id.mealImage);
+            mMealImageProgress = (ProgressBar) itemView.findViewById(R.id.mealImageProgressBar);
             mListItemHeader = (LinearLayout) itemView.findViewById(R.id.mensaListItemHeader);
             mShareButton = (FloatingActionButton) itemView.findViewById(R.id.shareButton);
             mShareButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ff4b66")));
@@ -135,9 +148,17 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                         .replaceAll("\\s+", "") + " #Hunger #mensaDD");
                 fragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Teilen"));
             } else {
-                if (mMealDetails.getVisibility() == View.GONE)
+                if (mMealDetails.getVisibility() == View.GONE) {
                     expandLayout(mMealDetails);
-                else
+                    String url = items.get(getAdapterPosition()).getImgLink();
+                    if (url.length() > 1) {
+                        NetworkController.getInstance(fragment.getActivity().getApplicationContext()).doImageRequest(url, this);
+                    } else {
+                        mMealImageProgress.setVisibility(View.GONE);
+                        mMealImage.setImageDrawable(fragment.getActivity().getResources().getDrawable(R.drawable.no_meal_image));
+                        mMealImage.setVisibility(View.VISIBLE);
+                    }
+                } else
                     collapseLayout(mMealDetails);
             }
 
@@ -200,6 +221,15 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                 }
             });
             return animator;
+        }
+
+        @Override
+        public void onResponseMessage(int responseType, String message, Bitmap bitmap) {
+            if (responseType == NetworkController.SUCCESS){
+                mMealImage.setImageBitmap(bitmap);
+                mMealImageProgress.setVisibility(View.GONE);
+                mMealImage.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

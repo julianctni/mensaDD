@@ -1,6 +1,7 @@
 package com.pasta.mensadd.networking;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.android.volley.Cache;
@@ -12,9 +13,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.pasta.mensadd.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -94,6 +97,24 @@ public class NetworkController {
                 });
         mRequestQueue.add(jsObjRequest);
     }
+
+    public void doImageRequest(String url, final LoadImageCallback callback) {
+        ImageRequest request = new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        Log.i("LOADING-IMAGE", "SUCCESS");
+                        callback.onResponseMessage(SUCCESS, "", bitmap);
+                    }
+                }, 0, 0, null,
+                new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("LOADING-IMAGE", "ERROR");
+                    }
+                });
+        mRequestQueue.add(request);
+    }
+
 
     public void getCanteenList(String url, AbstractCallback callback) {
         doJSONArrayRequest(url, "", callback);

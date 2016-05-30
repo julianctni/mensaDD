@@ -63,6 +63,10 @@ public class Meal {
         return mDetails;
     }
 
+    public String getImgLink() {
+        return mImgLink;
+    }
+
 
     public String formatDetails(String content){
         return Html.fromHtml("&#149;").toString()+" "+content.replace(", ","\n"+Html.fromHtml("&#149;").toString()+" ");
