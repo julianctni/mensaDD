@@ -28,7 +28,7 @@ import com.pasta.mensadd.R;
 import org.json.JSONObject;
 
 
-public class MensaMapFragment extends Fragment {
+public class CanteenMapFragment extends Fragment {
     private MapView mapView;
 
     private boolean isEndNotified;
@@ -45,10 +45,10 @@ public class MensaMapFragment extends Fragment {
     public final static String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
 
 
-    public MensaMapFragment() {}
+    public CanteenMapFragment() {}
 
-    public static MensaMapFragment newInstance(int mensaId) {
-        MensaMapFragment fragment = new MensaMapFragment();
+    public static CanteenMapFragment newInstance(int mensaId) {
+        CanteenMapFragment fragment = new CanteenMapFragment();
         Bundle args = new Bundle();
         args.putInt(TAG_MENSA_ID, mensaId);
         fragment.setArguments(args);

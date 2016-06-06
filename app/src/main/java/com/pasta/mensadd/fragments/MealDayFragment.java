@@ -3,27 +3,20 @@ package com.pasta.mensadd.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.adapter.MealListAdapter;
-import com.pasta.mensadd.adapter.MensaListAdapter;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class MealDayFragment extends Fragment {
 

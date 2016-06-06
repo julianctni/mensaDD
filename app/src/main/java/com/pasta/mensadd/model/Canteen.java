@@ -8,7 +8,7 @@ import java.util.HashMap;
 /**
  * Created by julian on 15.05.16.
  */
-public class Mensa {
+public class Canteen {
 
     private int mId;
     private String mName;
@@ -18,10 +18,11 @@ public class Mensa {
     private String mInfo;
     private LatLng mPosition;
     private String mContactData;
+    private int mListPriority;
     private HashMap<Integer, ArrayList<Meal>> mealMap = new HashMap<Integer, ArrayList<Meal>>();
 
-    public Mensa(int id, String name, String hours, String address,
-                 String contact, LatLng position, String info) {
+    public Canteen(int id, String name, String hours, String address,
+                   String contact, LatLng position, String info) {
         mId = id;
         mAddress = address;
         mHours = hours;
@@ -29,13 +30,31 @@ public class Mensa {
         mInfo = info;
         mContactData = contact;
         mPosition = position;
+        if (mCode.contains("zeltschloesschen") || mCode.contains("alte-mensa"))
+            mListPriority = 3;
+        else if (mCode.contains("siedepunkt") || mCode.contains("mensa-reichenbachstrasse"))
+            mListPriority = 2;
+        else
+            mListPriority = 0;
     }
 
-    public Mensa(String name, String code, String address, String hour){
+    public Canteen(String name, String code, String address, String hour, int priority){
         mName = name;
         mCode = code;
         mHours = hour;
         mAddress = address;
+        if (mCode.contains("zeltschloesschen") || mCode.contains("alte-mensa"))
+            if (priority < 2)
+                mListPriority = 2;
+            else
+                mListPriority = priority;
+        else if (mCode.contains("siedepunkt") || mCode.contains("mensa-reichenbachstrasse"))
+            if (priority < 1)
+                mListPriority = 1;
+            else
+                mListPriority = priority;
+        else
+            mListPriority = priority;
     }
 
     public String getCode(){
@@ -44,6 +63,10 @@ public class Mensa {
 
     public HashMap<Integer, ArrayList<Meal>> getmealMap() {
         return mealMap;
+    }
+
+    public int getListPriority(){
+        return mListPriority;
     }
 
     public void setMealMap(HashMap<Integer, ArrayList<Meal>> meal) {

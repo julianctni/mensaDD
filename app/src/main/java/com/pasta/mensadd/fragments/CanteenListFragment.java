@@ -1,9 +1,11 @@
 package com.pasta.mensadd.fragments;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,9 +17,9 @@ import android.widget.TextView;
 
 import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.adapter.MensaListAdapter;
+import com.pasta.mensadd.adapter.CanteenListAdapter;
 import com.pasta.mensadd.model.DataHolder;
-import com.pasta.mensadd.model.Mensa;
+import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.networking.LoadCanteensCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
@@ -25,13 +27,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 public class CanteenListFragment extends Fragment implements LoadCanteensCallback{
 
 
     private LinearLayoutManager layoutParams;
-    public static MensaListAdapter mMensaListAdapter;
+    public static CanteenListAdapter mCanteenListAdapter;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mCanteenListRefresher;
     private final String URL_CANTEEN_LIST = "http://ctni.sabic.uberspace.de/mensadd/canteen-list.json";
@@ -52,8 +52,8 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         MainActivity.setToolbarShadow(true);
         layoutParams = new LinearLayoutManager(getActivity());
         mRecyclerView = (RecyclerView) view.findViewById(R.id.mensaList);
-        mMensaListAdapter = new MensaListAdapter(DataHolder.getInstance().getCanteenList(),this);
-        mRecyclerView.setAdapter(mMensaListAdapter);
+        mCanteenListAdapter = new CanteenListAdapter(DataHolder.getInstance().getCanteenList(),this);
+        mRecyclerView.setAdapter(mCanteenListAdapter);
         mRecyclerView.setLayoutManager(layoutParams);
         mCanteenListRefresher = (SwipeRefreshLayout) view.findViewById(R.id.canteenListRefresher);
         int colorArray[] = {R.color.tile_cyan1, R.color.tile_orange1, R.color.tile_blue1, R.color.tile_pink1};
@@ -82,6 +82,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     public void onResponseMessage(int responseType, String message) {
         if (responseType == 1){
             DataHolder.getInstance().getCanteenList().clear();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             try {
                 JSONArray json = new JSONArray(message);
                 for(int i = 0 ; i < json.length(); i++){
@@ -96,15 +97,17 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
                         if (j < hourArray.length()-1)
                             hours += "\n";
                     }
-                    Mensa m = new Mensa(name, code, address, hours);
+                    int priority = prefs.getInt("priority_"+code, 0);
+                    Canteen m = new Canteen(name, code, address, hours, priority);
                     DataHolder.getInstance().getCanteenList().add(m);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            DataHolder.getInstance().sortCanteenList();
             mCanteenListRefresher.setRefreshing(false);
-            Log.i("CANTEEN-LIST",DataHolder.getInstance().getCanteenList().size()+"");
-            mMensaListAdapter.notifyDataSetChanged();
+            mCanteenListAdapter.notifyDataSetChanged();
+
         }
     }
 }

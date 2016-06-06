@@ -5,13 +5,9 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,17 +18,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.controller.FragmentController;
-import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.MealDayFragment;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
-import com.pasta.mensadd.model.Mensa;
 import com.pasta.mensadd.networking.LoadImageCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -140,12 +131,46 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.shareButton) {
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, items.get(getAdapterPosition()).getName()
+
+                String text = items.get(getAdapterPosition()).getName()
                         + "\n"+ items.get(getAdapterPosition()).getPrice()+"\n#"
                         + DataHolder.getInstance().getMensa(fragment.getCanteenId()).getName()
-                        .replaceAll("\\s+", "") + " #Hunger #mensaDD");
+                        .replaceAll("\\s+", "") + " #Hunger #mensaDD";
+
+                /*
+                Drawable mDrawable = mMealImage.getDrawable();
+
+                Bitmap mBitmap = ((BitmapDrawable)mDrawable).getBitmap();
+
+                String path = MediaStore.Images.Media.insertImage(fragment.getActivity().getContentResolver(),
+
+                        mBitmap, "Image Description", null);
+
+                Uri uri = Uri.parse(path);
+
+                Uri pictureUri = Uri.parse(items.get(getAdapterPosition()).getImgLink());
+
+                Intent shareIntent = new Intent();
+
+                shareIntent.setAction(Intent.ACTION_SEND);
+
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+
+                shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+
+
+
+                shareIntent.setType("image/*");
+
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                fragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Share images..."));
+                */
+
+
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, text);
                 fragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Teilen"));
             } else {
                 if (mMealDetails.getVisibility() == View.GONE) {
