@@ -34,7 +34,7 @@ public class FragmentController {
     public static void showCardCheckFragment(FragmentManager fm, String current, String lastTransaction){
         MainActivity.setToolbarShadow(false);
         CardCheckFragment fragment = CardCheckFragment.newInstance(current, lastTransaction);
-        fm.beginTransaction().replace(R.id.cardCheckContainer, fragment, "CARD_CHECK_FRAGMENT").commit();
+        fm.beginTransaction().replace(R.id.cardCheckContainer, fragment, "CARD_CHECK_FRAGMENT").commitAllowingStateLoss();
     }
 
     public static void updateCardCheckFragment(FragmentManager fm, String current, String lastTransaction){
