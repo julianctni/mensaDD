@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +27,9 @@ import com.pasta.mensadd.model.Meal;
 import com.pasta.mensadd.networking.LoadImageCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -128,50 +134,47 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             itemView.setOnClickListener(this);
         }
 
+
+        private void shareMeal() {
+            Meal meal = items.get(getAdapterPosition());
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            //text has to be added to intent no matter what
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, meal.getName() + "\n" + meal.getPrice() + "\n#"
+                    + DataHolder.getInstance().getMensa(fragment.getCanteenId()).getName()
+                    .replaceAll("\\s+", "") + " #Hunger #mensaDD");
+
+
+            Bitmap bitmap = ((BitmapDrawable) mMealImage.getDrawable()).getBitmap();
+            boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(fragment.getContext()).getBoolean("share_image", false);
+
+            //if there is a bitmap attached (the link isn't too short) and the user has enabled image sharing in prefs:
+            if (shareImagePref && meal.getImgLink().length() > 1 ) {
+                //additionally share image
+                try {
+                    //save file to cache directory
+                    File file = new File(fragment.getContext().getCacheDir(), meal.getName().hashCode() + ".jpeg");
+                    FileOutputStream fOut = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                    fOut.flush();
+                    fOut.close();
+                    file.setReadable(true, false);
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                    shareIntent.setType("image/png");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            //send the intent
+            //TODO: localize
+            fragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Teilen"));
+        }
+
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.shareButton) {
+                shareMeal();
 
-                String text = items.get(getAdapterPosition()).getName()
-                        + "\n"+ items.get(getAdapterPosition()).getPrice()+"\n#"
-                        + DataHolder.getInstance().getMensa(fragment.getCanteenId()).getName()
-                        .replaceAll("\\s+", "") + " #Hunger #mensaDD";
-
-                /*
-                Drawable mDrawable = mMealImage.getDrawable();
-
-                Bitmap mBitmap = ((BitmapDrawable)mDrawable).getBitmap();
-
-                String path = MediaStore.Images.Media.insertImage(fragment.getActivity().getContentResolver(),
-
-                        mBitmap, "Image Description", null);
-
-                Uri uri = Uri.parse(path);
-
-                Uri pictureUri = Uri.parse(items.get(getAdapterPosition()).getImgLink());
-
-                Intent shareIntent = new Intent();
-
-                shareIntent.setAction(Intent.ACTION_SEND);
-
-                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-
-                shareIntent.putExtra(Intent.EXTRA_TEXT, text);
-
-
-
-                shareIntent.setType("image/*");
-
-                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                fragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Share images..."));
-                */
-
-
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, text);
-                fragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Teilen"));
             } else {
                 if (mMealDetails.getVisibility() == View.GONE) {
                     expandLayout(mMealDetails);
@@ -250,7 +253,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
         @Override
         public void onResponseMessage(int responseType, String message, Bitmap bitmap) {
-            if (responseType == NetworkController.SUCCESS){
+            if (responseType == NetworkController.SUCCESS) {
                 mMealImage.setImageBitmap(bitmap);
                 mMealImageProgress.setVisibility(View.GONE);
                 mMealImage.setVisibility(View.VISIBLE);
