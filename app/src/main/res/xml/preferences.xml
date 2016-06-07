@@ -11,4 +11,11 @@
         android:title="@string/pref_map_title"
         android:summary="@string/pref_autostart_summary"
         android:defaultValue="false" />
+
+    <CheckBoxPreference
+        android:key="@string/pref_share_image_key"
+        android:title="@string/pref_share_image_title"
+        android:summary="@string/pref_share_image_summary"
+        android:defaultValue="false" />
+
 </PreferenceScreen>

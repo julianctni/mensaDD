@@ -8,6 +8,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,6 +34,9 @@ import com.pasta.mensadd.model.Mensa;
 import com.pasta.mensadd.networking.LoadImageCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -137,16 +143,67 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             itemView.setOnClickListener(this);
         }
 
+
+
+
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.shareButton) {
+
+                Meal meal = items.get(getAdapterPosition());
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, items.get(getAdapterPosition()).getName()
-                        + "\n"+ items.get(getAdapterPosition()).getPrice()+"\n#"
+
+                Bitmap bitmap = ((BitmapDrawable)mMealImage.getDrawable()).getBitmap();
+
+                boolean shareImage = PreferenceManager.getDefaultSharedPreferences(fragment.getContext()).getBoolean("share_image", false);
+                if (bitmap == null || !shareImage) {
+                    //share text only
+                    shareIntent.setType("text/plain");
+
+                } else {
+                    //share image additionally
+
+
+
+                    try {
+                        //save file to cache directory
+                        File file = new File(fragment.getContext().getCacheDir(), meal.getName().hashCode() + ".jpeg");
+                        FileOutputStream fOut = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        file.setReadable(true, false);
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                        shareIntent.setType("image/png");
+
+                    } catch (IOException e) {
+                        //if anything goes wrong: share text and print exception
+                        shareIntent.setType("text/plain");
+                        e.printStackTrace();
+                    }
+                    /*
+
+
+        bitmap.compress(CompressFormat.PNG, 100, fOut);
+        fOut.flush();
+        fOut.close();
+        file.setReadable(true, false);
+        final Intent intent = new Intent(     android.content.Intent.ACTION_SEND);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        intent.setType("image/png");
+        startActivity(intent);
+                     */
+
+
+                }
+
+                shareIntent.putExtra(Intent.EXTRA_TEXT, meal.getName() + "\n" + meal.getPrice() + "\n#"
                         + DataHolder.getInstance().getMensa(fragment.getCanteenId()).getName()
                         .replaceAll("\\s+", "") + " #Hunger #mensaDD");
                 fragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Teilen"));
+
+
             } else {
                 if (mMealDetails.getVisibility() == View.GONE) {
                     expandLayout(mMealDetails);
@@ -225,7 +282,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
         @Override
         public void onResponseMessage(int responseType, String message, Bitmap bitmap) {
-            if (responseType == NetworkController.SUCCESS){
+            if (responseType == NetworkController.SUCCESS) {
                 mMealImage.setImageBitmap(bitmap);
                 mMealImageProgress.setVisibility(View.GONE);
                 mMealImage.setVisibility(View.VISIBLE);
