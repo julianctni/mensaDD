@@ -145,64 +145,46 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
 
 
+        private void shareMeal() {
+            Meal meal = items.get(getAdapterPosition());
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            //text has to be added to intent no matter what
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, meal.getName() + "\n" + meal.getPrice() + "\n#"
+                    + DataHolder.getInstance().getMensa(fragment.getCanteenId()).getName()
+                    .replaceAll("\\s+", "") + " #Hunger #mensaDD");
+
+
+            Bitmap bitmap = ((BitmapDrawable)mMealImage.getDrawable()).getBitmap();
+            boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(fragment.getContext()).getBoolean("share_image", false);
+
+            //if there is a bitmap attached or the user has enabled image sharing in prefs:
+            if (bitmap != null || shareImagePref) {
+                //additionally share image
+                try {
+                    //save file to cache directory
+                    File file = new File(fragment.getContext().getCacheDir(), meal.getName().hashCode() + ".jpeg");
+                    FileOutputStream fOut = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                    fOut.flush();
+                    fOut.close();
+                    file.setReadable(true, false);
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                    shareIntent.setType("image/png");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            //send the intent
+            //TODO: localize
+            fragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Teilen"));
+        }
 
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.shareButton) {
 
-                Meal meal = items.get(getAdapterPosition());
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-
-                Bitmap bitmap = ((BitmapDrawable)mMealImage.getDrawable()).getBitmap();
-
-                boolean shareImage = PreferenceManager.getDefaultSharedPreferences(fragment.getContext()).getBoolean("share_image", false);
-                if (bitmap == null || !shareImage) {
-                    //share text only
-                    shareIntent.setType("text/plain");
-
-                } else {
-                    //share image additionally
-
-
-
-                    try {
-                        //save file to cache directory
-                        File file = new File(fragment.getContext().getCacheDir(), meal.getName().hashCode() + ".jpeg");
-                        FileOutputStream fOut = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                        fOut.flush();
-                        fOut.close();
-                        file.setReadable(true, false);
-                        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-                        shareIntent.setType("image/png");
-
-                    } catch (IOException e) {
-                        //if anything goes wrong: share text and print exception
-                        shareIntent.setType("text/plain");
-                        e.printStackTrace();
-                    }
-                    /*
-
-
-        bitmap.compress(CompressFormat.PNG, 100, fOut);
-        fOut.flush();
-        fOut.close();
-        file.setReadable(true, false);
-        final Intent intent = new Intent(     android.content.Intent.ACTION_SEND);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-        intent.setType("image/png");
-        startActivity(intent);
-                     */
-
-
-                }
-
-                shareIntent.putExtra(Intent.EXTRA_TEXT, meal.getName() + "\n" + meal.getPrice() + "\n#"
-                        + DataHolder.getInstance().getMensa(fragment.getCanteenId()).getName()
-                        .replaceAll("\\s+", "") + " #Hunger #mensaDD");
-                fragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Teilen"));
-
+                shareMeal();
 
             } else {
                 if (mMealDetails.getVisibility() == View.GONE) {
