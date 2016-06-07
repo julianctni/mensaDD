@@ -159,7 +159,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(fragment.getContext()).getBoolean("share_image", false);
 
             //if there is a bitmap attached or the user has enabled image sharing in prefs:
-            if (bitmap != null || shareImagePref) {
+            if (bitmap != null && shareImagePref) {
                 //additionally share image
                 try {
                     //save file to cache directory
