@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
-import com.pasta.mensadd.model.Mensa;
+import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.networking.LoadMealsCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
@@ -43,7 +43,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
     private static final String TAG_MENSA_ID = "mensaId";
     private String mMensaId;
-    private Mensa mMensa;
+    private Canteen mCanteen;
     private MealDayPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
     private Calendar mCalendar = Calendar.getInstance();
@@ -71,7 +71,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         if (getArguments() != null) {
             mMensaId = getArguments().getString(TAG_MENSA_ID);
         }
-        mMensa = DataHolder.getInstance().getMensa(mMensaId);
+        mCanteen = DataHolder.getInstance().getMensa(mMensaId);
     }
 
     @Override
@@ -90,14 +90,14 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         mTabStrip.setTabIndicatorColorResource(R.color.colorPrimaryDark);
 
         TextView header = (TextView)getActivity().findViewById(R.id.heading_toolbar);
-        header.setText(mMensa.getName());
+        header.setText(mCanteen.getName());
         header.setVisibility(View.VISIBLE);
         ImageView appLogo = (ImageView)getActivity().findViewById(R.id.home_button);
         appLogo.setVisibility(View.GONE);
         mProgressLayout = (LinearLayout) view.findViewById(R.id.mealListProgressLayout);
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.mealListrogressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
-        NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen("http://www.julianctni.xyz/mensadd/meals/"+mMensa.getCode()+".json", this);
+        NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen("http://www.julianctni.xyz/mensadd/meals/"+ mCanteen.getCode()+".json", this);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
                         Meal meal = new Meal(name, imgLink, details, price, vegan==1, vegetarian==1, pork==1, beef==1, garlic==1, alcohol==1);
                         mealList.add(meal);
                     }
-                    mMensa.getmealMap().put(mCalendar.get(Calendar.DAY_OF_YEAR), mealList);
+                    mCanteen.getmealMap().put(mCalendar.get(Calendar.DAY_OF_YEAR), mealList);
                     mCalendar.add(Calendar.DATE, 1);
                 }
             } catch (JSONException e) {

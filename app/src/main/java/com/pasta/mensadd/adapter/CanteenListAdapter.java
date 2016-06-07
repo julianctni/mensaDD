@@ -1,5 +1,7 @@
 package com.pasta.mensadd.adapter;
 
+import android.content.SharedPreferences;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,18 +12,19 @@ import android.widget.TextView;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.fragments.CanteenListFragment;
-import com.pasta.mensadd.model.Mensa;
+import com.pasta.mensadd.model.Canteen;
+import com.pasta.mensadd.model.DataHolder;
 
 import java.util.ArrayList;
 
 
-public class MensaListAdapter extends RecyclerView.Adapter<MensaListAdapter.ViewHolder> {
+public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.ViewHolder> {
 
-    public ArrayList<Mensa> items;
+    public ArrayList<Canteen> items;
     public CanteenListFragment fragment;
     public ArrayList<Integer> headerColors;
 
-    public MensaListAdapter(ArrayList<Mensa> items, CanteenListFragment fragment) {
+    public CanteenListAdapter(ArrayList<Canteen> items, CanteenListFragment fragment) {
         this.items = items;
         this.fragment = fragment;
         headerColors = new ArrayList<>();
@@ -34,13 +37,13 @@ public class MensaListAdapter extends RecyclerView.Adapter<MensaListAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.mensa_list_item, parent, false);
+                R.layout.canteen_list_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Mensa item = items.get(position);
+        Canteen item = items.get(position);
         holder.mName.setText(item.getName());
         holder.mAddress.setText(item.getAddress());
         holder.mHours.setText(item.getHours());
@@ -70,6 +73,10 @@ public class MensaListAdapter extends RecyclerView.Adapter<MensaListAdapter.View
         public void onClick(View v) {
             String mensaId = items.get(getAdapterPosition()).getCode();
             FragmentController.showMealWeekFragment(fragment.getFragmentManager(),mensaId);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(fragment.getActivity().getApplicationContext());
+            int priority = prefs.getInt("priority_"+mensaId, 0);
+            priority += 1;
+            prefs.edit().putInt("priority_"+mensaId, priority).apply();
         }
     }
 }

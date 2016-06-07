@@ -7,10 +7,9 @@ import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.CardCheckFragment;
 import com.pasta.mensadd.fragments.ImprintFragment;
-import com.pasta.mensadd.fragments.MealDayFragment;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.MealWeekFragment;
-import com.pasta.mensadd.fragments.MensaMapFragment;
+import com.pasta.mensadd.fragments.CanteenMapFragment;
 import com.pasta.mensadd.fragments.SettingsFragment;
 
 public class FragmentController {
@@ -22,12 +21,12 @@ public class FragmentController {
 
     public static void showMapFragment(FragmentManager fm){
         MainActivity.setToolbarShadow(true);
-        MensaMapFragment fragment = (MensaMapFragment)fm.findFragmentByTag("MAP_FRAGMENT");
+        CanteenMapFragment fragment = (CanteenMapFragment)fm.findFragmentByTag("MAP_FRAGMENT");
         if (fragment != null) {
             fm.beginTransaction().replace(R.id.mainContainer, fragment, "MAP_FRAGMENT").commit();
             Log.i("FRAGMENT-CONTROLLER", "NOT NULL");
         } else {
-            fm.beginTransaction().replace(R.id.mainContainer, new MensaMapFragment(), "MAP_FRAGMENT").commit();
+            fm.beginTransaction().replace(R.id.mainContainer, new CanteenMapFragment(), "MAP_FRAGMENT").commit();
             Log.i("FRAGMENT-CONTROLLER", "NULL");
         }
     }
@@ -35,7 +34,7 @@ public class FragmentController {
     public static void showCardCheckFragment(FragmentManager fm, String current, String lastTransaction){
         MainActivity.setToolbarShadow(false);
         CardCheckFragment fragment = CardCheckFragment.newInstance(current, lastTransaction);
-        fm.beginTransaction().replace(R.id.cardCheckContainer, fragment, "CARD_CHECK_FRAGMENT").commit();
+        fm.beginTransaction().replace(R.id.cardCheckContainer, fragment, "CARD_CHECK_FRAGMENT").commitAllowingStateLoss();
     }
 
     public static void updateCardCheckFragment(FragmentManager fm, String current, String lastTransaction){

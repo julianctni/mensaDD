@@ -5,16 +5,12 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,20 +21,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.controller.FragmentController;
-import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.MealDayFragment;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
-import com.pasta.mensadd.model.Mensa;
 import com.pasta.mensadd.networking.LoadImageCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -144,7 +135,6 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         }
 
 
-
         private void shareMeal() {
             Meal meal = items.get(getAdapterPosition());
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -155,11 +145,11 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                     .replaceAll("\\s+", "") + " #Hunger #mensaDD");
 
 
-            Bitmap bitmap = ((BitmapDrawable)mMealImage.getDrawable()).getBitmap();
+            Bitmap bitmap = ((BitmapDrawable) mMealImage.getDrawable()).getBitmap();
             boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(fragment.getContext()).getBoolean("share_image", false);
 
             //if there is a bitmap attached or the user has enabled image sharing in prefs:
-            if (bitmap != null && shareImagePref) {
+            if (meal.getImgLink().length() > 1 && shareImagePref) {
                 //additionally share image
                 try {
                     //save file to cache directory
@@ -183,7 +173,6 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.shareButton) {
-
                 shareMeal();
 
             } else {

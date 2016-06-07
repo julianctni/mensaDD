@@ -1,6 +1,8 @@
 package com.pasta.mensadd.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -9,8 +11,8 @@ import java.util.HashMap;
 public class DataHolder {
 
     private static DataHolder mInstance;
-    private HashMap<String,Mensa> mCanteenMap = new HashMap<>();
-    private ArrayList<Mensa> mCanteenList = new ArrayList<>();
+    private HashMap<String,Canteen> mCanteenMap = new HashMap<>();
+    private ArrayList<Canteen> mCanteenList = new ArrayList<>();
 
     private DataHolder(){}
 
@@ -22,18 +24,43 @@ public class DataHolder {
 
     }
 
-    public ArrayList<Mensa> getCanteenList() {
+    public ArrayList<Canteen> getCanteenList() {
         return mCanteenList;
     }
 
-    public Mensa getMensa(String code){
-        for (Mensa m : mCanteenList){
+    public Canteen getMensa(String code){
+        for (Canteen m : mCanteenList){
             if (m.getCode().equals(code))
                 return m;
         }
         return null;
     }
-    public HashMap<String,Mensa> getCanteenMap() {
+
+    public void sortCanteenList(){
+        Collections.sort(mCanteenList, new PriorityComparator());
+    }
+
+
+
+    private class PriorityComparator implements Comparator<Canteen> {
+
+        @Override
+        public int compare(Canteen c1, Canteen c2) {
+            if (c1.getListPriority() > c2.getListPriority())
+                return -1;
+            else if (c1.getListPriority() < c2.getListPriority())
+                return 1;
+            else
+                return 0;
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            return false;
+        }
+    }
+
+    public HashMap<String,Canteen> getCanteenMap() {
         return mCanteenMap;
     }
 }

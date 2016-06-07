@@ -99,19 +99,18 @@ public class NetworkController {
     }
 
     public void doImageRequest(String url, final LoadImageCallback callback) {
-        ImageRequest request = new ImageRequest(url,
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        Log.i("LOADING-IMAGE", "SUCCESS");
-                        callback.onResponseMessage(SUCCESS, "", bitmap);
-                    }
-                }, 0, 0, null,
-                new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i("LOADING-IMAGE", "ERROR");
-                    }
-                });
+        ImageRequest request = new ImageRequest(url, new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
+                Log.i("LOADING-IMAGE", "SUCCESS");
+                callback.onResponseMessage(SUCCESS, "", response);
+            }
+        }, 0, 0, null, Bitmap.Config.ARGB_8888, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("LOADING-IMAGE", "ERROR");
+            }
+        });
         mRequestQueue.add(request);
     }
 
