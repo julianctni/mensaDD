@@ -3,6 +3,7 @@ package com.pasta.mensadd.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -48,7 +49,6 @@ public class MealDayFragment extends Fragment {
         if (getArguments() != null) {
             mMensaId = getArguments().getString(TAG_MENSA_ID);
             mPagerPositon = getArguments().getInt(TAG_PAGER_POSITION);
-            Log.i("MEALDAYFRAGMENT", "Creating MealDayFragment Nr. "+mPagerPositon);
         }
     }
 
@@ -59,9 +59,17 @@ public class MealDayFragment extends Fragment {
         layoutParams = new LinearLayoutManager(getActivity());
         mRecyclerView = (RecyclerView) view.findViewById(R.id.mealList);
         mMealListAdapter = new MealListAdapter(getMeals(),this);
+        CardView noFoodToday = (CardView) view.findViewById(R.id.noFoodToday);
+        if (getMeals().isEmpty()) {
+            mRecyclerView.setVisibility(View.GONE);
+            noFoodToday.setVisibility(View.VISIBLE);
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            noFoodToday.setVisibility(View.GONE);
+        }
+
         mRecyclerView.setAdapter(mMealListAdapter);
         mRecyclerView.setLayoutManager(layoutParams);
-        Log.i("MEALDAYFRAGMENT", "Creating View of MealDayFragment Nr. "+mPagerPositon);
         return view;
     }
 

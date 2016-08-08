@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="drawer-icon.svg"
+   inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xxhdpi/banner.png"
+   inkscape:export-xdpi="23.779133"
+   inkscape:export-ydpi="23.779133">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.24748737"
+     inkscape:cx="-21.640435"
+     inkscape:cy="-790.65258"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1877"
+     inkscape:window-height="1056"
+     inkscape:window-x="43"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <defs
+     id="defs4">
+    <clipPath
+       id="clipPath4280"
+       clipPathUnits="userSpaceOnUse">
+      <circle
+         r="328.57144"
+         cy="696.64789"
+         cx="335.71429"
+         id="circle4282"
+         style="opacity:1;fill:#2e394d;fill-opacity:1;stroke:#3e3e3e;stroke-width:0.40000001;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4202">
+      <circle
+         r="328.57144"
+         cy="696.64789"
+         cx="335.71429"
+         id="circle4204"
+         style="opacity:1;fill:#2e394d;fill-opacity:1;stroke:#3e3e3e;stroke-width:0.40000001;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-xdpi="11.928994"
+         inkscape:export-ydpi="11.928994" />
+    </clipPath>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter4328">
+      <feFlood
+         flood-opacity="0.498039"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood4330" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite4332" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="10"
+         result="blur"
+         id="feGaussianBlur4334" />
+      <feOffset
+         dx="4.41619e-13"
+         dy="3"
+         result="offset"
+         id="feOffset4336" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite4338" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter4328-7">
+      <feFlood
+         flood-opacity="0.498039"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood4330-5" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite4332-3" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="10"
+         result="blur"
+         id="feGaussianBlur4334-5" />
+      <feOffset
+         dx="4.41619e-13"
+         dy="3"
+         result="offset"
+         id="feOffset4336-6" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite4338-2" />
+    </filter>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       inkscape:export-ydpi="5.4782605"
+       inkscape:export-xdpi="5.4782605"
+       y="805.53595"
+       x="-866.57568"
+       height="659.03632"
+       width="659.03632"
+       id="rect4284"
+       style="opacity:0;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:36.96517563;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/mipmap-mdpi/ic_launcher.png" />
+    <g
+       inkscape:export-ydpi="11.928994"
+       inkscape:export-xdpi="11.928994"
+       clip-path="url(#clipPath4280)"
+       style="stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1;opacity:0.319"
+       id="g4241" />
+    <circle
+       inkscape:export-ydpi="5.4782605"
+       inkscape:export-xdpi="5.4782605"
+       style="opacity:1;fill:#2e394d;fill-opacity:1;stroke:#000000;stroke-width:0.40000001;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4328)"
+       id="path4136"
+       cx="-537.0575"
+       cy="1135.0541"
+       r="328.57144"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/mipmap-mdpi/ic_launcher.png" />
+    <path
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/mipmap-mdpi/ic_launcher.png"
+       inkscape:export-ydpi="5.4782605"
+       inkscape:export-xdpi="5.4782605"
+       style="fill:none;fill-rule:evenodd;stroke:#fefefe;stroke-width:47.81105804;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -693.54173,1296.9874 c 0,0 -59.38525,-300.46666 47.38049,-325.67665 66.31398,-15.65834 113.09712,113.37615 116.80364,167.75415 6.2191,91.2398 29.55044,-184.02073 94.38981,-173.16936 112.77504,18.87378 57.15884,338.23476 57.15884,338.23476"
+       id="path4230"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="casac" />
+    <path
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/banner.png"
+       inkscape:export-ydpi="5.3188086"
+       inkscape:export-xdpi="5.3188086"
+       style="fill:none;fill-rule:evenodd;stroke:#fefefe;stroke-width:45;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -743.17893,2138.3416 c 0,0 -59.38517,-300.4667 47.3805,-325.6767 66.314,-15.6583 113.0971,113.3762 116.8036,167.7542 6.2191,91.2398 29.5505,-184.0208 94.3898,-173.1694 112.7751,18.8738 57.1589,338.2347 57.1589,338.2347"
+       id="path4230-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="casac" />
+    <path
+       sodipodi:nodetypes="cassaac"
+       inkscape:connector-curvature="0"
+       id="path4221"
+       d="m -323.70858,2015.6758 c 0,0 199.86676,46.0803 256.74052,-18.1533 33.85375,-38.2347 30.77203,-119.5152 -7.78002,-153.0071 -45.29773,-39.3521 -149.28099,-42.4175 -220.43379,-28.5266 -47.22327,9.2192 -45.28878,89.347 -44.08676,137.4469 1.59242,63.7209 14.52905,143.3775 67.42681,178.9404 53.82366,36.1853 194.5004,-5.1867 194.5004,-5.1867"
+       style="fill:none;fill-rule:evenodd;stroke:#fefefe;stroke-width:40.84508514;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/banner.png"
+       inkscape:export-xdpi="5.3188086"
+       inkscape:export-ydpi="5.3188086" />
+    <path
+       sodipodi:nodetypes="ccaaac"
+       inkscape:connector-curvature="0"
+       id="path4223"
+       d="m 22.857141,1782.9738 8.57143,362.8571 c 0,0 -36.2716896,-227.5478 24.59029,-312.4684 26.20062,-36.5577 79.062009,-55.5289 123.981109,-53.2459 52.3951,2.6629 109.8639,31.9018 137.5736,76.4497 49.4788,79.5454 13.855,280.6932 13.855,280.6932"
+       style="fill:none;fill-rule:evenodd;stroke:#fefefe;stroke-width:45;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/banner.png"
+       inkscape:export-xdpi="5.3188086"
+       inkscape:export-ydpi="5.3188086" />
+    <path
+       sodipodi:nodetypes="caaaaac"
+       inkscape:connector-curvature="0"
+       id="path4225"
+       d="m 677.16485,1826.6286 c 0,0 -137.7324,-77.7782 -197.1901,-45.8581 -42.4026,22.764 -69.2685,90.9891 -50.4439,135.2815 29.9911,70.5656 164.1894,30.9492 210.9475,91.7163 21.6871,28.1847 36.5184,76.3917 16.0503,105.4738 -32.2092,45.7644 -111.7264,50.0974 -164.7634,32.2398 -34.9904,-11.7814 -73.6989,-82.6839 -73.6989,-82.6839"
+       style="fill:none;fill-rule:evenodd;stroke:#fefefe;stroke-width:36.11329651;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/banner.png"
+       inkscape:export-xdpi="5.3188086"
+       inkscape:export-ydpi="5.3188086" />
+    <path
+       sodipodi:nodetypes="caaaaac"
+       inkscape:connector-curvature="0"
+       id="path4227"
+       d="m 808.5578,1836.7878 c 0,0 136.2619,-69.3096 189.3697,-33.4182 35.8403,24.2217 25.2393,83.7574 26.7345,126.9891 2.0474,59.198 16.9805,133.7245 -24.5067,176.0023 -43.1838,44.0068 -128.4771,58.3367 -182.6859,28.9624 -60.7926,-32.9418 -123.5815,-132.221 -84.6594,-189.3696 55.2376,-81.1042 294.0798,13.3673 294.0798,13.3673"
+       style="fill:none;fill-rule:evenodd;stroke:#fefefe;stroke-width:35.089077;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/banner.png"
+       inkscape:export-xdpi="5.3188086"
+       inkscape:export-ydpi="5.3188086" />
+    <path
+       sodipodi:nodetypes="saaass"
+       inkscape:connector-curvature="0"
+       id="path4229"
+       d="m 1123.2431,2109.8133 c 7.2523,61.3388 181.7322,35.5757 248.7148,-13.483 71.2284,-52.1683 106.2863,-160.4735 93.4696,-247.8276 -13.0873,-89.1988 -86.8198,-168.5757 -164.1146,-214.9784 -48.3519,-29.0274 -161.3845,-88.9613 -166.9572,-27.3817 -18.5827,205.3418 -38.5427,271.6732 -11.1126,503.6707 z"
+       style="fill:none;fill-rule:evenodd;stroke:#fefefe;stroke-width:45;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/banner.png"
+       inkscape:export-xdpi="5.3188086"
+       inkscape:export-ydpi="5.3188086" />
+    <path
+       sodipodi:nodetypes="saaass"
+       inkscape:connector-curvature="0"
+       id="path4229-7"
+       d="m 1538.9785,2124.3021 c 7.2523,61.3388 181.7322,35.5757 248.7148,-13.483 71.2284,-52.1683 106.2863,-160.4735 93.4696,-247.8276 -13.0873,-89.1988 -86.8198,-168.5757 -164.1146,-214.9784 -48.3519,-29.0274 -161.3845,-88.9613 -166.9572,-27.3817 -18.5827,205.3418 -38.5427,271.6732 -11.1126,503.6707 z"
+       style="fill:none;fill-rule:evenodd;stroke:#fefefe;stroke-width:45;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/banner.png"
+       inkscape:export-xdpi="5.3188086"
+       inkscape:export-ydpi="5.3188086" />
+  </g>
+</svg>

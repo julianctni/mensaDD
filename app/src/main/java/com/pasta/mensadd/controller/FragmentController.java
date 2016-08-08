@@ -24,10 +24,8 @@ public class FragmentController {
         CanteenMapFragment fragment = (CanteenMapFragment)fm.findFragmentByTag("MAP_FRAGMENT");
         if (fragment != null) {
             fm.beginTransaction().replace(R.id.mainContainer, fragment, "MAP_FRAGMENT").commit();
-            Log.i("FRAGMENT-CONTROLLER", "NOT NULL");
         } else {
             fm.beginTransaction().replace(R.id.mainContainer, new CanteenMapFragment(), "MAP_FRAGMENT").commit();
-            Log.i("FRAGMENT-CONTROLLER", "NULL");
         }
     }
 
@@ -46,16 +44,16 @@ public class FragmentController {
     
     public static void showSettingsFragment(FragmentManager fm){
         MainActivity.setToolbarShadow(true);
-        fm.beginTransaction().replace(R.id.mainContainer, new SettingsFragment()).commit();
+        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new SettingsFragment()).commit();
     }
 
     public static void showMealWeekFragment(FragmentManager fm, String mensaId){
         MainActivity.setToolbarShadow(false);
-        fm.beginTransaction().addToBackStack("test").replace(R.id.mainContainer, MealWeekFragment.newInstance(mensaId)).commit();
+        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, MealWeekFragment.newInstance(mensaId)).commit();
     }
 
     public static void showImprintFragment(FragmentManager fm){
         MainActivity.setToolbarShadow(true);
-        fm.beginTransaction().replace(R.id.mainContainer, ImprintFragment.newInstance()).commit();
+        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, ImprintFragment.newInstance()).commit();
     }
 }
