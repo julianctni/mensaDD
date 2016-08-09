@@ -10,7 +10,6 @@ import java.util.HashMap;
  */
 public class Canteen {
 
-    private int mId;
     private String mName;
     private String mHours;
     private String mAddress;
@@ -21,9 +20,8 @@ public class Canteen {
     private int mListPriority;
     private HashMap<Integer, ArrayList<Meal>> mealMap = new HashMap<Integer, ArrayList<Meal>>();
 
-    public Canteen(int id, String name, String hours, String address,
+    public Canteen(String name, String hours, String address,
                    String contact, LatLng position, String info) {
-        mId = id;
         mAddress = address;
         mHours = hours;
         mName = name;
@@ -38,11 +36,12 @@ public class Canteen {
             mListPriority = 0;
     }
 
-    public Canteen(String name, String code, String address, String hour, int priority){
+    public Canteen(String name, String code, LatLng position, String address, String hour, int priority){
         mName = name;
         mCode = code;
         mHours = hour;
         mAddress = address;
+        mPosition = position;
         if (mCode.contains("zeltschloesschen") || mCode.contains("alte-mensa"))
             if (priority < 2)
                 mListPriority = 2;
@@ -72,9 +71,8 @@ public class Canteen {
     public void setMealMap(HashMap<Integer, ArrayList<Meal>> meal) {
         this.mealMap = meal;
     }
-
-    public int getId() {
-        return mId;
+    public LatLng getPosition () {
+        return mPosition;
     }
 
     public String getHours() {

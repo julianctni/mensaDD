@@ -11,20 +11,8 @@
         android:layout_height="match_parent"
         mapbox:access_token="pk.eyJ1IjoicGFzdGFzb2Z0d2FyZSIsImEiOiJhZjJkYjBhNzMyMTNiMzI4ZmY5NDM0MDU1YjJmNTlmZCJ9.-nkTpeqduWxnSeizwuyV2Q"
         mapbox:style_url="mapbox://styles/mapbox/streets-v9"
-        mapbox:center_latitude="51.056553"
-        mapbox:center_longitude="13.742202"
-        mapbox:zoom="14"/>
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        style="@android:style/Widget.Material.ProgressBar.Horizontal"
-        tools:targetApi="lollipop" />
+        mapbox:center_latitude="51.053130"
+        mapbox:center_longitude="13.744334"
+        mapbox:zoom="12" />
 
 </RelativeLayout>

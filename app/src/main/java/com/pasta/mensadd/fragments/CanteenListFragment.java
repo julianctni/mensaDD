@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.adapter.CanteenListAdapter;
@@ -34,7 +35,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     public static CanteenListAdapter mCanteenListAdapter;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mCanteenListRefresher;
-    private final String URL_CANTEEN_LIST = "http://ctni.sabic.uberspace.de/mensadd/canteen-list.json";
+    private final String URL_CANTEEN_LIST = "http://ctni.sabic.uberspace.de/mensadd/canteens.json";
 
 
     public CanteenListFragment() {
@@ -90,6 +91,8 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
                     String name = canteen.getString("name");
                     String code = canteen.getString("code");
                     String address = canteen.getString("address");
+                    JSONArray gpsArray = canteen.getJSONArray("coordinates");
+                    LatLng position = new LatLng(Double.parseDouble(gpsArray.get(0).toString()),Double.parseDouble(gpsArray.get(1).toString()));
                     JSONArray hourArray = canteen.getJSONArray("hours");
                     String hours = "";
                     for (int j = 0; j < hourArray.length(); j++){
@@ -98,7 +101,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
                             hours += "\n";
                     }
                     int priority = prefs.getInt("priority_"+code, 0);
-                    Canteen m = new Canteen(name, code, address, hours, priority);
+                    Canteen m = new Canteen(name, code, position,address, hours, priority);
                     DataHolder.getInstance().getCanteenList().add(m);
                 }
             } catch (JSONException e) {

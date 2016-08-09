@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity
         barLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         mHeadingToolbar = (TextView) findViewById(R.id.heading_toolbar);
         mAppLogoToolbar = (ImageView) findViewById(R.id.home_button);
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mCardCheckContainer = (RelativeLayout) findViewById(R.id.cardCheckContainer);
         if (mCardCheckContainer != null) mCardCheckContainer.setOnClickListener(this);
         mCardCheckHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
 
-        if (getFragmentManager().findFragmentById(R.id.mainContainer) == null) {
+        if (getSupportFragmentManager().findFragmentById(R.id.mainContainer) == null) {
             CanteenListFragment fragment = new CanteenListFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.mainContainer, fragment, "MensaList").commit();
         }
