@@ -20,8 +20,7 @@ public class FragmentController {
 
     public static void showMapFragment(FragmentManager fm){
         MainActivity.setToolbarShadow(true);
-        fm.beginTransaction().replace(R.id.mainContainer, new CanteenMapFragment(), "MAP_FRAGMENT").commit();
-
+        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new CanteenMapFragment(), "MAP_FRAGMENT").commit();
     }
 
     public static void showCardCheckFragment(FragmentManager fm, String current, String lastTransaction){
@@ -44,7 +43,7 @@ public class FragmentController {
 
     public static void showMealWeekFragment(FragmentManager fm, String mensaId){
         MainActivity.setToolbarShadow(false);
-        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, MealWeekFragment.newInstance(mensaId)).commit();
+        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, MealWeekFragment.newInstance(mensaId), "MEAL_WEEK_FRAGMENT").commit();
     }
 
     public static void showImprintFragment(FragmentManager fm){

@@ -38,6 +38,7 @@ import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 
 import java.io.IOException;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -196,6 +197,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private String moneyStr(int i) {
+        Log.i("CARDCHECK", i+"");
         int euros = i / 1000;
         int cents = i/10 % 100;
         Log.i("CARD-CHECK", i + "Euro "+euros+" Cent "+cents);
@@ -203,6 +205,11 @@ public class MainActivity extends AppCompatActivity
         if (cents < 10)
             centsStr = "0" + centsStr;
         return euros + "," + centsStr + "\u20AC"; // Last one is euro sign
+    }
+
+    private void storeCardData(ValueData value){
+        float balance = value.value/10;
+        float lastTransaction = value.lastTransaction/10;
     }
 
     private void updateCardCheckFragment(ValueData value) {

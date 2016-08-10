@@ -22,16 +22,10 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
 
     public ArrayList<Canteen> items;
     public CanteenListFragment fragment;
-    public ArrayList<Integer> headerColors;
 
     public CanteenListAdapter(ArrayList<Canteen> items, CanteenListFragment fragment) {
         this.items = items;
         this.fragment = fragment;
-        headerColors = new ArrayList<>();
-        headerColors.add(R.color.tile_blue1);
-        headerColors.add(R.color.tile_pink1);
-        headerColors.add(R.color.tile_orange1);
-        headerColors.add(R.color.tile_cyan1);
     }
 
     @Override
