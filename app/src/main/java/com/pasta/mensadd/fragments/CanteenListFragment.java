@@ -76,6 +76,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
             Log.i("CANTEEN-LIST", "IS EMPTY");
             NetworkController.getInstance(getActivity()).getCanteenList(URL_CANTEEN_LIST, this);
         }
+        MainActivity.updateNavDrawer(R.id.nav_mensa);
         return view;
     }
 

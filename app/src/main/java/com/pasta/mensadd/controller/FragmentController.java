@@ -7,7 +7,7 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.CanteenMapFragment;
 import com.pasta.mensadd.fragments.CardCheckFragment;
-import com.pasta.mensadd.fragments.ImprintFragment;
+import com.pasta.mensadd.fragments.CardHistoryFragment;
 import com.pasta.mensadd.fragments.MealWeekFragment;
 import com.pasta.mensadd.fragments.SettingsFragment;
 
@@ -46,8 +46,13 @@ public class FragmentController {
         fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, MealWeekFragment.newInstance(mensaId), "MEAL_WEEK_FRAGMENT").commit();
     }
 
+    public static void showCardHistoryFragment(FragmentManager fm){
+        MainActivity.setToolbarShadow(true);
+        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, CardHistoryFragment.newInstance(), "CARD_HISTORY_FRAGMENT").commit();
+    }
+
     public static void showImprintFragment(FragmentManager fm){
         MainActivity.setToolbarShadow(true);
-        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, ImprintFragment.newInstance(), "IMPRINT_FRAGMENT").commit();
+        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, CardHistoryFragment.newInstance(), "IMPRINT_FRAGMENT").commit();
     }
 }

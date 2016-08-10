@@ -1,10 +1,12 @@
 package com.pasta.mensadd;
 
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
@@ -34,10 +36,12 @@ import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
 import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
+import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity
@@ -53,6 +57,8 @@ public class MainActivity extends AppCompatActivity
     private ImageView mAppLogoToolbar;
     private static AppBarLayout barLayout;
     private static final String TAG = MainActivity.class.getName();
+    private static NavigationView mNavigationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportActionBar().setTitle(null);
             }
         }
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         barLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         mHeadingToolbar = (TextView) findViewById(R.id.heading_toolbar);
         mAppLogoToolbar = (ImageView) findViewById(R.id.home_button);
@@ -103,6 +110,10 @@ public class MainActivity extends AppCompatActivity
             Log.i("New Elevation", barLayout.getElevation()+"");
         }
 
+    }
+
+    public static void updateNavDrawer(int id){
+        mNavigationView.getMenu().findItem(id).setChecked(true);
     }
 
     @Override
@@ -165,6 +176,12 @@ public class MainActivity extends AppCompatActivity
                 mAppLogoToolbar.setVisibility(View.VISIBLE);
                 mHeadingToolbar.setVisibility(View.GONE);
                 break;
+            case R.id.nav_card_history:
+                FragmentController.showCardHistoryFragment(getSupportFragmentManager());
+                mAppLogoToolbar.setVisibility(View.GONE);
+                mHeadingToolbar.setText(getString(R.string.nav_drawer_card_history));
+                mHeadingToolbar.setVisibility(View.VISIBLE);
+                break;
             case R.id.nav_settings:
                 FragmentController.showSettingsFragment(getSupportFragmentManager());
                 mAppLogoToolbar.setVisibility(View.GONE);
@@ -197,22 +214,34 @@ public class MainActivity extends AppCompatActivity
     }
 
     private String moneyStr(int i) {
-        Log.i("CARDCHECK", i+"");
         int euros = i / 1000;
         int cents = i/10 % 100;
-        Log.i("CARD-CHECK", i + "Euro "+euros+" Cent "+cents);
         String centsStr = Integer.toString(cents);
         if (cents < 10)
             centsStr = "0" + centsStr;
         return euros + "," + centsStr + "\u20AC"; // Last one is euro sign
     }
 
+
     private void storeCardData(ValueData value){
-        float balance = value.value/10;
-        float lastTransaction = value.lastTransaction/10;
+        float cardBalance = (float)value.value/1000;
+        float lastTransaction = (float)value.lastTransaction/1000;
+        DatabaseController dbController = new DatabaseController(this.getApplicationContext());
+        if (cardBalance != dbController.getLastInsertedBalance()) {
+            SQLiteDatabase db = dbController.getWritableDatabase();
+            String updateDb = "DELETE FROM "+dbController.BALANCE_TABLE_NAME+" WHERE "+dbController.ID+" NOT IN (" +
+                    "SELECT "+dbController.ID+" FROM "+dbController.BALANCE_TABLE_NAME+" ORDER BY "+dbController.ID+" DESC LIMIT 15);";
+            db.execSQL(updateDb);
+            ContentValues values = new ContentValues();
+            values.put(DatabaseController.ID, new Date().getTime());
+            values.put(DatabaseController.CARD_BALANCE, cardBalance);
+            values.put(DatabaseController.LAST_TRANSACTION, lastTransaction);
+            long id = db.insert(dbController.BALANCE_TABLE_NAME, null, values);
+        }
     }
 
     private void updateCardCheckFragment(ValueData value) {
+        storeCardData(value);
         if (!mCardCheckVisible) {
             FragmentController.showCardCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
             Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight);

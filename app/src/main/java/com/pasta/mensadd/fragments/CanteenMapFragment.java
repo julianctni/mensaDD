@@ -32,6 +32,7 @@ import com.mapbox.mapboxsdk.location.LocationServices;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.model.Canteen;
@@ -124,6 +125,7 @@ public class CanteenMapFragment extends Fragment {
                 });
             }
         });
+        MainActivity.updateNavDrawer(R.id.nav_map);
         return view;
     }
 
