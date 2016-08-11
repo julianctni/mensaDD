@@ -14,27 +14,10 @@ public class Canteen {
     private String mHours;
     private String mAddress;
     private String mCode;
-    private String mInfo;
     private LatLng mPosition;
-    private String mContactData;
     private int mListPriority;
-    private HashMap<Integer, ArrayList<Meal>> mealMap = new HashMap<Integer, ArrayList<Meal>>();
+    private HashMap<String, ArrayList<Meal>> mealMap = new HashMap<>();
 
-    public Canteen(String name, String hours, String address,
-                   String contact, LatLng position, String info) {
-        mAddress = address;
-        mHours = hours;
-        mName = name;
-        mInfo = info;
-        mContactData = contact;
-        mPosition = position;
-        if (mCode.contains("zeltschloesschen") || mCode.contains("alte-mensa"))
-            mListPriority = 3;
-        else if (mCode.contains("siedepunkt") || mCode.contains("mensa-reichenbachstrasse"))
-            mListPriority = 2;
-        else
-            mListPriority = 0;
-    }
 
     public Canteen(String name, String code, LatLng position, String address, String hour, int priority){
         mName = name;
@@ -56,11 +39,12 @@ public class Canteen {
             mListPriority = priority;
     }
 
+
     public String getCode(){
         return mCode;
     }
 
-    public HashMap<Integer, ArrayList<Meal>> getmealMap() {
+    public HashMap<String, ArrayList<Meal>> getMealMap() {
         return mealMap;
     }
 
@@ -68,9 +52,6 @@ public class Canteen {
         return mListPriority;
     }
 
-    public void setMealMap(HashMap<Integer, ArrayList<Meal>> meal) {
-        this.mealMap = meal;
-    }
     public LatLng getPosition () {
         return mPosition;
     }
@@ -84,16 +65,10 @@ public class Canteen {
         return mAddress;
     }
 
-    public String getInfo() {
-        return mInfo;
-    }
 
     public String getName() {
         return mName;
     }
 
-    public String getContactData() {
-        return mContactData;
-    }
 
 }

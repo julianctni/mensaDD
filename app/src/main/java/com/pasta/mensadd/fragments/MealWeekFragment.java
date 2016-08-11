@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
 import com.pasta.mensadd.model.Canteen;
@@ -49,8 +50,6 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
     private Calendar mCalendar = Calendar.getInstance();
     private PagerTabStrip mTabStrip;
     private DateFormat mDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    private Date mFirstDayOfWeekDate;
-    private int mFirstDayOfWeekInt;
     private LinearLayout mProgressLayout;
 
 
@@ -82,9 +81,6 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mCalendar.set(Calendar.DAY_OF_WEEK, 2);
-        mFirstDayOfWeekDate = mCalendar.getTime();
-        mFirstDayOfWeekInt = mCalendar.get(Calendar.DAY_OF_YEAR);
         mViewPager = (ViewPager) view.findViewById(R.id.mealViewPager);
         mTabStrip = (PagerTabStrip)view.findViewById(R.id.pager_tab_strip);
         mTabStrip.setTabIndicatorColorResource(R.color.colorPrimaryDark);
@@ -102,13 +98,12 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
     @Override
     public void onResponseMessage(int responseType, String message) {
+        DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
         if (responseType == NetworkController.SUCCESS) {
             try {
                 JSONArray mealDays = new JSONArray(message);
-                mCalendar.set(Calendar.DAY_OF_WEEK, 2);
+                dbController.deleteMealsOfCanteen(mCanteen.getCode());
                 for (int i=0; i<mealDays.length();i++){
-                    Log.i("MEAL-PARSING", "Parsing "+mDateFormat.format(mCalendar.getTime()));
-                    Log.i("MEAL-PARSING", "Parsing "+mCalendar.get(Calendar.DAY_OF_YEAR));
                     JSONObject mealDay = mealDays.getJSONObject(i);
                     JSONArray meals = mealDay.getJSONArray(mDateFormat.format(mCalendar.getTime()));
                     ArrayList<Meal> mealList = new ArrayList<>();
@@ -124,28 +119,24 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
                         String details = jsonMeal.getString("mealDetails");
                         String name = jsonMeal.getString("name");
                         String price = jsonMeal.getString("price");
-                        Meal meal = new Meal(name, imgLink, details, price, vegan==1, vegetarian==1, pork==1, beef==1, garlic==1, alcohol==1);
+                        Meal meal = new Meal(name, imgLink, details, price, mCanteen.getCode(), String.valueOf(mealDay.keys().next()), vegan==1, vegetarian==1, pork==1, beef==1, garlic==1, alcohol==1);
                         mealList.add(meal);
+                        dbController.updateMealTable(meal);
                     }
-                    mCanteen.getmealMap().put(mCalendar.get(Calendar.DAY_OF_YEAR), mealList);
+                    mCanteen.getMealMap().put(String.valueOf(mealDay.keys().next()), mealList);
                     mCalendar.add(Calendar.DATE, 1);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            mProgressLayout.setVisibility(View.GONE);
-            mViewPager.setVisibility(View.VISIBLE);
-            mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
-            mViewPager.setAdapter(mPagerAdapter);
-            mCalendar.setTime(new Date());
-            int today = mCalendar.get(Calendar.DAY_OF_WEEK);
-            if (today == 1)
-                today = 8;
-            Log.i("CALENDAR", mCalendar.get(Calendar.DAY_OF_WEEK)+"");
-            mViewPager.setCurrentItem(today-2, true);
+
         } else {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+            dbController.readMealsFromDb(mCanteen.getCode());
         }
+        mProgressLayout.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.VISIBLE);
+        mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
     }
 
     class MealDayPagerAdapter extends FragmentPagerAdapter {
@@ -158,9 +149,8 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd.MM.yyyy",
                     Locale.GERMANY);
             mCalendar.setTime(new Date());
-            mCalendar.set(Calendar.DAY_OF_WEEK, 2);
-            for (int d = 0; d<7; d++) {
-                mFragmentList.add(MealDayFragment.newInstance(mMensaId,mFirstDayOfWeekInt+d));
+            for (int d = 0; d<8; d++) {
+                mFragmentList.add(MealDayFragment.newInstance(mMensaId,d));
                 mFragmentTitleList.add(sdf.format(mCalendar.getTime()));
                 mCalendar.add(Calendar.DATE,1);
             }

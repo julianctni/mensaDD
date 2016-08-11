@@ -7,6 +7,8 @@ public class Meal {
     private String mPrice;
     private String mDetails;
     private String mImgLink;
+    private String mCanteenCode;
+    private String mDate;
     private boolean mVegetarian;
     private boolean mVegan;
     private boolean mPork;
@@ -14,7 +16,7 @@ public class Meal {
     private boolean mGarlic;
     private boolean mAlcohol;
 
-    public Meal(String name, String imgLink, String details, String price, boolean vegan, boolean vegetarian, boolean pork, boolean beef, boolean garlic, boolean alcohol) {
+    public Meal(String name, String imgLink, String details, String price, String canteen, String date, boolean vegan, boolean vegetarian, boolean pork, boolean beef, boolean garlic, boolean alcohol) {
         mName = name;
         mPrice = price;
         mImgLink = imgLink;
@@ -25,8 +27,13 @@ public class Meal {
         mBeef = beef;
         mGarlic = garlic;
         mAlcohol = alcohol;
+        mCanteenCode = canteen;
+        mDate = date;
     }
 
+    public String getCanteenCode(){
+        return mCanteenCode;
+    }
     public String getName() {
         return mName;
     }
@@ -57,6 +64,10 @@ public class Meal {
 
     public Boolean containsAlcohol() {
         return mAlcohol;
+    }
+
+    public String getDate(){
+        return mDate;
     }
 
     public String getDetails() {

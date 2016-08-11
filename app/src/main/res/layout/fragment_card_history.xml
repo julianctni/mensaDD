@@ -80,6 +80,16 @@
                     android:textColor="#888888"
                     android:textSize="20sp" />
 
+                <TextView
+                    android:id="@+id/notEnoughDataForLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Nicht genügend Datensätze vorhanden."
+                    android:textColor="#888888"
+                    android:textSize="16sp" />
+
                 <lecho.lib.hellocharts.view.LineChartView
                     android:id="@+id/lineChart"
                     android:layout_width="match_parent"
@@ -113,6 +123,16 @@
                     android:text="Abbuchungen"
                     android:textColor="#888888"
                     android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/notEnoughDataForColumn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Nicht genügend Datensätze vorhanden."
+                    android:textColor="#888888"
+                    android:textSize="16sp" />
 
                 <lecho.lib.hellocharts.view.ColumnChartView
                     android:id="@+id/columnChart"

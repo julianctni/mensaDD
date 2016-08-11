@@ -16,8 +16,11 @@ import com.pasta.mensadd.adapter.MealListAdapter;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MealDayFragment extends Fragment {
 
@@ -58,7 +61,6 @@ public class MealDayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_meal_day, container, false);
         layoutParams = new LinearLayoutManager(getActivity());
         mRecyclerView = (RecyclerView) view.findViewById(R.id.mealList);
-        mMealListAdapter = new MealListAdapter(getMeals(),this);
         CardView noFoodToday = (CardView) view.findViewById(R.id.noFoodToday);
         if (getMeals().isEmpty()) {
             mRecyclerView.setVisibility(View.GONE);
@@ -67,6 +69,9 @@ public class MealDayFragment extends Fragment {
             mRecyclerView.setVisibility(View.VISIBLE);
             noFoodToday.setVisibility(View.GONE);
         }
+        mMealListAdapter = new MealListAdapter(getMeals(),this);
+
+
 
         mRecyclerView.setAdapter(mMealListAdapter);
         mRecyclerView.setLayoutManager(layoutParams);
@@ -74,10 +79,13 @@ public class MealDayFragment extends Fragment {
     }
 
     public ArrayList<Meal> getMeals() {
-        int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-        if (DataHolder.getInstance().getMensa(mMensaId).getmealMap().get(mPagerPositon) == null)
-            DataHolder.getInstance().getMensa(mMensaId).getmealMap().put(mPagerPositon, new ArrayList<Meal>());
-        return DataHolder.getInstance().getMensa(mMensaId).getmealMap().get(mPagerPositon);
+        Date date = new Date();
+        date.setTime(date.getTime()+mPagerPositon*86400000);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMANY);
+        if (DataHolder.getInstance().getMensa(mMensaId).getMealMap().get(sdf.format(date)) == null)
+            DataHolder.getInstance().getMensa(mMensaId).getMealMap().put(sdf.format(date), new ArrayList<Meal>());
+        return DataHolder.getInstance().getMensa(mMensaId).getMealMap().get(sdf.format(date));
     }
 
 

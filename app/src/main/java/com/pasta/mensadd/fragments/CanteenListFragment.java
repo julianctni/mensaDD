@@ -2,13 +2,13 @@ package com.pasta.mensadd.fragments;
 
 
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +19,9 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.adapter.CanteenListAdapter;
-import com.pasta.mensadd.model.DataHolder;
+import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.model.Canteen;
+import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.networking.LoadCanteensCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
@@ -28,14 +29,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CanteenListFragment extends Fragment implements LoadCanteensCallback{
+import java.util.Date;
 
+public class CanteenListFragment extends Fragment implements LoadCanteensCallback{
 
     private LinearLayoutManager layoutParams;
     public static CanteenListAdapter mCanteenListAdapter;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mCanteenListRefresher;
+    private SharedPreferences prefs;
     private final String URL_CANTEEN_LIST = "http://ctni.sabic.uberspace.de/mensadd/canteens.json";
+
+    private static String KEY_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
 
 
     public CanteenListFragment() {
@@ -51,6 +56,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_canteen_list, container, false);
         MainActivity.setToolbarShadow(true);
+        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         layoutParams = new LinearLayoutManager(getActivity());
         mRecyclerView = (RecyclerView) view.findViewById(R.id.mensaList);
         mCanteenListAdapter = new CanteenListAdapter(DataHolder.getInstance().getCanteenList(),this);
@@ -72,10 +78,13 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         ImageView appLogo = (ImageView)getActivity().findViewById(R.id.home_button);
         appLogo.setVisibility(View.VISIBLE);
 
-        if (DataHolder.getInstance().getCanteenList().isEmpty()) {
-            Log.i("CANTEEN-LIST", "IS EMPTY");
+        if (prefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) == 0 || new Date().getTime() - prefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) > 86400000) {
             NetworkController.getInstance(getActivity()).getCanteenList(URL_CANTEEN_LIST, this);
+        } else if (DataHolder.getInstance().getCanteenList().isEmpty()){
+            DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
+            dbController.readCanteensFromDb();
         }
+
         MainActivity.updateNavDrawer(R.id.nav_mensa);
         return view;
     }
@@ -84,7 +93,8 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     public void onResponseMessage(int responseType, String message) {
         if (responseType == 1){
             DataHolder.getInstance().getCanteenList().clear();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
+            SQLiteDatabase db = dbController.getWritableDatabase();
             try {
                 JSONArray json = new JSONArray(message);
                 for(int i = 0 ; i < json.length(); i++){
@@ -105,9 +115,11 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
                     Canteen m = new Canteen(name, code, position,address, hours, priority);
                     DataHolder.getInstance().getCanteenList().add(m);
                 }
+                prefs.edit().putLong(KEY_LAST_CANTEENS_UPDATE,new Date().getTime()).commit();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            dbController.updateCanteenTable();
             DataHolder.getInstance().sortCanteenList();
             mCanteenListRefresher.setRefreshing(false);
             mCanteenListAdapter.notifyDataSetChanged();

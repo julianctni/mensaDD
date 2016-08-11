@@ -228,15 +228,7 @@ public class MainActivity extends AppCompatActivity
         float lastTransaction = (float)value.lastTransaction/1000;
         DatabaseController dbController = new DatabaseController(this.getApplicationContext());
         if (cardBalance != dbController.getLastInsertedBalance()) {
-            SQLiteDatabase db = dbController.getWritableDatabase();
-            String updateDb = "DELETE FROM "+dbController.BALANCE_TABLE_NAME+" WHERE "+dbController.ID+" NOT IN (" +
-                    "SELECT "+dbController.ID+" FROM "+dbController.BALANCE_TABLE_NAME+" ORDER BY "+dbController.ID+" DESC LIMIT 15);";
-            db.execSQL(updateDb);
-            ContentValues values = new ContentValues();
-            values.put(DatabaseController.ID, new Date().getTime());
-            values.put(DatabaseController.CARD_BALANCE, cardBalance);
-            values.put(DatabaseController.LAST_TRANSACTION, lastTransaction);
-            long id = db.insert(dbController.BALANCE_TABLE_NAME, null, values);
+            dbController.updateBalanceTable(new Date().getTime(),cardBalance,lastTransaction);
         }
     }
 

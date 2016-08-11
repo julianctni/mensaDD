@@ -1,35 +1,78 @@
 package com.pasta.mensadd.controller;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.pasta.mensadd.model.Canteen;
+import com.pasta.mensadd.model.DataHolder;
+import com.pasta.mensadd.model.Meal;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public class DatabaseController extends SQLiteOpenHelper {
 
-    public static final String BALANCE_TABLE_NAME = "cardBalanceTable";
-    public static final String ID = "id";
+    public static final String BALANCES_TABLE_NAME = "cardBalances";
+    public static final String MEALS_TABLE_NAME = "meals";
+    public static final String CANTEENS_TABLE_NAME = "canteens";
+
+    public static final String BALANCE_ID = "balanceId";
     public static final String CARD_BALANCE = "cardBalance";
     public static final String LAST_TRANSACTION = "lastTransaction";
 
+    public static final String CANTEEN_ID = "canteenId";
+    public static final String CANTEEN_NAME = "canteenName";
+    public static final String CANTEEN_ADDRESS = "canteenAddress";
+    public static final String CANTEEN_HOURS = "canteenHours";
+    public static final String CANTEEN_POS_LAT = "canteenPosLat";
+    public static final String CANTEEN_POS_LONG = "canteenPosLong";
+
+    public static final String MEAL_ID = "mealId";
+    public static final String MEAL_NAME = "mealName";
+    public static final String MEAL_PRICE = "mealPrice";
+    public static final String MEAL_DETAILS = "mealDetails";
+    public static final String MEAL_IMG_LINK = "mealImgLink";
+    public static final String MEAL_VEGAN = "mealVegan";
+    public static final String MEAL_VEGETARIAN = "mealVegetarian";
+    public static final String MEAL_PORC = "mealPorc";
+    public static final String MEAL_BEEF = "mealBeef";
+    public static final String MEAL_GARLIC = "mealGarlic";
+    public static final String MEAL_ALCOHOL = "mealAlcohol";
+    public static final String MEAL_CANTEEN_CODE = "mealCanteenCode";
+    public static final String MEAL_DATE = "mealDate";
+
     private static final String DATABASE_NAME = "mensadd.db";
     private static final int DATABASE_VERSION = 1;
-    private Context context;
     SharedPreferences prefs;
 
     public DatabaseController(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //createMealTable(db);
+        deleteOldTables(db);
+        createMealTable(db);
+        createCanteenTable(db);
         createBalanceTable(db);
+
     }
+
+    public void deleteOldTables(SQLiteDatabase db) {
+        String canteenTable = "DROP TABLE IF EXISTS mensen;";
+        String mealTable = "DROP TABLE IF EXISTS meals;";
+        db.execSQL(canteenTable);
+        db.execSQL(mealTable);
+    }
+
     /*
     public void getVeganSpotsFromDatabase(boolean firstStart) {
         DataRepo.clearSpotLists();
@@ -37,7 +80,8 @@ public class DatabaseController extends SQLiteOpenHelper {
         Log.i("SQLite", "importing vegan spots");
         String[] projection = { "spotId", "spotName", "spotAddress", "spotPhone",
                 "spotUrl", "spotMail", "spotInfo", "spotLocLong", "spotLocLat",
-                "catFood", "catShopping", "catCafe", "catIcecream", "catVokue", "catBakery", "isFavorite",
+                "catFood", "catShopping", "catCafe", "catIcecream", "catVokue", "catBakery",
+                "isFavorite",
                 "spotHours", "spotImgKey"};
         Cursor c = db.query("veganSpots", projection, null, null, null, null, null);
         while (c.moveToNext()) {
@@ -106,88 +150,143 @@ public class DatabaseController extends SQLiteOpenHelper {
             }
         }
     }
-
-    public void getVeganNewsFromDatabase() {
-        SQLiteDatabase db;
-        db = this.getReadableDatabase();
-        DataRepo.veganNews.clear();
-        Log.i("SQLite", "importing vegan news");
-        String[] projection = { "newsId", "spotId", "newsType", "newsContent", "newsTime"};
-        Cursor c = db.query("veganNews", projection, null, null, null, null, null);
+*/
+    public void readCanteensFromDb() {
+        SQLiteDatabase db = getReadableDatabase();
+        Log.i("SQLite", "importing canteens from db");
+        String[] projection = { CANTEEN_ID, CANTEEN_NAME, CANTEEN_ADDRESS, CANTEEN_HOURS, CANTEEN_POS_LAT, CANTEEN_POS_LONG};
+        Cursor c = db.query(CANTEENS_TABLE_NAME, projection, null, null, null, null, null);
         while (c.moveToNext()) {
-            int newsId = c.getInt(c.getColumnIndex("newsId"));
-            int spotId = c.getInt(c.getColumnIndex("spotId"));
-            int newsType = c.getInt(c.getColumnIndex("newsType"));
-            String newsTime = c.getString(c.getColumnIndex("newsTime"));
-            String newsContent = c.getString(c.getColumnIndex("newsContent"));
-
-            VeganNews n = new VeganNews(newsId, newsType, spotId, newsContent, newsTime, false);
-            DataRepo.veganNews.add(n);
-            Log.i("SQLITE", "getting stored news " + newsId);
+            String code = c.getString(c.getColumnIndex(CANTEEN_ID));
+            String name = c.getString(c.getColumnIndex(CANTEEN_NAME));
+            String address = c.getString(c.getColumnIndex(CANTEEN_ADDRESS));
+            String hours = c.getString(c.getColumnIndex(CANTEEN_HOURS));
+            double posLat = c.getDouble(c.getColumnIndex(CANTEEN_POS_LAT));
+            double posLong = c.getDouble(c.getColumnIndex(CANTEEN_POS_LONG));
+            int priority = prefs.getInt("priority_"+code,0);
+            Canteen canteen = new Canteen(name, code, new LatLng(posLat,posLong),address,hours,priority);
+            DataHolder.getInstance().getCanteenList().add(canteen);
         }
+        DataHolder.getInstance().sortCanteenList();
+        c.close();
+        db.close();
+    }
 
-        if (DataRepo.veganNews.size() > 50){
-            Log.i("SQLite", "deleting some old vegan news");
-            int maxId = this.getMaxNewsId();
-            String query = "DELETE FROM veganNews WHERE newsId < "+(maxId-50)+";";
-            db = this.getWritableDatabase();
-            db.execSQL(query);
+    public void readMealsFromDb(String canteenCode) {
+        SQLiteDatabase db = getReadableDatabase();
+        Log.i("SQLite", "importing meals from db");
+        String[] projection = { MEAL_NAME, MEAL_PRICE, MEAL_DETAILS, MEAL_IMG_LINK, MEAL_DATE, MEAL_ALCOHOL, MEAL_GARLIC, MEAL_PORC, MEAL_BEEF, MEAL_VEGAN, MEAL_VEGETARIAN};
+        String selection = MEAL_CANTEEN_CODE + " = '" + canteenCode+"'";
+        Cursor c = db.query(MEALS_TABLE_NAME, projection, selection, null, null, null, null);
+        while (c.moveToNext()) {
+            String name = c.getString(c.getColumnIndex(MEAL_NAME));
+            String price = c.getString(c.getColumnIndex(MEAL_PRICE));
+            String details = c.getString(c.getColumnIndex(MEAL_DETAILS));
+            String imgLink = c.getString(c.getColumnIndex(MEAL_IMG_LINK));
+            String date = c.getString(c.getColumnIndex(MEAL_DATE));
+            boolean alcohol = (c.getInt(c.getColumnIndex(MEAL_ALCOHOL)) == 1);
+            boolean porc = (c.getInt(c.getColumnIndex(MEAL_PORC)) == 1);
+            boolean beef = (c.getInt(c.getColumnIndex(MEAL_BEEF)) == 1);
+            boolean garlic = (c.getInt(c.getColumnIndex(MEAL_GARLIC)) == 1);
+            boolean vegan = (c.getInt(c.getColumnIndex(MEAL_VEGAN)) == 1);
+            boolean vegetarian = (c.getInt(c.getColumnIndex(MEAL_VEGETARIAN)) == 1);
+            Meal m = new Meal(name, imgLink, details, price, canteenCode, date, vegan, vegetarian, porc, beef, garlic, alcohol);
+            if (DataHolder.getInstance().getMensa(canteenCode).getMealMap().get(date) == null) {
+                ArrayList<Meal> meals = new ArrayList<>();
+                meals.add(m);
+                DataHolder.getInstance().getMensa(canteenCode).getMealMap().put(date, meals);
+            } else {
+                DataHolder.getInstance().getMensa(canteenCode).getMealMap().get(date).add(m);
+            }
         }
         c.close();
         db.close();
     }
 
-    public void setAsFavorite(VeganSpot spot, boolean b) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = "UPDATE veganSpots SET isFavorite=";
-        spot.setFavorite(b);
-        if (b) {
-            DataRepo.favoriteMap.put(spot.getID(), spot);
-            query += "1 WHERE spotId="+spot.getID()+";";
-        } else {
-            DataRepo.favoriteMap.remove(spot.getID());
-            query += "0 WHERE spotId="+spot.getID()+";";
-        }
-        db.execSQL(query);
+
+    public void updateBalanceTable(long timestamp, float cardBalance, float lastTransaction){
+        SQLiteDatabase db = getWritableDatabase();
+        String updateDb = "DELETE FROM "+BALANCES_TABLE_NAME+" WHERE "+BALANCE_ID+" NOT IN (" +
+                "SELECT "+BALANCE_ID+" FROM "+BALANCES_TABLE_NAME+" ORDER BY "+BALANCE_ID+" DESC LIMIT 14);";
+        db.execSQL(updateDb);
+        ContentValues values = new ContentValues();
+        values.put(DatabaseController.BALANCE_ID, timestamp);
+        values.put(DatabaseController.CARD_BALANCE, cardBalance);
+        values.put(DatabaseController.LAST_TRANSACTION, lastTransaction);
+        db.insert(BALANCES_TABLE_NAME, null, values);
         db.close();
-        DataRepo.updateFavorites();
     }
 
-    public boolean dbEmpty() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String count = "SELECT count(*) FROM veganSpots";
-        Cursor c = db.rawQuery(count, null);
-        if (c != null && c.moveToFirst()) {
-            boolean empty = c.getInt(0) == 0;
-            c.close();
-            return empty;
+    public void updateCanteenTable(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM "+CANTEENS_TABLE_NAME+";");
+        for (Canteen c : DataHolder.getInstance().getCanteenList()) {
+            ContentValues values = new ContentValues();
+            values.put(DatabaseController.CANTEEN_ID, c.getCode());
+            values.put(DatabaseController.CANTEEN_NAME, c.getName());
+            values.put(DatabaseController.CANTEEN_ADDRESS, c.getAddress());
+            values.put(DatabaseController.CANTEEN_HOURS, c.getHours());
+            values.put(DatabaseController.CANTEEN_POS_LAT, c.getPosition().getLatitude());
+            values.put(DatabaseController.CANTEEN_POS_LONG, c.getPosition().getLongitude());
+            db.insert(CANTEENS_TABLE_NAME, null, values);
         }
-        c.close();
-        return false;
+        db.close();
+    }
+
+    public void deleteMealsOfCanteen(String canteenCode){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM "+MEALS_TABLE_NAME+" WHERE "+MEAL_CANTEEN_CODE+" = '"+canteenCode+"';");
+        db.close();
+    }
+    public void updateMealTable(Meal m){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseController.MEAL_NAME, m.getName());
+        values.put(DatabaseController.MEAL_PRICE, m.getPrice());
+        values.put(DatabaseController.MEAL_DETAILS, m.getDetails());
+        values.put(DatabaseController.MEAL_IMG_LINK, m.getImgLink());
+        values.put(DatabaseController.MEAL_VEGAN, m.isVegan() ? 1 : 0);
+        values.put(DatabaseController.MEAL_VEGETARIAN, m.isVegetarian() ? 1 : 0);
+        values.put(DatabaseController.MEAL_PORC, m.containsPork() ? 1 : 0);
+        values.put(DatabaseController.MEAL_BEEF, m.containsBeef() ? 1 : 0);
+        values.put(DatabaseController.MEAL_ALCOHOL, m.containsAlcohol() ? 1 : 0);
+        values.put(DatabaseController.MEAL_GARLIC, m.containsGarlic() ? 1 : 0);
+        values.put(DatabaseController.MEAL_CANTEEN_CODE, m.getCanteenCode());
+        values.put(DatabaseController.MEAL_DATE, m.getDate());
+        db.insert(MEALS_TABLE_NAME, null, values);
+        db.close();
     }
 
     public void createMealTable(SQLiteDatabase db) {
-        String query = "CREATE TABLE IF NOT EXISTS veganSpots ("
-                + "spotId INTEGER PRIMARY KEY, spotName TEXT, spotAddress TEXT, spotPhone TEXT," +
-                "spotUrl TEXT, spotMail TEXT, spotInfo TEXT, spotLocLong REAL, spotLocLat REAL, spotImgKey TEXT," +
-                "catFood INTEGER, catShopping INTEGER, catCafe INTEGER, catIcecream INTEGER, catVokue INTEGER, catBakery INTEGER," +
-                "spotHours TEXT, isFavorite INTEGER);";
+        String query = "CREATE TABLE IF NOT EXISTS " + MEALS_TABLE_NAME + " (" + MEAL_ID + " " +
+                "INTEGER PRIMARY KEY, " + MEAL_NAME + " TEXT, " + MEAL_PRICE + " " + "TEXT, " +
+                MEAL_DETAILS + " TEXT," + MEAL_IMG_LINK + " TEXT, "+MEAL_DATE+" TEXT, "+MEAL_CANTEEN_CODE+" TEXT," + MEAL_VEGETARIAN + " " +
+                "INTEGER, " + MEAL_VEGAN + " " + "INTEGER, " + MEAL_GARLIC + " INTEGER, " +
+                MEAL_PORC + " INTEGER, " + MEAL_BEEF + " INTEGER," + MEAL_ALCOHOL + " INTEGER);";
         db.execSQL(query);
     }
-*/
 
-    public float getLastInsertedBalance(){
+    public void createCanteenTable(SQLiteDatabase db) {
+        String query = "CREATE TABLE IF NOT EXISTS " + CANTEENS_TABLE_NAME + " (" + CANTEEN_ID +
+                " TEXT PRIMARY KEY, " + CANTEEN_NAME + " TEXT, " + CANTEEN_ADDRESS + " TEXT, "
+                + CANTEEN_HOURS + " TEXT," + CANTEEN_POS_LAT + " REAL," +
+                " " + CANTEEN_POS_LONG + " " + "REAL);";
+        db.execSQL(query);
+    }
+
+
+    public float getLastInsertedBalance() {
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {
-                DatabaseController.ID,
+                DatabaseController.BALANCE_ID,
                 DatabaseController.CARD_BALANCE,
                 DatabaseController.LAST_TRANSACTION};
 
         String sortOrder =
-                DatabaseController.ID + " DESC";
+                DatabaseController.BALANCE_ID + " DESC";
 
         Cursor c = db.query(
-                DatabaseController.BALANCE_TABLE_NAME,
+                DatabaseController.BALANCES_TABLE_NAME,
                 projection,
                 null,
                 null,
@@ -205,8 +304,8 @@ public class DatabaseController extends SQLiteOpenHelper {
 
 
     public void createBalanceTable(SQLiteDatabase db) {
-        String query = "CREATE TABLE IF NOT EXISTS "+ BALANCE_TABLE_NAME +" ("
-                + ID + " INTEGER PRIMARY KEY, " + CARD_BALANCE + " REAL, " + LAST_TRANSACTION + " REAL);";
+        String query = "CREATE TABLE IF NOT EXISTS " + BALANCES_TABLE_NAME + " (" + BALANCE_ID +
+                " INTEGER PRIMARY KEY, " + CARD_BALANCE + " REAL, " + LAST_TRANSACTION + " REAL);";
         db.execSQL(query);
     }
 

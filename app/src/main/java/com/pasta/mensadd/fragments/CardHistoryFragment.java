@@ -65,7 +65,6 @@ public class CardHistoryFragment extends Fragment {
         balanceList.clear();
         transactionList.clear();
         timestamps.clear();
-        Log.i("CARD",balanceList.size()+"");
         mBalanceChart = (LineChartView) v.findViewById(R.id.lineChart);
         mTransactionChart = (ColumnChartView) v.findViewById(R.id.columnChart);
         mCurrentBalance = (TextView) v.findViewById(R.id.currentBalance);
@@ -73,15 +72,15 @@ public class CardHistoryFragment extends Fragment {
         DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
         SQLiteDatabase db = dbController.getReadableDatabase();
         String[] projection = {
-                DatabaseController.ID,
+                DatabaseController.BALANCE_ID,
                 DatabaseController.CARD_BALANCE,
                 DatabaseController.LAST_TRANSACTION};
 
         String sortOrder =
-                DatabaseController.ID + " ASC";
+                DatabaseController.BALANCE_ID + " ASC";
 
         Cursor c = db.query(
-                DatabaseController.BALANCE_TABLE_NAME,
+                DatabaseController.BALANCES_TABLE_NAME,
                 projection,
                 null,
                 null,
@@ -89,25 +88,38 @@ public class CardHistoryFragment extends Fragment {
                 null,
                 sortOrder
         );
+
         while (c.moveToNext()) {
             balanceList.add(c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
             transactionList.add(c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
-            timestamps.add(c.getLong(c.getColumnIndex(DatabaseController.ID)));
+            timestamps.add(c.getLong(c.getColumnIndex(DatabaseController.BALANCE_ID)));
             if (c.isLast()){
                 mCurrentBalance.setText("Guthaben: " + formatMoneyString(c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE))));
                 mCurrentLastTransaction.setText("Letzte Abbuchung: " + formatMoneyString(c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION))));
             }
-
         }
-        setUpBalanceChart();
-        setUpTransactionsChart();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mBalanceChart.startDataAnimation();
-                mTransactionChart.startDataAnimation();
+        if (balanceList.size() > 1) {
+            setUpBalanceChart();
+            setUpTransactionsChart();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mBalanceChart.startDataAnimation();
+                    mTransactionChart.startDataAnimation();
+                }
+            }, 500);
+        } else {
+            if (balanceList.isEmpty()){
+                mCurrentBalance.setText("Keine Daten vorhanden.");
             }
-        }, 500);
+            mBalanceChart.setVisibility(View.GONE);
+            mTransactionChart.setVisibility(View.GONE);
+            TextView noBalanceChart = (TextView) v.findViewById(R.id.notEnoughDataForLine);
+            TextView noTransactionChart = (TextView) v.findViewById(R.id.notEnoughDataForColumn);
+            noBalanceChart.setVisibility(View.VISIBLE);
+            noTransactionChart.setVisibility(View.VISIBLE);
+        }
+
         MainActivity.updateNavDrawer(R.id.nav_card_history);
         return v;
     }
