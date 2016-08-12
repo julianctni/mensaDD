@@ -36,7 +36,6 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     private LinearLayoutManager layoutParams;
     public static CanteenListAdapter mCanteenListAdapter;
     private RecyclerView mRecyclerView;
-    private SwipeRefreshLayout mCanteenListRefresher;
     private SharedPreferences prefs;
     private final String URL_CANTEEN_LIST = "http://ctni.sabic.uberspace.de/mensadd/canteens.json";
 
@@ -62,17 +61,8 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         mCanteenListAdapter = new CanteenListAdapter(DataHolder.getInstance().getCanteenList(),this);
         mRecyclerView.setAdapter(mCanteenListAdapter);
         mRecyclerView.setLayoutManager(layoutParams);
-        mCanteenListRefresher = (SwipeRefreshLayout) view.findViewById(R.id.canteenListRefresher);
         int colorArray[] = {R.color.tile_cyan1, R.color.tile_orange1, R.color.tile_blue1, R.color.tile_pink1};
-        mCanteenListRefresher.setColorSchemeResources(colorArray);
-        mCanteenListRefresher.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        NetworkController.getInstance(getActivity()).getCanteenList(URL_CANTEEN_LIST, CanteenListFragment.this);
-                    }
-                }
-        );
+
         TextView header = (TextView)getActivity().findViewById(R.id.heading_toolbar);
         header.setVisibility(View.GONE);
         ImageView appLogo = (ImageView)getActivity().findViewById(R.id.home_button);
@@ -121,7 +111,6 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
             }
             dbController.updateCanteenTable();
             DataHolder.getInstance().sortCanteenList();
-            mCanteenListRefresher.setRefreshing(false);
             mCanteenListAdapter.notifyDataSetChanged();
 
         }

@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,8 +83,25 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mViewPager = (ViewPager) view.findViewById(R.id.mealViewPager);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mPagerAdapter.updateList(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mTabStrip = (PagerTabStrip)view.findViewById(R.id.pager_tab_strip);
         mTabStrip.setTabIndicatorColorResource(R.color.colorPrimaryDark);
+
 
         TextView header = (TextView)getActivity().findViewById(R.id.heading_toolbar);
         header.setText(mCanteen.getName());
@@ -135,8 +153,10 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         }
         mProgressLayout.setVisibility(View.GONE);
         mViewPager.setVisibility(View.VISIBLE);
-        mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
-        mViewPager.setAdapter(mPagerAdapter);
+        if (mViewPager.getAdapter() == null) {
+            mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
+            mViewPager.setAdapter(mPagerAdapter);
+        }
     }
 
     class MealDayPagerAdapter extends FragmentPagerAdapter {
@@ -154,6 +174,11 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
                 mFragmentTitleList.add(sdf.format(mCalendar.getTime()));
                 mCalendar.add(Calendar.DATE,1);
             }
+        }
+
+        public void updateList(int position){
+            mFragmentList.get(position).updateMealList();
+
         }
 
         @Override

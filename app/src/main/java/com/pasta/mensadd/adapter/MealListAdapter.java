@@ -9,8 +9,10 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,16 +40,15 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
     public ArrayList<Meal> items;
     public MealDayFragment fragment;
-    public ArrayList<Integer> headerColors;
 
     public MealListAdapter(ArrayList<Meal> items, MealDayFragment fragment) {
-        this.items = items;
+        if (this.items == null)
+            this.items = items;
+        else {
+            this.items.clear();
+            this.items.addAll(items);
+        }
         this.fragment = fragment;
-        headerColors = new ArrayList<>();
-        headerColors.add(R.color.tile_blue1);
-        headerColors.add(R.color.tile_pink1);
-        headerColors.add(R.color.tile_orange1);
-        headerColors.add(R.color.tile_cyan1);
     }
 
     @Override
@@ -95,7 +96,6 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         return items.size();
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, LoadImageCallback {
         public LinearLayout mHeaderLayout;
         public TextView mName;
@@ -134,6 +134,8 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mShareButton.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
+
+
 
 
         private void shareMeal() {
