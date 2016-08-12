@@ -1,36 +1,41 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:background="@color/colorPrimary"
-    android:elevation="20dp"
-    tools:targetApi="lollipop">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@color/colorPrimary"
+                android:elevation="20dp"
+                tools:targetApi="lollipop">
+
 
     <LinearLayout
+        android:id="@+id/balanceLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
 
         <TextView
             android:id="@+id/balanceHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minLines="1"
             android:text="@string/card_check_balance"
             android:textAlignment="center"
             android:textColor="#EEEEEE"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/balanceContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minLines="1"
             android:textAlignment="center"
             android:textColor="#EEEEEE"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <View
             android:layout_width="match_parent"
@@ -39,24 +44,27 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="8dp"
-            android:background="#88EEEEEE" />
+            android:background="#88EEEEEE"/>
 
         <TextView
             android:id="@+id/lastTransactionHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minLines="1"
             android:text="@string/card_check_last_transaction"
             android:textAlignment="center"
             android:textColor="#EEEEEE"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/lastTransactionContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minLines="1"
+            android:paddingBottom="20dp"
             android:textAlignment="center"
             android:textColor="#EEEEEE"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
     </LinearLayout>
 
 

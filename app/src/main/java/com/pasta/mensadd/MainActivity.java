@@ -1,32 +1,31 @@
 package com.pasta.mensadd;
 
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,22 +41,24 @@ import com.pasta.mensadd.fragments.CanteenListFragment;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    private static AppBarLayout mAppBarLayout;
+    private static NavigationView mNavigationView;
     private RelativeLayout mCardCheckContainer;
     private DrawerLayout mNavDrawer;
-    private float mCardCheckHeight;
-    private boolean mCardCheckVisible;
-    private ActionBarDrawerToggle toggle;
-    private NfcAdapter mAdapter;
+    private ActionBarDrawerToggle mDrawerToggle;
     private TextView mHeadingToolbar;
     private ImageView mAppLogoToolbar;
-    private static AppBarLayout barLayout;
-    private static final String TAG = MainActivity.class.getName();
-    private static NavigationView mNavigationView;
+    private FloatingActionButton mSaveBalanceButton;
+
+    private NfcAdapter mNfcAdapter;
+    private ValueData mCurrentValueData;
+
+    private float mCardCheckHeight;
+    private boolean mCardCheckVisible;
 
 
     @Override
@@ -72,28 +73,29 @@ public class MainActivity extends AppCompatActivity
             }
         }
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        barLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
+        mSaveBalanceButton = (FloatingActionButton) findViewById(R.id.saveBalanceButton);
+        mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ff4b66")));
+        mSaveBalanceButton.setOnClickListener(this);
         mHeadingToolbar = (TextView) findViewById(R.id.heading_toolbar);
         mAppLogoToolbar = (ImageView) findViewById(R.id.home_button);
         mCardCheckContainer = (RelativeLayout) findViewById(R.id.cardCheckContainer);
-        if (mCardCheckContainer != null) mCardCheckContainer.setOnClickListener(this);
+        mCardCheckContainer.setOnClickListener(this);
         mCardCheckHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
         mNavDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(this, mNavDrawer, toolbar, 0, 0);
-        if (mNavDrawer != null) mNavDrawer.addDrawerListener(toggle);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) navigationView.setNavigationItemSelectedListener(this);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mNavDrawer, toolbar, 0, 0);
+        if (mNavDrawer != null) mNavDrawer.addDrawerListener(mDrawerToggle);
+        if (mNavigationView != null) mNavigationView.setNavigationItemSelectedListener(this);
 
         if (getSupportFragmentManager().findFragmentById(R.id.mainContainer) == null) {
             CanteenListFragment fragment = new CanteenListFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.mainContainer, fragment, "MensaList").commit();
         }
 
-        mAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (mAdapter != null) {
-            //AutostartRegister.register(getPackageManager(), mPrefs.getBoolean("nfc_autostart", false));
-        }
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this.getApplicationContext());
+
+        if (mNfcAdapter == null)
+            Toast.makeText(this.getApplicationContext(), "Phone does not support NFC.", Toast.LENGTH_LONG).show();
 
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
             onNewIntent(getIntent());
@@ -102,12 +104,10 @@ public class MainActivity extends AppCompatActivity
 
     public static void setToolbarShadow(boolean shadow){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Log.i("Old Elevation", barLayout.getElevation()+"");
             if (shadow)
-                barLayout.setElevation(8);
+                mAppBarLayout.setElevation(8);
             else
-                barLayout.setElevation(0);
-            Log.i("New Elevation", barLayout.getElevation()+"");
+                mAppBarLayout.setElevation(0);
         }
 
     }
@@ -119,13 +119,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        toggle.syncState();
+        mDrawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        toggle.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdapter != null)
+        if (mNfcAdapter != null)
             setUpCardCheck();
     }
 
@@ -157,6 +157,23 @@ public class MainActivity extends AppCompatActivity
             mCardCheckContainer.setAnimation(animation);
             mCardCheckContainer.startAnimation(animation);
             mCardCheckVisible = false;
+            ScaleAnimation hideAnim = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            hideAnim.setDuration(300);
+            hideAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mSaveBalanceButton.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
+            mSaveBalanceButton.startAnimation(hideAnim);
+        } else if (v.getId() == R.id.saveBalanceButton) {
+            storeCardData();
         }
     }
 
@@ -201,13 +218,9 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
-
     @Override
     public void onNewIntent(Intent intent) {
-        Log.i(TAG, "Foreground dispatch");
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
-            Log.i(TAG, "Discovered tag with intent: " + intent);
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             loadCard(tag);
         }
@@ -223,19 +236,27 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void storeCardData(ValueData value){
-        float cardBalance = (float)value.value/1000;
-        float lastTransaction = (float)value.lastTransaction/1000;
+    private void storeCardData(){
+        float cardBalance = (float)mCurrentValueData.value/1000;
+        float lastTransaction = (float)mCurrentValueData.lastTransaction/1000;
         DatabaseController dbController = new DatabaseController(this.getApplicationContext());
         if (cardBalance != dbController.getLastInsertedBalance()) {
             dbController.updateBalanceTable(new Date().getTime(),cardBalance,lastTransaction);
+            Toast.makeText(this.getApplicationContext(), "Guthabenstand wurde gespeichert.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this.getApplicationContext(), "Guthabenstand bereits gespeichert.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void updateCardCheckFragment(ValueData value) {
-        storeCardData(value);
+        mCurrentValueData = value;
         if (!mCardCheckVisible) {
             FragmentController.showCardCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
+            ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            showAnim.setDuration(300);
+            mSaveBalanceButton.setVisibility(View.VISIBLE);
+            mSaveBalanceButton.startAnimation(showAnim);
+
             Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight);
             mCardCheckContainer.setAnimation(animation);
             mCardCheckContainer.startAnimation(animation);
@@ -246,7 +267,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void loadCard(Tag tag) {
-        Log.i(TAG, "Loading tag");
         IsoDep tech = IsoDep.get(tag);
         try {
             tech.connect();
@@ -281,7 +301,7 @@ public class MainActivity extends AppCompatActivity
         String[][] mTechLists = new String[][]{new String[]{
                 IsoDep.class.getName(), NfcA.class.getName()}};
 
-        mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
+        mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
                 mTechLists);
     }
 }

@@ -46,12 +46,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical">
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <RelativeLayout
             android:id="@+id/cardCheckContainer"
             android:layout_width="match_parent"
@@ -67,9 +69,23 @@
             android:animateLayoutChanges="true"
             android:layout_below="@id/cardCheckContainer">
         </RelativeLayout>
+        </RelativeLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/saveBalanceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/ic_save_black_24dp"
+            android:tint="#FFFFFF"
+            app:fabSize="normal"
+            android:visibility="gone"
+            app:layout_anchor="@id/cardCheckContainer"
+            app:useCompatPadding="true"
+            app:layout_anchorGravity="bottom|right|end"/>
 
 
-    </RelativeLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
 
 
