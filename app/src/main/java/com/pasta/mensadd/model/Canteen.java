@@ -5,9 +5,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by julian on 15.05.16.
- */
+
 public class Canteen {
 
     private String mName;

@@ -5,9 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.util.Log;
-import android.widget.Toast;
 
+import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
 import com.pasta.mensadd.controller.DatabaseController;
@@ -25,6 +24,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 return false;
             }
         });
+        findPreference("nfc_autostart").setVisible(MainActivity.NFC_SUPPORTED);
     }
 
     @Override

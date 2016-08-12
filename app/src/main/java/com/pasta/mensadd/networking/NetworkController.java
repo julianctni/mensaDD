@@ -35,6 +35,10 @@ public class NetworkController {
     public static int SUCCESS = 1;
     public static int ERROR = 0;
 
+    public static final String URL_PREFIX = "http://ctni.sabic.uberspace.de/mensadd";
+    public static final String URL_GET_CANTEENS = "/canteens.json";
+    public static final String URL_GET_MEALS = "/meals/";
+
     private NetworkController(Context context) {
         mCtx = context;
         mRequestQueue = getRequestQueue();
@@ -115,11 +119,11 @@ public class NetworkController {
     }
 
 
-    public void getCanteenList(String url, AbstractCallback callback) {
-        doJSONArrayRequest(url, "", callback);
+    public void getCanteenList(AbstractCallback callback) {
+        doJSONArrayRequest(URL_PREFIX+URL_GET_CANTEENS, "", callback);
     }
 
-    public void getMealsForCanteen(String url, AbstractCallback callback) {
-        doJSONArrayRequest(url, "", callback);
+    public void getMealsForCanteen(String canteenCode, AbstractCallback callback) {
+        doJSONArrayRequest(URL_PREFIX+URL_GET_MEALS+canteenCode+".json", "", callback);
     }
 }

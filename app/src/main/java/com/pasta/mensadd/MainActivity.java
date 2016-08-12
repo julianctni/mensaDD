@@ -45,6 +45,8 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    public static boolean NFC_SUPPORTED = false;
+
     private static AppBarLayout mAppBarLayout;
     private static NavigationView mNavigationView;
     private RelativeLayout mCardCheckContainer;
@@ -94,10 +96,10 @@ public class MainActivity extends AppCompatActivity
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this.getApplicationContext());
 
-        if (mNfcAdapter == null)
-            Toast.makeText(this.getApplicationContext(), "Phone does not support NFC.", Toast.LENGTH_LONG).show();
+        NFC_SUPPORTED = (mNfcAdapter != null);
+        mNavigationView.getMenu().findItem(R.id.nav_card_history).setVisible(NFC_SUPPORTED);
 
-        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
+        if (NFC_SUPPORTED && NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
             onNewIntent(getIntent());
         }
     }
@@ -146,7 +148,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -226,13 +227,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
     private String moneyStr(int i) {
         int euros = i / 1000;
         int cents = i/10 % 100;
         String centsStr = Integer.toString(cents);
         if (cents < 10)
             centsStr = "0" + centsStr;
-        return euros + "," + centsStr + "\u20AC"; // Last one is euro sign
+        return euros + "," + centsStr + "\u20AC";
     }
 
 
@@ -248,6 +250,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
     private void updateCardCheckFragment(ValueData value) {
         mCurrentValueData = value;
         if (!mCardCheckVisible) {
@@ -256,7 +259,6 @@ public class MainActivity extends AppCompatActivity
             showAnim.setDuration(300);
             mSaveBalanceButton.setVisibility(View.VISIBLE);
             mSaveBalanceButton.startAnimation(showAnim);
-
             Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight);
             mCardCheckContainer.setAnimation(animation);
             mCardCheckContainer.startAnimation(animation);
@@ -271,13 +273,11 @@ public class MainActivity extends AppCompatActivity
         try {
             tech.connect();
         } catch (IOException e) {
-            // Tag was removed. We fail silently.
             e.printStackTrace();
             return;
         }
         try {
             DesfireProtocol desfireTag = new DesfireProtocol(tech);
-
             ValueData value = Readers.getInstance().readCard(desfireTag);
             if (value != null)
                 updateCardCheckFragment(value);
@@ -300,7 +300,6 @@ public class MainActivity extends AppCompatActivity
         IntentFilter[] mFilters = new IntentFilter[]{tech,};
         String[][] mTechLists = new String[][]{new String[]{
                 IsoDep.class.getName(), NfcA.class.getName()}};
-
         mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
                 mTechLists);
     }

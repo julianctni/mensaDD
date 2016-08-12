@@ -5,9 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-/**
- * Created by julian on 19.05.16.
- */
 public class DataHolder {
 
     private static DataHolder mInstance;
@@ -58,9 +55,5 @@ public class DataHolder {
         public boolean equals(Object object) {
             return false;
         }
-    }
-
-    public HashMap<String,Canteen> getCanteenMap() {
-        return mCanteenMap;
     }
 }

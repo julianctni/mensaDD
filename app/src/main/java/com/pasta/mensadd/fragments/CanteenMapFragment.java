@@ -2,7 +2,6 @@ package com.pasta.mensadd.fragments;
 
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.support.annotation.UiThread;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
@@ -40,9 +37,9 @@ import com.pasta.mensadd.model.DataHolder;
 
 
 public class CanteenMapFragment extends Fragment {
-    private MapView mapView;
-    private MapboxMap map;
-    private LocationServices locationServices;
+    private MapView mMapView;
+    private MapboxMap mMapboxMap;
+    private LocationServices mLocationServices;
     private static final int PERMISSIONS_LOCATION = 0;
 
     private TextView mCanteenName;
@@ -55,7 +52,8 @@ public class CanteenMapFragment extends Fragment {
     private int mMapZoom = 12;
     private LatLng mMapCenter = new LatLng(51.053130, 13.744334);
 
-    public CanteenMapFragment() {}
+    public CanteenMapFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,9 +66,9 @@ public class CanteenMapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-        locationServices = LocationServices.getLocationServices(getActivity());
+        mLocationServices = LocationServices.getLocationServices(getActivity());
         setHasOptionsMenu(true);
-        mapView = (MapView) view.findViewById(R.id.mapview);
+        mMapView = (MapView) view.findViewById(R.id.mapview);
         mCanteenAddress = (TextView) view.findViewById(R.id.mapInfoCardCanteenAddress);
         mCanteenHours = (TextView) view.findViewById(R.id.mapInfoCardCanteenHours);
         mCanteenName = (TextView) view.findViewById(R.id.mapInfoCardCanteenName);
@@ -85,24 +83,26 @@ public class CanteenMapFragment extends Fragment {
         mInfoCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentController.showMealWeekFragment(getActivity().getSupportFragmentManager(),mCurrentCanteen);
+                FragmentController.showMealWeekFragment(getActivity().getSupportFragmentManager()
+                        , mCurrentCanteen);
             }
         });
-        mapView.onCreate(savedInstanceState);
+        mMapView.onCreate(savedInstanceState);
 
-        mapView.getMapAsync(new OnMapReadyCallback() {
+        mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(final MapboxMap mapboxMap) {
-                map = mapboxMap;
-                map.setCameraPosition(new CameraPosition.Builder()
+                mMapboxMap = mapboxMap;
+                mMapboxMap.setCameraPosition(new CameraPosition.Builder()
                         .target(mMapCenter)
                         .zoom(mMapZoom)
                         .build());
                 drawCanteensOnMap(mapboxMap);
-                map.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
+                mMapboxMap.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(@NonNull LatLng point) {
-                        ScaleAnimation hideAnim = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                        ScaleAnimation hideAnim = new ScaleAnimation(1, 0, 1, 0, Animation
+                                .RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                         hideAnim.setDuration(150);
                         mInfoCard.startAnimation(hideAnim);
                         hideAnim.setAnimationListener(new Animation.AnimationListener() {
@@ -129,7 +129,7 @@ public class CanteenMapFragment extends Fragment {
         return view;
     }
 
-    public void drawCanteensOnMap(MapboxMap map){
+    public void drawCanteensOnMap(MapboxMap map) {
         for (Canteen c : DataHolder.getInstance().getCanteenList()) {
             map.addMarker(new MarkerOptions()
                     .position(c.getPosition()).title(c.getCode()));
@@ -144,7 +144,8 @@ public class CanteenMapFragment extends Fragment {
                 mCanteenHours.setText(c.getHours());
                 if (mInfoCard.getVisibility() == View.GONE) {
                     mInfoCard.setVisibility(View.VISIBLE);
-                    ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation
+                            .RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                     showAnim.setDuration(150);
                     mInfoCard.startAnimation(showAnim);
                 }
@@ -156,35 +157,34 @@ public class CanteenMapFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mapView.onResume();
+        mMapView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mapView.onPause();
-        mMapZoom = (int)map.getCameraPosition().zoom;
-        mMapCenter = map.getCameraPosition().target;
+        mMapView.onPause();
+        mMapZoom = (int) mMapboxMap.getCameraPosition().zoom;
+        mMapCenter = mMapboxMap.getCameraPosition().target;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
         outState.putString("title", "Some Text");
-        Log.i("MAPFRAGMENT", "SAVING INSTANCE");
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
+        mMapView.onLowMemory();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+        mMapView.onDestroy();
     }
 
     @Override
@@ -197,7 +197,7 @@ public class CanteenMapFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_location:
-                if (map != null) {
+                if (mMapboxMap != null) {
                     toggleGps();
                 }
                 return true;
@@ -209,7 +209,7 @@ public class CanteenMapFragment extends Fragment {
     @UiThread
     public void toggleGps() {
         // Check if user has granted location permission
-        if (!locationServices.areLocationPermissionsGranted()) {
+        if (!mLocationServices.areLocationPermissionsGranted()) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_LOCATION);
@@ -221,12 +221,11 @@ public class CanteenMapFragment extends Fragment {
 
     private void enableLocation(boolean enabled) {
         if (enabled) {
-            locationServices.addLocationListener(new LocationListener() {
+            mLocationServices.addLocationListener(new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
                     if (location != null) {
-                        // Move the map camera to where the user location is
-                        map.setCameraPosition(new CameraPosition.Builder()
+                        mMapboxMap.setCameraPosition(new CameraPosition.Builder()
                                 .target(new LatLng(location))
                                 .zoom(13)
                                 .build());
@@ -234,7 +233,7 @@ public class CanteenMapFragment extends Fragment {
                 }
             });
         }
-        map.setMyLocationEnabled(enabled);
+        mMapboxMap.setMyLocationEnabled(enabled);
     }
 
     @Override

@@ -20,12 +20,12 @@ import java.util.ArrayList;
 
 public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.ViewHolder> {
 
-    public ArrayList<Canteen> items;
-    public CanteenListFragment fragment;
+    private ArrayList<Canteen> mCanteens;
+    private CanteenListFragment mFragment;
 
     public CanteenListAdapter(ArrayList<Canteen> items, CanteenListFragment fragment) {
-        this.items = items;
-        this.fragment = fragment;
+        this.mCanteens = items;
+        this.mFragment = fragment;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Canteen item = items.get(position);
+        Canteen item = mCanteens.get(position);
         holder.mName.setText(item.getName());
         holder.mAddress.setText(item.getAddress());
         holder.mHours.setText(item.getHours());
@@ -45,7 +45,7 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return mCanteens.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -65,9 +65,9 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
 
         @Override
         public void onClick(View v) {
-            String mensaId = items.get(getAdapterPosition()).getCode();
-            FragmentController.showMealWeekFragment(fragment.getFragmentManager(),mensaId);
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(fragment.getActivity().getApplicationContext());
+            String mensaId = mCanteens.get(getAdapterPosition()).getCode();
+            FragmentController.showMealWeekFragment(mFragment.getFragmentManager(),mensaId);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mFragment.getActivity().getApplicationContext());
             int priority = prefs.getInt("priority_"+mensaId, 0);
             priority += 1;
             prefs.edit().putInt("priority_"+mensaId, priority).apply();

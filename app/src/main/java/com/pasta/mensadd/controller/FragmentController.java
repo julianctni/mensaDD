@@ -48,11 +48,11 @@ public class FragmentController {
 
     public static void showCardHistoryFragment(FragmentManager fm){
         MainActivity.setToolbarShadow(true);
-        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, CardHistoryFragment.newInstance(), "CARD_HISTORY_FRAGMENT").commit();
+        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new CardHistoryFragment(), "CARD_HISTORY_FRAGMENT").commit();
     }
 
     public static void showImprintFragment(FragmentManager fm){
         MainActivity.setToolbarShadow(true);
-        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, CardHistoryFragment.newInstance(), "IMPRINT_FRAGMENT").commit();
+        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new CardHistoryFragment(), "IMPRINT_FRAGMENT").commit();
     }
 }

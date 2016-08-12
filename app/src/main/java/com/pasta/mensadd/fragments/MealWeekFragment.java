@@ -9,8 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,21 +16,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.DatabaseController;
-import com.pasta.mensadd.model.DataHolder;
-import com.pasta.mensadd.model.Meal;
+import com.pasta.mensadd.controller.ParseController;
 import com.pasta.mensadd.model.Canteen;
+import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.networking.LoadMealsCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,8 +41,6 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
     private MealDayPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
     private Calendar mCalendar = Calendar.getInstance();
-    private PagerTabStrip mTabStrip;
-    private DateFormat mDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private LinearLayout mProgressLayout;
 
 
@@ -99,7 +89,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
             }
         });
-        mTabStrip = (PagerTabStrip)view.findViewById(R.id.pager_tab_strip);
+        PagerTabStrip mTabStrip = (PagerTabStrip) view.findViewById(R.id.pager_tab_strip);
         mTabStrip.setTabIndicatorColorResource(R.color.colorPrimaryDark);
 
 
@@ -111,43 +101,15 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         mProgressLayout = (LinearLayout) view.findViewById(R.id.mealListProgressLayout);
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.mealListrogressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
-        NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen("http://www.julianctni.xyz/mensadd/meals/"+ mCanteen.getCode()+".json", this);
+        NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen(mCanteen.getCode(), this);
     }
 
     @Override
     public void onResponseMessage(int responseType, String message) {
         DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
         if (responseType == NetworkController.SUCCESS) {
-            try {
-                JSONArray mealDays = new JSONArray(message);
-                dbController.deleteMealsOfCanteen(mCanteen.getCode());
-                for (int i=0; i<mealDays.length();i++){
-                    JSONObject mealDay = mealDays.getJSONObject(i);
-                    JSONArray meals = mealDay.getJSONArray(mDateFormat.format(mCalendar.getTime()));
-                    ArrayList<Meal> mealList = new ArrayList<>();
-                    for (int j=0; j<meals.length(); j++){
-                        JSONObject jsonMeal = meals.getJSONObject(j);
-                        int vegan = jsonMeal.getInt("vegan");
-                        int vegetarian = jsonMeal.getInt("vegetarian");
-                        int beef = jsonMeal.getInt("beef");
-                        int pork = jsonMeal.getInt("porc");
-                        int garlic = jsonMeal.getInt("garlic");
-                        int alcohol = jsonMeal.getInt("alcohol");
-                        String imgLink = jsonMeal.getString("imgLink");
-                        String details = jsonMeal.getString("mealDetails");
-                        String name = jsonMeal.getString("name");
-                        String price = jsonMeal.getString("price");
-                        Meal meal = new Meal(name, imgLink, details, price, mCanteen.getCode(), String.valueOf(mealDay.keys().next()), vegan==1, vegetarian==1, pork==1, beef==1, garlic==1, alcohol==1);
-                        mealList.add(meal);
-                        dbController.updateMealTable(meal);
-                    }
-                    mCanteen.getMealMap().put(String.valueOf(mealDay.keys().next()), mealList);
-                    mCalendar.add(Calendar.DATE, 1);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
+            ParseController p = new ParseController();
+            p.parseMealsForCanteen(mCanteen.getCode(), message, new DatabaseController(this.getActivity().getApplicationContext()));
         } else {
             dbController.readMealsFromDb(mCanteen.getCode());
         }

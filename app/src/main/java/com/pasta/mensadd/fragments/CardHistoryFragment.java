@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import lecho.lib.hellocharts.formatter.SimpleAxisValueFormatter;
 import lecho.lib.hellocharts.model.Axis;
@@ -37,21 +38,14 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 public class CardHistoryFragment extends Fragment {
 
-    private float maxBalanceValue;
-    private float maxTransactionValue;
-    private SimpleDateFormat sf = new SimpleDateFormat("dd.MM");
-    private ArrayList<Float> balanceList = new ArrayList<>();
-    private ArrayList<Float> transactionList = new ArrayList<>();
-    private ArrayList<Long> timestamps = new ArrayList<>();
+    private float mMaxBalance;
+    private float mMaxTransaction;
+    private SimpleDateFormat mDateFormat = new SimpleDateFormat("dd.MM", Locale.GERMAN);
+    private ArrayList<Float> mBalance = new ArrayList<>();
+    private ArrayList<Float> mTransactions = new ArrayList<>();
+    private ArrayList<Long> mTimestamps = new ArrayList<>();
     private LineChartView mBalanceChart;
     private ColumnChartView mTransactionChart;
-    private TextView mCurrentBalance;
-    private TextView mCurrentLastTransaction;
-
-
-    public static CardHistoryFragment newInstance() {
-        return new CardHistoryFragment();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,13 +56,13 @@ public class CardHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_card_history, container, false);
-        balanceList.clear();
-        transactionList.clear();
-        timestamps.clear();
+        mBalance.clear();
+        mTransactions.clear();
+        mTimestamps.clear();
         mBalanceChart = (LineChartView) v.findViewById(R.id.lineChart);
         mTransactionChart = (ColumnChartView) v.findViewById(R.id.columnChart);
-        mCurrentBalance = (TextView) v.findViewById(R.id.currentBalance);
-        mCurrentLastTransaction = (TextView) v.findViewById(R.id.currentLastTransaction);
+        TextView mCurrentBalance = (TextView) v.findViewById(R.id.currentBalance);
+        TextView mCurrentLastTransaction = (TextView) v.findViewById(R.id.currentLastTransaction);
         DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
         SQLiteDatabase db = dbController.getReadableDatabase();
         String[] projection = {
@@ -88,17 +82,20 @@ public class CardHistoryFragment extends Fragment {
                 null,
                 sortOrder
         );
+        c.close();
 
         while (c.moveToNext()) {
-            balanceList.add(c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
-            transactionList.add(c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
-            timestamps.add(c.getLong(c.getColumnIndex(DatabaseController.BALANCE_ID)));
+            mBalance.add(c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
+            mTransactions.add(c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
+            mTimestamps.add(c.getLong(c.getColumnIndex(DatabaseController.BALANCE_ID)));
             if (c.isLast()){
-                mCurrentBalance.setText("Guthaben: " + formatMoneyString(c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE))));
-                mCurrentLastTransaction.setText("Letzte Abbuchung: " + formatMoneyString(c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION))));
+                String b = getString(R.string.card_check_balance)+": "+formatMoneyString(c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
+                String t = getString(R.string.card_check_last_transaction)+": "+formatMoneyString(c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
+                mCurrentBalance.setText(b);
+                mCurrentLastTransaction.setText(t);
             }
         }
-        if (balanceList.size() > 1) {
+        if (mBalance.size() > 1) {
             setUpBalanceChart();
             setUpTransactionsChart();
             new Handler().postDelayed(new Runnable() {
@@ -109,8 +106,8 @@ public class CardHistoryFragment extends Fragment {
                 }
             }, 500);
         } else {
-            if (balanceList.isEmpty()){
-                mCurrentBalance.setText("Keine Daten vorhanden.");
+            if (mBalance.isEmpty()){
+                mCurrentBalance.setText(getString(R.string.no_data_available));
             }
             mBalanceChart.setVisibility(View.GONE);
             mTransactionChart.setVisibility(View.GONE);
@@ -135,12 +132,12 @@ public class CardHistoryFragment extends Fragment {
     public void setUpBalanceChart(){
         List<PointValue> values = new ArrayList<>();
         List<AxisValue> axisValues = new ArrayList<>();
-        for (int i = 0; i<balanceList.size(); i++){
+        for (int i = 0; i< mBalance.size(); i++){
             values.add(new PointValue(i,i));
-            if (balanceList.get(i) > maxBalanceValue)
-                maxBalanceValue = balanceList.get(i);
-            Date date = new Date(timestamps.get(i));
-            axisValues.add(new AxisValue(i).setLabel(sf.format(date)));
+            if (mBalance.get(i) > mMaxBalance)
+                mMaxBalance = mBalance.get(i);
+            Date date = new Date(mTimestamps.get(i));
+            axisValues.add(new AxisValue(i).setLabel(mDateFormat.format(date)));
         }
 
 
@@ -160,28 +157,28 @@ public class CardHistoryFragment extends Fragment {
         mBalanceChart.setViewportCalculationEnabled(false);
         Viewport viewport = new Viewport(mBalanceChart.getMaximumViewport());
         viewport.bottom = 0;
-        viewport.top = (int)(maxBalanceValue*1.3);
+        viewport.top = (int)(mMaxBalance *1.3);
         mBalanceChart.setMaximumViewport(viewport);
         mBalanceChart.setCurrentViewport(viewport);
 
         for (int j = 0; j<line.getValues().size();j++){
-            line.getValues().get(j).setTarget(j, balanceList.get(j));
-            Log.i("CARDHISTORY",balanceList.get(j)+"");
+            line.getValues().get(j).setTarget(j, mBalance.get(j));
+            Log.i("CARDHISTORY", mBalance.get(j)+"");
         }
     }
 
     public void setUpTransactionsChart(){
-        int numColumns = transactionList.size();
+        int numColumns = mTransactions.size();
         List<AxisValue> axisValues = new ArrayList<>();
         List<Column> columns = new ArrayList<>();
         List<SubcolumnValue> values;
         for (int i = 0; i < numColumns; ++i) {
             values = new ArrayList<>();
             values.add(new SubcolumnValue(i, Color.parseColor("#bb00888a")));
-            Date date = new Date(timestamps.get(i));
-            axisValues.add(new AxisValue(i).setLabel(sf.format(date)));
-            if (transactionList.get(i) > maxTransactionValue)
-                maxTransactionValue = transactionList.get(i);
+            Date date = new Date(mTimestamps.get(i));
+            axisValues.add(new AxisValue(i).setLabel(mDateFormat.format(date)));
+            if (mTransactions.get(i) > mMaxTransaction)
+                mMaxTransaction = mTransactions.get(i);
             Column column = new Column(values);
             columns.add(column);
         }
@@ -197,13 +194,13 @@ public class CardHistoryFragment extends Fragment {
         mTransactionChart.setViewportCalculationEnabled(false);
         Viewport viewport = new Viewport(mTransactionChart.getMaximumViewport());
         viewport.bottom = 0;
-        viewport.top = (int)(maxTransactionValue*1.3);
+        viewport.top = (int)(mMaxTransaction *1.3);
         mTransactionChart.setMaximumViewport(viewport);
         mTransactionChart.setCurrentViewport(viewport);
 
         for (int j = 0; j<data.getColumns().size(); j++){
             for (SubcolumnValue value : data.getColumns().get(j).getValues()) {
-                value.setTarget(transactionList.get(j));
+                value.setTarget(mTransactions.get(j));
             }
         }
     }

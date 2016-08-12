@@ -9,10 +9,8 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,17 +36,17 @@ import java.util.ArrayList;
 
 public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHolder> {
 
-    public ArrayList<Meal> items;
-    public MealDayFragment fragment;
+    public ArrayList<Meal> mMeals;
+    public MealDayFragment mFragment;
 
     public MealListAdapter(ArrayList<Meal> items, MealDayFragment fragment) {
-        if (this.items == null)
-            this.items = items;
+        if (this.mMeals == null)
+            this.mMeals = items;
         else {
-            this.items.clear();
-            this.items.addAll(items);
+            this.mMeals.clear();
+            this.mMeals.addAll(items);
         }
-        this.fragment = fragment;
+        mFragment = fragment;
     }
 
     @Override
@@ -60,7 +58,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Meal item = items.get(position);
+        Meal item = mMeals.get(position);
         holder.mName.setText(item.getName());
         holder.mPrice.setText(item.getPrice());
         holder.mMealContent.setText(item.getDetails());
@@ -93,7 +91,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return mMeals.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, LoadImageCallback {
@@ -139,24 +137,24 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
 
         private void shareMeal() {
-            Meal meal = items.get(getAdapterPosition());
+            Meal meal = mMeals.get(getAdapterPosition());
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             //text has to be added to intent no matter what
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_TEXT, meal.getName() + "\n" + meal.getPrice() + "\n#"
-                    + DataHolder.getInstance().getMensa(fragment.getCanteenId()).getName()
+                    + DataHolder.getInstance().getMensa(mFragment.getCanteenId()).getName()
                     .replaceAll("\\s+", "") + " #Hunger #mensaDD");
 
 
             Bitmap bitmap = ((BitmapDrawable) mMealImage.getDrawable()).getBitmap();
-            boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(fragment.getContext()).getBoolean("share_image", false);
+            boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(mFragment.getContext()).getBoolean("share_image", false);
 
             //if there is a bitmap attached (the link isn't too short) and the user has enabled image sharing in prefs:
             if (shareImagePref && meal.getImgLink().length() > 1 ) {
                 //additionally share image
                 try {
                     //save file to cache directory
-                    File file = new File(fragment.getContext().getCacheDir(), meal.getName().hashCode() + ".jpeg");
+                    File file = new File(mFragment.getContext().getCacheDir(), meal.getName().hashCode() + ".jpeg");
                     FileOutputStream fOut = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
                     fOut.flush();
@@ -170,7 +168,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             }
             //send the intent
             //TODO: localize
-            fragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Teilen"));
+            mFragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Teilen"));
         }
 
         @Override
@@ -181,12 +179,12 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             } else {
                 if (mMealDetails.getVisibility() == View.GONE) {
                     expandLayout(mMealDetails);
-                    String url = items.get(getAdapterPosition()).getImgLink();
+                    String url = mMeals.get(getAdapterPosition()).getImgLink();
                     if (url.length() > 1) {
-                        NetworkController.getInstance(fragment.getActivity().getApplicationContext()).doImageRequest(url, this);
+                        NetworkController.getInstance(mFragment.getActivity().getApplicationContext()).doImageRequest(url, this);
                     } else {
                         mMealImageProgress.setVisibility(View.GONE);
-                        mMealImage.setImageDrawable(fragment.getActivity().getResources().getDrawable(R.drawable.no_meal_image));
+                        mMealImage.setImageDrawable(mFragment.getActivity().getResources().getDrawable(R.drawable.no_meal_image));
                         mMealImage.setVisibility(View.VISIBLE);
                     }
                 } else
