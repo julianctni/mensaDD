@@ -157,9 +157,12 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Toast.makeText(getActivity().getApplicationContext(), "Speisepläne wurden aktualisiert.", Toast.LENGTH_SHORT).show();
-            mMealRefresher.setRefreshing(false);
+
+
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(), "Speisepläne konnten aus technischen Gründen nicht geladen werden.", Toast.LENGTH_SHORT).show();
         }
+        mMealRefresher.setRefreshing(false);
 
     }
 }

@@ -60,6 +60,9 @@ public class Canteen {
         return mHours;
     }
 
+    public void increasePriority(){
+        mListPriority += 1;
+    }
 
     public String getAddress() {
         return mAddress;

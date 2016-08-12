@@ -34,12 +34,12 @@ import java.util.Date;
 public class CanteenListFragment extends Fragment implements LoadCanteensCallback{
 
     private LinearLayoutManager layoutParams;
-    public static CanteenListAdapter mCanteenListAdapter;
+    public CanteenListAdapter mCanteenListAdapter;
     private RecyclerView mRecyclerView;
     private SharedPreferences prefs;
     private final String URL_CANTEEN_LIST = "http://ctni.sabic.uberspace.de/mensadd/canteens.json";
 
-    private static String KEY_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
+    public static String KEY_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
 
 
     public CanteenListFragment() {
@@ -58,6 +58,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         layoutParams = new LinearLayoutManager(getActivity());
         mRecyclerView = (RecyclerView) view.findViewById(R.id.mensaList);
+        DataHolder.getInstance().sortCanteenList();
         mCanteenListAdapter = new CanteenListAdapter(DataHolder.getInstance().getCanteenList(),this);
         mRecyclerView.setAdapter(mCanteenListAdapter);
         mRecyclerView.setLayoutManager(layoutParams);
@@ -84,7 +85,6 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         if (responseType == 1){
             DataHolder.getInstance().getCanteenList().clear();
             DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
-            SQLiteDatabase db = dbController.getWritableDatabase();
             try {
                 JSONArray json = new JSONArray(message);
                 for(int i = 0 ; i < json.length(); i++){
@@ -105,11 +105,11 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
                     Canteen m = new Canteen(name, code, position,address, hours, priority);
                     DataHolder.getInstance().getCanteenList().add(m);
                 }
+                dbController.updateCanteenTable();
                 prefs.edit().putLong(KEY_LAST_CANTEENS_UPDATE,new Date().getTime()).commit();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            dbController.updateCanteenTable();
             DataHolder.getInstance().sortCanteenList();
             mCanteenListAdapter.notifyDataSetChanged();
 

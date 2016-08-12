@@ -71,6 +71,9 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
             int priority = prefs.getInt("priority_"+mensaId, 0);
             priority += 1;
             prefs.edit().putInt("priority_"+mensaId, priority).apply();
+            DataHolder.getInstance().getMensa(mensaId).increasePriority();
+            DataHolder.getInstance().sortCanteenList();
+            CanteenListAdapter.this.notifyDataSetChanged();
         }
     }
 }

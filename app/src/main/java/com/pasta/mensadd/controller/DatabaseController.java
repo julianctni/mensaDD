@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
@@ -73,84 +74,19 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.execSQL(mealTable);
     }
 
-    /*
-    public void getVeganSpotsFromDatabase(boolean firstStart) {
-        DataRepo.clearSpotLists();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Log.i("SQLite", "importing vegan spots");
-        String[] projection = { "spotId", "spotName", "spotAddress", "spotPhone",
-                "spotUrl", "spotMail", "spotInfo", "spotLocLong", "spotLocLat",
-                "catFood", "catShopping", "catCafe", "catIcecream", "catVokue", "catBakery",
-                "isFavorite",
-                "spotHours", "spotImgKey"};
-        Cursor c = db.query("veganSpots", projection, null, null, null, null, null);
-        while (c.moveToNext()) {
-            int spotId = c.getInt(c.getColumnIndex("spotId"));
-            String spotName = c.getString(c.getColumnIndex("spotName"));
-            String spotAddress = c.getString(c.getColumnIndex("spotAddress"));
-            String spotPhone = c.getString(c.getColumnIndex("spotPhone"));
-            String spotUrl = c.getString(c.getColumnIndex("spotUrl"));
-            String spotMail = c.getString(c.getColumnIndex("spotMail"));
-            String spotInfo = c.getString(c.getColumnIndex("spotInfo"));
-            String spotImgKey = c.getString(c.getColumnIndex("spotImgKey"));
-            String spotHours = c.getString(c.getColumnIndex("spotHours"));
-            double locLong = c.getDouble(c.getColumnIndex("spotLocLong"));
-            double locLat = c.getDouble(c.getColumnIndex("spotLocLat"));
-            int catFood = c.getInt(c.getColumnIndex("catFood"));
-            int catShopping = c.getInt(c.getColumnIndex("catShopping"));
-            int catCafe = c.getInt(c.getColumnIndex("catCafe"));
-            int catIcecream = c.getInt(c.getColumnIndex("catIcecream"));
-            int catVokue = c.getInt(c.getColumnIndex("catVokue"));
-            int catBakery = c.getInt(c.getColumnIndex("catBakery"));
-            int isFavorite = c.getInt(c.getColumnIndex("isFavorite"));
-            VeganSpot s = new VeganSpot(spotName, spotAddress, spotUrl, "", locLat,
-                    locLong, spotMail, spotInfo, spotId,  spotPhone, spotImgKey);
-
-            s.addHours(spotHours);
-
-            DataRepo.veganSpots.put(s.getID(),s);
-            if (catFood == 1)
-                DataRepo.foodSpots.add(s);
-            if (catShopping == 1)
-                DataRepo.shoppingSpots.add(s);
-            if (catBakery == 1)
-                DataRepo.bakerySpots.add(s);
-            if (catIcecream == 1)
-                DataRepo.icecreamSpots.add(s);
-            if (catVokue == 1)
-                DataRepo.vokueSpots.add(s);
-            if (catCafe == 1)
-                DataRepo.cafeSpots.add(s);
-            if (isFavorite == 1) {
-                DataRepo.favoriteMap.put(s.getID(), s);
-                s.setFavorite(true);
-            }
-        }
-        c.close();
+    public void deleteAllData(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM "+MEALS_TABLE_NAME+";");
+        db.execSQL("DELETE FROM "+CANTEENS_TABLE_NAME+";");
+        db.execSQL("DELETE FROM "+BALANCES_TABLE_NAME+";");
         db.close();
-
-        if (firstStart)
-            this.loadFavFromOldVersion();
-        DataRepo.updateFavorites();
-    }
-
-    public void loadFavFromOldVersion(){
-        Log.i("DATABASE", "Loading favorites from old app");
-        context.deleteDatabase("ddvegan_db");
-        prefs.edit().remove("LAST_DB_UPDATE").commit();
-        Map<String, ?> prefMap = prefs.getAll();
-        prefMap.remove(DataRepo.APP_VERSION_KEY);
-        for (String x : prefMap.keySet()) {
-            if (DataRepo.veganSpots.containsKey(Integer.parseInt(x))) {
-                VeganSpot vs = DataRepo.veganSpots.get(Integer.parseInt(x));
-                prefs.edit().remove(x).commit();
-                vs.setFavorite(true);
-                DataRepo.favoriteMap.put(vs.getID(), vs);
-                setAsFavorite(vs,true);
-            }
+        prefs.edit().remove(CanteenListFragment.KEY_LAST_CANTEENS_UPDATE).apply();
+        for (Canteen c : DataHolder.getInstance().getCanteenList()){
+            prefs.edit().remove("priority_"+c.getCode()).apply();
         }
     }
-*/
+
+
     public void readCanteensFromDb() {
         SQLiteDatabase db = getReadableDatabase();
         Log.i("SQLite", "importing canteens from db");
@@ -219,6 +155,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     public void updateCanteenTable(){
         SQLiteDatabase db = getWritableDatabase();
+        createCanteenTable(db);
         db.execSQL("DELETE FROM "+CANTEENS_TABLE_NAME+";");
         for (Canteen c : DataHolder.getInstance().getCanteenList()) {
             ContentValues values = new ContentValues();

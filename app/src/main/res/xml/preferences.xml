@@ -7,15 +7,14 @@
         android:defaultValue="false" />
 
     <CheckBoxPreference
-        android:key="@string/pref_map_key"
-        android:title="@string/pref_map_title"
-        android:summary="@string/pref_autostart_summary"
-        android:defaultValue="false" />
-
-    <CheckBoxPreference
         android:key="@string/pref_share_image_key"
         android:title="@string/pref_share_image_title"
         android:summary="@string/pref_share_image_summary"
         android:defaultValue="false" />
+
+    <Preference
+        android:key="pref_reset_key"
+        android:title="Daten löschen"
+        android:summary="Alle lokal gespeicherten Speisepläne, Prioritätsdaten der Mensaliste und Guthabendaten werden gelöscht."/>
 
 </PreferenceScreen>
