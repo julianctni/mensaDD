@@ -20,5 +20,12 @@
     <string name="meals_no_food">Heute gibt es hier leider kein Essen.</string>
     <string name="nav_drawer_card_history">Guthaben</string>
     <string name="no_data_available">Keine Daten vorhanden.</string>
+    <string name="imprint_credits">Ein großes Dankeschön an die zuvor genannten Entwickler, die ihren Quellcode als freie Software zur Verfügung stellen und somit die Entwicklung von mensaDD unterstützt haben.\n\nWeiterer Dank gilt Paul für die Unterstützung bei der Entwicklung und die Perry Rhodan Youth für das Testen während der Entwicklungsphase.\n\nUnd letztendlich auch ein großes Dankeschön an die Nutzer dieser App und deren oft sehr hilfreiches Feedback! ;-)</string>
+    <string name="imprint_license">Die Guthabenabfrage wurde mithilfe des Codes von <![CDATA[<a href="https://github.com/jakobwenzel/MensaGuthaben">Jakob Wenzel</a>]]> und <![CDATA[<a href="https://github.com/codebutler/farebot">Farebot</a>]]> umgesetzt. Für die Graphvisualisierung der Guthabenwerte wurde <![CDATA[<a href="https://github.com/lecho/hellocharts-android">hellocharts</a>]]> genutzt. Die Kartenansicht wurde mithilfe des <![CDATA[<a href="https://www.mapbox.com/android-sdk/">Mapbox Android SDK</a>]]> realisiert.\n\nDer Quelltext von mensaDD ist auf <![CDATA[<a href="https://github.com/julianctni/mensaDD">GitHub</a>]]> frei verfügbar, lizenziert unter GPL.</string>
+    <string name="imprint_credits_header">Danksagungen</string>
+    <string name="imprint_license_header"><![CDATA[Lizenzen & Co.]]></string>
+    <string name="imprint_love_pasta">love pasta, hate racism!</string>
+    <string name="imprint_general_header">Allgemeines</string>
+    <string name="imprint_general">Für Ungenauigkeiten bei den Speiseplänen und anderen Angaben zu den Mensen übernehme ich keine Haftung.\n\nDie Speisepläne werden serverseitig von der Webseite des Studentenwerks heruntergeladen und ausgelesen.\n\nBei Fragen, Wünschen und Anregungen einfach eine Nachricht schreiben.</string>
 
 </resources>
