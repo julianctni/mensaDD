@@ -29,10 +29,6 @@
             android:id="@+id/nav_imprint"
             android:icon="@drawable/ic_info_outline_black_24dp"
             android:title="@string/nav_drawer_imprint" />
-        <item
-            android:id="@+id/nav_license"
-            android:icon="@drawable/ic_code_black_24dp"
-            android:title="@string/nav_drawer_license" />
     </group>
 
 </menu>

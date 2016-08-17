@@ -10,9 +10,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -101,7 +99,7 @@ public class MainActivity extends AppCompatActivity
             onNewIntent(getIntent());
         }
 
-        FragmentController.showCardCheckFragment(getSupportFragmentManager(), "tst", "test");
+        FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), "tst", "test");
     }
 
     public static void updateNavDrawer(int id){
@@ -188,7 +186,7 @@ public class MainActivity extends AppCompatActivity
                 mHeadingToolbar.setVisibility(View.GONE);
                 break;
             case R.id.nav_card_history:
-                FragmentController.showCardHistoryFragment(getSupportFragmentManager());
+                FragmentController.showBalanceHistoryFragment(getSupportFragmentManager());
                 mAppLogoToolbar.setVisibility(View.GONE);
                 mHeadingToolbar.setText(getString(R.string.nav_drawer_card_history));
                 mHeadingToolbar.setVisibility(View.VISIBLE);
@@ -247,7 +245,7 @@ public class MainActivity extends AppCompatActivity
     private void updateCardCheckFragment(ValueData value) {
         mCurrentValueData = value;
         if (!mCardCheckVisible) {
-            FragmentController.showCardCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
+            FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
             ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
             showAnim.setDuration(400);
             mSaveBalanceButton.setVisibility(View.VISIBLE);
@@ -257,7 +255,7 @@ public class MainActivity extends AppCompatActivity
             mCardCheckContainer.startAnimation(animation);
             mCardCheckVisible = true;
         } else {
-            FragmentController.updateCardCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
+            FragmentController.updateBalanceCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
         }
     }
 

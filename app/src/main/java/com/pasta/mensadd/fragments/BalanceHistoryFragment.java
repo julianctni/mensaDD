@@ -36,7 +36,7 @@ import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
-public class CardHistoryFragment extends Fragment {
+public class BalanceHistoryFragment extends Fragment {
 
     private float mMaxBalance;
     private float mMaxTransaction;
@@ -55,7 +55,7 @@ public class CardHistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_card_history, container, false);
+        View v = inflater.inflate(R.layout.fragment_balance_history, container, false);
         mBalance.clear();
         mTransactions.clear();
         mTimestamps.clear();

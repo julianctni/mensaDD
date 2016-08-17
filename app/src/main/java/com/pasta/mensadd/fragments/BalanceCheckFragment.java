@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.pasta.mensadd.R;
 
-public class CardCheckFragment extends Fragment {
+public class BalanceCheckFragment extends Fragment {
 
     private String mCardBalance;
     private String mLastTransaction;
@@ -18,10 +18,10 @@ public class CardCheckFragment extends Fragment {
     private TextView mViewLastTransaction;
 
 
-    public CardCheckFragment() {}
+    public BalanceCheckFragment() {}
 
-    public static CardCheckFragment newInstance(String cardBalance, String lastTransaction) {
-        CardCheckFragment fragment = new CardCheckFragment();
+    public static BalanceCheckFragment newInstance(String cardBalance, String lastTransaction) {
+        BalanceCheckFragment fragment = new BalanceCheckFragment();
         Bundle args = new Bundle();
         args.putString("mCardBalance", cardBalance);
         args.putString("mLastTransaction", lastTransaction);
@@ -41,7 +41,7 @@ public class CardCheckFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_card_check, container, false);
+        View view = inflater.inflate(R.layout.fragment_balance_check, container, false);
         mViewCardBalance = (TextView)view.findViewById(R.id.balanceContent);
         mViewLastTransaction = (TextView)view.findViewById(R.id.lastTransactionContent);
         updateContent(mCardBalance, mLastTransaction);
