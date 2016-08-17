@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity
 
     public static boolean NFC_SUPPORTED = false;
 
-    private static AppBarLayout mAppBarLayout;
     private static NavigationView mNavigationView;
     private RelativeLayout mCardCheckContainer;
     private DrawerLayout mNavDrawer;
@@ -75,7 +74,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         mSaveBalanceButton = (FloatingActionButton) findViewById(R.id.saveBalanceButton);
         mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ff4b66")));
         mSaveBalanceButton.setOnClickListener(this);
@@ -83,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         mAppLogoToolbar = (ImageView) findViewById(R.id.home_button);
         mCardCheckContainer = (RelativeLayout) findViewById(R.id.cardCheckContainer);
         mCardCheckContainer.setOnClickListener(this);
-        mCardCheckHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
+        mCardCheckHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
         mNavDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mNavDrawer, toolbar, 0, 0);
         if (mNavDrawer != null) mNavDrawer.addDrawerListener(mDrawerToggle);
@@ -102,16 +100,8 @@ public class MainActivity extends AppCompatActivity
         if (NFC_SUPPORTED && NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
             onNewIntent(getIntent());
         }
-    }
 
-    public static void setToolbarShadow(boolean shadow){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (shadow)
-                mAppBarLayout.setElevation(8);
-            else
-                mAppBarLayout.setElevation(0);
-        }
-
+        FragmentController.showCardCheckFragment(getSupportFragmentManager(), "tst", "test");
     }
 
     public static void updateNavDrawer(int id){
@@ -158,8 +148,13 @@ public class MainActivity extends AppCompatActivity
             mCardCheckContainer.setAnimation(animation);
             mCardCheckContainer.startAnimation(animation);
             mCardCheckVisible = false;
+
+        } else if (v.getId() == R.id.saveBalanceButton) {
+            storeCardData();
+        }
+        if (v.getId() == R.id.saveBalanceButton || v.getId() == R.id.cardCheckContainer) {
             ScaleAnimation hideAnim = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            hideAnim.setDuration(300);
+            hideAnim.setDuration(200);
             hideAnim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {}
@@ -173,8 +168,6 @@ public class MainActivity extends AppCompatActivity
                 public void onAnimationRepeat(Animation animation) {}
             });
             mSaveBalanceButton.startAnimation(hideAnim);
-        } else if (v.getId() == R.id.saveBalanceButton) {
-            storeCardData();
         }
     }
 
@@ -256,7 +249,7 @@ public class MainActivity extends AppCompatActivity
         if (!mCardCheckVisible) {
             FragmentController.showCardCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
             ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            showAnim.setDuration(300);
+            showAnim.setDuration(400);
             mSaveBalanceButton.setVisibility(View.VISIBLE);
             mSaveBalanceButton.startAnimation(showAnim);
             Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight);

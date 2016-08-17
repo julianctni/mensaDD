@@ -82,7 +82,7 @@ public class CardHistoryFragment extends Fragment {
                 null,
                 sortOrder
         );
-        c.close();
+
 
         while (c.moveToNext()) {
             mBalance.add(c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
@@ -95,9 +95,14 @@ public class CardHistoryFragment extends Fragment {
                 mCurrentLastTransaction.setText(t);
             }
         }
+        c.close();
+        TextView noBalanceText = (TextView) v.findViewById(R.id.notEnoughDataForLine);
+        TextView noTransactionText = (TextView) v.findViewById(R.id.notEnoughDataForColumn);
         if (mBalance.size() > 1) {
             setUpBalanceChart();
             setUpTransactionsChart();
+            noBalanceText.setVisibility(View.GONE);
+            noTransactionText.setVisibility(View.GONE);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -111,10 +116,8 @@ public class CardHistoryFragment extends Fragment {
             }
             mBalanceChart.setVisibility(View.GONE);
             mTransactionChart.setVisibility(View.GONE);
-            TextView noBalanceChart = (TextView) v.findViewById(R.id.notEnoughDataForLine);
-            TextView noTransactionChart = (TextView) v.findViewById(R.id.notEnoughDataForColumn);
-            noBalanceChart.setVisibility(View.VISIBLE);
-            noTransactionChart.setVisibility(View.VISIBLE);
+
+
         }
 
         MainActivity.updateNavDrawer(R.id.nav_card_history);

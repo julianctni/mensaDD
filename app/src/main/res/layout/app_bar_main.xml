@@ -27,21 +27,20 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/content_app_logo"
-                android:visibility="visible"
-                android:src="@drawable/banner"/>
+                android:src="@drawable/banner"
+                android:visibility="visible"/>
 
             <TextView
                 android:id="@+id/heading_toolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="20sp"
+                android:text="Zeltschlösschen"
                 android:textColor="#EEE"
-                android:visibility="gone"
-                android:text="Zeltschlösschen"/>
+                android:textSize="20sp"
+                android:visibility="gone"/>
 
         </android.support.v7.widget.Toolbar>
-
 
 
     </android.support.design.widget.AppBarLayout>
@@ -51,24 +50,34 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <RelativeLayout
-            android:id="@+id/cardCheckContainer"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="#EEEEEE"
-            android:elevation="10dp"
-            tools:targetApi="lollipop" />
 
-        <RelativeLayout
-            android:id="@+id/mainContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:animateLayoutChanges="true"
-            android:layout_below="@id/cardCheckContainer">
-        </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/cardCheckContainer"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="#EEEEEE"
+                android:visibility="visible"
+                android:elevation="10dp"
+                android:layout_alignParentBottom="true"
+                tools:targetApi="lollipop">
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/mainContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/cardCheckContainer"
+                android:animateLayoutChanges="true">
+            </RelativeLayout>
+
+
+
+
+
         </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton
@@ -78,16 +87,14 @@
             android:clickable="true"
             android:src="@drawable/ic_save_black_24dp"
             android:tint="#FFFFFF"
-            app:fabSize="normal"
             android:visibility="gone"
+            app:fabSize="normal"
             app:layout_anchor="@id/cardCheckContainer"
-            app:useCompatPadding="true"
-            app:layout_anchorGravity="bottom|right|end"/>
+            app:layout_anchorGravity="top|right|end"
+            app:useCompatPadding="true"/>
 
 
     </android.support.design.widget.CoordinatorLayout>
-
-
 
 
     <!--

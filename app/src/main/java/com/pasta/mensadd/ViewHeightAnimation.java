@@ -15,7 +15,7 @@ public class ViewHeightAnimation extends Animation {
         this.mView = view;
         this.mFromHeight = fromHeight;
         this.mToHeight = toHeight;
-        this.setDuration(300);
+        this.setDuration(200);
         this.setInterpolator(new AccelerateInterpolator());
     }
 

@@ -14,17 +14,14 @@ import com.pasta.mensadd.fragments.SettingsFragment;
 public class FragmentController {
 
     public static void showMensaListFragment(FragmentManager fm){
-        MainActivity.setToolbarShadow(true);
         fm.beginTransaction().replace(R.id.mainContainer, new CanteenListFragment(), "CANTEEN_LIST_FRAGMENT").commit();
     }
 
     public static void showMapFragment(FragmentManager fm){
-        MainActivity.setToolbarShadow(true);
         fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new CanteenMapFragment(), "MAP_FRAGMENT").commit();
     }
 
     public static void showCardCheckFragment(FragmentManager fm, String current, String lastTransaction){
-        MainActivity.setToolbarShadow(false);
         CardCheckFragment fragment = CardCheckFragment.newInstance(current, lastTransaction);
         fm.beginTransaction().replace(R.id.cardCheckContainer, fragment, "CARD_CHECK_FRAGMENT").commitAllowingStateLoss();
     }
@@ -37,22 +34,18 @@ public class FragmentController {
     }
     
     public static void showSettingsFragment(FragmentManager fm){
-        MainActivity.setToolbarShadow(true);
         fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new SettingsFragment(), "SETTINGS_FRAGMENT").commit();
     }
 
     public static void showMealWeekFragment(FragmentManager fm, String mensaId){
-        MainActivity.setToolbarShadow(false);
         fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, MealWeekFragment.newInstance(mensaId), "MEAL_WEEK_FRAGMENT").commit();
     }
 
     public static void showCardHistoryFragment(FragmentManager fm){
-        MainActivity.setToolbarShadow(true);
         fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new CardHistoryFragment(), "CARD_HISTORY_FRAGMENT").commit();
     }
 
     public static void showImprintFragment(FragmentManager fm){
-        MainActivity.setToolbarShadow(true);
         fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new CardHistoryFragment(), "IMPRINT_FRAGMENT").commit();
     }
 }
