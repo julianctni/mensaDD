@@ -98,8 +98,6 @@ public class MainActivity extends AppCompatActivity
         if (NFC_SUPPORTED && NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
             onNewIntent(getIntent());
         }
-
-        FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), "tst", "test");
     }
 
     public static void updateNavDrawer(int id){
