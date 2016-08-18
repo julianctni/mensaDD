@@ -139,8 +139,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        Animation animation = new ViewHeightAnimation(mCardCheckContainer, (int) mCardCheckHeight, 0);
         if (v.getId() == R.id.cardCheckContainer) {
-            Animation animation = new ViewHeightAnimation(mCardCheckContainer, (int) mCardCheckHeight, 0);
             mCardCheckContainer.setAnimation(animation);
             mCardCheckContainer.startAnimation(animation);
             mCardCheckVisible = false;
@@ -149,6 +149,9 @@ public class MainActivity extends AppCompatActivity
             storeCardData();
         }
         if (v.getId() == R.id.saveBalanceButton || v.getId() == R.id.cardCheckContainer) {
+            mCardCheckContainer.setAnimation(animation);
+            mCardCheckContainer.startAnimation(animation);
+            mCardCheckVisible = false;
             ScaleAnimation hideAnim = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
             hideAnim.setDuration(200);
             hideAnim.setAnimationListener(new Animation.AnimationListener() {

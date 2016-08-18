@@ -114,10 +114,8 @@ public class BalanceHistoryFragment extends Fragment {
             if (mBalance.isEmpty()){
                 mCurrentBalance.setText(getString(R.string.no_data_available));
             }
-            mBalanceChart.setVisibility(View.GONE);
-            mTransactionChart.setVisibility(View.GONE);
-
-
+            //mBalanceChart.setVisibility(View.GONE);
+            //mTransactionChart.setVisibility(View.GONE);
         }
 
         MainActivity.updateNavDrawer(R.id.nav_card_history);
