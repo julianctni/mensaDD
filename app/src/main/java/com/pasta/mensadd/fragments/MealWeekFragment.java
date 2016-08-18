@@ -1,6 +1,7 @@
 package com.pasta.mensadd.fragments;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -106,6 +107,9 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
     @Override
     public void onResponseMessage(int responseType, String message) {
+        if (getActivity() == null) {
+            return;
+        }
         DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
         if (responseType == NetworkController.SUCCESS) {
             ParseController p = new ParseController();
