@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minLines="1"
-                android:text="@string/card_check_balance"
+                android:text="@string/balance_check_balance"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minLines="1"
-                android:text="@string/card_check_last_transaction"
+                android:text="@string/balance_check_last_transaction"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"/>
 

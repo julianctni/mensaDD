@@ -89,8 +89,8 @@ public class BalanceHistoryFragment extends Fragment {
             mTransactions.add(c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
             mTimestamps.add(c.getLong(c.getColumnIndex(DatabaseController.BALANCE_ID)));
             if (c.isLast()){
-                String b = getString(R.string.card_check_balance)+": "+formatMoneyString(c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
-                String t = getString(R.string.card_check_last_transaction)+": "+formatMoneyString(c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
+                String b = getString(R.string.balance_check_balance)+": "+formatMoneyString(c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
+                String t = getString(R.string.balance_check_last_transaction)+": "+formatMoneyString(c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
                 mCurrentBalance.setText(b);
                 mCurrentLastTransaction.setText(t);
             }
