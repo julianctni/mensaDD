@@ -2,6 +2,7 @@ package com.pasta.mensadd.adapter;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.MealDayFragment;
@@ -38,6 +40,10 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
     public ArrayList<Meal> mMeals;
     public MealDayFragment mFragment;
+    public final String COLOR_TEXT_WHITE = "#FFFFFF";
+    public final String COLOR_TEXT_DARK = "#444444";
+    public final String COLOR_HEADER_VEG = "#7fb29b";
+    public final String COLOR_HEADER_NOT_VEG = "#F1F1F1";
 
     public MealListAdapter(ArrayList<Meal> items, MealDayFragment fragment) {
         if (this.mMeals == null)
@@ -81,11 +87,11 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         else holder.mAlcohol.setVisibility(View.GONE);
 
         if (item.isVegan() || item.isVegetarian()) {
-            holder.mHeaderLayout.setBackgroundColor(Color.parseColor("#7fb29b"));
-            holder.mName.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.mHeaderLayout.setBackgroundColor(Color.parseColor(COLOR_HEADER_VEG));
+            holder.mName.setTextColor(Color.parseColor(COLOR_TEXT_WHITE));
         } else {
-            holder.mHeaderLayout.setBackgroundColor(Color.parseColor("#F1F1F1"));
-            holder.mName.setTextColor(Color.parseColor("#333333"));
+            holder.mHeaderLayout.setBackgroundColor(Color.parseColor(COLOR_HEADER_NOT_VEG));
+            holder.mName.setTextColor(Color.parseColor(COLOR_TEXT_DARK));
         }
     }
 
@@ -128,7 +134,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mMealImageProgress = (ProgressBar) itemView.findViewById(R.id.mealImageProgressBar);
             mListItemHeader = (LinearLayout) itemView.findViewById(R.id.mensaListItemHeader);
             mShareButton = (FloatingActionButton) itemView.findViewById(R.id.shareButton);
-            mShareButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ff4b66")));
+            mShareButton.setBackgroundTintList(ColorStateList.valueOf(mFragment.getResources().getColor(R.color.pink)));
             mShareButton.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
@@ -136,6 +142,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
 
 
+        @SuppressLint("SetWorldReadable")
         private void shareMeal() {
             Meal meal = mMeals.get(getAdapterPosition());
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -143,11 +150,11 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_TEXT, meal.getName() + "\n" + meal.getPrice() + "\n#"
                     + DataHolder.getInstance().getMensa(mFragment.getCanteenId()).getName()
-                    .replaceAll("\\s+", "") + " #Hunger #mensaDD");
+                    .replaceAll("\\s+", "") + " "+mFragment.getString(R.string.content_share_hungry)+" #mensaDD");
 
 
             Bitmap bitmap = ((BitmapDrawable) mMealImage.getDrawable()).getBitmap();
-            boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(mFragment.getContext()).getBoolean("share_image", false);
+            boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(mFragment.getContext()).getBoolean(mFragment.getString(R.string.pref_share_image_key), false);
 
             //if there is a bitmap attached (the link isn't too short) and the user has enabled image sharing in prefs:
             if (shareImagePref && meal.getImgLink().length() > 1 ) {
@@ -168,7 +175,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             }
             //send the intent
             //TODO: localize
-            mFragment.getActivity().startActivity(Intent.createChooser(shareIntent, "Teilen"));
+            mFragment.getActivity().startActivity(Intent.createChooser(shareIntent, mFragment.getString(R.string.content_share)));
         }
 
         @Override
@@ -181,7 +188,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                     expandLayout(mMealDetails);
                     String url = mMeals.get(getAdapterPosition()).getImgLink();
                     if (url.length() > 1) {
-                        NetworkController.getInstance(mFragment.getActivity().getApplicationContext()).doImageRequest(url, this);
+                        NetworkController.getInstance(mFragment.getActivity().getApplicationContext()).loadMealImage(url, this);
                     } else {
                         mMealImageProgress.setVisibility(View.GONE);
                         mMealImage.setImageDrawable(mFragment.getActivity().getResources().getDrawable(R.drawable.no_meal_image));
@@ -258,6 +265,13 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                 mMealImage.setImageBitmap(bitmap);
                 mMealImageProgress.setVisibility(View.GONE);
                 mMealImage.setVisibility(View.VISIBLE);
+            } else {
+                mMealImageProgress.setVisibility(View.GONE);
+                mFragment.getActivity().getResources().getDrawable(R.drawable.no_meal_image);
+                mMealImage.setVisibility(View.VISIBLE);
+            }
+            if (responseType == NetworkController.NO_INTERNET) {
+                Toast.makeText(mFragment.getActivity().getApplicationContext(), mFragment.getString(R.string.img_load_no_connection), Toast.LENGTH_SHORT).show();
             }
         }
     }

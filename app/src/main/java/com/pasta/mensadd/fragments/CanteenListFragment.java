@@ -61,8 +61,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         if (mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) == 0 || new Date().getTime() - mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) > 86400000) {
             NetworkController.getInstance(getActivity()).getCanteenList(this);
         } else if (DataHolder.getInstance().getCanteenList().isEmpty()){
-            DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
-            dbController.readCanteensFromDb();
+            readCanteensFromDb();
         }
 
         MainActivity.updateNavDrawer(R.id.nav_mensa);
@@ -75,6 +74,13 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
             ParseController p = new ParseController();
             p.parseCanteens(message, new DatabaseController(this.getActivity().getApplicationContext()), mSharedPrefs);
             mCanteenListAdapter.notifyDataSetChanged();
+        } else {
+            readCanteensFromDb();
         }
+    }
+
+    public void readCanteensFromDb(){
+        DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
+        dbController.readCanteensFromDb();
     }
 }

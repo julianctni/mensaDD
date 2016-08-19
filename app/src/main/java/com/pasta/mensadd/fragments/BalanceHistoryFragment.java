@@ -114,8 +114,6 @@ public class BalanceHistoryFragment extends Fragment {
             if (mBalance.isEmpty()){
                 mCurrentBalance.setText(getString(R.string.no_data_available));
             }
-            //mBalanceChart.setVisibility(View.GONE);
-            //mTransactionChart.setVisibility(View.GONE);
         }
 
         MainActivity.updateNavDrawer(R.id.nav_card_history);
@@ -142,7 +140,7 @@ public class BalanceHistoryFragment extends Fragment {
         }
 
 
-        Line line = new Line(values).setColor(Color.parseColor("#bbcc3c51")).setCubic(false).setFilled(true).setHasPoints(false);
+        Line line = new Line(values).setColor(getResources().getColor(R.color.pink_dark)).setCubic(false).setFilled(true).setHasPoints(false);
         List<Line> lines = new ArrayList<>();
         lines.add(line);
 
@@ -164,7 +162,6 @@ public class BalanceHistoryFragment extends Fragment {
 
         for (int j = 0; j<line.getValues().size();j++){
             line.getValues().get(j).setTarget(j, mBalance.get(j));
-            Log.i("CARDHISTORY", mBalance.get(j)+"");
         }
     }
 
@@ -175,7 +172,7 @@ public class BalanceHistoryFragment extends Fragment {
         List<SubcolumnValue> values;
         for (int i = 0; i < numColumns; ++i) {
             values = new ArrayList<>();
-            values.add(new SubcolumnValue(i, Color.parseColor("#bb00888a")));
+            values.add(new SubcolumnValue(i, getResources().getColor(R.color.cyan_dark)));
             Date date = new Date(mTimestamps.get(i));
             axisValues.add(new AxisValue(i).setLabel(mDateFormat.format(date)));
             if (mTransactions.get(i) > mMaxTransaction)

@@ -2,7 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:background="@color/tile_cyan1"
+                android:background="@color/cyan"
                 android:elevation="20dp"
                 tools:targetApi="lollipop">
 
@@ -36,6 +36,7 @@
                 android:minLines="1"
                 android:textAlignment="center"
                 android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:textColor="#FFFFFF"
                 android:textSize="22sp"
                 android:textStyle="bold"/>
@@ -61,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:minLines="1"
                 android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"/>
         </LinearLayout>

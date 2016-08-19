@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">mensaDD</string>
     <string name="nav_drawer_food">Mensen</string>
     <string name="nav_drawer_map">Karte</string>
     <string name="nav_drawer_settings">Einstellungen</string>
@@ -9,12 +8,8 @@
     <string name="pref_map_summary">Bei WLan-Verbindung wird die Dresdenkarte beim Start der Kartenansicht auf das Gerät heruntergeladen.</string>
     <string name="pref_autostart_title">NFC-Autostart</string>
     <string name="pref_map_title">Offline-Karte</string>
-    <string name="card_check_balance">Aktuelles Guthaben</string>
-    <string name="card_check_last_transaction">Letzte Abbuchung</string>
-    <string name="content_app_logo">app_logo</string>
-    <string name="pref_autostart_key">nfc_autostart</string>
-    <string name="pref_map_key">offline-map</string>
-    <string name="pref_share_image_key">share_image</string>
+    <string name="balance_check_balance">Aktuelles Guthaben</string>
+    <string name="balance_check_last_transaction">Letzte Abbuchung</string>
     <string name="pref_share_image_title">Bilder zum Gericht teilen</string>
     <string name="pref_share_image_summary">Einige wenige Apps teilen leider nur das Bild ohne Text, wenn diese Option aktiviert ist.</string>
     <string name="meals_no_food">Heute gibt es hier leider kein Essen.</string>
@@ -24,8 +19,21 @@
     <string name="imprint_license">Die Guthabenabfrage wurde mithilfe des Codes von <![CDATA[<a href="https://github.com/jakobwenzel/MensaGuthaben">Jakob Wenzel</a>]]> und <![CDATA[<a href="https://github.com/codebutler/farebot">Farebot</a>]]> umgesetzt. Für die Graphvisualisierung der Guthabenwerte wurde <![CDATA[<a href="https://github.com/lecho/hellocharts-android">hellocharts</a>]]> genutzt. Die Kartenansicht wurde mithilfe des <![CDATA[<a href="https://www.mapbox.com/android-sdk/">Mapbox Android SDK</a>]]> realisiert.\n\nDer Quelltext von mensaDD ist auf <![CDATA[<a href="https://github.com/julianctni/mensaDD">GitHub</a>]]> frei verfügbar, lizenziert unter GPL.</string>
     <string name="imprint_credits_header">Danksagungen</string>
     <string name="imprint_license_header"><![CDATA[Lizenzen & Co.]]></string>
-    <string name="imprint_love_pasta">love pasta, hate racism!</string>
     <string name="imprint_general_header">Allgemeines</string>
     <string name="imprint_general">Für Ungenauigkeiten bei den Speiseplänen und anderen Angaben zu den Mensen übernehme ich keine Haftung.\n\nDie Speisepläne werden serverseitig von der Webseite des Studentenwerks heruntergeladen und ausgelesen.\n\nBei Fragen, Wünschen und Anregungen einfach eine Nachricht schreiben.</string>
+    <string name="content_share">Teilen</string>
+    <string name="content_share_hungry">#Hunger</string>
+    <string name="img_load_no_connection">Bild konnte wegen fehlender Internetverbindung nicht geladen werden.</string>
+    <string name="load_meals_technical">Speisepläne konnten aus technischen Gründen nicht geladen/aktualisiert werden.</string>
+    <string name="balance_already_saved">Guthaben wurde bereits gespeichert.</string>
+    <string name="balance_saved">Aktuelles Guthaben wurde gespeichert.</string>
+    <string name="balance_check_fail">Karte konnte nicht gelesen werden.</string>
+    <string name="balance_check_card_not_supported">Karte nicht unterstützt.</string>
+    <string name="balance_check_last_check">Letzte Überprüfung</string>
+    <string name="balance_check_history">Guthabenverlauf</string>
+    <string name="balance_check_last_transactions">Letzte Abbuchungen</string>
+    <string name="balance_check_not_enough_data">Nicht genügend Datensätze vorhanden.</string>
+    <string name="balance_check_footnote">Alle hier angezeigten Daten werden ausschließlich lokal auf deinem Gerät gespeichert. Bei einer Neuinstallation werden diese somit gelöscht. Manuelles Löschen der Daten ist in den Einstellungen möglich.</string>
+    <string name="meals_loading_progress">Speiseplan wird geladen...</string>
 
 </resources>

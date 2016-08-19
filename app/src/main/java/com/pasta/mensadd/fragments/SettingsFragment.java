@@ -16,7 +16,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        findPreference("pref_reset_key").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        findPreference(getString(R.string.pref_reset_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
@@ -24,7 +24,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 return false;
             }
         });
-        findPreference("nfc_autostart").setVisible(MainActivity.NFC_SUPPORTED);
+        findPreference(getString(R.string.pref_autostart_key)).setVisible(MainActivity.NFC_SUPPORTED);
     }
 
     @Override

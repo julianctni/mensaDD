@@ -24,8 +24,8 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
     private CanteenListFragment mFragment;
 
     public CanteenListAdapter(ArrayList<Canteen> items, CanteenListFragment fragment) {
-        this.mCanteens = items;
-        this.mFragment = fragment;
+        mCanteens = items;
+        mFragment = fragment;
     }
 
     @Override

@@ -21,10 +21,8 @@ import com.pasta.mensadd.model.Meal;
 import com.pasta.mensadd.networking.LoadMealsCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 public class MealDayFragment extends Fragment implements LoadMealsCallback {
 
@@ -114,8 +112,11 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
             if (p.parseMealsForCanteen(mMensaId, message, new DatabaseController(getActivity().getApplicationContext()))) {
                 this.updateMealList();
             }
+        } else if (responseType == NetworkController.ERROR){
+            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.load_meals_technical), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getActivity().getApplicationContext(), "Speisepläne konnten aus technischen Gründen nicht geladen werden.", Toast.LENGTH_SHORT).show();
+            DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
+            dbController.readMealsFromDb(mMensaId);
         }
         mMealRefresher.setRefreshing(false);
     }

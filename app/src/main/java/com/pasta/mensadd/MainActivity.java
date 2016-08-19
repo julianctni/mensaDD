@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
@@ -35,7 +34,6 @@ import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.FragmentController;
-import com.pasta.mensadd.fragments.CanteenListFragment;
 
 import java.io.IOException;
 import java.util.Date;
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity
         }
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mSaveBalanceButton = (FloatingActionButton) findViewById(R.id.saveBalanceButton);
-        mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ff4b66")));
+        mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.pink)));
         mSaveBalanceButton.setOnClickListener(this);
         mHeadingToolbar = (TextView) findViewById(R.id.heading_toolbar);
         mAppLogoToolbar = (ImageView) findViewById(R.id.home_button);
@@ -86,8 +84,7 @@ public class MainActivity extends AppCompatActivity
         if (mNavigationView != null) mNavigationView.setNavigationItemSelectedListener(this);
 
         if (getSupportFragmentManager().findFragmentById(R.id.mainContainer) == null) {
-            CanteenListFragment fragment = new CanteenListFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.mainContainer, fragment, "MensaList").commit();
+            FragmentController.showCanteenListFragment(getSupportFragmentManager());
         }
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this.getApplicationContext());
@@ -182,7 +179,7 @@ public class MainActivity extends AppCompatActivity
                 mHeadingToolbar.setVisibility(View.VISIBLE);
                 break;
             case R.id.nav_mensa:
-                FragmentController.showMensaListFragment(getSupportFragmentManager());
+                FragmentController.showCanteenListFragment(getSupportFragmentManager());
                 mAppLogoToolbar.setVisibility(View.VISIBLE);
                 mHeadingToolbar.setVisibility(View.GONE);
                 break;
@@ -236,9 +233,9 @@ public class MainActivity extends AppCompatActivity
         DatabaseController dbController = new DatabaseController(this.getApplicationContext());
         if (cardBalance != dbController.getLastInsertedBalance()) {
             dbController.updateBalanceTable(new Date().getTime(),cardBalance,lastTransaction);
-            Toast.makeText(this.getApplicationContext(), "Guthabenstand wurde gespeichert.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getApplicationContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this.getApplicationContext(), "Guthabenstand bereits gespeichert.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getApplicationContext(), getString(R.string.balance_already_saved), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -274,11 +271,11 @@ public class MainActivity extends AppCompatActivity
             if (value != null)
                 updateCardCheckFragment(value);
             else
-                Toast.makeText(this, "card_not_supported", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.balance_check_card_not_supported), Toast.LENGTH_LONG).show();
             tech.close();
         } catch (DesfireException ex) {
             ex.printStackTrace();
-            Toast.makeText(this, "communication_fail", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.balance_check_fail), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
         }

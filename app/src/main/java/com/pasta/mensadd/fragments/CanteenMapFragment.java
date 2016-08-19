@@ -172,7 +172,6 @@ public class CanteenMapFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
-        outState.putString("title", "Some Text");
     }
 
     @Override
