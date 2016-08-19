@@ -1,7 +1,6 @@
 package com.pasta.mensadd.fragments;
 
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -18,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.ParseController;
@@ -73,6 +73,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        MainActivity.hideToolbarShadow(true);
         mViewPager = (ViewPager) view.findViewById(R.id.mealViewPager);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -110,6 +111,10 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         if (getActivity() == null) {
             return;
         }
+        if (mViewPager.getAdapter() == null) {
+            mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
+            mViewPager.setAdapter(mPagerAdapter);
+        }
         DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
         if (responseType == NetworkController.SUCCESS) {
             ParseController p = new ParseController();
@@ -117,12 +122,10 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         } else {
             dbController.readMealsFromDb(mCanteen.getCode());
         }
+
         mProgressLayout.setVisibility(View.GONE);
         mViewPager.setVisibility(View.VISIBLE);
-        if (mViewPager.getAdapter() == null) {
-            mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
-            mViewPager.setAdapter(mPagerAdapter);
-        }
+
     }
 
     class MealDayPagerAdapter extends FragmentPagerAdapter {
@@ -132,8 +135,16 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
         public MealDayPagerAdapter(FragmentManager fm) {
             super(fm);
-            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd.MM.yyyy",
-                    Locale.GERMANY);
+            Locale locale;
+            String dateFormat;
+            if (Locale.getDefault().getLanguage().equals("de")) {
+                locale = Locale.GERMANY;
+                dateFormat = "EEEE, dd.MM.yyyy";
+            } else {
+                locale = Locale.ENGLISH;
+                dateFormat = "EEEE, MM-dd-yyyy";
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, locale);
             mCalendar.setTime(new Date());
             for (int d = 0; d<8; d++) {
                 mFragmentList.add(MealDayFragment.newInstance(mMensaId,d));

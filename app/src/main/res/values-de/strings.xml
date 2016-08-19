@@ -11,7 +11,7 @@
     <string name="balance_check_balance">Aktuelles Guthaben</string>
     <string name="balance_check_last_transaction">Letzte Abbuchung</string>
     <string name="pref_share_image_title">Bilder zum Gericht teilen</string>
-    <string name="pref_share_image_summary">Einige wenige Apps teilen leider nur das Bild ohne Text, wenn diese Option aktiviert ist.</string>
+    <string name="pref_share_image_summary">Einige wenige Apps (Threema, Facebook Messenger...) teilen leider nur das Bild ohne Text, wenn diese Option aktiviert ist.</string>
     <string name="meals_no_food">Heute gibt es hier leider kein Essen.</string>
     <string name="nav_drawer_card_history">Guthaben</string>
     <string name="no_data_available">Keine Daten vorhanden.</string>
@@ -35,5 +35,8 @@
     <string name="balance_check_not_enough_data">Nicht genügend Datensätze vorhanden.</string>
     <string name="balance_check_footnote">Alle hier angezeigten Daten werden ausschließlich lokal auf deinem Gerät gespeichert. Bei einer Neuinstallation werden diese somit gelöscht. Manuelles Löschen der Daten ist in den Einstellungen möglich.</string>
     <string name="meals_loading_progress">Speiseplan wird geladen...</string>
+    <string name="pref_reset_summary">Alle lokal gespeicherten Speisepläne, Prioritätsdaten der Mensaliste und Guthabendaten werden gelöscht.</string>
+    <string name="pref_reset_title">Daten löschen</string>
+    <string name="send_feedback_mail">Feedback E-Mail verfassen</string>
 
 </resources>

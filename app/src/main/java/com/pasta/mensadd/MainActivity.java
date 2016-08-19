@@ -1,5 +1,6 @@
 package com.pasta.mensadd;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -9,7 +10,9 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity
 
     public static boolean NFC_SUPPORTED = false;
 
+    private static AppBarLayout mAppBarLayout;
     private static NavigationView mNavigationView;
     private RelativeLayout mCardCheckContainer;
     private DrawerLayout mNavDrawer;
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportActionBar().setTitle(null);
             }
         }
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mSaveBalanceButton = (FloatingActionButton) findViewById(R.id.saveBalanceButton);
         mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.pink)));
@@ -95,6 +100,15 @@ public class MainActivity extends AppCompatActivity
         if (NFC_SUPPORTED && NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
             onNewIntent(getIntent());
         }
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static void hideToolbarShadow(boolean hide){
+        if (hide)
+            mAppBarLayout.setElevation(0.0f);
+        else
+            mAppBarLayout.setElevation(8.0f);
     }
 
     public static void updateNavDrawer(int id){

@@ -40,7 +40,7 @@ public class BalanceHistoryFragment extends Fragment {
 
     private float mMaxBalance;
     private float mMaxTransaction;
-    private SimpleDateFormat mDateFormat = new SimpleDateFormat("dd.MM", Locale.GERMAN);
+    private SimpleDateFormat mDateFormat;
     private ArrayList<Float> mBalance = new ArrayList<>();
     private ArrayList<Float> mTransactions = new ArrayList<>();
     private ArrayList<Long> mTimestamps = new ArrayList<>();
@@ -56,6 +56,17 @@ public class BalanceHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_balance_history, container, false);
+        MainActivity.hideToolbarShadow(false);
+        Locale locale;
+        String dateFormat;
+        if (Locale.getDefault().getLanguage().equals("de")) {
+            locale = Locale.GERMANY;
+            dateFormat = "dd.MM.";
+        } else {
+            locale = Locale.ENGLISH;
+            dateFormat = "MM-dd";
+        }
+        mDateFormat = new SimpleDateFormat(dateFormat, locale);
         mBalance.clear();
         mTransactions.clear();
         mTimestamps.clear();

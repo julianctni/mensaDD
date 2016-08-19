@@ -44,6 +44,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_canteen_list, container, false);
+        MainActivity.hideToolbarShadow(false);
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
 
         LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());

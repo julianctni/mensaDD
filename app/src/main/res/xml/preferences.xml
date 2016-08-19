@@ -13,8 +13,8 @@
         android:defaultValue="false" />
 
     <Preference
-        android:key="pref_reset_key"
-        android:title="Daten löschen"
-        android:summary="Alle lokal gespeicherten Speisepläne, Prioritätsdaten der Mensaliste und Guthabendaten werden gelöscht."/>
+        android:key="@string/pref_reset_key"
+        android:title="@string/pref_reset_title"
+        android:summary="@string/pref_reset_summary"/>
 
 </PreferenceScreen>

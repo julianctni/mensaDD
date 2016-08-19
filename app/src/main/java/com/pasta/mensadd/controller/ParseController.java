@@ -7,6 +7,7 @@ import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
+import com.pasta.mensadd.networking.LoadMealsCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
