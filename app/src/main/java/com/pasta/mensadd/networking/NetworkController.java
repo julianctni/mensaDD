@@ -120,8 +120,10 @@ public class NetworkController {
     public void getCanteenList(AbstractCallback callback) {
         if (isConnectedToInternet(mCtx))
             doJSONArrayRequest(URL_PREFIX+URL_GET_CANTEENS, callback);
-        else
-            Toast.makeText(mCtx,"Mensen konnten nicht aktualisiert werden. Keine Internetverbindung vorhanden.",Toast.LENGTH_LONG).show();
+        else {
+            Toast.makeText(mCtx, "Mensen konnten nicht aktualisiert werden. Keine Internetverbindung vorhanden.", Toast.LENGTH_LONG).show();
+            callback.onResponseMessage(NO_INTERNET,"");
+        }
     }
 
     public void getMealsForCanteen(String canteenCode, AbstractCallback callback) {

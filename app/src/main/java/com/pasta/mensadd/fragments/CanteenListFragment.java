@@ -71,7 +71,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
 
     @Override
     public void onResponseMessage(int responseType, String message) {
-        if (responseType == 1){
+        if (responseType == 1) {
             ParseController p = new ParseController();
             p.parseCanteens(message, new DatabaseController(this.getActivity().getApplicationContext()), mSharedPrefs);
             mCanteenListAdapter.notifyDataSetChanged();
