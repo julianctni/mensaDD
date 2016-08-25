@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -184,8 +186,9 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                 shareMeal();
 
             } else {
+                mMealImage.getLayoutParams().width = mHeaderLayout.getMeasuredWidth() - (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, mFragment.getResources().getDisplayMetrics());
                 if (mMealDetails.getVisibility() == View.GONE) {
-                    expandLayout(mMealDetails);
+
                     String url = mMeals.get(getAdapterPosition()).getImgLink();
                     if (url.length() > 1) {
                         NetworkController.getInstance(mFragment.getActivity().getApplicationContext()).loadMealImage(url, this);
@@ -193,6 +196,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                         mMealImageProgress.setVisibility(View.GONE);
                         mMealImage.setImageDrawable(mFragment.getActivity().getResources().getDrawable(R.drawable.no_meal_image));
                         mMealImage.setVisibility(View.VISIBLE);
+                        expandLayout(mMealDetails);
                     }
                 } else
                     collapseLayout(mMealDetails);
@@ -273,6 +277,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             if (responseType == NetworkController.NO_INTERNET) {
                 Toast.makeText(mFragment.getActivity().getApplicationContext(), mFragment.getString(R.string.img_load_no_connection), Toast.LENGTH_SHORT).show();
             }
+            expandLayout(mMealDetails);
         }
     }
 }

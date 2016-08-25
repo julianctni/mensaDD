@@ -63,12 +63,12 @@
 
                 <ImageView
                     android:id="@+id/mealImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="125dp"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:src="@drawable/no_meal_image"
                     android:contentDescription="@string/no_meal_image"
-                    android:visibility="gone" />
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/mealContent"
