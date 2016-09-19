@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="-417.85714"
+     inkscape:cx="-1210.7143"
      inkscape:cy="520"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,60 +53,64 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="opacity:0.12;fill:none;fill-opacity:1;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:0.12000002;fill:none;fill-opacity:1;stroke:#000000;stroke-width:15.82919884;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4136"
-       width="865.71429"
-       height="520"
-       x="-1040"
-       y="383.79077"
-       inkscape:export-xdpi="18.333334"
-       inkscape:export-ydpi="18.333334" />
+       width="869.88507"
+       height="324.17084"
+       x="-1042.0853"
+       y="471.39285"
+       inkscape:export-xdpi="111.70586"
+       inkscape:export-ydpi="111.70586"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-de-xxxhdpi/no_meal_image.png" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;opacity:0.12000002;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-603.51733"
        y="608.74438"
        id="text4725"
-       sodipodi:linespacing="125%"
-       inkscape:export-xdpi="18.333334"
-       inkscape:export-ydpi="18.333334"><tspan
+       sodipodi:linespacing="110%"
+       inkscape:export-xdpi="111.70586"
+       inkscape:export-ydpi="111.70586"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-de-xxxhdpi/no_meal_image.png"><tspan
          sodipodi:role="line"
          id="tspan4727"
          x="-603.51733"
          y="608.74438"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:137.5px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;text-anchor:middle">kein Bild</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:137.5px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;text-anchor:middle;line-height:110%">kein Bild</tspan><tspan
          sodipodi:role="line"
          x="-603.51733"
          y="780.61938"
          id="tspan4729"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:137.5px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;text-anchor:middle">vorhanden</tspan></text>
-    <rect
-       style="opacity:0.12000002;fill:none;fill-opacity:1;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4136-3"
-       width="865.71429"
-       height="520"
-       x="-995.71429"
-       y="1046.6479"
-       inkscape:export-xdpi="18.333334"
-       inkscape:export-ydpi="18.333334" />
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:137.5px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;text-anchor:middle;line-height:110%">vorhanden</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;opacity:0.12000002;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-559.23163"
        y="1271.6014"
        id="text4725-6"
-       sodipodi:linespacing="125%"
-       inkscape:export-xdpi="18.333334"
-       inkscape:export-ydpi="18.333334"><tspan
+       sodipodi:linespacing="110%"
+       inkscape:export-xdpi="111.70587"
+       inkscape:export-ydpi="111.70587"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xxxhdpi/no_meal_image.png"><tspan
          sodipodi:role="line"
          x="-559.23163"
          y="1271.6014"
          id="tspan4729-5"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:137.5px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;text-anchor:middle">no image</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:137.5px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;text-anchor:middle;line-height:110%">no image</tspan><tspan
          sodipodi:role="line"
          x="-559.23163"
          y="1443.4764"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:137.5px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;text-anchor:middle"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:137.5px;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:center;text-anchor:middle;line-height:110%"
          id="tspan4765">available</tspan></text>
+    <rect
+       style="opacity:0.12000002;fill:none;fill-opacity:1;stroke:#000000;stroke-width:15.82919884;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4136-3"
+       width="869.88507"
+       height="324.17084"
+       x="-991.92505"
+       y="1136.264"
+       inkscape:export-xdpi="111.70587"
+       inkscape:export-ydpi="111.70587"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xxxhdpi/no_meal_image.png" />
   </g>
 </svg>
