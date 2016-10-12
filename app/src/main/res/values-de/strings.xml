@@ -38,5 +38,19 @@
     <string name="pref_reset_summary">Alle lokal gespeicherten Speisepläne, Prioritätsdaten der Mensaliste und Guthabendaten werden gelöscht.</string>
     <string name="pref_reset_title">Daten löschen</string>
     <string name="send_feedback_mail">Feedback E-Mail verfassen</string>
+    <string name="tutorial_header">mensaDD 2.0 - Was ist neu?</string>
+    <string name="tutorial_design_header">Design</string>
+    <string name="tutorial_design_content">Das Design von mensaDD wurde komplett überarbeitet. Die Startseite stellt eine Liste aller Mensen dar. Je häufiger du eine Mensa auswählst, desto weiter oben erscheint sie in der Liste. Das Hauptmenü lässt sich per Swipe vom linken Displayrand öffnen.</string>
+    <string name="tutorial_map_header">Kartenansicht</string>
+    <string name="tutorial_balance_header">eMeal Guthaben (NFC wird benötigt)</string>
+    <string name="tutorial_balance_content">Um das Guthaben deiner eMeal-Karte zu überprüfen, genügt es, die Karte bei eingeschaltetem NFC an das Handy zu halten. In den Einstellungen lässt sich aktivieren, dass sich mensaDD automatisch öffnet, sobald die Karte erkannt wurde.</string>
+    <string name="tutorial_balancehistory_header">Guthabenverlauf (NFC wird benötigt)</string>
+    <string name="tutorial_balancehistory_content">Wenn du dein Guthaben abrufst, kannst du diese Daten über den Speichern-Button persistent auf deinem Gerät speichern. Im Menü kannst du dir anschließend den Verlauf deines Mensaguthabens anschauen.</string>
+    <string name="tutorial_map_content">Alternativ zur Listenansicht lassen sich nun auch alle Mensen auf einer Karte anzeigen lassen. Diese erreichst du über das Hauptmenü.</string>
+    <string name="tutorial_other_header">Sonstiges</string>
+    <string name="tutorial_other_content">Beim Teilen von Gerichten kannst du nun auch Bilder mitsenden (siehe Einstellungen). Die Speisepläne werden nun serverseitig von der Seite des Studentenwerks eingelesen. Dies erspart Zeit und Rechenaufwand auf deinem Smartphone.</string>
+    <string name="tutorial_button_continue">Weiter</string>
+    <string name="tutorial_button_close">Schliessen</string>
+    <string name="tutorial_button_back">Zurück</string>
 
 </resources>

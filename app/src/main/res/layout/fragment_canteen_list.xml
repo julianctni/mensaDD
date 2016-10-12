@@ -15,6 +15,7 @@
         android:layout_marginTop="6dp"
         android:longClickable="false"
         android:textColor="#FFFFFF"
+        android:visibility="gone"
         card_view:cardBackgroundColor="@color/cyan"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="3dp">
@@ -29,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="mensaDD 2.0 - Was ist neu?"
+                android:text="@string/tutorial_header"
                 android:textSize="20sp"
                 android:textColor="#333"
                 android:textStyle="bold"/>
@@ -44,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="Design"
+                    android:text="@string/tutorial_design_header"
                     android:textColor="#333"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
@@ -54,14 +55,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="14dp"
                     android:textColor="#333"
-                    android:text="Das Design von mensaDD wurde komplett überarbeitet. Die Startseite stellt eine Liste aller Mensen dar. Je häufiger du eine Mensa auswählst, desto weiter oben erscheint sie in der Liste. Das Hauptmenü lässt sich per Swipe vom linken Displayrand öffnen."
+                    android:text="@string/tutorial_design_content"
                     android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="Kartenansicht"
+                    android:text="@string/tutorial_map_header"
                     android:textColor="#333"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
@@ -71,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="14dp"
                     android:textColor="#333"
-                    android:text="Alternativ zur Listenansicht lassen sich nun auch alle Mensen auf einer Karte anzeigen lassen. Diese findest du im Hauptmenü."
+                    android:text="@string/tutorial_map_content"
                     android:textSize="15sp"/>
             </LinearLayout>
 
@@ -86,7 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="eMeal Guthaben (NFC wird benötigt)"
+                    android:text="@string/tutorial_balance_header"
                     android:textColor="#333"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
@@ -96,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="14dp"
                     android:textColor="#333"
-                    android:text="Um das Guthaben deiner eMeal-Karte zu überprüfen, genügt es, die Karte bei eingeschaltetem NFC an das Handy zu halten. In den Einstellungen lässt sich aktivieren, dass sich mensaDD automatisch öffnet, sobald die Karte erkannt wurde."
+                    android:text="@string/tutorial_balance_content"
                     android:textSize="15sp"/>
 
                 <TextView
@@ -104,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:textColor="#333"
-                    android:text="Guthabenverlauf (NFC wird benötigt)"
+                    android:text="@string/tutorial_balancehistory_header"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
@@ -113,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="14dp"
                     android:textColor="#333"
-                    android:text="Wenn du dein Guthaben abrufst, kannst du diese Daten über den Speichern-Button persistent auf deinem Gerät speichern. Im Menü kannst du dir anschließend den Verlauf deines Mensaguthabens anschauen."
+                    android:text="@string/tutorial_balancehistory_content"
                     android:textSize="15sp"/>
             </LinearLayout>
 
@@ -129,7 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="Sonstiges"
+                    android:text="@string/tutorial_other_header"
                     android:textColor="#333"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
@@ -139,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="14dp"
                     android:textColor="#333"
-                    android:text="Beim Teilen von Gerichten kannst du nun auch Bilder mitsenden (siehe Einstellungen). Die Speisepläne werden nun serverseitig von der Seite des Studentenwerks eingelesen. Dies erspart Zeit und Rechenaufwand auf deinem Smartphone."
+                    android:text="@string/tutorial_other_content"
                     android:textSize="15sp"/>
             </LinearLayout>
 
@@ -153,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:text="zurück"/>
+                    android:text="@string/tutorial_button_back"/>
 
                 <Button
                     android:id="@+id/tutorialContinueButton"
@@ -162,7 +163,7 @@
                     android:layout_alignParentRight="true"
 
                     android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:text="Weiter"/>
+                    android:text="@string/tutorial_button_continue"/>
             </RelativeLayout>
 
         </LinearLayout>

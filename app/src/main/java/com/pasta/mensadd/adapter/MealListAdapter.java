@@ -48,12 +48,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     public final String COLOR_HEADER_NOT_VEG = "#F1F1F1";
 
     public MealListAdapter(ArrayList<Meal> items, MealDayFragment fragment) {
-        if (this.mMeals == null)
-            this.mMeals = items;
-        else {
-            this.mMeals.clear();
-            this.mMeals.addAll(items);
-        }
+        mMeals = items;
         mFragment = fragment;
     }
 
@@ -62,6 +57,10 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_meal_list, parent, false);
         return new ViewHolder(v);
+    }
+
+    public void setMealList(ArrayList<Meal> meals){
+        mMeals = meals;
     }
 
     @Override

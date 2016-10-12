@@ -64,6 +64,8 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         mTutorialCard = (CardView) view.findViewById(R.id.tutorialCard);
         mTutorialBackBtn.setOnClickListener(this);
         mTutorialContinueBtn.setOnClickListener(this);
+        if (mSharedPrefs.getBoolean("pref_show_tut", true))
+            mTutorialCard.setVisibility(View.VISIBLE);
         LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.mensaList);
         DataHolder.getInstance().sortCanteenList();
@@ -73,7 +75,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
 
         TextView header = (TextView)getActivity().findViewById(R.id.heading_toolbar);
         header.setVisibility(View.GONE);
-        ImageView appLogo = (ImageView)getActivity().findViewById(R.id.home_button);
+        ImageView appLogo = (ImageView)getActivity().findViewById(R.id.toolbarImage);
         appLogo.setVisibility(View.VISIBLE);
 
         if (mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) == 0 || new Date().getTime() - mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) > 86400000) {
@@ -104,21 +106,18 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
 
     @Override
     public void onClick(View view) {
-        Log.i("TEST",view.getId()+" "+R.id.tutorialContinueButton);
         if (view.getId() == R.id.tutorialContinueButton){
-            Log.i("TEST","hallo");
-
             if (mTutorialPage1.getVisibility() == View.VISIBLE){
-                Log.i("TEST","hallo");
                 mTutorialPage1.setVisibility(View.GONE);
                 mTutorialPage2.setVisibility(View.VISIBLE);
                 mTutorialBackBtn.setVisibility(View.VISIBLE);
             } else if (mTutorialPage2.getVisibility() == View.VISIBLE){
                 mTutorialPage2.setVisibility(View.GONE);
                 mTutorialPage3.setVisibility(View.VISIBLE);
-                mTutorialContinueBtn.setText("Schliessen");
+                mTutorialContinueBtn.setText(getResources().getString(R.string.tutorial_button_close));
             } else if (mTutorialPage3.getVisibility() == View.VISIBLE){
                 mTutorialCard.setVisibility(View.GONE);
+                mSharedPrefs.edit().putBoolean("pref_show_tut", false).apply();
             }
 
         } else if (view.getId() == R.id.tutorialBackButton) {
@@ -129,7 +128,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
             } else if (mTutorialPage3.getVisibility() == View.VISIBLE){
                 mTutorialPage3.setVisibility(View.GONE);
                 mTutorialPage2.setVisibility(View.VISIBLE);
-                mTutorialContinueBtn.setText("Weiter");
+                mTutorialContinueBtn.setText(getResources().getString(R.string.tutorial_button_continue));
             }
         }
     }

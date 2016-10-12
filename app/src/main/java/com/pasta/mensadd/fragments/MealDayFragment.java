@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,15 +110,17 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
     public void onResponseMessage(int responseType, String message) {
         if (responseType == NetworkController.SUCCESS) {
             ParseController p = new ParseController();
-            if (p.parseMealsForCanteen(mMensaId, message, new DatabaseController(getActivity().getApplicationContext()))) {
-                this.updateMealList();
-            }
+            p.parseMealsForCanteen(mMensaId, message, new DatabaseController(this.getActivity().getApplicationContext()), this);
         } else if (responseType == NetworkController.ERROR){
             Toast.makeText(getActivity().getApplicationContext(), getString(R.string.load_meals_technical), Toast.LENGTH_SHORT).show();
+        } else if (responseType == ParseController.PARSE_SUCCESS) {
+            mMealRefresher.setRefreshing(false);
+            this.updateMealList();
         } else {
             DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
             dbController.readMealsFromDb(mMensaId);
+            mMealRefresher.setRefreshing(false);
         }
-        mMealRefresher.setRefreshing(false);
+
     }
 }

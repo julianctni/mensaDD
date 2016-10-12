@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,11 +99,17 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         TextView header = (TextView)getActivity().findViewById(R.id.heading_toolbar);
         header.setText(mCanteen.getName());
         header.setVisibility(View.VISIBLE);
-        ImageView appLogo = (ImageView)getActivity().findViewById(R.id.home_button);
+        ImageView appLogo = (ImageView)getActivity().findViewById(R.id.toolbarImage);
         appLogo.setVisibility(View.GONE);
         mProgressLayout = (LinearLayout) view.findViewById(R.id.mealListProgressLayout);
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.mealListrogressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
+        NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen(mCanteen.getCode(), this);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
         NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen(mCanteen.getCode(), this);
     }
 
@@ -118,14 +125,13 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
         if (responseType == NetworkController.SUCCESS) {
             ParseController p = new ParseController();
-            p.parseMealsForCanteen(mCanteen.getCode(), message, new DatabaseController(this.getActivity().getApplicationContext()));
+            p.parseMealsForCanteen(mCanteen.getCode(), message, new DatabaseController(this.getActivity().getApplicationContext()), this);
+        } else if (responseType == ParseController.PARSE_SUCCESS) {
+            mProgressLayout.setVisibility(View.GONE);
+            mViewPager.setVisibility(View.VISIBLE);
         } else {
             dbController.readMealsFromDb(mCanteen.getCode());
         }
-
-        mProgressLayout.setVisibility(View.GONE);
-        mViewPager.setVisibility(View.VISIBLE);
-
     }
 
     class MealDayPagerAdapter extends FragmentPagerAdapter {

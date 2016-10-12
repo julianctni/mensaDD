@@ -1,6 +1,8 @@
 package com.pasta.mensadd.controller;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.pasta.mensadd.fragments.CanteenListFragment;
@@ -22,6 +24,7 @@ import java.util.Locale;
 public class ParseController {
 
     public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMAN);
+    public static final int PARSE_SUCCESS = 10;
 
     public boolean parseCanteens(String message, DatabaseController dbController,
                                  SharedPreferences prefs) {
@@ -59,41 +62,79 @@ public class ParseController {
     }
 
     public boolean parseMealsForCanteen(String canteenCode, String message, DatabaseController
-            dbController) {
-        try {
-            JSONArray mealDays = new JSONArray(message);
-            dbController.deleteMealsOfCanteen(canteenCode);
-            Date day = new Date();
-            for (int i = 0; i < mealDays.length(); i++) {
-                JSONObject mealDay = mealDays.getJSONObject(i);
-                JSONArray meals = mealDay.getJSONArray(DATE_FORMAT.format(day));
-                ArrayList<Meal> mealList = new ArrayList<>();
-                for (int j = 0; j < meals.length(); j++) {
-                    JSONObject jsonMeal = meals.getJSONObject(j);
-                    int vegan = jsonMeal.getInt("vegan");
-                    int vegetarian = jsonMeal.getInt("vegetarian");
-                    int beef = jsonMeal.getInt("beef");
-                    int pork = jsonMeal.getInt("porc");
-                    int garlic = jsonMeal.getInt("garlic");
-                    int alcohol = jsonMeal.getInt("alcohol");
-                    String imgLink = jsonMeal.getString("imgLink");
-                    String details = jsonMeal.getString("mealDetails");
-                    String name = jsonMeal.getString("name");
-                    String price = jsonMeal.getString("price");
-                    Meal meal = new Meal(name, imgLink, details, price, canteenCode, String
-                            .valueOf(mealDay.keys().next()), vegan == 1, vegetarian == 1, pork ==
-                            1, beef == 1, garlic == 1, alcohol == 1);
-                    mealList.add(meal);
-                    dbController.updateMealTable(meal);
-                }
-                DataHolder.getInstance().getMensa(canteenCode).getMealMap().put(String.valueOf
-                        (mealDay.keys().next()), mealList);
-                day.setTime(day.getTime() + 86400000);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
+            dbController, LoadMealsCallback callback) {
+        ParseTask parseTask = new ParseTask(dbController, canteenCode, message, callback);
+        parseTask.execute();
         return true;
     }
+
+
+    private class ParseTask extends AsyncTask<Void, Void, Boolean> {
+        DatabaseController mDbController;
+        String mCanteenCode;
+        String mMessage;
+        LoadMealsCallback mMealsCallback;
+
+
+        public ParseTask (DatabaseController dbController, String canteenCode, String message, LoadMealsCallback callback){
+            mDbController = dbController;
+            mCanteenCode = canteenCode;
+            mMessage = message;
+            mMealsCallback = callback;
+        }
+
+
+        protected Boolean doInBackground(Void... canteens) {
+            Log.i("UPDATING MEALS", "doInBackground()");
+            try {
+                JSONArray mealDays = new JSONArray(mMessage);
+                mDbController.deleteMealsOfCanteen(mCanteenCode);
+                Date day = new Date();
+                for (int i = 0; i < mealDays.length(); i++) {
+                    JSONObject mealDay = mealDays.getJSONObject(i);
+                    JSONArray meals = mealDay.getJSONArray(DATE_FORMAT.format(day));
+                    ArrayList<Meal> mealList = new ArrayList<>();
+                    for (int j = 0; j < meals.length(); j++) {
+                        JSONObject jsonMeal = meals.getJSONObject(j);
+                        int vegan = jsonMeal.getInt("vegan");
+                        int vegetarian = jsonMeal.getInt("vegetarian");
+                        int beef = jsonMeal.getInt("beef");
+                        int pork = jsonMeal.getInt("porc");
+                        int garlic = jsonMeal.getInt("garlic");
+                        int alcohol = jsonMeal.getInt("alcohol");
+                        String imgLink = jsonMeal.getString("imgLink");
+                        String details = jsonMeal.getString("mealDetails");
+                        String name = jsonMeal.getString("name");
+                        String price = jsonMeal.getString("price");
+                        Meal meal = new Meal(name, imgLink, details, price, mCanteenCode, String
+                                .valueOf(mealDay.keys().next()), vegan == 1, vegetarian == 1, pork ==
+                                1, beef == 1, garlic == 1, alcohol == 1);
+                        mealList.add(meal);
+                        mDbController.updateMealTable(meal);
+                    }
+                    if (DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().get(String.valueOf
+                                    (mealDay.keys().next())) != null) {
+                        DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().get(String.valueOf
+                                (mealDay.keys().next())).clear();
+                        DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().get(String.valueOf
+                                (mealDay.keys().next())).addAll(mealList);
+                    } else
+                        DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().put(String.valueOf
+                                (mealDay.keys().next()), mealList);
+
+                    day.setTime(day.getTime() + 86400000);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            mMealsCallback.onResponseMessage(PARSE_SUCCESS,"");
+        }
+    }
 }
+
+

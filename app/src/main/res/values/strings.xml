@@ -54,5 +54,19 @@
     <string name="pref_reset_summary">Deletes all locally stored meals, priorities of clicked canteens and balance data.</string>
     <string name="pref_reset_title">Delete all data</string>
     <string name="send_feedback_mail">Write a feedback mail</string>
+    <string name="tutorial_header">mensaDD 2.0 - What\'s new?</string>
+    <string name="tutorial_design_header">Design</string>
+    <string name="tutorial_design_content">The design of mensaDD has been completly updated. The main view now consists of a list of all canteens. The canteens you mostly choose automatically appear at the top of the list. The main menu can be shown by swiping from the right display edge.</string>
+    <string name="tutorial_map_header">Map view</string>
+    <string name="tutorial_map_content">As an alternativ to the list view you are now able to see all canteens on a map which is accessible via the main menu.</string>
+    <string name="tutorial_balancehistory_header">Balance history (NFC needed)</string>
+    <string name="tutorial_balance_header">eMeal balance (NFC needed)</string>
+    <string name="tutorial_other_header">Other</string>
+    <string name="tutorial_button_close">Close</string>
+    <string name="tutorial_button_continue">Continue</string>
+    <string name="tutorial_button_back">Back</string>
+    <string name="tutorial_other_content">When sharing meals you are now able to attach pictures (see settings). The menus will be accessed server-sided from the the student services page. This saves time and computational cost on your device.</string>
+    <string name="tutorial_balance_content">To check your eMeal card\'s credit simply put the card on your phone with NFC activated. Your settings will allow you to open mensaDD automatically as soon as the card is recognized.</string>
+    <string name="tutorial_balancehistory_content">When you check your balance, you can save the value by pressing the save button. Later you can take a look at the history of your balance checks. This is accessible through the main menu.</string>
 
 </resources>

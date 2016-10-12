@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.nfc.NfcAdapter;
@@ -19,7 +21,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.*;
+import android.support.v7.preference.BuildConfig;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +44,7 @@ import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.FragmentController;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
@@ -73,13 +79,14 @@ public class MainActivity extends AppCompatActivity
                 getSupportActionBar().setTitle(null);
             }
         }
+
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mSaveBalanceButton = (FloatingActionButton) findViewById(R.id.saveBalanceButton);
         mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.pink)));
         mSaveBalanceButton.setOnClickListener(this);
         mHeadingToolbar = (TextView) findViewById(R.id.heading_toolbar);
-        mAppLogoToolbar = (ImageView) findViewById(R.id.home_button);
+        mAppLogoToolbar = (ImageView) findViewById(R.id.toolbarImage);
         mCardCheckContainer = (RelativeLayout) findViewById(R.id.cardCheckContainer);
         mCardCheckContainer.setOnClickListener(this);
         mCardCheckHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
@@ -88,9 +95,21 @@ public class MainActivity extends AppCompatActivity
         if (mNavDrawer != null) mNavDrawer.addDrawerListener(mDrawerToggle);
         if (mNavigationView != null) mNavigationView.setNavigationItemSelectedListener(this);
 
+        View hView =  mNavigationView.getHeaderView(0);
+        ImageView drawerImage = (ImageView) hView.findViewById(R.id.navDrawerImage);
+        Calendar cal = Calendar.getInstance();
+        if (cal.get(Calendar.MONTH) == 11) {
+            mAppLogoToolbar.setImageDrawable(getResources().getDrawable(R.drawable.banner_christmas));
+            drawerImage.setImageDrawable(getResources().getDrawable(R.drawable.banner_christmas));
+        } else {
+            mAppLogoToolbar.setImageDrawable(getResources().getDrawable(R.drawable.banner));
+            drawerImage.setImageDrawable(getResources().getDrawable(R.drawable.banner));
+        }
         if (getSupportFragmentManager().findFragmentById(R.id.mainContainer) == null) {
             FragmentController.showCanteenListFragment(getSupportFragmentManager());
         }
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        sharedPref.edit().remove("first_start");
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this.getApplicationContext());
 
