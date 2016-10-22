@@ -124,10 +124,12 @@ public class MainActivity extends AppCompatActivity
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void hideToolbarShadow(boolean hide){
-        if (hide)
-            mAppBarLayout.setElevation(0.0f);
-        else
-            mAppBarLayout.setElevation(8.0f);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (hide)
+                mAppBarLayout.setElevation(0.0f);
+            else
+                mAppBarLayout.setElevation(8.0f);
+        }
     }
 
     public static void updateNavDrawer(int id){

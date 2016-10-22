@@ -153,7 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     android:text="@string/tutorial_button_back"/>
 
                 <Button
@@ -161,8 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     android:text="@string/tutorial_button_continue"/>
             </RelativeLayout>
 

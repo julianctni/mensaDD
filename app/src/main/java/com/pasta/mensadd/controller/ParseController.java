@@ -37,6 +37,7 @@ public class ParseController {
                 String code = canteen.getString("code");
                 String address = canteen.getString("address");
                 JSONArray gpsArray = canteen.getJSONArray("coordinates");
+                Log.i("Parsing canteens", name);
                 LatLng position = new LatLng(Double.parseDouble(gpsArray.get(0).toString()),
                         Double.parseDouble(gpsArray.get(1).toString()));
                 JSONArray hourArray = canteen.getJSONArray("hours");

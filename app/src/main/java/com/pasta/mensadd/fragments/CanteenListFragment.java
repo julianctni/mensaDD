@@ -78,8 +78,9 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         ImageView appLogo = (ImageView)getActivity().findViewById(R.id.toolbarImage);
         appLogo.setVisibility(View.VISIBLE);
 
-        if (mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) == 0 || new Date().getTime() - mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) > 86400000) {
+        if (mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE, 0) == 0 || new Date().getTime() - mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) > 86400000) {
             NetworkController.getInstance(getActivity()).getCanteenList(this);
+            Log.i("Parsing canteens", "Doing request");
         } else if (DataHolder.getInstance().getCanteenList().isEmpty()){
             readCanteensFromDb();
         }
@@ -90,13 +91,16 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
 
     @Override
     public void onResponseMessage(int responseType, String message) {
-        if (responseType == 1) {
+        if (responseType == NetworkController.SUCCESS) {
             ParseController p = new ParseController();
             p.parseCanteens(message, new DatabaseController(this.getActivity().getApplicationContext()), mSharedPrefs);
             mCanteenListAdapter.notifyDataSetChanged();
+
         } else {
             readCanteensFromDb();
         }
+        Log.i("Parsing canteens", "test");
+        //Log.i("Parsing canteens", "Calling onResponseMessage");
     }
 
     public void readCanteensFromDb(){

@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHolder> {
@@ -46,6 +47,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     public final String COLOR_TEXT_DARK = "#444444";
     public final String COLOR_HEADER_VEG = "#7fb29b";
     public final String COLOR_HEADER_NOT_VEG = "#F1F1F1";
+    public HashMap<Integer,Boolean> mExpandStates = new HashMap<>();
 
     public MealListAdapter(ArrayList<Meal> items, MealDayFragment fragment) {
         mMeals = items;
@@ -57,10 +59,6 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_meal_list, parent, false);
         return new ViewHolder(v);
-    }
-
-    public void setMealList(ArrayList<Meal> meals){
-        mMeals = meals;
     }
 
     @Override
@@ -93,6 +91,12 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         } else {
             holder.mHeaderLayout.setBackgroundColor(Color.parseColor(COLOR_HEADER_NOT_VEG));
             holder.mName.setTextColor(Color.parseColor(COLOR_TEXT_DARK));
+        }
+
+        if (mExpandStates.containsKey(position) && mExpandStates.get(position)) {
+            holder.mMealDetails.setVisibility(View.VISIBLE);
+        } else {
+            holder.mMealDetails.setVisibility(View.GONE);
         }
     }
 
@@ -185,11 +189,13 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                 shareMeal();
 
             } else {
+                mMealDetails = (LinearLayout) v.findViewById(R.id.mealDetails);
                 mMealImage.getLayoutParams().width = mHeaderLayout.getMeasuredWidth() - (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, mFragment.getResources().getDisplayMetrics());
                 if (mMealDetails.getVisibility() == View.GONE) {
 
                     String url = mMeals.get(getAdapterPosition()).getImgLink();
                     if (url.length() > 1) {
+                        expandLayout(mMealDetails);
                         NetworkController.getInstance(mFragment.getActivity().getApplicationContext()).loadMealImage(url, this);
                     } else {
                         mMealImageProgress.setVisibility(View.GONE);
@@ -197,8 +203,11 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                         mMealImage.setVisibility(View.VISIBLE);
                         expandLayout(mMealDetails);
                     }
-                } else
+                    mExpandStates.put(getAdapterPosition(),true);
+                } else {
+                    mExpandStates.put(getAdapterPosition(),false);
                     collapseLayout(mMealDetails);
+                }
             }
 
         }

@@ -3,6 +3,7 @@ package com.pasta.mensadd.networking;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Cache;
@@ -68,6 +69,7 @@ public class NetworkController {
                     @Override
                     public void onResponse(JSONArray response) {
                         callback.onResponseMessage(SUCCESS, response.toString());
+                        Log.i("Parsing canteens", "onResponse");
                     }
                 }, new Response.ErrorListener() {
 
@@ -117,7 +119,7 @@ public class NetworkController {
             callback.onResponseMessage(NO_INTERNET,"",null);
     }
 
-    public void getCanteenList(AbstractCallback callback) {
+    public void getCanteenList(LoadCanteensCallback callback) {
         if (isConnectedToInternet(mCtx))
             doJSONArrayRequest(URL_PREFIX+URL_GET_CANTEENS, callback);
         else {
