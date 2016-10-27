@@ -9,7 +9,7 @@
         android:orientation="vertical">
 
         <ProgressBar
-            android:id="@+id/mealListrogressBar"
+            android:id="@+id/canteenListProgressBar"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"

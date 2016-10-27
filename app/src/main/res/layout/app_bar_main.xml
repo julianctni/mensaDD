@@ -72,26 +72,42 @@
                 android:layout_above="@id/cardCheckContainer"
                 android:animateLayoutChanges="true">
             </RelativeLayout>
-
-
-
-
-
         </RelativeLayout>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/saveBalanceButton"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/balanceButtonsLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:src="@drawable/ic_save_black_24dp"
-            android:tint="#FFFFFF"
-            android:visibility="gone"
-            app:fabSize="normal"
             app:layout_anchor="@id/cardCheckContainer"
-            app:layout_anchorGravity="top|right|end"
-            app:useCompatPadding="true"/>
+            app:layout_anchorGravity="top|right|end">
 
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/saveBalanceButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/ic_save_black_24dp"
+                android:tint="#FFFFFF"
+                android:visibility="gone"
+                android:layout_alignParentRight="true"
+                app:fabSize="normal"
+                app:useCompatPadding="true"/>
+
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/hideBalanceButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/ic_clear_black_18dp"
+                android:tint="#FFFFFF"
+                android:visibility="gone"
+                android:layout_alignRight="@id/saveBalanceButton"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="65dp"
+                app:fabSize="mini"
+                app:useCompatPadding="true"/>
+        </RelativeLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 

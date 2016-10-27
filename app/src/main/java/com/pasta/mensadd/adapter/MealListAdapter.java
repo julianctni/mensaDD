@@ -222,8 +222,10 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mAnimator.setDuration(250);
             ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
             showAnim.setDuration(250);
-            mShareButton.setVisibility(View.VISIBLE);
-            mShareButton.startAnimation(showAnim);
+            if (mShareButton.getVisibility() == View.GONE) {
+                mShareButton.setVisibility(View.VISIBLE);
+                mShareButton.startAnimation(showAnim);
+            }
             mAnimator.start();
         }
 

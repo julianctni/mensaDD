@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Cache;
@@ -17,8 +18,12 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.pasta.mensadd.controller.DatabaseController;
+import com.pasta.mensadd.model.DataHolder;
 
 import org.json.JSONArray;
+
+import java.util.Date;
 
 
 public class NetworkController {

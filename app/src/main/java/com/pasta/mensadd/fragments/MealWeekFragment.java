@@ -44,6 +44,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
     private ViewPager mViewPager;
     private Calendar mCalendar = Calendar.getInstance();
     private LinearLayout mProgressLayout;
+    private DatabaseController mDatabaseController;
 
 
     public MealWeekFragment() {
@@ -75,6 +76,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         MainActivity.hideToolbarShadow(true);
+        mDatabaseController = new DatabaseController(getActivity().getApplicationContext());
         mViewPager = (ViewPager) view.findViewById(R.id.mealViewPager);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -102,15 +104,32 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         ImageView appLogo = (ImageView)getActivity().findViewById(R.id.toolbarImage);
         appLogo.setVisibility(View.GONE);
         mProgressLayout = (LinearLayout) view.findViewById(R.id.mealListProgressLayout);
-        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.mealListrogressBar);
+        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.canteenListProgressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
-        NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen(mCanteen.getCode(), this);
+        if (mCanteen.getMealMap().isEmpty()) {
+            NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen(mCanteen.getCode(), this);
+            Log.i("Loading meals", "Loading meals from server...");
+        } else {
+            if (mCanteen.getLastMealUpdate() < new Date().getTime() - 240000) {
+                NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen(mCanteen.getCode(), this);
+                Log.i("LOADING MEALS", "List not empty, getting meals from server");
+            } else {
+                Log.i("LOADING MEALS", "MealMap not empty, no refresh needed");
+                mProgressLayout.setVisibility(View.GONE);
+                mViewPager.setVisibility(View.VISIBLE);
+                if (mViewPager.getAdapter() == null) {
+                    mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
+                    mViewPager.setAdapter(mPagerAdapter);
+                }
+            }
+        }
+
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen(mCanteen.getCode(), this);
+        //NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen(mCanteen.getCode(), this);
     }
 
     @Override
@@ -118,19 +137,23 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         if (getActivity() == null) {
             return;
         }
+
         if (mViewPager.getAdapter() == null) {
             mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
             mViewPager.setAdapter(mPagerAdapter);
         }
-        DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
+
         if (responseType == NetworkController.SUCCESS) {
+            Log.i("Loading meals", "Received data, start parsing");
             ParseController p = new ParseController();
-            p.parseMealsForCanteen(mCanteen.getCode(), message, new DatabaseController(this.getActivity().getApplicationContext()), this);
+            p.parseMealsForCanteen(mCanteen.getCode(), message, mDatabaseController, this);
         } else if (responseType == ParseController.PARSE_SUCCESS) {
+            Log.i("Loading meals", "Finished parsing, showing content");
             mProgressLayout.setVisibility(View.GONE);
             mViewPager.setVisibility(View.VISIBLE);
+            mCanteen.setLastMealUpdate(new Date().getTime());
         } else {
-            dbController.readMealsFromDb(mCanteen.getCode());
+            mDatabaseController.readMealsFromDb(mCanteen.getCode());
         }
     }
 

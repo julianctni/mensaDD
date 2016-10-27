@@ -195,7 +195,7 @@
                     android:visibility="gone"
                     android:textStyle="bold"
                     android:textColor="#111"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:text="@string/tutorial_button_back"/>
 
                 <Button
@@ -205,7 +205,7 @@
                     android:layout_alignParentRight="true"
                     android:textStyle="bold"
                     android:textColor="#111"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:text="@string/tutorial_button_continue"/>
             </RelativeLayout>
 

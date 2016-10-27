@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
@@ -42,6 +43,7 @@ import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.FragmentController;
+import com.pasta.mensadd.fragments.BalanceHistoryFragment;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     private TextView mHeadingToolbar;
     private ImageView mAppLogoToolbar;
     private FloatingActionButton mSaveBalanceButton;
+    private FloatingActionButton mHideBalanceButton;
 
     private NfcAdapter mNfcAdapter;
     private ValueData mCurrentValueData;
@@ -83,8 +86,11 @@ public class MainActivity extends AppCompatActivity
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mSaveBalanceButton = (FloatingActionButton) findViewById(R.id.saveBalanceButton);
-        mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.pink)));
+        mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.cyan_dark)));
         mSaveBalanceButton.setOnClickListener(this);
+        mHideBalanceButton = (FloatingActionButton) findViewById(R.id.hideBalanceButton);
+        mHideBalanceButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor( "#CC3C51")));
+        mHideBalanceButton.setOnClickListener(this);
         mHeadingToolbar = (TextView) findViewById(R.id.heading_toolbar);
         mAppLogoToolbar = (ImageView) findViewById(R.id.toolbarImage);
         mCardCheckContainer = (RelativeLayout) findViewById(R.id.cardCheckContainer);
@@ -171,21 +177,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        Animation animation = new ViewHeightAnimation(mCardCheckContainer, (int) mCardCheckHeight, 0);
-        if (v.getId() == R.id.cardCheckContainer) {
-            mCardCheckContainer.setAnimation(animation);
-            mCardCheckContainer.startAnimation(animation);
-            mCardCheckVisible = false;
-
-        } else if (v.getId() == R.id.saveBalanceButton) {
+        Animation animation = new ViewHeightAnimation(mCardCheckContainer, (int) mCardCheckHeight, 0, 150);
+        if (v.getId() == R.id.saveBalanceButton) {
             storeCardData();
         }
-        if (v.getId() == R.id.saveBalanceButton || v.getId() == R.id.cardCheckContainer) {
+        if (v.getId() == R.id.saveBalanceButton || v.getId() == R.id.hideBalanceButton) {
             mCardCheckContainer.setAnimation(animation);
             mCardCheckContainer.startAnimation(animation);
             mCardCheckVisible = false;
             ScaleAnimation hideAnim = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            hideAnim.setDuration(200);
+            hideAnim.setDuration(150);
             hideAnim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {}
@@ -193,12 +194,15 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     mSaveBalanceButton.setVisibility(View.GONE);
+                    mHideBalanceButton.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onAnimationRepeat(Animation animation) {}
             });
             mSaveBalanceButton.startAnimation(hideAnim);
+            mHideBalanceButton.startAnimation(hideAnim);
+
         }
     }
 
@@ -269,6 +273,10 @@ public class MainActivity extends AppCompatActivity
         if (cardBalance != dbController.getLastInsertedBalance()) {
             dbController.updateBalanceTable(new Date().getTime(),cardBalance,lastTransaction);
             Toast.makeText(this.getApplicationContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
+            BalanceHistoryFragment fragment = (BalanceHistoryFragment) getSupportFragmentManager().findFragmentByTag(FragmentController.TAG_BALANCE_HISTORY);
+            if (fragment != null) {
+                fragment.updateBalanceHistory();
+            }
         } else {
             Toast.makeText(this.getApplicationContext(), getString(R.string.balance_already_saved), Toast.LENGTH_SHORT).show();
         }
@@ -280,10 +288,25 @@ public class MainActivity extends AppCompatActivity
         if (!mCardCheckVisible) {
             FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
             ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            showAnim.setDuration(400);
+            showAnim.setDuration(250);
+            showAnim.setStartOffset(100);
             mSaveBalanceButton.setVisibility(View.VISIBLE);
             mSaveBalanceButton.startAnimation(showAnim);
-            Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight);
+            mHideBalanceButton.setVisibility(View.VISIBLE);
+            mHideBalanceButton.startAnimation(showAnim);
+            Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight, 200);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
             mCardCheckContainer.setAnimation(animation);
             mCardCheckContainer.startAnimation(animation);
             mCardCheckVisible = true;

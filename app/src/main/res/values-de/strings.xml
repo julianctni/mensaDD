@@ -11,7 +11,7 @@
     <string name="balance_check_balance">Aktuelles Guthaben</string>
     <string name="balance_check_last_transaction">Letzte Abbuchung</string>
     <string name="pref_share_image_title">Bilder zum Gericht teilen</string>
-    <string name="pref_share_image_summary">Einige wenige Apps (Threema, Facebook Messenger...) teilen leider nur das Bild ohne Text, wenn diese Option aktiviert ist. Funktioniert derzeit noch nicht unter Android 7.</string>
+    <string name="pref_share_image_summary">Einige wenige Apps (Threema, FB Messenger...) teilen leider nur das Bild ohne Text, wenn diese Option aktiviert ist. Funktioniert derzeit noch nicht unter Android Nougat.</string>
     <string name="meals_no_food">Heute gibt es hier leider kein Essen.</string>
     <string name="nav_drawer_card_history">Guthaben</string>
     <string name="no_data_available">Keine Daten vorhanden.</string>
@@ -38,13 +38,13 @@
     <string name="pref_reset_summary">Alle lokal gespeicherten Speisepläne, Prioritätsdaten der Mensaliste und Guthabendaten werden gelöscht.</string>
     <string name="pref_reset_title">Daten löschen</string>
     <string name="send_feedback_mail">Feedback E-Mail verfassen</string>
-    <string name="tutorial_header">mensaDD 2.0 - Was ist neu?</string>
+    <string name="tutorial_header">Willkommen</string>
     <string name="tutorial_design_header">Design</string>
-    <string name="tutorial_design_content">Das Design von mensaDD wurde komplett überarbeitet. Die Startseite stellt eine Liste aller Mensen dar. Je häufiger du eine Mensa auswählst, desto weiter oben erscheint sie in der Liste. Das Hauptmenü lässt sich per Swipe vom linken Displayrand öffnen.</string>
+    <string name="tutorial_design_content">Das Design wurde komplett überarbeitet. Die Startseite stellt eine Liste aller Mensen dar. Je häufiger du eine Mensa auswählst, desto weiter oben erscheint sie in der Liste. Das Hauptmenü lässt sich per Swipe vom linken Displayrand öffnen.</string>
     <string name="tutorial_map_header">Kartenansicht</string>
-    <string name="tutorial_balance_header">eMeal Guthaben (NFC wird benötigt)</string>
+    <string name="tutorial_balance_header">Guthabencheck (NFC)</string>
     <string name="tutorial_balance_content">Um das Guthaben deiner eMeal-Karte zu überprüfen, genügt es, die Karte bei eingeschaltetem NFC an das Handy zu halten. In den Einstellungen lässt sich aktivieren, dass sich mensaDD automatisch öffnet, sobald die Karte erkannt wurde.</string>
-    <string name="tutorial_balancehistory_header">Guthabenverlauf (NFC wird benötigt)</string>
+    <string name="tutorial_balancehistory_header">Guthabenverlauf</string>
     <string name="tutorial_balancehistory_content">Wenn du dein Guthaben abrufst, kannst du diese Daten über den Speichern-Button persistent auf deinem Gerät speichern. Im Menü kannst du dir anschließend den Verlauf deines Mensaguthabens anschauen.</string>
     <string name="tutorial_map_content">Alternativ zur Listenansicht lassen sich nun auch alle Mensen auf einer Karte anzeigen lassen. Diese erreichst du über das Hauptmenü.</string>
     <string name="tutorial_other_header">Sonstiges</string>
@@ -52,5 +52,9 @@
     <string name="tutorial_button_continue">Weiter</string>
     <string name="tutorial_button_close">Schliessen</string>
     <string name="tutorial_button_back">Zurück</string>
+    <string name="canteens_loading_progress">Mensen werden geladen...</string>
+    <string name="tutorial_header_content">zur neuen Version von mensaDD! Es gibt viel Neues zu entdecken. Ich wünsche viel Spaß damit und stets guten Appetit! ;)</string>
+    <string name="delete_data">Daten wurden erfolgreich gelöscht.</string>
+    <string name="app_version">Version 2.0 / Okt 2016</string>
 
 </resources>

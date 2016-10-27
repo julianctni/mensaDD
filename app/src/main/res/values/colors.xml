@@ -9,7 +9,7 @@
     <color name="window_background">#2e394d</color>
     <color name="cyan">#01aaad</color>
     <color name="pink">#ff4b66</color>
-    <color name="cyan_dark">#00888a</color>
+    <color name="cyan_dark">#006c6e</color>
     <color name="pink_dark">#cc3c51</color>
     <color name="header_grey">#88CCCCCC</color>
 </resources>
