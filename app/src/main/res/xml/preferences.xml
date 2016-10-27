@@ -4,7 +4,7 @@
         android:key="@string/pref_autostart_key"
         android:title="@string/pref_autostart_title"
         android:summary="@string/pref_autostart_summary"
-        android:defaultValue="false" />
+        android:defaultValue="true" />
 
     <CheckBoxPreference
         android:key="@string/pref_share_image_key"

@@ -71,5 +71,6 @@
     <string name="canteens_loading_progress">Loading canteens...</string>
     <string name="tutorial_header_content">to the new version of mensaDD! There are many new things you can discover. Have fun with all those changes and  enjoy your meal(s)! ;)</string>
     <string name="delete_data">Successfully deleted data.</string>
+    <string name="pref_key_autostart_set" translatable="false">autostart_set</string>
 
 </resources>

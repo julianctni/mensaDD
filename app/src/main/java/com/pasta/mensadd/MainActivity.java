@@ -37,6 +37,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pasta.mensadd.cardcheck.AutostartRegister;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
 import com.pasta.mensadd.cardcheck.cardreader.Readers;
@@ -120,6 +121,13 @@ public class MainActivity extends AppCompatActivity
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this.getApplicationContext());
 
         NFC_SUPPORTED = (mNfcAdapter != null);
+
+        if (NFC_SUPPORTED && !sharedPref.getBoolean(getString(R.string.pref_key_autostart_set),false)) {
+            AutostartRegister.register(this.getPackageManager(), true);
+            sharedPref.edit().putBoolean(getString(R.string.pref_key_autostart_set), true).apply();
+            sharedPref.edit().putBoolean(getString(R.string.pref_autostart_key), true).apply();
+        }
+
         mNavigationView.getMenu().findItem(R.id.nav_card_history).setVisible(NFC_SUPPORTED);
 
         if (NFC_SUPPORTED && NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
