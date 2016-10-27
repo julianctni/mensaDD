@@ -20,9 +20,9 @@ import java.util.Date;
 
 public class DatabaseController extends SQLiteOpenHelper {
 
-    public static final String BALANCES_TABLE_NAME = "cardBalances";
-    public static final String MEALS_TABLE_NAME = "meals";
-    public static final String CANTEENS_TABLE_NAME = "canteens";
+    public static final String BALANCES_TABLE_NAME = "table_balances";
+    public static final String MEALS_TABLE_NAME = "table_meals";
+    public static final String CANTEENS_TABLE_NAME = "table_canteens";
 
     public static final String BALANCE_ID = "balanceId";
     public static final String CARD_BALANCE = "cardBalance";
