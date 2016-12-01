@@ -2,15 +2,22 @@ package com.pasta.mensadd.fragments;
 
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pasta.mensadd.MainActivity;
@@ -24,10 +31,18 @@ import com.pasta.mensadd.networking.NetworkController;
 
 import java.util.Date;
 
-public class CanteenListFragment extends Fragment implements LoadCanteensCallback{
+public class CanteenListFragment extends Fragment implements LoadCanteensCallback, View.OnClickListener{
 
     private CanteenListAdapter mCanteenListAdapter;
     private SharedPreferences mSharedPrefs;
+    private LinearLayout mTutorialPage1;
+    private LinearLayout mTutorialPage2;
+    private LinearLayout mTutorialPage3;
+    private RecyclerView mCanteenList;
+    private Button mTutorialContinueBtn;
+    private Button mTutorialBackBtn;
+    private CardView mTutorialCard;
+    private LinearLayout mProgressLayout;
 
     public static String KEY_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
 
@@ -44,10 +59,20 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_canteen_list, container, false);
+        MainActivity.hideToolbarShadow(false);
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-
+        mTutorialPage1 = (LinearLayout) view.findViewById(R.id.tutorialPage1);
+        mTutorialPage2 = (LinearLayout) view.findViewById(R.id.tutorialPage2);
+        mTutorialPage3 = (LinearLayout) view.findViewById(R.id.tutorialPage3);
+        mTutorialContinueBtn = (Button) view.findViewById(R.id.tutorialContinueButton);
+        mTutorialBackBtn = (Button) view.findViewById(R.id.tutorialBackButton);
+        mProgressLayout = (LinearLayout) view.findViewById(R.id.canteenListProgressLayout);
+        mTutorialCard = (CardView) view.findViewById(R.id.tutorialCard);
+        mCanteenList = (RecyclerView) view.findViewById(R.id.canteenList);
+        mTutorialBackBtn.setOnClickListener(this);
+        mTutorialContinueBtn.setOnClickListener(this);
         LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.mensaList);
+        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.canteenList);
         DataHolder.getInstance().sortCanteenList();
         mCanteenListAdapter = new CanteenListAdapter(DataHolder.getInstance().getCanteenList(),this);
         mRecyclerView.setAdapter(mCanteenListAdapter);
@@ -55,14 +80,20 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
 
         TextView header = (TextView)getActivity().findViewById(R.id.heading_toolbar);
         header.setVisibility(View.GONE);
-        ImageView appLogo = (ImageView)getActivity().findViewById(R.id.home_button);
+        ImageView appLogo = (ImageView)getActivity().findViewById(R.id.toolbarImage);
         appLogo.setVisibility(View.VISIBLE);
 
-        if (mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) == 0 || new Date().getTime() - mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) > 86400000) {
+        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.canteenListProgressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
+
+        if (mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE, 0) == 0 || new Date().getTime() - mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) > 86400000) {
             NetworkController.getInstance(getActivity()).getCanteenList(this);
+            Log.i("Parsing canteens", "Doing request");
         } else if (DataHolder.getInstance().getCanteenList().isEmpty()){
-            DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
-            dbController.readCanteensFromDb();
+            readCanteensFromDb();
+        } else {
+            mProgressLayout.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
         }
 
         MainActivity.updateNavDrawer(R.id.nav_mensa);
@@ -71,10 +102,56 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
 
     @Override
     public void onResponseMessage(int responseType, String message) {
-        if (responseType == 1){
+        if (responseType == NetworkController.SUCCESS) {
             ParseController p = new ParseController();
-            p.parseCanteens(message, new DatabaseController(this.getActivity().getApplicationContext()), mSharedPrefs);
+            p.parseCanteens(message, new DatabaseController(this.getActivity().getApplicationContext()), mSharedPrefs, this);
+        } else if (responseType == ParseController.PARSE_SUCCESS) {
+            mProgressLayout.setVisibility(View.GONE);
             mCanteenListAdapter.notifyDataSetChanged();
+            if (mSharedPrefs.getBoolean("pref_show_tut", true))
+                mTutorialCard.setVisibility(View.VISIBLE);
+            mCanteenList.setVisibility(View.VISIBLE);
+        } else {
+            readCanteensFromDb();
+        }
+    }
+
+    public void readCanteensFromDb(){
+        DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
+        dbController.readCanteensFromDb();
+        mProgressLayout.setVisibility(View.GONE);
+        mCanteenListAdapter.notifyDataSetChanged();
+        if (mSharedPrefs.getBoolean("pref_show_tut", true))
+            mTutorialCard.setVisibility(View.VISIBLE);
+        mCanteenList.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.tutorialContinueButton){
+            if (mTutorialPage1.getVisibility() == View.VISIBLE){
+                mTutorialPage1.setVisibility(View.GONE);
+                mTutorialPage2.setVisibility(View.VISIBLE);
+                mTutorialBackBtn.setVisibility(View.VISIBLE);
+            } else if (mTutorialPage2.getVisibility() == View.VISIBLE){
+                mTutorialPage2.setVisibility(View.GONE);
+                mTutorialPage3.setVisibility(View.VISIBLE);
+                mTutorialContinueBtn.setText(getResources().getString(R.string.tutorial_button_close));
+            } else if (mTutorialPage3.getVisibility() == View.VISIBLE){
+                mTutorialCard.setVisibility(View.GONE);
+                mSharedPrefs.edit().putBoolean("pref_show_tut", false).apply();
+            }
+
+        } else if (view.getId() == R.id.tutorialBackButton) {
+            if (mTutorialPage2.getVisibility() == View.VISIBLE){
+                mTutorialPage2.setVisibility(View.GONE);
+                mTutorialPage1.setVisibility(View.VISIBLE);
+                mTutorialBackBtn.setVisibility(View.GONE);
+            } else if (mTutorialPage3.getVisibility() == View.VISIBLE){
+                mTutorialPage3.setVisibility(View.GONE);
+                mTutorialPage2.setVisibility(View.VISIBLE);
+                mTutorialContinueBtn.setText(getResources().getString(R.string.tutorial_button_continue));
+            }
         }
     }
 }

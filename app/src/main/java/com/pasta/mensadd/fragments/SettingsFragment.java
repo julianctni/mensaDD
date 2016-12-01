@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.widget.Toast;
 
 import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
@@ -15,16 +16,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainActivity.hideToolbarShadow(false);
         addPreferencesFromResource(R.xml.preferences);
-        findPreference("pref_reset_key").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        findPreference(getString(R.string.pref_reset_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
                 dbController.deleteAllData();
+                Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.delete_data), Toast.LENGTH_LONG).show();
+
                 return false;
             }
         });
-        findPreference("nfc_autostart").setVisible(MainActivity.NFC_SUPPORTED);
+        findPreference(getString(R.string.pref_autostart_key)).setVisible(MainActivity.NFC_SUPPORTED);
     }
 
     @Override

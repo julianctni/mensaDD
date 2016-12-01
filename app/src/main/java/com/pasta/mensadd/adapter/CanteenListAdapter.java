@@ -24,8 +24,8 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
     private CanteenListFragment mFragment;
 
     public CanteenListAdapter(ArrayList<Canteen> items, CanteenListFragment fragment) {
-        this.mCanteens = items;
-        this.mFragment = fragment;
+        mCanteens = items;
+        mFragment = fragment;
     }
 
     @Override
@@ -66,7 +66,6 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
         @Override
         public void onClick(View v) {
             String mensaId = mCanteens.get(getAdapterPosition()).getCode();
-            FragmentController.showMealWeekFragment(mFragment.getFragmentManager(),mensaId);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mFragment.getActivity().getApplicationContext());
             int priority = prefs.getInt("priority_"+mensaId, 0);
             priority += 1;
@@ -74,6 +73,7 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
             DataHolder.getInstance().getMensa(mensaId).increasePriority();
             DataHolder.getInstance().sortCanteenList();
             CanteenListAdapter.this.notifyDataSetChanged();
+            FragmentController.showMealWeekFragment(mFragment.getFragmentManager(),mensaId);
         }
     }
 }

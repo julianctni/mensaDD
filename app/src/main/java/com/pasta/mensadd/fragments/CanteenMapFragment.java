@@ -66,6 +66,7 @@ public class CanteenMapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+        MainActivity.hideToolbarShadow(false);
         mLocationServices = LocationServices.getLocationServices(getActivity());
         setHasOptionsMenu(true);
         mMapView = (MapView) view.findViewById(R.id.mapview);
@@ -172,7 +173,6 @@ public class CanteenMapFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
-        outState.putString("title", "Some Text");
     }
 
     @Override

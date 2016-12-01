@@ -14,6 +14,7 @@ public class Canteen {
     private String mCode;
     private LatLng mPosition;
     private int mListPriority;
+    private long mLastMealUpdate;
     private HashMap<String, ArrayList<Meal>> mealMap = new HashMap<>();
 
 
@@ -40,6 +41,14 @@ public class Canteen {
 
     public String getCode(){
         return mCode;
+    }
+
+    public long getLastMealUpdate(){
+        return mLastMealUpdate;
+    }
+
+    public void setLastMealUpdate(long lastUpdate){
+        mLastMealUpdate = lastUpdate;
     }
 
     public HashMap<String, ArrayList<Meal>> getMealMap() {

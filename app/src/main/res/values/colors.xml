@@ -7,13 +7,9 @@
     <color name="text_primary">#EEEEEE</color>
     <color name="text_secondary">#EEEEEE</color>
     <color name="window_background">#2e394d</color>
-    <color name="tile_cyan">#bb01aaad</color>
-    <color name="tile_pink">#bbff4b66</color>
-    <color name="tile_blue">#bb00c5f9</color>
-    <color name="tile_orange">#bbffb248</color>
-    <color name="tile_cyan1">#bb00888a</color>
-    <color name="tile_pink1">#bbcc3c51</color>
-    <color name="tile_blue1">#bb0089ae</color>
-    <color name="tile_orange1">#bbe5a040</color>
+    <color name="cyan">#01aaad</color>
+    <color name="pink">#ff4b66</color>
+    <color name="cyan_dark">#006c6e</color>
+    <color name="pink_dark">#cc3c51</color>
     <color name="header_grey">#88CCCCCC</color>
 </resources>

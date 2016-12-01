@@ -11,11 +11,11 @@ public class ViewHeightAnimation extends Animation {
     int mToHeight;
     View mView;
 
-    public ViewHeightAnimation(final View view, final int fromHeight, final int toHeight) {
+    public ViewHeightAnimation(final View view, final int fromHeight, final int toHeight, int duration) {
         this.mView = view;
         this.mFromHeight = fromHeight;
         this.mToHeight = toHeight;
-        this.setDuration(200);
+        this.setDuration(duration);
         this.setInterpolator(new AccelerateInterpolator());
     }
 

@@ -2,24 +2,24 @@
 
 
     <!-- CONTENT DESCRIPTIONS -->
-    <string name="content_app_logo">app_logo</string>
-    <string name="app_name">mensaDD</string>
-    <string name="nav_drawer_food">Mensen</string>
+    <string name="content_app_logo" translatable="false">app_logo</string>
+    <string name="app_name" translatable="false">mensaDD</string>
+    <string name="nav_drawer_food">Canteens</string>
     <string name="nav_drawer_map">Map</string>
     <string name="nav_drawer_settings">Settings</string>
     <string name="nav_drawer_imprint">Imprint</string>
     <string name="nav_drawer_license">Licenses</string>
     <string name="pref_autostart_summary">App opens automatically as soon as an eMeal card is discovered.</string>
-    <string name="pref_autostart_key">nfc_autostart</string>
-    <string name="pref_map_key">offline-map</string>
+    <string name="pref_autostart_key" translatable="false">nfc_autostart</string>
+    <string name="pref_map_key" translatable="false">offline-map</string>
     <string name="pref_map_summary">If there is a WiFi connection, the map of Dresden gets downloaded to the device when you start the map.</string>
     <string name="pref_autostart_title">Auto start on NFC</string>
     <string name="pref_map_title">Offline map</string>
-    <string name="card_check_balance">Current balance</string>
-    <string name="card_check_last_transaction">Last transaction</string>
-    <string name="pref_share_image_key">share_image</string>
+    <string name="balance_check_balance">Current balance</string>
+    <string name="balance_check_last_transaction">Last transaction</string>
+    <string name="pref_share_image_key" translatable="false">share_image</string>
     <string name="pref_share_image_title">Share meal images</string>
-    <string name="pref_share_image_summary">Some apps just share the image without text if this option is activated.</string>
+    <string name="pref_share_image_summary">Some apps (Threema, FB Messenger...) just share the image without text if this option is activated. Currently not working on Android Nougat.</string>
     <string name="meals_no_food">Unfortunately there\'s no food today.</string>
     <string name="nav_drawer_card_history">Card balance</string>
     <string name="no_data_available">No data available.</string>
@@ -28,8 +28,49 @@
     <string name="imprint_license">The NFC balance check uses source code from <![CDATA[<a href="https://github.com/jakobwenzel/MensaGuthaben">Jakob Wenzel</a>]]> and <![CDATA[<a href="https://github.com/codebutler/farebot">Farebot</a>]]>. The graph visualization of the balance history has been realized with <![CDATA[<a href="https://github.com/lecho/hellocharts-android">hellocharts</a>]]>. The map view uses the <![CDATA[<a href="https://www.mapbox.com/android-sdk/">Mapbox Android SDK</a>]]>.\n\nThe source code of mensaDD is available on<![CDATA[<a href="https://github.com/julianctni/mensaDD">GitHub</a>]]>, licensed under GPL.</string>
     <string name="imprint_credits_header">credits</string>
     <string name="imprint_license_header"><![CDATA[Licenses & co.]]></string>
-    <string name="imprint_love_pasta">love pasta, hate racism!</string>
+    <string name="imprint_love_pasta" translatable="false">love pasta, hate racism!</string>
     <string name="imprint_general">I am not liable for any inaccuracies in the meal data.\nThe meal information gets downloaded from the website of the Studentenwerk Dresden and parsed by an external server.\n\nIf you have any wishes or suggestions, just write me an E-Mail!</string>
     <string name="imprint_general_header">Annotations</string>
+    <string name="content_share">Share</string>
+    <string name="content_share_hungry">#hungry</string>
+    <string name="img_load_no_connection">Due to a missing internet connection the image could not be loaded.</string>
+    <string name="load_meals_technical">Due to technical reasons the meals could not be loaded/updated.</string>
+    <string name="pref_reset_key" translatable="false">pref_reset</string>
+    <string name="balance_saved">Saved current balance.</string>
+    <string name="balance_already_saved">Balance has already been saved.</string>
+    <string name="balance_check_card_not_supported">Card not supported.</string>
+    <string name="balance_check_fail">Card could not be read.</string>
+    <string name="balance_check_last_check">Last balance check</string>
+    <string name="balance_check_history">Balance history</string>
+    <string name="balance_check_last_transactions">Last transactions</string>
+    <string name="balance_check_not_enough_data">Not enough data available.</string>
+    <string name="balance_check_footnote">The balance data is only stored on your device. If you uninstall the application all data is gone. In order to manually reset all data, go to settings.</string>
+    <string name="app_version">Version 2.0 / Oct 2016</string>
+    <string name="imprint_developer" translatable="false">Pasta Software\naka Julian Catoni</string>
+    <string name="meals_no_food_icon" translatable="false">no_food_today</string>
+    <string name="meals_loading_progress">Loading meals...</string>
+    <string name="no_meal_image" translatable="false">no meal image</string>
+    <string name="vegan_meal" translatable="false">vegan</string>
+    <string name="pref_reset_summary">Deletes all locally stored meals, priorities of clicked canteens and balance data.</string>
+    <string name="pref_reset_title">Delete all data</string>
+    <string name="send_feedback_mail">Write a feedback mail</string>
+    <string name="tutorial_header">Welcome</string>
+    <string name="tutorial_design_header">Design</string>
+    <string name="tutorial_design_content">The design has been completly updated. The main view now consists of a list of all canteens. The canteens you mostly choose automatically appear at the top of the list. The main menu can be shown by swiping from the right display edge.</string>
+    <string name="tutorial_map_header">Map view</string>
+    <string name="tutorial_map_content">As an alternativ to the list view you are now able to see all canteens on a map which is accessible via the main menu.</string>
+    <string name="tutorial_balancehistory_header">Balance history</string>
+    <string name="tutorial_balance_header">Balance check (NFC)</string>
+    <string name="tutorial_other_header">Other</string>
+    <string name="tutorial_button_close">Close</string>
+    <string name="tutorial_button_continue">Continue</string>
+    <string name="tutorial_button_back">Back</string>
+    <string name="tutorial_other_content">When sharing meals you are now able to attach pictures (see settings). The menus will be accessed server-sided from the the student services page. This saves time and computational cost on your device.</string>
+    <string name="tutorial_balance_content">To check your eMeal card\'s credit simply put the card on your phone with NFC activated. Your settings will allow you to open mensaDD automatically as soon as the card is recognized.</string>
+    <string name="tutorial_balancehistory_content">When you check your balance, you can save the value by pressing the save button. Later you can take a look at the history of your balance checks. This is accessible through the main menu.</string>
+    <string name="canteens_loading_progress">Loading canteens...</string>
+    <string name="tutorial_header_content">to the new version of mensaDD! There are many new things you can discover. Have fun with all those changes and  enjoy your meal(s)! ;)</string>
+    <string name="delete_data">Successfully deleted data.</string>
+    <string name="pref_key_autostart_set" translatable="false">autostart_set</string>
 
 </resources>

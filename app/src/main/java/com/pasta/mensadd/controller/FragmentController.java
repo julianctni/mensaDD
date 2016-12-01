@@ -2,6 +2,7 @@ package com.pasta.mensadd.controller;
 
 import android.support.v4.app.FragmentManager;
 
+import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.CanteenMapFragment;
@@ -21,7 +22,8 @@ public class FragmentController {
     public static final String TAG_SETTINGS = "SETTINGS_FRAGMENT";
     public static final String TAG_IMPRINT = "IMPRINT_FRAGMENT";
 
-    public static void showMensaListFragment(FragmentManager fm){
+
+    public static void showCanteenListFragment(FragmentManager fm){
         fm.beginTransaction().replace(R.id.mainContainer, new CanteenListFragment(), TAG_CANTEEN_LIST).commit();
     }
 

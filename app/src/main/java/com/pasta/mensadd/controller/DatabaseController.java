@@ -20,9 +20,9 @@ import java.util.Date;
 
 public class DatabaseController extends SQLiteOpenHelper {
 
-    public static final String BALANCES_TABLE_NAME = "cardBalances";
-    public static final String MEALS_TABLE_NAME = "meals";
-    public static final String CANTEENS_TABLE_NAME = "canteens";
+    public static final String BALANCES_TABLE_NAME = "table_balances";
+    public static final String MEALS_TABLE_NAME = "table_meals";
+    public static final String CANTEENS_TABLE_NAME = "table_canteens";
 
     public static final String BALANCE_ID = "balanceId";
     public static final String CARD_BALANCE = "cardBalance";
@@ -50,7 +50,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     public static final String MEAL_DATE = "mealDate";
 
     private static final String DATABASE_NAME = "mensadd.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     SharedPreferences prefs;
 
     public DatabaseController(Context context) {
@@ -60,12 +60,11 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        deleteOldTables(db);
         createMealTable(db);
         createCanteenTable(db);
         createBalanceTable(db);
-
     }
+
 
     public void deleteOldTables(SQLiteDatabase db) {
         String canteenTable = "DROP TABLE IF EXISTS mensen;";
@@ -248,5 +247,9 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        deleteOldTables(db);
+        createMealTable(db);
+        createCanteenTable(db);
+        createBalanceTable(db);
     }
 }

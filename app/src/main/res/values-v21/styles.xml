@@ -13,4 +13,5 @@
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
     </style>
 
+
 </resources>

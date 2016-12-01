@@ -5,10 +5,34 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    id="svg3815"
    height="1200px"
-   width="1600px">
+   width="1600px"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="icons_pork_beef.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1406"
+     inkscape:window-height="668"
+     id="namedview106"
+     showgrid="false"
+     inkscape:zoom="0.098333333"
+     inkscape:cx="-389.14416"
+     inkscape:cy="-517.29253"
+     inkscape:window-x="477"
+     inkscape:window-y="137"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g5813" />
   <defs
      id="defs3817" />
   <metadata
@@ -19,7 +43,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -305,23 +329,38 @@
       <path
          id="path4364-0-7-4"
          d="m 350.73721,2144.3139 c -45.4721,2.9459 -80.2459,37.5213 -77.6729,77.2388 2.5731,39.7176 41.5192,69.5436 86.9913,66.5977 45.472,-2.9459 80.2442,-37.5477 77.6711,-77.2653 -2.5731,-39.7175 -41.5175,-69.517 -86.9895,-66.5712 z m -35.4847,50.4985 c 11.7651,-0.7622 21.9468,8.693 22.7524,21.1288 0.8057,12.4358 -8.0709,23.1256 -19.8361,23.8878 -11.7651,0.7622 -21.9717,-8.6913 -22.7774,-21.1271 -0.8056,-12.4358 8.0959,-23.1273 19.8611,-23.8895 z m 77.2136,-5.0022 c 11.765,-0.7622 21.9467,8.6929 22.7523,21.1288 0.8057,12.4358 -8.0709,23.1255 -19.8359,23.8877 -11.7652,0.7622 -21.9469,-8.6928 -22.7526,-21.1287 -0.8056,-12.4358 8.0711,-23.1256 19.8362,-23.8878 z"
-         style="opacity:0.98999999;fill:#000000;fill-opacity:1;stroke:none" />
+         style="opacity:0.98999999;fill:#000000;fill-opacity:1;stroke:none"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/pork.png"
+         inkscape:export-xdpi="3.4633651"
+         inkscape:export-ydpi="3.4633651" />
       <path
          id="path3823-1-8"
          d="m 335.80111,1913.5376 c -120.7918,7.8254 -212.0279,117.6639 -203.7563,245.3422 8.2716,127.6784 112.9173,224.8265 233.7091,217.001 120.792,-7.8254 211.9986,-117.6618 203.727,-245.3402 -8.2716,-127.6783 -112.8878,-224.8285 -233.6798,-217.003 z m -65.6838,121.1561 c 18.2491,-1.1822 34.056,13.4966 35.3056,32.7861 1.2497,19.2896 -12.531,35.8852 -30.7802,37.0675 -18.2491,1.1823 -34.056,-13.4965 -35.3057,-32.7861 -1.2497,-19.2896 12.5311,-35.8852 30.7803,-37.0675 z m 151.0536,-9.7859 c 18.2492,-1.1823 34.0561,13.4965 35.3058,32.7861 1.2497,19.2895 -12.5312,35.8852 -30.7803,37.0674 -18.2492,1.1823 -34.056,-13.4965 -35.3057,-32.7861 -1.2496,-19.2895 12.5311,-35.8852 30.7802,-37.0674 z m -71.9421,96.3525 c 60.0492,-3.8902 111.5007,35.4622 114.8987,87.912 3.3979,52.45 -42.544,98.1434 -102.5931,102.0336 -60.0491,3.8903 -111.4732,-35.4953 -114.8712,-87.9452 -3.3979,-52.4499 42.5165,-98.1101 102.5656,-102.0004 z"
-         style="opacity:0.98999999;fill:#000000;fill-opacity:1;stroke:none" />
+         style="opacity:0.98999999;fill:#000000;fill-opacity:1;stroke:none"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/pork.png"
+         inkscape:export-xdpi="3.4633651"
+         inkscape:export-ydpi="3.4633651" />
       <path
          style="fill:#000000;fill-opacity:1;stroke:none"
          d="m 391.05131,1999.9111 c 0,0 25.4978,-67.2829 52.1564,-86.8029 39.0214,-28.5725 139.6346,-31.087 139.6346,-31.087 0,0 -20.5541,43.3076 -29.3718,65.6556 -15.8783,40.2422 -42.277,122.9676 -42.277,122.9676"
-         id="path4404-00-4" />
+         id="path4404-00-4"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/pork.png"
+         inkscape:export-xdpi="3.4633651"
+         inkscape:export-ydpi="3.4633651" />
       <path
          style="fill:#000000;fill-opacity:1;stroke:none"
          d="m 292.12801,2006.3198 c 0,0 -37.6913,-56.7241 -62.9204,-79.3477 -26.7975,-24.0299 -91.6741,-57.8557 -91.6741,-57.8557 0,0 -19.2087,71.164 -13.2067,106.3624 7.2627,42.5914 57.7898,116.4847 57.7898,116.4847"
-         id="path4404-0-0-7" />
+         id="path4404-0-0-7"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/pork.png"
+         inkscape:export-xdpi="3.4633651"
+         inkscape:export-ydpi="3.4633651" />
       <g
          style="fill:#000000;fill-opacity:1"
          transform="matrix(0.99790804,-0.06464923,0.05597875,0.86407286,1.5941108,1487.7479)"
-         id="g4568-3-1">
+         id="g4568-3-1"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/beef.png"
+         inkscape:export-xdpi="3.343653"
+         inkscape:export-ydpi="3.343653">
         <path
            id="path4493-1-0"
            transform="translate(-12.15958,-38.333333)"
@@ -356,23 +395,38 @@
       <path
          id="path4208-2-3"
          d="m -444.18979,1947.4508 c 0,0 16.2432,76.2133 18.2121,115.0789 2.1762,42.9605 -2.9949,77.0727 -7.1828,128.3995 -3.2825,40.2318 -18.0227,109.4838 8.8711,146.7157 15.2777,21.1506 44.9672,20.5753 67.433,16.985 22.24,-3.5542 47.8916,-12.9786 60.342,-37.126 17.3768,-33.7021 16.2439,-83.9699 6.3227,-123.7863 -11.6183,-46.6273 -50.4624,-73.4964 -71.9235,-113.9717 -23.213,-43.779 -60.9573,-138.4084 -60.9573,-138.4084 z"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:40;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:40;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xxxhdpi/garlic.png"
+         inkscape:export-xdpi="31.301113"
+         inkscape:export-ydpi="31.301113" />
       <path
          id="path4210-7-4"
          d="m -440.40049,1966.1035 c 0,0 -0.9005,57.837 -7.8462,84.8987 -5.254,20.4706 -16.7546,37.5666 -25.0285,56.4196 -11.5734,26.3714 -25.5196,51.3824 -34.4308,79.308 -7.2995,22.8748 -16.228,46.6458 -15.312,71.4028 0.9438,25.5129 7.0588,53.4349 21.1918,72.7143 6.7003,9.1402 17.3292,14.4562 27.0387,16.1173 17.0784,2.9218 50.3413,-11.6002 50.3413,-11.6002"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:40;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:40;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xxxhdpi/garlic.png"
+         inkscape:export-xdpi="31.301113"
+         inkscape:export-ydpi="31.301113" />
       <path
          id="path4212-6-8"
          d="m -441.45399,1959.4152 c 0,0 -12.2392,24.6398 -27.464,51.6972 -11.5632,20.5498 -36.2234,47.4067 -48.9584,58.496 -20.9783,18.2671 -33.9681,31.7923 -47.7415,51.5214 -13.5125,19.3554 -26.7261,40.3243 -33.473,64.4906 -6.8347,24.4802 -11.9011,52.4065 -6.0086,77.6434 5.507,23.5864 19.7858,45.1387 36.3917,59.2462 11.0485,9.3862 25.2403,13.6705 38.5519,13.9031 8.3567,0.1459 24.046,-7.885 24.046,-7.885"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:40;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:40;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xxxhdpi/garlic.png"
+         inkscape:export-xdpi="31.301113"
+         inkscape:export-ydpi="31.301113" />
       <path
          id="path4214-8-7"
          d="m -408.76739,1975.3904 c 0,0 34.448,43.6279 54.5997,60.9716 19.9267,17.1499 44.6115,24.6264 64.5594,41.7391 18.8621,16.1812 38.7923,33.1424 51.193,56.8187 17.3474,33.121 27.2089,73.1821 28.6812,112.0078 0.7313,19.283 -1.1848,40.4916 -10.0027,56.2318 -7.6076,13.5797 -20.8585,22.2225 -33.7881,27.2038 -16.9284,6.5218 -53.5893,2.0715 -53.5893,2.0715"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:40;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:40;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xxxhdpi/garlic.png"
+         inkscape:export-xdpi="31.301113"
+         inkscape:export-ydpi="31.301113" />
       <g
          transform="matrix(1.1948497,-0.07740804,0.06464923,0.99790804,-81.668089,532.63941)"
          style="fill:#000000;fill-opacity:1;stroke:none;stroke-opacity:1"
-         id="g5799-2">
+         id="g5799-2"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xhdpi/alcohol.png"
+         inkscape:export-xdpi="14.160723"
+         inkscape:export-ydpi="14.160723">
         <ellipse
            style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:80;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            id="path4216-3-0"
@@ -428,37 +482,58 @@
          height="519.68256"
          width="312.26459"
          id="rect5811-8"
-         style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:43.5764389;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:43.5764389;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xhdpi/vegetarian.png"
+         inkscape:export-xdpi="12.601595"
+         inkscape:export-ydpi="12.601595" />
       <path
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:30;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m -1835.0319,2067.2008 c -21.3623,0.2923 -42.6604,4.8714 -60.9882,13.5039 -21.3389,10.0507 -37.3695,27.41 -51.1446,47.3574 l 21.1446,22.2207 77.8457,81.8105 -99.9883,-52.4922 -23.0254,-12.0878 c -5.5587,9.7809 -11.0524,19.5079 -16.7559,28.6855 -18.2766,29.4095 -39.1199,70.6085 -58.7656,112.3887 l 60.6992,79.7695 -74.3828,-50.1875 c -32.9695,72.4057 -59.5449,138.5156 -59.5449,138.5156 0,0 124.9551,-37.5061 237.332,-96.4629 l -2.3984,-3.7578 -60.7656,-95.1875 88.1054,70.6446 10.6817,8.5644 c 49.6556,-29.1199 93.5456,-62.3976 118.3125,-98.291 19.3729,-28.0762 21.7405,-68.0977 14.1406,-101.3516 -6.9425,-30.3774 -24.5147,-62.8287 -51.8535,-77.7812 -20.1441,-11.0175 -44.4378,-16.1927 -68.6485,-15.8613 z"
-         id="path4340-1-3" />
+         id="path4340-1-3"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xhdpi/vegetarian.png"
+         inkscape:export-xdpi="12.601595"
+         inkscape:export-ydpi="12.601595" />
       <path
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m -1790.443,2151.492 12.1895,-212.8223 c 0,0 33.6498,56.9835 33.8072,88.5905 0.2198,44.1573 -45.9967,124.2318 -45.9967,124.2318 z"
-         id="path4371-84-8" />
+         id="path4371-84-8"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xhdpi/vegetarian.png"
+         inkscape:export-xdpi="12.601595"
+         inkscape:export-ydpi="12.601595" />
       <path
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m -1814.5768,2157.126 206.8272,-59.8633 c 0,0 -59.5788,-22.7567 -89.289,-16.8629 -45.8938,9.1042 -117.5382,76.7262 -117.5382,76.7262 z"
-         id="path4371-8-8-0" />
+         id="path4371-8-8-0"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xhdpi/vegetarian.png"
+         inkscape:export-xdpi="12.601595"
+         inkscape:export-ydpi="12.601595" />
       <path
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m -1783.8918,2150.2502 155.006,-149.4464 c 0,0 -97.1933,32.6617 -128.5093,70.0772 -17.9018,21.3887 -26.4967,79.3692 -26.4967,79.3692 z"
-         id="path4371-8-4-2-9" />
+         id="path4371-8-4-2-9"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xhdpi/vegetarian.png"
+         inkscape:export-xdpi="12.601595"
+         inkscape:export-ydpi="12.601595" />
       <circle
          transform="matrix(0.99790805,-0.06464923,0.06464923,0.99790805,0,0)"
          r="35.355339"
          cy="2077.7354"
          cx="134.68977"
          id="path5927"
-         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:40;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:40;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/pork.png"
+         inkscape:export-xdpi="3.4633651"
+         inkscape:export-ydpi="3.4633651" />
       <circle
          transform="matrix(0.99790805,-0.06464923,0.06464923,0.99790805,0,0)"
          r="35.355339"
          cy="2077.7354"
          cx="292.61029"
          id="path5927-8"
-         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:40;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:40;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-mdpi/pork.png"
+         inkscape:export-xdpi="3.4633651"
+         inkscape:export-ydpi="3.4633651" />
     </g>
   </g>
 </svg>
