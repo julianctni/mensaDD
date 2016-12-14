@@ -2,13 +2,12 @@ package com.pasta.mensadd.controller;
 
 import android.support.v4.app.FragmentManager;
 
-import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.CanteenMapFragment;
 import com.pasta.mensadd.fragments.BalanceCheckFragment;
 import com.pasta.mensadd.fragments.BalanceHistoryFragment;
-import com.pasta.mensadd.fragments.Imprintfragment;
+import com.pasta.mensadd.fragments.ImprintFragment;
 import com.pasta.mensadd.fragments.MealWeekFragment;
 import com.pasta.mensadd.fragments.SettingsFragment;
 
@@ -56,6 +55,6 @@ public class FragmentController {
     }
 
     public static void showImprintFragment(FragmentManager fm){
-        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new Imprintfragment(), TAG_IMPRINT).commit();
+        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new ImprintFragment(), TAG_IMPRINT).commit();
     }
 }

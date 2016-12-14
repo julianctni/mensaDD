@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 
-public class Imprintfragment extends Fragment {
+public class ImprintFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
