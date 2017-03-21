@@ -12,6 +12,12 @@
         android:summary="@string/pref_share_image_summary"
         android:defaultValue="false" />
 
+    <CheckBoxPreference
+        android:key="@string/pref_veg_meals_key"
+        android:title="@string/pref_veg_meals_title"
+        android:summary="@string/pref_veg_meals_summary"
+        android:defaultValue="true" />
+
     <Preference
         android:key="@string/pref_reset_key"
         android:title="@string/pref_reset_title"

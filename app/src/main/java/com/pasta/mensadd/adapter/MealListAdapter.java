@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.fragments.MealDayFragment;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
@@ -43,6 +46,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
     public ArrayList<Meal> mMeals;
     public MealDayFragment mFragment;
+    public SharedPreferences mPrefs;
     public final String COLOR_TEXT_WHITE = "#FFFFFF";
     public final String COLOR_TEXT_DARK = "#444444";
     public final String COLOR_HEADER_VEG = "#7fb29b";
@@ -52,6 +56,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     public MealListAdapter(ArrayList<Meal> items, MealDayFragment fragment) {
         mMeals = items;
         mFragment = fragment;
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(mFragment.getActivity().getApplicationContext());
     }
 
     @Override
@@ -85,7 +90,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         if (item.containsAlcohol()) holder.mAlcohol.setVisibility(View.VISIBLE);
         else holder.mAlcohol.setVisibility(View.GONE);
 
-        if (item.isVegan() || item.isVegetarian()) {
+        if (mPrefs.getBoolean(mFragment.getString(R.string.pref_veg_meals_key), true) && (item.isVegan() || item.isVegetarian())) {
             holder.mHeaderLayout.setBackgroundColor(Color.parseColor(COLOR_HEADER_VEG));
             holder.mName.setTextColor(Color.parseColor(COLOR_TEXT_WHITE));
         } else {
@@ -95,8 +100,10 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
         if (mExpandStates.containsKey(position) && mExpandStates.get(position)) {
             holder.mMealDetails.setVisibility(View.VISIBLE);
+            holder.mShareButton.setVisibility(View.VISIBLE);
         } else {
             holder.mMealDetails.setVisibility(View.GONE);
+            holder.mShareButton.setVisibility(View.GONE);
         }
     }
 
@@ -121,6 +128,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         public FloatingActionButton mShareButton;
         public ImageView mMealImage;
         public ProgressBar mMealImageProgress;
+        public Bitmap mMealImageBitmap;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -141,6 +149,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mShareButton = (FloatingActionButton) itemView.findViewById(R.id.shareButton);
             mShareButton.setBackgroundTintList(ColorStateList.valueOf(mFragment.getResources().getColor(R.color.pink)));
             mShareButton.setOnClickListener(this);
+            mMealImage.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
@@ -187,9 +196,10 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         public void onClick(View v) {
             if (v.getId() == R.id.shareButton) {
                 shareMeal();
-
+            } else if (v.getId() == R.id.mealImage && mMealImageBitmap != null) {
+                FragmentController.showLargeImageFragment(mFragment.getParentFragment().getFragmentManager(), mMealImageBitmap);
             } else {
-                mMealDetails = (LinearLayout) v.findViewById(R.id.mealDetails);
+                //mMealDetails = (LinearLayout) v.findViewById(R.id.mealDetails);
                 mMealImage.getLayoutParams().width = mHeaderLayout.getMeasuredWidth() - (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, mFragment.getResources().getDisplayMetrics());
                 if (mMealDetails.getVisibility() == View.GONE) {
 
@@ -279,6 +289,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                 mMealImage.setImageBitmap(bitmap);
                 mMealImageProgress.setVisibility(View.GONE);
                 mMealImage.setVisibility(View.VISIBLE);
+                mMealImageBitmap = bitmap;
             } else {
                 mMealImageProgress.setVisibility(View.GONE);
                 mFragment.getActivity().getResources().getDrawable(R.drawable.no_meal_image);

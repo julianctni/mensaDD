@@ -65,9 +65,10 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         if (getArguments() != null) {
             mMensaId = getArguments().getString(TAG_MENSA_ID);
         }
+
+        mCanteen = DataHolder.getInstance().getMensa(mMensaId);
         if (mCanteen == null)
             FragmentController.showCanteenListFragment(this.getFragmentManager());
-        mCanteen = DataHolder.getInstance().getMensa(mMensaId);
     }
 
     @Override
