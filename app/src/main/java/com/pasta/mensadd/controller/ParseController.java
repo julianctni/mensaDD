@@ -64,8 +64,10 @@ public class ParseController {
                 Date day = new Date();
                 for (int i = 0; i < mealDays.length(); i++) {
                     Log.i("Loading meals", "Parsing day "+DATE_FORMAT.format(day));
+                    Log.i("Loading meals", "Parsing day "+day.getTime());
                     JSONObject mealDay = mealDays.getJSONObject(i);
                     JSONArray meals = mealDay.getJSONArray(DATE_FORMAT.format(day));
+                    if (meals.length() == 0) Log.i("Loading meals", "No meals");
                     ArrayList<Meal> mealList = new ArrayList<>();
                     for (int j = 0; j < meals.length(); j++) {
                         JSONObject jsonMeal = meals.getJSONObject(j);
@@ -83,6 +85,7 @@ public class ParseController {
                                 .valueOf(mealDay.keys().next()), vegan == 1, vegetarian == 1, pork ==
                                 1, beef == 1, garlic == 1, alcohol == 1);
                         mealList.add(meal);
+                        Log.i("Loading meals", "Padding "+meal.getName());
                         mDbController.updateMealTable(meal);
                     }
                     if (DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().get(String.valueOf
@@ -91,10 +94,10 @@ public class ParseController {
                                 (mealDay.keys().next())).clear();
                         DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().get(String.valueOf
                                 (mealDay.keys().next())).addAll(mealList);
-                    } else
+                    } else {
                         DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().put(String.valueOf
                                 (mealDay.keys().next()), mealList);
-
+                    }
                     day.setTime(day.getTime() + 86400000);
                 }
             } catch (JSONException e) {

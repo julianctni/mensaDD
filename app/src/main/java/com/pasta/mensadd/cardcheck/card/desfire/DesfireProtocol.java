@@ -143,8 +143,12 @@ public class DesfireProtocol {
 		}
 
 		while (true) {
-            if (recvBuffer[recvBuffer.length - 2] != (byte) 0x91)
-                throw new DesfireException("Invalid response");
+            try {
+                if (recvBuffer[recvBuffer.length - 2] != (byte) 0x91)
+                    throw new DesfireException("Invalid response");
+            } catch (IndexOutOfBoundsException e) {
+
+            }
 
             output.write(recvBuffer, 0, recvBuffer.length - 2);
 

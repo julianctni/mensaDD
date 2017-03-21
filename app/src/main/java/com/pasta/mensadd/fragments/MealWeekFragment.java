@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.DatabaseController;
+import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.controller.ParseController;
 import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.model.DataHolder;
@@ -64,6 +65,8 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         if (getArguments() != null) {
             mMensaId = getArguments().getString(TAG_MENSA_ID);
         }
+        if (mCanteen == null)
+            FragmentController.showCanteenListFragment(this.getFragmentManager());
         mCanteen = DataHolder.getInstance().getMensa(mMensaId);
     }
 
@@ -81,7 +84,6 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override

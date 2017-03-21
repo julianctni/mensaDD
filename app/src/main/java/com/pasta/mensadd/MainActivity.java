@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void hideToolbarShadow(boolean hide){
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mAppBarLayout != null) {
             if (hide)
                 mAppBarLayout.setElevation(0.0f);
             else
