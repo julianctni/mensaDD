@@ -61,29 +61,29 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         View view = inflater.inflate(R.layout.fragment_canteen_list, container, false);
         MainActivity.hideToolbarShadow(false);
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        mTutorialPage1 = (LinearLayout) view.findViewById(R.id.tutorialPage1);
-        mTutorialPage2 = (LinearLayout) view.findViewById(R.id.tutorialPage2);
-        mTutorialPage3 = (LinearLayout) view.findViewById(R.id.tutorialPage3);
-        mTutorialContinueBtn = (Button) view.findViewById(R.id.tutorialContinueButton);
-        mTutorialBackBtn = (Button) view.findViewById(R.id.tutorialBackButton);
-        mProgressLayout = (LinearLayout) view.findViewById(R.id.canteenListProgressLayout);
-        mTutorialCard = (CardView) view.findViewById(R.id.tutorialCard);
-        mCanteenList = (RecyclerView) view.findViewById(R.id.canteenList);
+        mTutorialPage1 = view.findViewById(R.id.tutorialPage1);
+        mTutorialPage2 = view.findViewById(R.id.tutorialPage2);
+        mTutorialPage3 = view.findViewById(R.id.tutorialPage3);
+        mTutorialContinueBtn = view.findViewById(R.id.tutorialContinueButton);
+        mTutorialBackBtn = view.findViewById(R.id.tutorialBackButton);
+        mProgressLayout = view.findViewById(R.id.canteenListProgressLayout);
+        mTutorialCard = view.findViewById(R.id.tutorialCard);
+        mCanteenList = view.findViewById(R.id.canteenList);
         mTutorialBackBtn.setOnClickListener(this);
         mTutorialContinueBtn.setOnClickListener(this);
         LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.canteenList);
+        RecyclerView mRecyclerView = view.findViewById(R.id.canteenList);
         DataHolder.getInstance().sortCanteenList();
         mCanteenListAdapter = new CanteenListAdapter(DataHolder.getInstance().getCanteenList(),this);
         mRecyclerView.setAdapter(mCanteenListAdapter);
         mRecyclerView.setLayoutManager(layoutParams);
 
-        TextView header = (TextView)getActivity().findViewById(R.id.heading_toolbar);
+        TextView header = getActivity().findViewById(R.id.heading_toolbar);
         header.setVisibility(View.GONE);
-        ImageView appLogo = (ImageView)getActivity().findViewById(R.id.toolbarImage);
+        ImageView appLogo = getActivity().findViewById(R.id.toolbarImage);
         appLogo.setVisibility(View.VISIBLE);
 
-        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.canteenListProgressBar);
+        ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
 
         if (mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE, 0) == 0 || new Date().getTime() - mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE,0) > 86400000) {

@@ -81,7 +81,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         MainActivity.hideToolbarShadow(true);
         mDatabaseController = new DatabaseController(getActivity().getApplicationContext());
-        mViewPager = (ViewPager) view.findViewById(R.id.mealViewPager);
+        mViewPager = view.findViewById(R.id.mealViewPager);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -97,17 +97,16 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
             }
         });
-        PagerTabStrip mTabStrip = (PagerTabStrip) view.findViewById(R.id.pager_tab_strip);
+        PagerTabStrip mTabStrip = view.findViewById(R.id.pager_tab_strip);
         mTabStrip.setTabIndicatorColorResource(R.color.colorPrimaryDark);
 
-
-        TextView header = (TextView)getActivity().findViewById(R.id.heading_toolbar);
+        TextView header = getActivity().findViewById(R.id.heading_toolbar);
         header.setText(mCanteen.getName());
         header.setVisibility(View.VISIBLE);
-        ImageView appLogo = (ImageView)getActivity().findViewById(R.id.toolbarImage);
+        ImageView appLogo = getActivity().findViewById(R.id.toolbarImage);
         appLogo.setVisibility(View.GONE);
-        mProgressLayout = (LinearLayout) view.findViewById(R.id.mealListProgressLayout);
-        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.canteenListProgressBar);
+        mProgressLayout = view.findViewById(R.id.mealListProgressLayout);
+        ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
         if (mCanteen.getMealMap().isEmpty()) {
             NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen(mCanteen.getCode(), this);

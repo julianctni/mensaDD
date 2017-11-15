@@ -11,7 +11,7 @@
     <string name="balance_check_balance">Aktuelles Guthaben</string>
     <string name="balance_check_last_transaction">Letzte Abbuchung</string>
     <string name="pref_share_image_title">Bilder zum Gericht teilen</string>
-    <string name="pref_share_image_summary">Einige wenige Apps (Threema, FB Messenger...) teilen leider nur das Bild ohne Text, wenn diese Option aktiviert ist. Funktioniert derzeit noch nicht unter Android Nougat.</string>
+    <string name="pref_share_image_summary">Einige wenige Apps (Threema, FB Messenger...) teilen leider nur das Bild ohne Text, wenn diese Option aktiviert ist.</string>
     <string name="meals_no_food">Heute gibt es hier leider kein Essen.</string>
     <string name="nav_drawer_card_history">Guthaben</string>
     <string name="no_data_available">Keine Daten vorhanden.</string>
@@ -46,7 +46,7 @@
     <string name="tutorial_balance_content">Um das Guthaben deiner eMeal-Karte zu überprüfen, genügt es, die Karte bei eingeschaltetem NFC an das Handy zu halten. In den Einstellungen lässt sich aktivieren, dass sich mensaDD automatisch öffnet, sobald die Karte erkannt wurde.</string>
     <string name="tutorial_balancehistory_header">Guthabenverlauf</string>
     <string name="tutorial_balancehistory_content">Wenn du dein Guthaben abrufst, kannst du diese Daten über den Speichern-Button persistent auf deinem Gerät speichern. Im Menü kannst du dir anschließend den Verlauf deines Mensaguthabens anschauen.</string>
-    <string name="tutorial_map_content">Alternativ zur Listenansicht lassen sich nun auch alle Mensen auf einer Karte anzeigen lassen. Diese erreichst du über das Hauptmenü.</string>
+    <string name="tutorial_map_content">Alternativ zur Listenansicht lassen sich nun auch alle Mensen auf einer Karte anzeigen. Diese erreichst du über das Hauptmenü.</string>
     <string name="tutorial_other_header">Sonstiges</string>
     <string name="tutorial_other_content">Beim Teilen von Gerichten kannst du nun auch Bilder mitsenden (siehe Einstellungen). Die Speisepläne werden nun serverseitig von der Seite des Studentenwerks eingelesen. Dies erspart Zeit und Rechenaufwand auf deinem Smartphone.</string>
     <string name="tutorial_button_continue">Weiter</string>

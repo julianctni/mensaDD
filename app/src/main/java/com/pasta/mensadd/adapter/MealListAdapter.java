@@ -162,7 +162,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             //text has to be added to intent no matter what
             shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, meal.getName() + "\n" + meal.getPrice() + "\n#"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, DataHolder.getInstance().getMensa(meal.getCanteenCode())+": "+ meal.getName() + "\n" + meal.getPrice() + "\n#"
                     + DataHolder.getInstance().getMensa(mFragment.getCanteenId()).getName()
                     .replaceAll("\\s+", "") + " "+mFragment.getString(R.string.content_share_hungry)+" #mensaDD");
 
