@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Cache;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -98,6 +99,7 @@ public class NetworkController {
                 callback.onResponseMessage(ERROR,"",null);
             }
         });
+        request.setRetryPolicy(new DefaultRetryPolicy(2000, 0, 1.0f));
         mRequestQueue.add(request);
     }
 

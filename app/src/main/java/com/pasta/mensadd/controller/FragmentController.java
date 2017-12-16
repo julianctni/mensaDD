@@ -1,17 +1,14 @@
 package com.pasta.mensadd.controller;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentManager;
 
-import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.CanteenMapFragment;
 import com.pasta.mensadd.fragments.BalanceCheckFragment;
 import com.pasta.mensadd.fragments.BalanceHistoryFragment;
 import com.pasta.mensadd.fragments.Imprintfragment;
-import com.pasta.mensadd.fragments.LargeImageFragment;
 import com.pasta.mensadd.fragments.MealWeekFragment;
 import com.pasta.mensadd.fragments.SettingsFragment;
 
@@ -61,14 +58,5 @@ public class FragmentController {
 
     public static void showImprintFragment(FragmentManager fm){
         fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new Imprintfragment(), TAG_IMPRINT).commit();
-    }
-
-    public static void showLargeImageFragment(FragmentManager fm, Bitmap image){
-        fm.beginTransaction().addToBackStack("").add(R.id.mainContainer, LargeImageFragment.newInstance(image), TAG_LARGE_IMAGE).commit();
-    }
-
-    public static void hideLargeImageFragment(FragmentManager fm){
-        //fm.beginTransaction().remove(fm.findFragmentByTag(TAG_LARGE_IMAGE)).commit();
-        fm.popBackStack();
     }
 }
