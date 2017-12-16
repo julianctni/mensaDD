@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -171,14 +172,22 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                 //additionally share image
                 try {
                     //save file to cache directory
-                    File file = new File(mFragment.getContext().getCacheDir(), meal.getName().hashCode() + ".jpeg");
+                    shareIntent.setAction(Intent.ACTION_SEND);
+
+                    String filename = Math.abs(meal.getName().hashCode()) + ".jpeg";
+                    File file = new File(mFragment.getContext().getFilesDir(), filename);
                     FileOutputStream fOut = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
                     fOut.flush();
                     fOut.close();
                     file.setReadable(true, false);
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-                    shareIntent.setType("image/png");
+
+                    shareIntent.setType("image/*");
+                    Uri fileUri = FileProvider.getUriForFile(mFragment.getContext(), "com.pasta.mensadd.fileprovider", file);
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
