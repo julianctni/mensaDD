@@ -156,24 +156,19 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         @SuppressLint("SetWorldReadable")
         private void shareMeal() {
             Meal meal = mMeals.get(getAdapterPosition());
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            //text has to be added to intent no matter what
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, meal.getName() + "\n" + meal.getPrice() + "\n#"
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            String shareText = meal.getName() + "\n" + meal.getPrice() + "\n#"
                     + DataHolder.getInstance().getMensa(mFragment.getCanteenId()).getName()
-                    .replaceAll("\\s+", "") + " "+mFragment.getString(R.string.content_share_hungry)+" #mensaDD");
+                    .replaceAll("\\s+", "") + " "+mFragment.getString(R.string.content_share_hungry)+" #mensaDD";
 
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareText);
 
             Bitmap bitmap = ((BitmapDrawable) mMealImage.getDrawable()).getBitmap();
             boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(mFragment.getContext()).getBoolean(mFragment.getString(R.string.pref_share_image_key), false);
 
-            //if there is a bitmap attached (the link isn't too short) and the user has enabled image sharing in prefs:
             if (shareImagePref && meal.getImgLink().length() > 1 ) {
-                //additionally share image
                 try {
-                    //save file to cache directory
-                    shareIntent.setAction(Intent.ACTION_SEND);
-
                     String filename = Math.abs(meal.getName().hashCode()) + ".jpeg";
                     File file = new File(mFragment.getContext().getFilesDir(), filename);
                     FileOutputStream fOut = new FileOutputStream(file);
@@ -181,17 +176,17 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                     fOut.flush();
                     fOut.close();
                     file.setReadable(true, false);
-
-                    shareIntent.setType("image/*");
                     Uri fileUri = FileProvider.getUriForFile(mFragment.getContext(), "com.pasta.mensadd.fileprovider", file);
-                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
                     shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-
+                    shareIntent.setType("image/jpeg");
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else {
+                shareIntent.setType("text/plain");
             }
+
             mFragment.getActivity().startActivity(Intent.createChooser(shareIntent, mFragment.getString(R.string.content_share)));
         }
 
