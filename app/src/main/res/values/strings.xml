@@ -75,7 +75,7 @@
     <string name="pref_veg_meals_key" translatable="false">pref_veg_meals</string>
     <string name="pref_veg_meals_title">Green meals</string>
     <string name="pref_veg_meals_summary">Green background for vegan and vegetarian meals</string>
-    <string name="meals_no_image">no image available :(</string>
+    <string name="meals_no_image">no image available</string>
     <string name="meals_loading_image">Loading meal image...</string>
 
 </resources>

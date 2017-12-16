@@ -40,14 +40,14 @@ import java.util.HashMap;
 
 public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHolder> {
 
-    public ArrayList<Meal> mMeals;
-    public MealDayFragment mFragment;
-    public SharedPreferences mPrefs;
-    public final String COLOR_TEXT_WHITE = "#FFFFFF";
-    public final String COLOR_TEXT_DARK = "#444444";
-    public final String COLOR_HEADER_VEG = "#7fb29b";
-    public final String COLOR_HEADER_NOT_VEG = "#F1F1F1";
-    public HashMap<Integer,Boolean> mExpandStates = new HashMap<>();
+    private ArrayList<Meal> mMeals;
+    private MealDayFragment mFragment;
+    private SharedPreferences mPrefs;
+    private final String COLOR_TEXT_WHITE = "#FFFFFF";
+    private final String COLOR_TEXT_DARK = "#444444";
+    private final String COLOR_HEADER_VEG = "#7fb29b";
+    private final String COLOR_HEADER_NOT_VEG = "#F1F1F1";
+    private HashMap<Integer,Boolean> mExpandStates = new HashMap<>();
 
     public MealListAdapter(ArrayList<Meal> items, MealDayFragment fragment) {
         mMeals = items;
@@ -110,42 +110,39 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, LoadImageCallback {
-        public LinearLayout mHeaderLayout;
-        public TextView mName;
-        public TextView mPrice;
-        public TextView mMealImageStatus;
-        public ImageView mPork;
-        public ImageView mBeef;
-        public TextView mVegan;
-        public ImageView mVegetarian;
-        public ImageView mAlcohol;
-        public ImageView mGarlic;
-        public TextView mMealContent;
-        public LinearLayout mListItemHeader;
-        public LinearLayout mMealDetails;
-        public FloatingActionButton mShareButton;
-        public ImageView mMealImage;
-        public ProgressBar mMealImageProgress;
-        public Bitmap mMealImageBitmap;
+        private LinearLayout mHeaderLayout;
+        private TextView mName;
+        private TextView mPrice;
+        private TextView mMealImageStatus;
+        private ImageView mPork;
+        private ImageView mBeef;
+        private TextView mVegan;
+        private ImageView mVegetarian;
+        private ImageView mAlcohol;
+        private ImageView mGarlic;
+        private TextView mMealContent;
+        private LinearLayout mMealDetails;
+        private FloatingActionButton mShareButton;
+        private ImageView mMealImage;
+        private ProgressBar mMealImageProgress;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
-            mHeaderLayout = (LinearLayout) itemView.findViewById(R.id.mealListItemHeader);
-            mMealDetails = (LinearLayout) itemView.findViewById(R.id.mealDetails);
-            mName = (TextView) itemView.findViewById(R.id.mealName);
-            mPrice = (TextView) itemView.findViewById(R.id.mealPrice);
-            mMealImageStatus = (TextView) itemView.findViewById(R.id.mealImageStatus);
-            mPork = (ImageView) itemView.findViewById(R.id.pork);
-            mBeef = (ImageView) itemView.findViewById(R.id.beef);
-            mVegan = (TextView) itemView.findViewById(R.id.vegan);
-            mVegetarian = (ImageView) itemView.findViewById(R.id.vegetarian);
-            mAlcohol = (ImageView) itemView.findViewById(R.id.alcohol);
-            mGarlic = (ImageView) itemView.findViewById(R.id.garlic);
-            mMealContent = (TextView) itemView.findViewById(R.id.mealContent);
-            mMealImage = (ImageView) itemView.findViewById(R.id.mealImage);
-            mMealImageProgress = (ProgressBar) itemView.findViewById(R.id.mealImageProgressBar);
-            mListItemHeader = (LinearLayout) itemView.findViewById(R.id.mensaListItemHeader);
-            mShareButton = (FloatingActionButton) itemView.findViewById(R.id.shareButton);
+            mHeaderLayout = itemView.findViewById(R.id.mealListItemHeader);
+            mMealDetails = itemView.findViewById(R.id.mealDetails);
+            mName = itemView.findViewById(R.id.mealName);
+            mPrice = itemView.findViewById(R.id.mealPrice);
+            mMealImageStatus = itemView.findViewById(R.id.mealImageStatus);
+            mPork =  itemView.findViewById(R.id.pork);
+            mBeef =  itemView.findViewById(R.id.beef);
+            mVegan = itemView.findViewById(R.id.vegan);
+            mVegetarian =  itemView.findViewById(R.id.vegetarian);
+            mAlcohol =  itemView.findViewById(R.id.alcohol);
+            mGarlic =  itemView.findViewById(R.id.garlic);
+            mMealContent = itemView.findViewById(R.id.mealContent);
+            mMealImage =  itemView.findViewById(R.id.mealImage);
+            mMealImageProgress = itemView.findViewById(R.id.mealImageProgressBar);
+            mShareButton = itemView.findViewById(R.id.shareButton);
             mShareButton.setBackgroundTintList(ColorStateList.valueOf(mFragment.getResources().getColor(R.color.pink)));
             mShareButton.setOnClickListener(this);
             mMealImage.setOnClickListener(this);
@@ -186,8 +183,6 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                     e.printStackTrace();
                 }
             }
-            //send the intent
-            //TODO: localize
             mFragment.getActivity().startActivity(Intent.createChooser(shareIntent, mFragment.getString(R.string.content_share)));
         }
 
@@ -220,13 +215,13 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         }
 
 
-        public void expandLayout(View v) {
+        private void expandLayout(View v) {
             v.setVisibility(View.VISIBLE);
             final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
             final int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
             v.measure(widthSpec, heightSpec);
             ValueAnimator mAnimator = slideAnimator(v, v.getHeight(), v.getMeasuredHeight());
-            mAnimator.setDuration(250);
+            mAnimator.setDuration(200);
             mAnimator.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -235,7 +230,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                    showAnim.setDuration(200);
+                    showAnim.setDuration(180);
                     if (mShareButton.getVisibility() == View.GONE) {
                         mShareButton.setVisibility(View.VISIBLE);
                         mShareButton.startAnimation(showAnim);
@@ -304,7 +299,6 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                 mMealImageProgress.setVisibility(View.GONE);
                 mMealImageStatus.setVisibility(View.GONE);
                 mMealImage.setVisibility(View.VISIBLE);
-                mMealImageBitmap = bitmap;
             } else {
                 mMealImageProgress.setVisibility(View.GONE);
                 mMealImage.setVisibility(View.GONE);

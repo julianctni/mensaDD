@@ -58,7 +58,7 @@
     <string name="app_version">Version 2.0 / Okt 2016</string>
     <string name="pref_veg_meals_title">Grüne Gerichte</string>
     <string name="pref_veg_meals_summary">Vegane und vegetarische Gerichte grün einfärben</string>
-    <string name="meals_no_image">kein Bild verfügbar :(</string>
+    <string name="meals_no_image">kein Bild verfügbar</string>
     <string name="meals_loading_image">Bild wird geladen...</string>
 
 </resources>
