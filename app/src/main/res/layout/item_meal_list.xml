@@ -29,14 +29,22 @@
                 android:padding="10dp">
 
                 <TextView
+                    android:id="@+id/mealLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:textSize="14sp"
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="4dp"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/mealName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minLines="2"
                     android:includeFontPadding="false"
                     android:textSize="19sp"
                     android:textStyle="normal" />
-
             </LinearLayout>
 
 

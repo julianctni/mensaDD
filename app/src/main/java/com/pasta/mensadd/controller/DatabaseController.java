@@ -37,6 +37,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     public static final String MEAL_ID = "mealId";
     public static final String MEAL_NAME = "mealName";
+    public static final String MEAL_LOCATION = "mealLocation";
     public static final String MEAL_PRICE = "mealPrice";
     public static final String MEAL_DETAILS = "mealDetails";
     public static final String MEAL_IMG_LINK = "mealImgLink";
@@ -50,7 +51,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     public static final String MEAL_DATE = "mealDate";
 
     private static final String DATABASE_NAME = "mensadd.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     SharedPreferences prefs;
 
     public DatabaseController(Context context) {
@@ -60,6 +61,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.i("DATABASE", "creating database");
         createMealTable(db);
         createCanteenTable(db);
         createBalanceTable(db);
@@ -110,11 +112,12 @@ public class DatabaseController extends SQLiteOpenHelper {
     public void readMealsFromDb(String canteenCode) {
         SQLiteDatabase db = getReadableDatabase();
         Log.i("SQLite", "importing meals from db");
-        String[] projection = { MEAL_NAME, MEAL_PRICE, MEAL_DETAILS, MEAL_IMG_LINK, MEAL_DATE, MEAL_ALCOHOL, MEAL_GARLIC, MEAL_PORC, MEAL_BEEF, MEAL_VEGAN, MEAL_VEGETARIAN};
+        String[] projection = { MEAL_NAME, MEAL_LOCATION, MEAL_PRICE, MEAL_DETAILS, MEAL_IMG_LINK, MEAL_DATE, MEAL_ALCOHOL, MEAL_GARLIC, MEAL_PORC, MEAL_BEEF, MEAL_VEGAN, MEAL_VEGETARIAN};
         String selection = MEAL_CANTEEN_CODE + " = '" + canteenCode+"'";
         Cursor c = db.query(MEALS_TABLE_NAME, projection, selection, null, null, null, null);
         while (c.moveToNext()) {
             String name = c.getString(c.getColumnIndex(MEAL_NAME));
+            String location = c.getString(c.getColumnIndex(MEAL_LOCATION));
             String price = c.getString(c.getColumnIndex(MEAL_PRICE));
             String details = c.getString(c.getColumnIndex(MEAL_DETAILS));
             String imgLink = c.getString(c.getColumnIndex(MEAL_IMG_LINK));
@@ -125,7 +128,7 @@ public class DatabaseController extends SQLiteOpenHelper {
             boolean garlic = (c.getInt(c.getColumnIndex(MEAL_GARLIC)) == 1);
             boolean vegan = (c.getInt(c.getColumnIndex(MEAL_VEGAN)) == 1);
             boolean vegetarian = (c.getInt(c.getColumnIndex(MEAL_VEGETARIAN)) == 1);
-            Meal m = new Meal(name, imgLink, details, price, canteenCode, date, vegan, vegetarian, porc, beef, garlic, alcohol);
+            Meal m = new Meal(name, location, imgLink, details, price, canteenCode, date, vegan, vegetarian, porc, beef, garlic, alcohol);
             if (DataHolder.getInstance().getMensa(canteenCode).getMealMap().get(date) == null) {
                 ArrayList<Meal> meals = new ArrayList<>();
                 meals.add(m);
@@ -178,6 +181,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DatabaseController.MEAL_NAME, m.getName());
+        values.put(DatabaseController.MEAL_LOCATION, m.getLocation());
         values.put(DatabaseController.MEAL_PRICE, m.getPrice());
         values.put(DatabaseController.MEAL_DETAILS, m.getDetails());
         values.put(DatabaseController.MEAL_IMG_LINK, m.getImgLink());
@@ -195,7 +199,7 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     public void createMealTable(SQLiteDatabase db) {
         String query = "CREATE TABLE IF NOT EXISTS " + MEALS_TABLE_NAME + " (" + MEAL_ID + " " +
-                "INTEGER PRIMARY KEY, " + MEAL_NAME + " TEXT, " + MEAL_PRICE + " " + "TEXT, " +
+                "INTEGER PRIMARY KEY, " + MEAL_NAME + " TEXT, " + MEAL_LOCATION + " TEXT, " + MEAL_PRICE + " " + "TEXT, " +
                 MEAL_DETAILS + " TEXT," + MEAL_IMG_LINK + " TEXT, "+MEAL_DATE+" TEXT, "+MEAL_CANTEEN_CODE+" TEXT," + MEAL_VEGETARIAN + " " +
                 "INTEGER, " + MEAL_VEGAN + " " + "INTEGER, " + MEAL_GARLIC + " INTEGER, " +
                 MEAL_PORC + " INTEGER, " + MEAL_BEEF + " INTEGER," + MEAL_ALCOHOL + " INTEGER);";
@@ -210,6 +214,11 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
+    public void addColumnToTable (SQLiteDatabase db, String table, String column, String columnType) {
+        String query = "ALTER TABLE " + table + " ADD COLUMN " + column + " " + columnType;
+        Log.i("DATABASE", query);
+        db.execSQL(query);
+    }
 
     public float getLastInsertedBalance() {
         SQLiteDatabase db = getReadableDatabase();
@@ -247,9 +256,15 @@ public class DatabaseController extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        deleteOldTables(db);
-        createMealTable(db);
-        createCanteenTable(db);
-        createBalanceTable(db);
+        Log.i("DATABASE", "Upgrading database");
+        if (oldVersion == 1) {
+            deleteOldTables(db);
+            createMealTable(db);
+            createCanteenTable(db);
+            createBalanceTable(db);
+        } else if (oldVersion == 2) {
+            Log.i("DATABASE", "Adding location column to meal table.");
+            addColumnToTable(db, MEALS_TABLE_NAME, MEAL_LOCATION, "TEXT");
+        }
     }
 }

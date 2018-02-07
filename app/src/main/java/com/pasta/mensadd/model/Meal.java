@@ -9,6 +9,7 @@ public class Meal {
     private String mImgLink;
     private String mCanteenCode;
     private String mDate;
+    private String mLocation;
     private boolean mVegetarian;
     private boolean mVegan;
     private boolean mPork;
@@ -16,8 +17,9 @@ public class Meal {
     private boolean mGarlic;
     private boolean mAlcohol;
 
-    public Meal(String name, String imgLink, String details, String price, String canteen, String date, boolean vegan, boolean vegetarian, boolean pork, boolean beef, boolean garlic, boolean alcohol) {
+    public Meal(String name, String location, String imgLink, String details, String price, String canteen, String date, boolean vegan, boolean vegetarian, boolean pork, boolean beef, boolean garlic, boolean alcohol) {
         mName = name;
+        mLocation = location;
         mPrice = price;
         mImgLink = imgLink;
         mDetails = formatDetails(details);
@@ -77,6 +79,8 @@ public class Meal {
     public String getImgLink() {
         return mImgLink;
     }
+
+    public String getLocation() { return mLocation; }
 
     public String formatDetails(String content){
         return Html.fromHtml("&#149;").toString()+" "+content.replace(", ","\n"+Html.fromHtml("&#149;").toString()+" ");

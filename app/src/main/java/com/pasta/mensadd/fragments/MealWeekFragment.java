@@ -177,7 +177,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
             }
             SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, locale);
             mCalendar.setTime(new Date());
-            for (int d = 0; d<8; d++) {
+            for (int d = 0; d<6; d++) {
                 mFragmentList.add(MealDayFragment.newInstance(mMensaId,d));
                 mFragmentTitleList.add(sdf.format(mCalendar.getTime()));
                 mCalendar.add(Calendar.DATE,1);

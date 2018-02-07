@@ -69,6 +69,13 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         holder.mName.setText(item.getName());
         holder.mPrice.setText(item.getPrice());
         holder.mMealContent.setText(item.getDetails());
+
+        if (item.getLocation().length() > 0) {
+            holder.mLocation.setText(item.getLocation());
+            holder.mLocation.setVisibility(View.VISIBLE);
+        } else
+            holder.mLocation.setVisibility(View.GONE);
+
         if (item.isVegan()) holder.mVegan.setVisibility(View.VISIBLE);
         else holder.mVegan.setVisibility(View.GONE);
 
@@ -90,9 +97,11 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         if (mPrefs.getBoolean(mFragment.getString(R.string.pref_veg_meals_key), true) && (item.isVegan() || item.isVegetarian())) {
             holder.mHeaderLayout.setBackgroundColor(Color.parseColor(COLOR_HEADER_VEG));
             holder.mName.setTextColor(Color.parseColor(COLOR_TEXT_WHITE));
+            holder.mLocation.setTextColor(Color.parseColor(COLOR_TEXT_WHITE));
         } else {
             holder.mHeaderLayout.setBackgroundColor(Color.parseColor(COLOR_HEADER_NOT_VEG));
             holder.mName.setTextColor(Color.parseColor(COLOR_TEXT_DARK));
+            holder.mLocation.setTextColor(Color.parseColor(COLOR_TEXT_DARK));
         }
 
 
@@ -113,6 +122,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, LoadImageCallback {
         private LinearLayout mHeaderLayout;
         private TextView mName;
+        private TextView mLocation;
         private TextView mPrice;
         private TextView mMealImageStatus;
         private ImageView mPork;
@@ -132,6 +142,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mHeaderLayout = itemView.findViewById(R.id.mealListItemHeader);
             mMealDetails = itemView.findViewById(R.id.mealDetails);
             mName = itemView.findViewById(R.id.mealName);
+            mLocation = itemView.findViewById(R.id.mealLocation);
             mPrice = itemView.findViewById(R.id.mealPrice);
             mMealImageStatus = itemView.findViewById(R.id.mealImageStatus);
             mPork =  itemView.findViewById(R.id.pork);

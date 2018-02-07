@@ -79,13 +79,14 @@ public class ParseController {
                         int alcohol = jsonMeal.getInt("alcohol");
                         String imgLink = jsonMeal.getString("imgLink");
                         String details = jsonMeal.getString("mealDetails");
+                        String location = jsonMeal.getString("mealLocation");
                         String name = jsonMeal.getString("name");
                         String price = jsonMeal.getString("price");
-                        Meal meal = new Meal(name, imgLink, details, price, mCanteenCode, String
+                        Meal meal = new Meal(name, location, imgLink, details, price, mCanteenCode, String
                                 .valueOf(mealDay.keys().next()), vegan == 1, vegetarian == 1, pork ==
                                 1, beef == 1, garlic == 1, alcohol == 1);
                         mealList.add(meal);
-                        Log.i("Loading meals", "Padding "+meal.getName());
+                        //Log.i("Loading meals", "Padding "+meal.getName());
                         mDbController.updateMealTable(meal);
                     }
                     if (DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().get(String.valueOf
