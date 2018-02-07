@@ -65,7 +65,12 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
 
         @Override
         public void onClick(View v) {
-            String mensaId = mCanteens.get(getAdapterPosition()).getCode();
+            String mensaId;
+            try {
+                mensaId = mCanteens.get(getAdapterPosition()).getCode();
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return;
+            }
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mFragment.getActivity().getApplicationContext());
             int priority = prefs.getInt("priority_"+mensaId, 0);
             priority += 1;

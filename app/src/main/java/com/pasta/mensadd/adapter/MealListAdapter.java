@@ -162,7 +162,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                     + DataHolder.getInstance().getMensa(mFragment.getCanteenId()).getName()
                     .replaceAll("\\s+", "") + " "+mFragment.getString(R.string.content_share_hungry)+" #mensaDD";
 
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareText);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 
             Bitmap bitmap = ((BitmapDrawable) mMealImage.getDrawable()).getBitmap();
             boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(mFragment.getContext()).getBoolean(mFragment.getString(R.string.pref_share_image_key), false);
