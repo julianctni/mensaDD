@@ -11,12 +11,16 @@ import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
@@ -39,6 +43,7 @@ import java.util.Locale;
 public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
     private static final String TAG_MENSA_ID = "mensaId";
+    private static final int PAGE_COUNT = 5;
     private String mMensaId;
     private Canteen mCanteen;
     private MealDayPagerAdapter mPagerAdapter;
@@ -74,12 +79,13 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_meal_week, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        MainActivity.hideToolbarShadow(true);
+        //MainActivity.hideToolbarShadow(true);
         mDatabaseController = new DatabaseController(getActivity().getApplicationContext());
         mViewPager = view.findViewById(R.id.mealViewPager);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -98,8 +104,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
             }
         });
         PagerTabStrip mTabStrip = view.findViewById(R.id.pager_tab_strip);
-        mTabStrip.setTabIndicatorColorResource(R.color.colorPrimaryDark);
-
+        mTabStrip.setTabIndicatorColorResource(R.color.colorPrimary);
         TextView header = getActivity().findViewById(R.id.heading_toolbar);
         header.setText(mCanteen.getName());
         header.setVisibility(View.VISIBLE);
@@ -126,6 +131,23 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
             }
         }
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.fragment_meals_menu, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.set_canteen_favorite:
+                Toast.makeText(getContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -177,7 +199,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
             }
             SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, locale);
             mCalendar.setTime(new Date());
-            for (int d = 0; d<6; d++) {
+            for (int d = 0; d<=PAGE_COUNT; d++) {
                 mFragmentList.add(MealDayFragment.newInstance(mMensaId,d));
                 mFragmentTitleList.add(sdf.format(mCalendar.getTime()));
                 mCalendar.add(Calendar.DATE,1);
@@ -191,7 +213,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
         @Override
         public int getCount() {
-            return 7;
+            return PAGE_COUNT;
         }
 
         @Override

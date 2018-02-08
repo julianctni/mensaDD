@@ -60,7 +60,7 @@ public class BalanceHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_balance_history, container, false);
-        MainActivity.hideToolbarShadow(false);
+        //MainActivity.hideToolbarShadow(false);
         Locale locale;
         String dateFormat;
         if (Locale.getDefault().getLanguage().equals("de")) {
@@ -79,7 +79,7 @@ public class BalanceHistoryFragment extends Fragment {
         noTransactionText = (TextView) v.findViewById(R.id.notEnoughDataForColumn);
         updateBalanceHistory();
 
-        MainActivity.updateNavDrawer(R.id.nav_card_history);
+        //MainActivity.updateNavDrawer(R.id.nav_card_history);
         return v;
     }
 

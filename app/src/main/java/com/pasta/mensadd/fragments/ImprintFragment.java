@@ -24,7 +24,7 @@ public class ImprintFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_imprint, container, false);
-        MainActivity.hideToolbarShadow(false);
+        //MainActivity.hideToolbarShadow(false);
         setHasOptionsMenu(true);
         TextView licenseView = (TextView) v.findViewById(R.id.imprintLicense);
 

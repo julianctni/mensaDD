@@ -15,11 +15,15 @@ import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.*;
@@ -51,70 +55,89 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     public static boolean NFC_SUPPORTED = false;
-
-    private static AppBarLayout mAppBarLayout;
-    private static NavigationView mNavigationView;
+    private Toolbar mToolbar;
     private RelativeLayout mCardCheckContainer;
-    private DrawerLayout mNavDrawer;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private TextView mHeadingToolbar;
-    private ImageView mAppLogoToolbar;
     private FloatingActionButton mSaveBalanceButton;
     private FloatingActionButton mHideBalanceButton;
-
+    private TextView mHeadingToolbar;
+    private ImageView mAppLogoToolbar;
     private NfcAdapter mNfcAdapter;
     private ValueData mCurrentValueData;
 
     private float mCardCheckHeight;
     private boolean mCardCheckVisible;
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_map:
+                FragmentController.showMapFragment(getSupportFragmentManager());
+                mAppLogoToolbar.setVisibility(View.GONE);
+                mHeadingToolbar.setText(getString(R.string.nav_drawer_map));
+                mHeadingToolbar.setVisibility(View.VISIBLE);
+                return true;
+            case R.id.nav_mensa:
+                FragmentController.showCanteenListFragment(getSupportFragmentManager());
+                mAppLogoToolbar.setVisibility(View.VISIBLE);
+                mHeadingToolbar.setVisibility(View.GONE);
+                return true;
+            case R.id.nav_favorites:
+                Toast.makeText(getApplicationContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.nav_card_history:
+                FragmentController.showBalanceHistoryFragment(getSupportFragmentManager());
+                mAppLogoToolbar.setVisibility(View.GONE);
+                mHeadingToolbar.setText(getString(R.string.nav_drawer_card_history));
+                mHeadingToolbar.setVisibility(View.VISIBLE);
+                return true;
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
+
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(this);
+
+        mToolbar = findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(null);
             }
         }
 
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mSaveBalanceButton = (FloatingActionButton) findViewById(R.id.saveBalanceButton);
+        mHeadingToolbar = findViewById(R.id.heading_toolbar);
+        mAppLogoToolbar = findViewById(R.id.toolbarImage);
+        mSaveBalanceButton = findViewById(R.id.saveBalanceButton);
         mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.cyan_dark)));
         mSaveBalanceButton.setOnClickListener(this);
-        mHideBalanceButton = (FloatingActionButton) findViewById(R.id.hideBalanceButton);
+        mHideBalanceButton = findViewById(R.id.hideBalanceButton);
         mHideBalanceButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor( "#CC3C51")));
         mHideBalanceButton.setOnClickListener(this);
-        mHeadingToolbar = (TextView) findViewById(R.id.heading_toolbar);
-        mAppLogoToolbar = (ImageView) findViewById(R.id.toolbarImage);
-        mCardCheckContainer = (RelativeLayout) findViewById(R.id.cardCheckContainer);
+
+        mCardCheckContainer = findViewById(R.id.cardCheckContainer);
         mCardCheckContainer.setOnClickListener(this);
         mCardCheckHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
-        mNavDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mNavDrawer, toolbar, 0, 0);
-        if (mNavDrawer != null) mNavDrawer.addDrawerListener(mDrawerToggle);
-        if (mNavigationView != null) mNavigationView.setNavigationItemSelectedListener(this);
 
-        View hView =  mNavigationView.getHeaderView(0);
-        ImageView drawerImage = (ImageView) hView.findViewById(R.id.navDrawerImage);
+
         Calendar cal = Calendar.getInstance();
         if (cal.get(Calendar.MONTH) == 11) {
             mAppLogoToolbar.setImageDrawable(getResources().getDrawable(R.drawable.banner_christmas));
-            drawerImage.setImageDrawable(getResources().getDrawable(R.drawable.banner_christmas));
         } else {
             mAppLogoToolbar.setImageDrawable(getResources().getDrawable(R.drawable.banner));
-            drawerImage.setImageDrawable(getResources().getDrawable(R.drawable.banner));
         }
+
         if (getSupportFragmentManager().findFragmentById(R.id.mainContainer) == null) {
             FragmentController.showCanteenListFragment(getSupportFragmentManager());
         }
+
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         sharedPref.edit().remove("first_start");
 
@@ -127,47 +150,10 @@ public class MainActivity extends AppCompatActivity
             sharedPref.edit().putBoolean(getString(R.string.pref_key_autostart_set), true).apply();
             sharedPref.edit().putBoolean(getString(R.string.pref_autostart_key), true).apply();
         }
-
-        mNavigationView.getMenu().findItem(R.id.nav_card_history).setVisible(NFC_SUPPORTED);
+        if (!NFC_SUPPORTED) navigation.getMenu().removeItem(R.id.nav_card_history);
 
         if (NFC_SUPPORTED && NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
             onNewIntent(getIntent());
-        }
-    }
-
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static void hideToolbarShadow(boolean hide){
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mAppBarLayout != null) {
-            if (hide)
-                mAppBarLayout.setElevation(0.0f);
-            else
-                mAppBarLayout.setElevation(8.0f);
-        }
-    }
-
-    public static void updateNavDrawer(int id){
-        mNavigationView.getMenu().findItem(id).setChecked(true);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mNavDrawer.isDrawerOpen(GravityCompat.START)) {
-            mNavDrawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
     }
 
@@ -185,6 +171,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+
         Animation animation = new ViewHeightAnimation(mCardCheckContainer, (int) mCardCheckHeight, 0, 150);
         if (v.getId() == R.id.saveBalanceButton) {
             storeCardData();
@@ -212,46 +199,6 @@ public class MainActivity extends AppCompatActivity
             mHideBalanceButton.startAnimation(hideAnim);
 
         }
-    }
-
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_map:
-                FragmentController.showMapFragment(getSupportFragmentManager());
-                mAppLogoToolbar.setVisibility(View.GONE);
-                mHeadingToolbar.setText(getString(R.string.nav_drawer_map));
-                mHeadingToolbar.setVisibility(View.VISIBLE);
-                break;
-            case R.id.nav_mensa:
-                FragmentController.showCanteenListFragment(getSupportFragmentManager());
-                mAppLogoToolbar.setVisibility(View.VISIBLE);
-                mHeadingToolbar.setVisibility(View.GONE);
-                break;
-            case R.id.nav_card_history:
-                FragmentController.showBalanceHistoryFragment(getSupportFragmentManager());
-                mAppLogoToolbar.setVisibility(View.GONE);
-                mHeadingToolbar.setText(getString(R.string.nav_drawer_card_history));
-                mHeadingToolbar.setVisibility(View.VISIBLE);
-                break;
-            case R.id.nav_settings:
-                FragmentController.showSettingsFragment(getSupportFragmentManager());
-                mAppLogoToolbar.setVisibility(View.GONE);
-                mHeadingToolbar.setText(getString(R.string.nav_drawer_settings));
-                mHeadingToolbar.setVisibility(View.VISIBLE);
-                break;
-            case R.id.nav_imprint:
-                FragmentController.showImprintFragment(getSupportFragmentManager());
-                mAppLogoToolbar.setVisibility(View.GONE);
-                mHeadingToolbar.setText(getString(R.string.nav_drawer_imprint));
-                mHeadingToolbar.setVisibility(View.VISIBLE);
-                break;
-        }
-
-        mNavDrawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
 
@@ -292,6 +239,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private void updateCardCheckFragment(ValueData value) {
+
         mCurrentValueData = value;
         if (!mCardCheckVisible) {
             FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
