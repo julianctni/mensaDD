@@ -47,7 +47,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     private final String COLOR_TEXT_WHITE = "#FFFFFF";
     private final String COLOR_TEXT_DARK = "#444444";
     private final String COLOR_HEADER_VEG = "#7fb29b";
-    private final String COLOR_HEADER_NOT_VEG = "#F1F1F1";
+    private final String COLOR_HEADER_NOT_VEG = "#EBEBEB";
     private HashMap<Integer,Boolean> mExpandStates = new HashMap<>();
 
     public MealListAdapter(ArrayList<Meal> items, MealDayFragment fragment) {
