@@ -1,39 +1,32 @@
 package com.pasta.mensadd;
 
-import android.annotation.TargetApi;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.res.ColorStateList;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.*;
-import android.support.v7.preference.BuildConfig;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
@@ -53,9 +46,14 @@ import com.pasta.mensadd.fragments.BalanceHistoryFragment;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
+
+import static java.util.logging.Level.INFO;
 
 public class MainActivity extends AppCompatActivity
-        implements BottomNavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements BottomNavigation.OnMenuItemSelectionListener, View.OnClickListener {
 
     public static boolean NFC_SUPPORTED = false;
     private Toolbar mToolbar;
@@ -70,8 +68,64 @@ public class MainActivity extends AppCompatActivity
     private float mCardCheckHeight;
     private boolean mCardCheckVisible;
 
+
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public void onMenuItemSelect(int id, int position, boolean b) {
+        switch (id) {
+            case R.id.nav_map:
+                FragmentController.showMapFragment(getSupportFragmentManager());
+                mAppLogoToolbar.setVisibility(View.GONE);
+                mHeadingToolbar.setText(getString(R.string.nav_drawer_map));
+                mHeadingToolbar.setVisibility(View.VISIBLE);
+                return;
+            case R.id.nav_mensa:
+                FragmentController.showCanteenListFragment(getSupportFragmentManager());
+                mAppLogoToolbar.setVisibility(View.VISIBLE);
+                mHeadingToolbar.setVisibility(View.GONE);
+                FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), "10", "10");
+                ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                showAnim.setDuration(250);
+                showAnim.setStartOffset(100);
+                mSaveBalanceButton.setVisibility(View.VISIBLE);
+                mSaveBalanceButton.startAnimation(showAnim);
+                mHideBalanceButton.setVisibility(View.VISIBLE);
+                mHideBalanceButton.startAnimation(showAnim);
+                Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight, 200);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {}
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {}
+                });
+                mCardCheckContainer.setAnimation(animation);
+                mCardCheckContainer.startAnimation(animation);
+                mCardCheckVisible = true;
+                return;
+            case R.id.nav_favorites:
+                Toast.makeText(getApplicationContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
+                return;
+            case R.id.nav_card_history:
+                FragmentController.showBalanceHistoryFragment(getSupportFragmentManager());
+                mAppLogoToolbar.setVisibility(View.GONE);
+                mHeadingToolbar.setText(getString(R.string.nav_drawer_card_history));
+                mHeadingToolbar.setVisibility(View.VISIBLE);
+                return;
+        }
+    }
+
+    @Override
+    public void onMenuItemReselect(int id, int position, boolean b) {
+
+    }
+    /*
+    @Override
+    public boolean onMenu(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_map:
                 FragmentController.showMapFragment(getSupportFragmentManager());
@@ -83,6 +137,30 @@ public class MainActivity extends AppCompatActivity
                 FragmentController.showCanteenListFragment(getSupportFragmentManager());
                 mAppLogoToolbar.setVisibility(View.VISIBLE);
                 mHeadingToolbar.setVisibility(View.GONE);
+                FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), "10", "10");
+                ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                showAnim.setDuration(250);
+                showAnim.setStartOffset(100);
+                mSaveBalanceButton.setVisibility(View.VISIBLE);
+                mSaveBalanceButton.startAnimation(showAnim);
+                mHideBalanceButton.setVisibility(View.VISIBLE);
+                mHideBalanceButton.startAnimation(showAnim);
+                Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight, 200);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {}
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {}
+                });
+                mCardCheckContainer.setAnimation(animation);
+                mCardCheckContainer.startAnimation(animation);
+                mCardCheckVisible = true;
                 return true;
             case R.id.nav_favorites:
                 Toast.makeText(getApplicationContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
@@ -96,15 +174,15 @@ public class MainActivity extends AppCompatActivity
         }
         return false;
     }
+    */
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(this);
-
+        BottomNavigation navigation = findViewById(R.id.bottomNavigation);
+        navigation.setOnMenuItemClickListener(this);
         mToolbar = findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
@@ -150,7 +228,7 @@ public class MainActivity extends AppCompatActivity
             sharedPref.edit().putBoolean(getString(R.string.pref_key_autostart_set), true).apply();
             sharedPref.edit().putBoolean(getString(R.string.pref_autostart_key), true).apply();
         }
-        if (!NFC_SUPPORTED) navigation.getMenu().removeItem(R.id.nav_card_history);
+        //if (!NFC_SUPPORTED) navigation.getMenu().removeItem(R.id.nav_card_history);
 
         if (NFC_SUPPORTED && NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
             onNewIntent(getIntent());
@@ -306,4 +384,7 @@ public class MainActivity extends AppCompatActivity
         mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
                 mTechLists);
     }
+
+
+
 }

@@ -1,4 +1,4 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:scrollbars="none"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -151,4 +151,4 @@
             android:textColor="#AAAAAA"
             android:textSize="12sp" />
     </LinearLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

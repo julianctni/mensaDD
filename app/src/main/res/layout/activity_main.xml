@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout android:id="@+id/CoordinatorLayout01"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pasta.mensadd.MainActivity">
+    android:fitsSystemWindows="true">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -18,9 +17,9 @@
 
             <ImageView
                 android:id="@+id/toolbarImage"
-                android:layout_width="120dp"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:contentDescription="@string/content_app_logo"
                 android:src="@drawable/banner"
                 android:visibility="visible"/>
@@ -29,7 +28,7 @@
                 android:id="@+id/heading_toolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:textColor="#EEE"
                 android:textSize="20sp"
                 android:visibility="gone"/>
@@ -40,31 +39,19 @@
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/navigation"
-        android:layout_below="@id/toolbar"
-        android:animateLayoutChanges="true">
+        android:layout_marginTop="?attr/actionBarSize">
     </RelativeLayout>
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/bottom_menu" />
-
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/navigation"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical">
+        android:layout_marginBottom="-6dp"
+        app:layout_behavior="com.pasta.mensadd.CardCheckBehavior"
+        app:layout_anchor="@id/bottomNavigation">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:id="@+id/cardCheckContainer"
@@ -116,8 +103,29 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
-</RelativeLayout>
+    <it.sephiroth.android.library.bottomnavigation.BottomNavigation
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        app:bbn_entries="@menu/bottom_menu"
+        app:bbn_scrollEnabled="true"
+        app:bbn_badgeProvider="@string/bbn_badgeProvider"
+        app:layout_behavior="@string/bbn_phone_view_behavior" />
+    <!--
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/bottom_menu" />-->
 
+
+
+
+</android.support.design.widget.CoordinatorLayout>
 
     <!--
 
