@@ -12,15 +12,15 @@
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_map_black_24dp"
-            android:title="@string/nav_drawer_map" />
+            android:title="@string/nav_map" />
         <item
             android:id="@+id/nav_card_history"
             android:icon="@drawable/ic_timeline_black_24dp"
-            android:title="@string/nav_drawer_card_history" />
+            android:title="@string/nav_card_history" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/nav_drawer_settings" />
+            android:title="@string/nav_settings" />
     </group>
     <group
         android:id="@+id/nav_infos"
@@ -28,7 +28,7 @@
         <item
             android:id="@+id/nav_imprint"
             android:icon="@drawable/ic_info_outline_black_24dp"
-            android:title="@string/nav_drawer_imprint" />
+            android:title="@string/nav_imprint" />
     </group>
 
 </menu>

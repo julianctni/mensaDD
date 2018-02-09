@@ -16,7 +16,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //MainActivity.hideToolbarShadow(false);
+        setHasOptionsMenu(false);
         addPreferencesFromResource(R.xml.preferences);
         findPreference(getString(R.string.pref_reset_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

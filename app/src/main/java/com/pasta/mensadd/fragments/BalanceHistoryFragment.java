@@ -60,7 +60,7 @@ public class BalanceHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_balance_history, container, false);
-        //MainActivity.hideToolbarShadow(false);
+        setHasOptionsMenu(false);
         Locale locale;
         String dateFormat;
         if (Locale.getDefault().getLanguage().equals("de")) {

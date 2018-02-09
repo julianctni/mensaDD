@@ -59,6 +59,7 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(false);
         View view = inflater.inflate(R.layout.fragment_meal_day, container, false);
         LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.mealList);
