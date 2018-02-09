@@ -31,6 +31,7 @@ public class ImprintFragment extends Fragment {
         licenseView.setMovementMethod(LinkMovementMethod.getInstance());
         licenseView.setText(Html
                 .fromHtml(getString(R.string.imprint_license)));
+        MainActivity.updateToolbar(-1, getString(R.string.pref_imprint));
         return v;
     }
 

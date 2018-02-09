@@ -1,38 +1,29 @@
 package com.pasta.mensadd.fragments;
 
 
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.adapter.CanteenListAdapter;
-import com.pasta.mensadd.controller.DatabaseController;
+import com.pasta.mensadd.adapter.NewsListAdapter;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.controller.ParseController;
 import com.pasta.mensadd.model.DataHolder;
-import com.pasta.mensadd.networking.LoadCanteensCallback;
+import com.pasta.mensadd.networking.LoadNewsCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
-import java.util.Date;
+public class NewsFragment extends Fragment implements LoadNewsCallback {
 
-public class NewsFragment extends Fragment implements LoadCanteensCallback {
+    private NewsListAdapter mNewsListAdapter;
+    private RecyclerView mNewsList;
 
     public NewsFragment() {
     }
@@ -46,7 +37,12 @@ public class NewsFragment extends Fragment implements LoadCanteensCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-
+        LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
+        mNewsList = view.findViewById(R.id.newsList);
+        mNewsListAdapter = new NewsListAdapter(DataHolder.getInstance().getNewsList(),this);
+        mNewsList.setAdapter(mNewsListAdapter);
+        mNewsList.setLayoutManager(layoutParams);
+        NetworkController.getInstance(getActivity()).getNews(this);
         return view;
     }
 
@@ -69,6 +65,13 @@ public class NewsFragment extends Fragment implements LoadCanteensCallback {
 
     @Override
     public void onResponseMessage(int responseType, String message) {
-
+        if (responseType == NetworkController.SUCCESS) {
+            ParseController p = new ParseController();
+            p.parseNews(message, this);
+        } else if (responseType == ParseController.PARSE_SUCCESS) {
+            DataHolder.getInstance().sortNewsList();
+            mNewsListAdapter.notifyDataSetChanged();
+            mNewsList.setVisibility(View.VISIBLE);
+        }
     }
 }

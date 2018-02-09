@@ -102,6 +102,12 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mCanteenListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.fragment_canteens_menu, menu);
         super.onCreateOptionsMenu(menu, menuInflater);

@@ -8,71 +8,68 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.fragments.CanteenListFragment;
+import com.pasta.mensadd.fragments.NewsFragment;
 import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.model.DataHolder;
+import com.pasta.mensadd.model.News;
 
 import java.util.ArrayList;
 
 
-public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.ViewHolder> {
+public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
 
-    private ArrayList<Canteen> mCanteens;
-    private CanteenListFragment mFragment;
+    private ArrayList<News> mNews;
+    private NewsFragment mFragment;
 
-    public CanteenListAdapter(ArrayList<Canteen> items, CanteenListFragment fragment) {
-        mCanteens = items;
+    public NewsListAdapter(ArrayList<News> items, NewsFragment fragment) {
+        mNews = items;
         mFragment = fragment;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.item_canteen_list, parent, false);
+                R.layout.item_news_list, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Canteen item = mCanteens.get(position);
-        holder.mName.setText(item.getName());
-        holder.mAddress.setText(item.getAddress());
-        holder.mHours.setText(item.getHours());
-        if (item.isFavorite())
-            holder.mFavorite.setVisibility(View.VISIBLE);
-        else
-            holder.mFavorite.setVisibility(View.GONE);
+        News item = mNews.get(position);
+        holder.mHeading.setText(item.getHeading());
+        holder.mText.setText(item.getContentShort());
+        holder.mDate.setText(item.getDate());
+        holder.mCategory.setText(item.getCategory());
     }
 
     @Override
     public int getItemCount() {
-        return mCanteens.size();
+        return mNews.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public TextView mName;
-        public TextView mAddress;
-        public TextView mHours;
-        public ImageView mFavorite;
-        public RelativeLayout mListItemHeader;
+        public TextView mHeading;
+        public TextView mText;
+        public TextView mDate;
+        public TextView mCategory;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mName = itemView.findViewById(R.id.mensaName);
-            mAddress = itemView.findViewById(R.id.mensaAddress);
-            mHours = itemView.findViewById(R.id.mensaHours);
-            mFavorite = itemView.findViewById(R.id.mensaFavorite);
-            mListItemHeader = itemView.findViewById(R.id.mensaListItemHeader);
+            mHeading = itemView.findViewById(R.id.newsHeading);
+            mText = itemView.findViewById(R.id.newsText);
+            mDate = itemView.findViewById(R.id.newsDate);
+            mCategory = itemView.findViewById(R.id.newsCategory);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
+            /*
             String mensaId;
             try {
                 mensaId = mCanteens.get(getAdapterPosition()).getCode();
@@ -85,8 +82,8 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
             prefs.edit().putInt("priority_"+mensaId, priority).apply();
             DataHolder.getInstance().getCanteen(mensaId).increasePriority();
             DataHolder.getInstance().sortCanteenList();
-            CanteenListAdapter.this.notifyDataSetChanged();
-            FragmentController.showMealWeekFragment(mFragment.getFragmentManager(),mensaId);
+            NewsListAdapter.this.notifyDataSetChanged();
+            FragmentController.showMealWeekFragment(mFragment.getFragmentManager(),mensaId);*/
         }
     }
 }

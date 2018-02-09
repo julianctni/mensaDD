@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,10 +90,10 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
         Date date = new Date();
         date.setTime(date.getTime()+mPagerPositon*86400000);
 
-        if (DataHolder.getInstance().getMensa(mMensaId).getMealMap().get(ParseController.DATE_FORMAT.format(date)) == null) {
-            DataHolder.getInstance().getMensa(mMensaId).getMealMap().put(ParseController.DATE_FORMAT.format(date), new ArrayList<Meal>());
+        if (DataHolder.getInstance().getCanteen(mMensaId).getMealMap().get(ParseController.DATE_FORMAT.format(date)) == null) {
+            DataHolder.getInstance().getCanteen(mMensaId).getMealMap().put(ParseController.DATE_FORMAT.format(date), new ArrayList<Meal>());
         }
-        return DataHolder.getInstance().getMensa(mMensaId).getMealMap().get(ParseController.DATE_FORMAT.format(date));
+        return DataHolder.getInstance().getCanteen(mMensaId).getMealMap().get(ParseController.DATE_FORMAT.format(date));
     }
 
     public void updateMealList(){

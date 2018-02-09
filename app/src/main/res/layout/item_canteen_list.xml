@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/mensaListItemHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,11 +27,20 @@
             android:orientation="vertical"
             android:padding="8dp">
 
+            <ImageView
+                android:id="@+id/mensaFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:tint="@color/pink_dark"
+                android:visibility="gone"
+                android:src="@drawable/ic_favorite_white_24dp"/>
+
             <TextView
                 android:id="@+id/mensaName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="26sp"
+                android:textSize="24sp"
                 android:includeFontPadding="false"
                 android:textColor="#444444"
                 android:textStyle="bold" />
@@ -43,8 +52,9 @@
                 android:includeFontPadding="false"
                 android:textColor="#444444"
                 android:textSize="16sp"
-                android:textStyle="normal" />
-        </LinearLayout>
+                android:textStyle="normal"
+                android:layout_below="@id/mensaName"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

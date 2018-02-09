@@ -21,6 +21,7 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.model.DataHolder;
+import com.pasta.mensadd.model.News;
 
 import org.json.JSONArray;
 
@@ -38,6 +39,7 @@ public class NetworkController {
     public static int NO_INTERNET = -1;
 
     public static final String URL_PREFIX = "http://ctni.sabic.uberspace.de/mensadd";
+    public static final String URL_GET_NEWS = "/news.json";
     public static final String URL_GET_CANTEENS = "/canteens.json";
     public static final String URL_GET_MEALS = "/meals/";
 
@@ -131,6 +133,15 @@ public class NetworkController {
             doJSONArrayRequest(URL_PREFIX+URL_GET_CANTEENS, callback);
         else {
             Toast.makeText(mCtx, "Mensen konnten nicht aktualisiert werden. Keine Internetverbindung vorhanden.", Toast.LENGTH_LONG).show();
+            callback.onResponseMessage(NO_INTERNET,"");
+        }
+    }
+
+    public void getNews(LoadNewsCallback callback) {
+        if (isConnectedToInternet(mCtx))
+            doJSONArrayRequest(URL_PREFIX+URL_GET_NEWS, callback);
+        else {
+            Toast.makeText(mCtx, "News konnten nicht geladen werden. Keine Internetverbindung vorhanden.", Toast.LENGTH_LONG).show();
             callback.onResponseMessage(NO_INTERNET,"");
         }
     }

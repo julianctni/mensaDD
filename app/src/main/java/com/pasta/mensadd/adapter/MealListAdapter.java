@@ -170,7 +170,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             String shareText = meal.getName() + "\n" + meal.getPrice() + "\n#"
-                    + DataHolder.getInstance().getMensa(mFragment.getCanteenId()).getName()
+                    + DataHolder.getInstance().getCanteen(mFragment.getCanteenId()).getName()
                     .replaceAll("\\s+", "") + " "+mFragment.getString(R.string.content_share_hungry)+" #mensaDD";
 
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);

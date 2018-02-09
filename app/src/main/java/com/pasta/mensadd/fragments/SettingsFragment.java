@@ -2,21 +2,28 @@ package com.pasta.mensadd.fragments;
 
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
 import com.pasta.mensadd.controller.DatabaseController;
+import com.pasta.mensadd.controller.FragmentController;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(false);
+        setHasOptionsMenu(true);
         addPreferencesFromResource(R.xml.preferences);
         findPreference(getString(R.string.pref_reset_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -28,9 +35,24 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 return false;
             }
         });
+        findPreference(getString(R.string.pref_imprint)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                FragmentController.showImprintFragment(getFragmentManager());
+                //MainActivity.updateToolbar(-1, getString(R.string.pref_imprint));
+                return false;
+            }
+        });
         findPreference(getString(R.string.pref_autostart_key)).setVisible(MainActivity.NFC_SUPPORTED);
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
+        MainActivity.updateToolbar(-1, getString(R.string.nav_settings));
+    }
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
     }
@@ -40,6 +62,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         if (key.equals(getString(R.string.pref_autostart_key))){
             AutostartRegister.register(getActivity().getPackageManager(), sharedPreferences.getBoolean(key, false));
         }
+    }
+
+    @Override
+    public void setDividerHeight(int height) {
+        super.setDividerHeight(0);
     }
 
     @Override
@@ -56,4 +83,5 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
+
 }

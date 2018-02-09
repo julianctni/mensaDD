@@ -53,6 +53,10 @@ public class FragmentController {
         fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new SettingsFragment(), TAG_SETTINGS).commit();
     }
 
+    public static void showImprintFragment(FragmentManager fm){
+        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new ImprintFragment(), TAG_IMPRINT).commit();
+    }
+
     public static void showMealWeekFragment(FragmentManager fm, String mensaId){
         fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, MealWeekFragment.newInstance(mensaId), TAG_MEAL_WEEK).commit();
     }
@@ -61,7 +65,5 @@ public class FragmentController {
         fm.beginTransaction().replace(R.id.mainContainer, new BalanceHistoryFragment(), TAG_BALANCE_HISTORY).commit();
     }
 
-    public static void showImprintFragment(FragmentManager fm){
-        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new ImprintFragment(), TAG_IMPRINT).commit();
-    }
+
 }

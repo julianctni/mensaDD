@@ -9,8 +9,10 @@ import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
+import com.pasta.mensadd.model.News;
 import com.pasta.mensadd.networking.LoadCanteensCallback;
 import com.pasta.mensadd.networking.LoadMealsCallback;
+import com.pasta.mensadd.networking.LoadNewsCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +33,12 @@ public class ParseController {
                                  SharedPreferences prefs, LoadCanteensCallback callback) {
         CanteenParserTask canteenParserTask = new CanteenParserTask(dbController, message, prefs, callback);
         canteenParserTask.execute();
+        return true;
+    }
+
+    public boolean parseNews(String message, LoadNewsCallback callback) {
+        NewsParserTask newsParserTask = new NewsParserTask(message, callback);
+        newsParserTask.execute();
         return true;
     }
 
@@ -89,14 +97,14 @@ public class ParseController {
                         //Log.i("Loading meals", "Padding "+meal.getName());
                         mDbController.updateMealTable(meal);
                     }
-                    if (DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().get(String.valueOf
+                    if (DataHolder.getInstance().getCanteen(mCanteenCode).getMealMap().get(String.valueOf
                                     (mealDay.keys().next())) != null) {
-                        DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().get(String.valueOf
+                        DataHolder.getInstance().getCanteen(mCanteenCode).getMealMap().get(String.valueOf
                                 (mealDay.keys().next())).clear();
-                        DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().get(String.valueOf
+                        DataHolder.getInstance().getCanteen(mCanteenCode).getMealMap().get(String.valueOf
                                 (mealDay.keys().next())).addAll(mealList);
                     } else {
-                        DataHolder.getInstance().getMensa(mCanteenCode).getMealMap().put(String.valueOf
+                        DataHolder.getInstance().getCanteen(mCanteenCode).getMealMap().put(String.valueOf
                                 (mealDay.keys().next()), mealList);
                     }
                     day.setTime(day.getTime() + 86400000);
@@ -165,6 +173,43 @@ public class ParseController {
 
         protected void onPostExecute(Boolean result) {
             mCanteensCallback.onResponseMessage(PARSE_SUCCESS,"");
+        }
+    }
+
+    private class NewsParserTask extends AsyncTask<Void, Void, Boolean> {
+        String mMessage;
+        LoadNewsCallback mLoadNewsCallback;
+
+        public NewsParserTask(String message, LoadNewsCallback callback){
+            mMessage = message;
+            mLoadNewsCallback = callback;
+        }
+
+        protected Boolean doInBackground(Void... canteens) {
+            DataHolder.getInstance().getNewsList().clear();
+            try {
+                JSONArray json = new JSONArray(mMessage);
+                for (int i = 0; i < json.length(); i++) {
+                    JSONObject news = json.getJSONObject(i);
+                    String heading = news.getString("newsHeading");
+                    String date = news.getString("newsDate");
+                    String category = news.getString("newsCategory");
+                    String textShort = news.getString("newsContentShort");
+                    String textLong = news.getString("newsContentLong");
+                    String imgLink = news.getString("newsImgLink");
+
+                    News n = new News(category, date, heading, textShort, textLong, imgLink);
+                    DataHolder.getInstance().getNewsList().add(n);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            mLoadNewsCallback.onResponseMessage(PARSE_SUCCESS,"");
         }
     }
 }

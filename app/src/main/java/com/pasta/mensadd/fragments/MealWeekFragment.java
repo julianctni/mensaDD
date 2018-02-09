@@ -1,14 +1,17 @@
 package com.pasta.mensadd.fragments;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,10 +23,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.adapter.CanteenListAdapter;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.controller.ParseController;
@@ -71,7 +73,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
             mMensaId = getArguments().getString(TAG_MENSA_ID);
         }
 
-        mCanteen = DataHolder.getInstance().getMensa(mMensaId);
+        mCanteen = DataHolder.getInstance().getCanteen(mMensaId);
         if (mCanteen == null)
             FragmentController.showCanteenListFragment(this.getFragmentManager());
     }
@@ -135,15 +137,30 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.fragment_meals_menu, menu);
         super.onCreateOptionsMenu(menu, menuInflater);
+        menuInflater.inflate(R.menu.fragment_meals_menu, menu);
+        if (DataHolder.getInstance().getCanteen(mMensaId).isFavorite()) {
+            menu.findItem(R.id.set_canteen_favorite).setIcon(R.drawable.ic_favorite_white_24dp);
+        }
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.set_canteen_favorite:
-                Toast.makeText(getContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
+                Canteen canteen = DataHolder.getInstance().getCanteen(mMensaId);
+                if (canteen.isFavorite()) {
+                    item.setIcon(R.drawable.ic_favorite_border_white_24dp);
+                    canteen.setAsFavorite(false);
+                } else {
+                    item.setIcon(R.drawable.ic_favorite_white_24dp);
+                    canteen.setAsFavorite(true);
+                }
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getApplicationContext());
+                int priority = canteen.isFavorite() ? Canteen.FAVORITE : 0;
+                prefs.edit().putInt("priority_"+mMensaId, priority).apply();
+                DataHolder.getInstance().sortCanteenList();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

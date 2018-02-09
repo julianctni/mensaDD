@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 public class Canteen {
 
+    public static final int FAVORITE = 9999999;
     private String mName;
     private String mHours;
     private String mAddress;
@@ -68,16 +69,22 @@ public class Canteen {
     }
 
     public void increasePriority(){
-        mListPriority += 1;
+        if (mListPriority != Canteen.FAVORITE) mListPriority += 1;
     }
 
     public String getAddress() {
         return mAddress;
     }
 
-
     public String getName() {
         return mName;
+    }
+
+    public boolean isFavorite() { return mListPriority == Canteen.FAVORITE;}
+
+    public void setAsFavorite (boolean favorite) {
+        if (favorite) mListPriority = Canteen.FAVORITE;
+        else mListPriority = 0;
     }
 
 

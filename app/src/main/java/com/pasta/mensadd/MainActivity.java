@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity
     private RelativeLayout mCardCheckContainer;
     private FloatingActionButton mSaveBalanceButton;
     private FloatingActionButton mHideBalanceButton;
-    private TextView mHeadingToolbar;
-    private ImageView mAppLogoToolbar;
+    private static TextView mHeadingToolbar;
+    private static ImageView mAppLogoToolbar;
     private NfcAdapter mNfcAdapter;
     private ValueData mCurrentValueData;
 
@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMenuItemSelect(int id, int position, boolean b) {
+        for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++){
+            getSupportFragmentManager().popBackStack();
+        }
+
         switch (id) {
             case R.id.nav_mensa:
                 FragmentController.showCanteenListFragment(getSupportFragmentManager());
@@ -86,7 +90,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void updateToolbar(int id, String title) {
+    public static void updateToolbar(int id, String title) {
         if (id == R.id.nav_mensa) {
             mAppLogoToolbar.setVisibility(View.VISIBLE);
             mHeadingToolbar.setVisibility(View.GONE);
@@ -104,6 +108,9 @@ public class MainActivity extends AppCompatActivity
             if (getSupportFragmentManager().getBackStackEntryCount() > 0)
                 updateToolbar(R.id.nav_mensa, "");
             super.onBackPressed();
+        } else if (mBottomNav.getSelectedIndex() == 1 && getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            super.onBackPressed();
+            updateToolbar(R.id.nav_map, getString(R.string.nav_map));
         } else {
             FragmentController.showCanteenListFragment(getSupportFragmentManager());
             updateToolbar(R.id.nav_mensa, "");

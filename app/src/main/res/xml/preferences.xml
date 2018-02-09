@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:divider="@android:color/transparent">
+
     <CheckBoxPreference
         android:key="@string/pref_autostart_key"
         android:title="@string/pref_autostart_title"
@@ -16,11 +19,17 @@
         android:key="@string/pref_veg_meals_key"
         android:title="@string/pref_veg_meals_title"
         android:summary="@string/pref_veg_meals_summary"
+        android:drawableTint="@color/pink_dark"
         android:defaultValue="true" />
 
     <Preference
         android:key="@string/pref_reset_key"
         android:title="@string/pref_reset_title"
-        android:summary="@string/pref_reset_summary"/>
+        android:summary="@string/pref_reset_summary"
+        android:icon="@drawable/ic_delete_forever_black_24dp"/>
 
+    <Preference
+        android:key="@string/pref_imprint"
+        android:title="@string/pref_imprint"
+        android:icon="@drawable/ic_info_outline_black_24dp"/>
 </PreferenceScreen>

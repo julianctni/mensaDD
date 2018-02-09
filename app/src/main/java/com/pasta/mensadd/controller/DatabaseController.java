@@ -16,7 +16,6 @@ import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class DatabaseController extends SQLiteOpenHelper {
 
@@ -129,12 +128,12 @@ public class DatabaseController extends SQLiteOpenHelper {
             boolean vegan = (c.getInt(c.getColumnIndex(MEAL_VEGAN)) == 1);
             boolean vegetarian = (c.getInt(c.getColumnIndex(MEAL_VEGETARIAN)) == 1);
             Meal m = new Meal(name, location, imgLink, details, price, canteenCode, date, vegan, vegetarian, porc, beef, garlic, alcohol);
-            if (DataHolder.getInstance().getMensa(canteenCode).getMealMap().get(date) == null) {
+            if (DataHolder.getInstance().getCanteen(canteenCode).getMealMap().get(date) == null) {
                 ArrayList<Meal> meals = new ArrayList<>();
                 meals.add(m);
-                DataHolder.getInstance().getMensa(canteenCode).getMealMap().put(date, meals);
+                DataHolder.getInstance().getCanteen(canteenCode).getMealMap().put(date, meals);
             } else {
-                DataHolder.getInstance().getMensa(canteenCode).getMealMap().get(date).add(m);
+                DataHolder.getInstance().getCanteen(canteenCode).getMealMap().get(date).add(m);
             }
         }
         c.close();

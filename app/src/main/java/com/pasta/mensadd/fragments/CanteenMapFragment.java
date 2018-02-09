@@ -29,7 +29,6 @@ import com.mapbox.mapboxsdk.location.LocationServices;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.model.Canteen;
@@ -74,7 +73,7 @@ public class CanteenMapFragment extends Fragment {
         mCanteenName = (TextView) view.findViewById(R.id.mapInfoCardCanteenName);
         mInfoCard = (CardView) view.findViewById(R.id.mapInfoCard);
         if (!mCurrentCanteen.isEmpty()) {
-            Canteen c = DataHolder.getInstance().getMensa(mCurrentCanteen);
+            Canteen c = DataHolder.getInstance().getCanteen(mCurrentCanteen);
             mCanteenName.setText(c.getName());
             mCanteenAddress.setText(c.getAddress());
             mCanteenHours.setText(c.getHours());
@@ -137,7 +136,7 @@ public class CanteenMapFragment extends Fragment {
         map.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
-                Canteen c = DataHolder.getInstance().getMensa(marker.getTitle());
+                Canteen c = DataHolder.getInstance().getCanteen(marker.getTitle());
                 mCurrentCanteen = marker.getTitle();
                 mCanteenName.setText(c.getName());
                 mCanteenAddress.setText(c.getAddress());
