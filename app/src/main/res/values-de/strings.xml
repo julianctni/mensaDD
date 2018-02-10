@@ -1,5 +1,5 @@
 <resources>
-    <string name="nav_drawer_food">Mensen</string>
+    <string name="nav_food">Mensen</string>
     <string name="nav_map">Karte</string>
     <string name="nav_settings">Einstellungen</string>
     <string name="pref_imprint">Impressum</string>
@@ -61,6 +61,7 @@
     <string name="pref_veg_meals_summary">Vegane und vegetarische Gerichte grün einfärben</string>
     <string name="meals_no_image">kein Bild verfügbar</string>
     <string name="meals_loading_image">Bild wird geladen...</string>
+    <string name="news_share_button">Teilen</string>
 
 
 </resources>

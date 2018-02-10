@@ -48,7 +48,6 @@ public class DataHolder {
     }
 
 
-
     private class PriorityComparator implements Comparator<Canteen> {
 
         @Override

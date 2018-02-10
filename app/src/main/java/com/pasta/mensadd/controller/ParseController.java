@@ -195,10 +195,10 @@ public class ParseController {
                     String date = news.getString("newsDate");
                     String category = news.getString("newsCategory");
                     String textShort = news.getString("newsContentShort");
-                    String textLong = news.getString("newsContentLong");
+                    String newsLink = news.getString("newsLink");
                     String imgLink = news.getString("newsImgLink");
 
-                    News n = new News(category, date, heading, textShort, textLong, imgLink);
+                    News n = new News(category, date, heading, textShort, imgLink, newsLink);
                     DataHolder.getInstance().getNewsList().add(n);
                 }
             } catch (JSONException e) {

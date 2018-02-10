@@ -14,15 +14,16 @@ public class News {
     private String mContentShort;
     private String mContentLong;
     private String mImgLink;
-    private Bitmap mImage;
+    private String mLink;
 
-    public News(String mCategory, String mDate, String mHeading, String mContentShort, String mContentLong, String mImgLink) {
+    public News(String mCategory, String mDate, String mHeading, String mContentShort, String mImgLink, String mLink) {
         this.mCategory = mCategory;
         this.mDate = mDate;
         this.mHeading = mHeading;
         this.mContentShort = mContentShort;
         this.mContentLong = mContentLong;
         this.mImgLink = mImgLink;
+        this.mLink = mLink;
     }
 
     public String getCategory() {
@@ -49,7 +50,8 @@ public class News {
         return mImgLink;
     }
 
-    public void setImage (Bitmap image) { mImage = image; }
 
-    public Bitmap getImageBitmap () { return mImage; }
+    public String getLink () { return mLink; }
+
+
 }

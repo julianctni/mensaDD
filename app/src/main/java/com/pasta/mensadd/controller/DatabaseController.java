@@ -100,6 +100,7 @@ public class DatabaseController extends SQLiteOpenHelper {
             double posLat = c.getDouble(c.getColumnIndex(CANTEEN_POS_LAT));
             double posLong = c.getDouble(c.getColumnIndex(CANTEEN_POS_LONG));
             int priority = prefs.getInt("priority_"+code,0);
+            Log.i("CANTEENPRIO", code+": "+priority);
             Canteen canteen = new Canteen(name, code, new LatLng(posLat,posLong),address,hours,priority);
             DataHolder.getInstance().getCanteenList().add(canteen);
         }

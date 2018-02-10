@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -25,7 +24,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.adapter.CanteenListAdapter;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.controller.ParseController;
@@ -162,9 +160,8 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback{
                 prefs.edit().putInt("priority_"+mMensaId, priority).apply();
                 DataHolder.getInstance().sortCanteenList();
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
