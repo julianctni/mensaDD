@@ -62,16 +62,17 @@ public class CanteenMapFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-        mLocationServices = LocationServices.getLocationServices(getActivity());
+        if (getContext() != null)
+            mLocationServices = LocationServices.getLocationServices(getContext());
         setHasOptionsMenu(true);
-        mMapView = (MapView) view.findViewById(R.id.mapview);
-        mCanteenAddress = (TextView) view.findViewById(R.id.mapInfoCardCanteenAddress);
-        mCanteenHours = (TextView) view.findViewById(R.id.mapInfoCardCanteenHours);
-        mCanteenName = (TextView) view.findViewById(R.id.mapInfoCardCanteenName);
-        mInfoCard = (CardView) view.findViewById(R.id.mapInfoCard);
+        mMapView = view.findViewById(R.id.mapview);
+        mCanteenAddress = view.findViewById(R.id.mapInfoCardCanteenAddress);
+        mCanteenHours = view.findViewById(R.id.mapInfoCardCanteenHours);
+        mCanteenName = view.findViewById(R.id.mapInfoCardCanteenName);
+        mInfoCard = view.findViewById(R.id.mapInfoCard);
         if (!mCurrentCanteen.isEmpty()) {
             Canteen c = DataHolder.getInstance().getCanteen(mCurrentCanteen);
             mCanteenName.setText(c.getName());
@@ -82,8 +83,7 @@ public class CanteenMapFragment extends Fragment {
         mInfoCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentController.showMealWeekFragment(getActivity().getSupportFragmentManager()
-                        , mCurrentCanteen);
+                FragmentController.showMealWeekFragment(getFragmentManager(), mCurrentCanteen);
             }
         });
         mMapView.onCreate(savedInstanceState);
@@ -168,7 +168,7 @@ public class CanteenMapFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
     }
@@ -207,31 +207,31 @@ public class CanteenMapFragment extends Fragment {
     @UiThread
     public void toggleGps() {
         // Check if user has granted location permission
-        if (!mLocationServices.areLocationPermissionsGranted()) {
+        if (!mLocationServices.areLocationPermissionsGranted() && getActivity() != null) {
+
             ActivityCompat.requestPermissions(getActivity(), new String[]{
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_LOCATION);
         } else {
-            enableLocation(true);
+            enableLocation();
         }
 
     }
 
-    private void enableLocation(boolean enabled) {
-        if (enabled) {
-            mLocationServices.addLocationListener(new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    if (location != null) {
-                        mMapboxMap.setCameraPosition(new CameraPosition.Builder()
-                                .target(new LatLng(location))
-                                .zoom(13)
-                                .build());
-                    }
+    private void enableLocation() {
+        mLocationServices.addLocationListener(new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if (location != null) {
+                    mMapboxMap.setCameraPosition(new CameraPosition.Builder()
+                            .target(new LatLng(location))
+                            .zoom(13)
+                            .build());
                 }
-            });
-        }
-        mMapboxMap.setMyLocationEnabled(enabled);
+            }
+        });
+
+        mMapboxMap.setMyLocationEnabled(true);
     }
 
     @Override
@@ -241,7 +241,7 @@ public class CanteenMapFragment extends Fragment {
             case PERMISSIONS_LOCATION: {
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    enableLocation(true);
+                    enableLocation();
                 }
             }
         }

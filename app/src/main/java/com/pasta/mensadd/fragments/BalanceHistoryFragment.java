@@ -3,17 +3,15 @@ package com.pasta.mensadd.fragments;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.DatabaseController;
 
@@ -57,7 +55,7 @@ public class BalanceHistoryFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_balance_history, container, false);
         setHasOptionsMenu(false);
@@ -71,33 +69,32 @@ public class BalanceHistoryFragment extends Fragment {
             dateFormat = "MM-dd";
         }
         mDateFormat = new SimpleDateFormat(dateFormat, locale);
-        mBalanceChart = (LineChartView) v.findViewById(R.id.lineChart);
-        mTransactionChart = (ColumnChartView) v.findViewById(R.id.columnChart);
-        mCurrentBalance = (TextView) v.findViewById(R.id.currentBalance);
-        mCurrentLastTransaction = (TextView) v.findViewById(R.id.currentLastTransaction);
-        noBalanceText = (TextView) v.findViewById(R.id.notEnoughDataForLine);
-        noTransactionText = (TextView) v.findViewById(R.id.notEnoughDataForColumn);
+        mBalanceChart = v.findViewById(R.id.lineChart);
+        mTransactionChart = v.findViewById(R.id.columnChart);
+        mCurrentBalance = v.findViewById(R.id.currentBalance);
+        mCurrentLastTransaction = v.findViewById(R.id.currentLastTransaction);
+        noBalanceText = v.findViewById(R.id.notEnoughDataForLine);
+        noTransactionText = v.findViewById(R.id.notEnoughDataForColumn);
         updateBalanceHistory();
 
-        //MainActivity.updateNavDrawer(R.id.nav_card_history);
         return v;
     }
 
-    public String formatMoneyString (String value) {
+    public String formatMoneyString(String value) {
         String[] split = value.split("\\.");
         String euro = split[0];
         String cent = split[1];
         if (cent.length() < 2)
             cent += "0";
-        return euro+","+cent+"€";
+        return euro + "," + cent + "€";
     }
 
 
-    public void setUpBalanceChart(){
+    public void setUpBalanceChart() {
         List<PointValue> values = new ArrayList<>();
         List<AxisValue> axisValues = new ArrayList<>();
-        for (int i = 0; i< mBalance.size(); i++){
-            values.add(new PointValue(i,mBalance.get(i)));
+        for (int i = 0; i < mBalance.size(); i++) {
+            values.add(new PointValue(i, mBalance.get(i)));
             if (mBalance.get(i) > mMaxBalance)
                 mMaxBalance = mBalance.get(i);
             Date date = new Date(mTimestamps.get(i));
@@ -121,16 +118,16 @@ public class BalanceHistoryFragment extends Fragment {
         mBalanceChart.setViewportCalculationEnabled(false);
         Viewport viewport = new Viewport(mBalanceChart.getMaximumViewport());
         viewport.bottom = 0;
-        viewport.top = (int)(mMaxBalance *1.3);
+        viewport.top = (int) (mMaxBalance * 1.3);
         mBalanceChart.setMaximumViewport(viewport);
         mBalanceChart.setCurrentViewport(viewport);
 
-        for (int j = 0; j<line.getValues().size();j++){
+        for (int j = 0; j < line.getValues().size(); j++) {
             line.getValues().get(j).setTarget(j, mBalance.get(j));
         }
     }
 
-    public void setUpTransactionsChart(){
+    public void setUpTransactionsChart() {
         int numColumns = mTransactions.size();
         List<AxisValue> axisValues = new ArrayList<>();
         List<Column> columns = new ArrayList<>();
@@ -156,22 +153,22 @@ public class BalanceHistoryFragment extends Fragment {
         mTransactionChart.setViewportCalculationEnabled(false);
         Viewport viewport = new Viewport(mTransactionChart.getMaximumViewport());
         viewport.bottom = 0;
-        viewport.top = (int)(mMaxTransaction *1.3);
+        viewport.top = (int) (mMaxTransaction * 1.3);
         mTransactionChart.setMaximumViewport(viewport);
         mTransactionChart.setCurrentViewport(viewport);
 
-        for (int j = 0; j<data.getColumns().size(); j++){
+        for (int j = 0; j < data.getColumns().size(); j++) {
             for (SubcolumnValue value : data.getColumns().get(j).getValues()) {
                 value.setTarget(mTransactions.get(j));
             }
         }
     }
 
-    public void updateBalanceHistory(){
+    public void updateBalanceHistory() {
         mBalance.clear();
         mTransactions.clear();
         mTimestamps.clear();
-        DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
+        DatabaseController dbController = new DatabaseController(getContext());
         SQLiteDatabase db = dbController.getReadableDatabase();
         String[] projection = {
                 DatabaseController.BALANCE_ID,
@@ -197,9 +194,9 @@ public class BalanceHistoryFragment extends Fragment {
             mBalance.add(c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
             mTransactions.add(c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
             mTimestamps.add(c.getLong(c.getColumnIndex(DatabaseController.BALANCE_ID)));
-            if (c.isLast()){
-                String b = getString(R.string.balance_check_balance)+": "+formatMoneyString(""+c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
-                String t = getString(R.string.balance_check_last_transaction)+": "+formatMoneyString(""+c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
+            if (c.isLast()) {
+                String b = getString(R.string.balance_check_balance) + ": " + formatMoneyString("" + c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
+                String t = getString(R.string.balance_check_last_transaction) + ": " + formatMoneyString("" + c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
                 mCurrentBalance.setText(b);
                 mCurrentLastTransaction.setText(t);
             }
@@ -219,7 +216,7 @@ public class BalanceHistoryFragment extends Fragment {
                 }
             }, 500);
         } else {
-            if (mBalance.isEmpty()){
+            if (mBalance.isEmpty()) {
                 mCurrentBalance.setText(getString(R.string.no_data_available));
             }
         }

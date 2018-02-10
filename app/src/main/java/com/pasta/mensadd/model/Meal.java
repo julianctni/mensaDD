@@ -33,9 +33,10 @@ public class Meal {
         mDate = date;
     }
 
-    public String getCanteenCode(){
+    public String getCanteenCode() {
         return mCanteenCode;
     }
+
     public String getName() {
         return mName;
     }
@@ -68,7 +69,7 @@ public class Meal {
         return mAlcohol;
     }
 
-    public String getDate(){
+    public String getDate() {
         return mDate;
     }
 
@@ -80,9 +81,11 @@ public class Meal {
         return mImgLink;
     }
 
-    public String getLocation() { return mLocation; }
+    public String getLocation() {
+        return mLocation;
+    }
 
-    public String formatDetails(String content){
-        return Html.fromHtml("&#149;").toString()+" "+content.replace(", ","\n"+Html.fromHtml("&#149;").toString()+" ");
+    private String formatDetails(String content) {
+        return Html.fromHtml("&#149;").toString() + " " + content.replace(", ", "\n" + Html.fromHtml("&#149;").toString() + " ");
     }
 }

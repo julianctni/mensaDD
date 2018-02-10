@@ -1,33 +1,18 @@
 package com.pasta.mensadd.adapter;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.support.v4.content.FileProvider;
-import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.controller.FragmentController;
-import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.NewsFragment;
-import com.pasta.mensadd.model.Canteen;
-import com.pasta.mensadd.model.DataHolder;
-import com.pasta.mensadd.model.Meal;
 import com.pasta.mensadd.model.News;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -70,7 +55,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         Button mShareButton;
         Button mDetailsButton;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             mHeading = itemView.findViewById(R.id.newsHeading);
             mText = itemView.findViewById(R.id.newsText);
@@ -102,12 +87,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         shareIntent.setType("text/plain");
-        mFragment.getActivity().startActivity(Intent.createChooser(shareIntent, mFragment.getString(R.string.content_share)));
+        if (mFragment.getActivity() != null)
+            mFragment.getActivity().startActivity(Intent.createChooser(shareIntent, mFragment.getString(R.string.content_share)));
     }
 
     private void openDetailsInBrowser(News news) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(news.getLink()));
-        if (intent.resolveActivity(mFragment.getActivity().getPackageManager()) != null) {
+        if (mFragment.getActivity() != null) {
             mFragment.getActivity().startActivity(intent);
         }
 

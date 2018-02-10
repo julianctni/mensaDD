@@ -2,6 +2,7 @@ package com.pasta.mensadd.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
@@ -34,8 +35,8 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
     private SwipeRefreshLayout mMealRefresher;
 
 
-
-    public MealDayFragment() {}
+    public MealDayFragment() {
+    }
 
     public static MealDayFragment newInstance(String mensaId, int position) {
         MealDayFragment fragment = new MealDayFragment();
@@ -56,20 +57,20 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(false);
         View view = inflater.inflate(R.layout.fragment_meal_day, container, false);
         LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.mealList);
-        mMealRefresher = (SwipeRefreshLayout) view.findViewById(R.id.mealListRefresher);
+        RecyclerView mRecyclerView = view.findViewById(R.id.mealList);
+        mMealRefresher = view.findViewById(R.id.mealListRefresher);
         mMealRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                NetworkController.getInstance(getActivity().getApplicationContext()).getMealsForCanteen(mMensaId, MealDayFragment.this);
+                NetworkController.getInstance(getContext()).getMealsForCanteen(mMensaId, MealDayFragment.this);
             }
         });
-        CardView noFoodToday = (CardView) view.findViewById(R.id.noFoodToday);
+        CardView noFoodToday = view.findViewById(R.id.noFoodToday);
         if (getMeals().isEmpty()) {
             mRecyclerView.setVisibility(View.GONE);
             noFoodToday.setVisibility(View.VISIBLE);
@@ -77,7 +78,7 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
             mRecyclerView.setVisibility(View.VISIBLE);
             noFoodToday.setVisibility(View.GONE);
         }
-        mMealListAdapter = new MealListAdapter(getMeals(),this);
+        mMealListAdapter = new MealListAdapter(getMeals(), this);
 
 
         mRecyclerView.setLayoutManager(layoutParams);
@@ -88,7 +89,7 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
 
     public ArrayList<Meal> getMeals() {
         Date date = new Date();
-        date.setTime(date.getTime()+mPagerPositon*86400000);
+        date.setTime(date.getTime() + mPagerPositon * 86400000);
 
         if (DataHolder.getInstance().getCanteen(mMensaId).getMealMap().get(ParseController.DATE_FORMAT.format(date)) == null) {
             DataHolder.getInstance().getCanteen(mMensaId).getMealMap().put(ParseController.DATE_FORMAT.format(date), new ArrayList<Meal>());
@@ -96,13 +97,13 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
         return DataHolder.getInstance().getCanteen(mMensaId).getMealMap().get(ParseController.DATE_FORMAT.format(date));
     }
 
-    public void updateMealList(){
+    public void updateMealList() {
         if (mMealListAdapter != null) {
             mMealListAdapter.notifyDataSetChanged();
         }
     }
 
-    public String getCanteenId(){
+    public String getCanteenId() {
         return mMensaId;
     }
 
@@ -110,14 +111,14 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
     public void onResponseMessage(int responseType, String message) {
         if (responseType == NetworkController.SUCCESS) {
             ParseController p = new ParseController();
-            p.parseMealsForCanteen(mMensaId, message, new DatabaseController(this.getActivity().getApplicationContext()), this);
-        } else if (responseType == NetworkController.ERROR){
-            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.load_meals_technical), Toast.LENGTH_SHORT).show();
+            p.parseMealsForCanteen(mMensaId, message, new DatabaseController(getContext()), this);
+        } else if (responseType == NetworkController.ERROR) {
+            Toast.makeText(getContext(), getString(R.string.load_meals_technical), Toast.LENGTH_SHORT).show();
         } else if (responseType == ParseController.PARSE_SUCCESS) {
             mMealRefresher.setRefreshing(false);
             this.updateMealList();
         } else {
-            DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
+            DatabaseController dbController = new DatabaseController(getContext());
             dbController.readMealsFromDb(mMensaId);
             mMealRefresher.setRefreshing(false);
         }

@@ -2,6 +2,7 @@ package com.pasta.mensadd.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,12 +35,12 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
         mNewsList = view.findViewById(R.id.newsList);
-        mNewsListAdapter = new NewsListAdapter(DataHolder.getInstance().getNewsList(),this);
+        mNewsListAdapter = new NewsListAdapter(DataHolder.getInstance().getNewsList(), this);
         mNewsList.setAdapter(mNewsListAdapter);
         mNewsList.setLayoutManager(layoutParams);
         NetworkController.getInstance(getActivity()).getNews(this);

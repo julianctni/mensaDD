@@ -59,18 +59,18 @@
     <string name="tutorial_design_header">Design</string>
     <string name="tutorial_design_content">The design has been completly updated. The main view now consists of a list of all canteens. The canteens you mostly choose automatically appear at the top of the list. The main menu can be shown by swiping from the right display edge.</string>
     <string name="tutorial_map_header">Map view</string>
-    <string name="tutorial_map_content">As an alternativ to the list view you are now able to see all canteens on a map which is accessible via the main menu.</string>
+    <string name="tutorial_map_content">As an alternative to the list view you are now able to see all canteens on a map which is accessible via the main menu.</string>
     <string name="tutorial_balancehistory_header">Balance history</string>
     <string name="tutorial_balance_header">Balance check (NFC)</string>
     <string name="tutorial_other_header">Other</string>
     <string name="tutorial_button_close">Close</string>
     <string name="tutorial_button_continue">Continue</string>
     <string name="tutorial_button_back">Back</string>
-    <string name="tutorial_other_content">When sharing meals you are now able to attach pictures (see settings). The menus will be accessed server-sided from the the student services page. This saves time and computational cost on your device.</string>
+    <string name="tutorial_other_content">Do you like my app? Or do you miss anything? I really look forward to receiving feedback via e-mail (imprint) or a Play Store rating!</string>
     <string name="tutorial_balance_content">To check your eMeal card\'s credit simply put the card on your phone with NFC activated. Your settings will allow you to open mensaDD automatically as soon as the card is recognized.</string>
     <string name="tutorial_balancehistory_content">When you check your balance, you can save the value by pressing the save button. Later you can take a look at the history of your balance checks. This is accessible through the main menu.</string>
     <string name="canteens_loading_progress">Loading canteens...</string>
-    <string name="tutorial_header_content">to the new version of mensaDD! There are many new things you can discover. Have fun with all those changes and  enjoy your meal(s)! ;)</string>
+    <string name="tutorial_header_content">to the version 3.0 of mensaDD! There are some new things you can discover. Have fun with all those changes and  enjoy your meal(s)! ;-)</string>
     <string name="delete_data">Successfully deleted data.</string>
     <string name="pref_key_autostart_set" translatable="false">autostart_set</string>
     <string name="pref_veg_meals_key" translatable="false">pref_veg_meals</string>
@@ -80,6 +80,18 @@
     <string name="meals_loading_image">Loading meal image...</string>
     <string name="news_details_button">Details</string>
     <string name="news_share_button">Share</string>
+    <string name="icon_favorite">Favorite</string>
+    <string name="image_meal">Meal image</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_show_position">Current position</string>
+    <string name="menu_send_feedback">Send feedback</string>
+    <string name="menu_set_favorite">Set favorite</string>
+    <string name="tutorial_navigation_header">Navigation</string>
+    <string name="tutorial_navigation_content">The app navigation has been updated. The different views (canteens, map,...) are now reachable from everywhere through the bottom navigation bar.</string>
+    <string name="tutorial_favorites_header">Favorites</string>
+    <string name="tutorial_favorites_content">You can now mark one or more canteens as your favorite. They will automatically appear at the top of the list.</string>
+    <string name="tutorial_news_header">News</string>
+    <string name="tutorial_news_content">There is a new app section, which fetches the latest news concerning canteens and special offers from the Studentenwerk Dresden. It is reachable through the new bottom navigation. You can also share the news or directly view them on the Studentenwerk\'s website.</string>
 
 
 </resources>

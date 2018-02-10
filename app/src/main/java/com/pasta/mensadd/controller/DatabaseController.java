@@ -74,15 +74,15 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.execSQL(mealTable);
     }
 
-    public void deleteAllData(){
+    public void deleteAllData() {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM "+MEALS_TABLE_NAME+";");
-        db.execSQL("DELETE FROM "+CANTEENS_TABLE_NAME+";");
-        db.execSQL("DELETE FROM "+BALANCES_TABLE_NAME+";");
+        db.execSQL("DELETE FROM " + MEALS_TABLE_NAME + ";");
+        db.execSQL("DELETE FROM " + CANTEENS_TABLE_NAME + ";");
+        db.execSQL("DELETE FROM " + BALANCES_TABLE_NAME + ";");
         db.close();
         prefs.edit().remove(CanteenListFragment.KEY_LAST_CANTEENS_UPDATE).apply();
-        for (Canteen c : DataHolder.getInstance().getCanteenList()){
-            prefs.edit().remove("priority_"+c.getCode()).apply();
+        for (Canteen c : DataHolder.getInstance().getCanteenList()) {
+            prefs.edit().remove("priority_" + c.getCode()).apply();
         }
     }
 
@@ -90,7 +90,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     public void readCanteensFromDb() {
         SQLiteDatabase db = getReadableDatabase();
         Log.i("SQLite", "importing canteens from db");
-        String[] projection = { CANTEEN_ID, CANTEEN_NAME, CANTEEN_ADDRESS, CANTEEN_HOURS, CANTEEN_POS_LAT, CANTEEN_POS_LONG};
+        String[] projection = {CANTEEN_ID, CANTEEN_NAME, CANTEEN_ADDRESS, CANTEEN_HOURS, CANTEEN_POS_LAT, CANTEEN_POS_LONG};
         Cursor c = db.query(CANTEENS_TABLE_NAME, projection, null, null, null, null, null);
         while (c.moveToNext()) {
             String code = c.getString(c.getColumnIndex(CANTEEN_ID));
@@ -99,9 +99,9 @@ public class DatabaseController extends SQLiteOpenHelper {
             String hours = c.getString(c.getColumnIndex(CANTEEN_HOURS));
             double posLat = c.getDouble(c.getColumnIndex(CANTEEN_POS_LAT));
             double posLong = c.getDouble(c.getColumnIndex(CANTEEN_POS_LONG));
-            int priority = prefs.getInt("priority_"+code,0);
-            Log.i("CANTEENPRIO", code+": "+priority);
-            Canteen canteen = new Canteen(name, code, new LatLng(posLat,posLong),address,hours,priority);
+            int priority = prefs.getInt("priority_" + code, 0);
+            Log.i("CANTEENPRIO", code + ": " + priority);
+            Canteen canteen = new Canteen(name, code, new LatLng(posLat, posLong), address, hours, priority);
             DataHolder.getInstance().getCanteenList().add(canteen);
         }
         DataHolder.getInstance().sortCanteenList();
@@ -112,8 +112,8 @@ public class DatabaseController extends SQLiteOpenHelper {
     public void readMealsFromDb(String canteenCode) {
         SQLiteDatabase db = getReadableDatabase();
         Log.i("SQLite", "importing meals from db");
-        String[] projection = { MEAL_NAME, MEAL_LOCATION, MEAL_PRICE, MEAL_DETAILS, MEAL_IMG_LINK, MEAL_DATE, MEAL_ALCOHOL, MEAL_GARLIC, MEAL_PORC, MEAL_BEEF, MEAL_VEGAN, MEAL_VEGETARIAN};
-        String selection = MEAL_CANTEEN_CODE + " = '" + canteenCode+"'";
+        String[] projection = {MEAL_NAME, MEAL_LOCATION, MEAL_PRICE, MEAL_DETAILS, MEAL_IMG_LINK, MEAL_DATE, MEAL_ALCOHOL, MEAL_GARLIC, MEAL_PORC, MEAL_BEEF, MEAL_VEGAN, MEAL_VEGETARIAN};
+        String selection = MEAL_CANTEEN_CODE + " = '" + canteenCode + "'";
         Cursor c = db.query(MEALS_TABLE_NAME, projection, selection, null, null, null, null);
         while (c.moveToNext()) {
             String name = c.getString(c.getColumnIndex(MEAL_NAME));
@@ -142,10 +142,10 @@ public class DatabaseController extends SQLiteOpenHelper {
     }
 
 
-    public void updateBalanceTable(long timestamp, float cardBalance, float lastTransaction){
+    public void updateBalanceTable(long timestamp, float cardBalance, float lastTransaction) {
         SQLiteDatabase db = getWritableDatabase();
-        String updateDb = "DELETE FROM "+BALANCES_TABLE_NAME+" WHERE "+BALANCE_ID+" NOT IN (" +
-                "SELECT "+BALANCE_ID+" FROM "+BALANCES_TABLE_NAME+" ORDER BY "+BALANCE_ID+" DESC LIMIT 14);";
+        String updateDb = "DELETE FROM " + BALANCES_TABLE_NAME + " WHERE " + BALANCE_ID + " NOT IN (" +
+                "SELECT " + BALANCE_ID + " FROM " + BALANCES_TABLE_NAME + " ORDER BY " + BALANCE_ID + " DESC LIMIT 14);";
         db.execSQL(updateDb);
         ContentValues values = new ContentValues();
         values.put(DatabaseController.BALANCE_ID, timestamp);
@@ -155,10 +155,10 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateCanteenTable(){
+    public void updateCanteenTable() {
         SQLiteDatabase db = getWritableDatabase();
         createCanteenTable(db);
-        db.execSQL("DELETE FROM "+CANTEENS_TABLE_NAME+";");
+        db.execSQL("DELETE FROM " + CANTEENS_TABLE_NAME + ";");
         for (Canteen c : DataHolder.getInstance().getCanteenList()) {
             ContentValues values = new ContentValues();
             values.put(DatabaseController.CANTEEN_ID, c.getCode());
@@ -172,12 +172,13 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteMealsOfCanteen(String canteenCode){
+    public void deleteMealsOfCanteen(String canteenCode) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM "+MEALS_TABLE_NAME+" WHERE "+MEAL_CANTEEN_CODE+" = '"+canteenCode+"';");
+        db.execSQL("DELETE FROM " + MEALS_TABLE_NAME + " WHERE " + MEAL_CANTEEN_CODE + " = '" + canteenCode + "';");
         db.close();
     }
-    public void updateMealTable(Meal m){
+
+    public void updateMealTable(Meal m) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DatabaseController.MEAL_NAME, m.getName());
@@ -200,7 +201,7 @@ public class DatabaseController extends SQLiteOpenHelper {
     public void createMealTable(SQLiteDatabase db) {
         String query = "CREATE TABLE IF NOT EXISTS " + MEALS_TABLE_NAME + " (" + MEAL_ID + " " +
                 "INTEGER PRIMARY KEY, " + MEAL_NAME + " TEXT, " + MEAL_LOCATION + " TEXT, " + MEAL_PRICE + " " + "TEXT, " +
-                MEAL_DETAILS + " TEXT," + MEAL_IMG_LINK + " TEXT, "+MEAL_DATE+" TEXT, "+MEAL_CANTEEN_CODE+" TEXT," + MEAL_VEGETARIAN + " " +
+                MEAL_DETAILS + " TEXT," + MEAL_IMG_LINK + " TEXT, " + MEAL_DATE + " TEXT, " + MEAL_CANTEEN_CODE + " TEXT," + MEAL_VEGETARIAN + " " +
                 "INTEGER, " + MEAL_VEGAN + " " + "INTEGER, " + MEAL_GARLIC + " INTEGER, " +
                 MEAL_PORC + " INTEGER, " + MEAL_BEEF + " INTEGER," + MEAL_ALCOHOL + " INTEGER);";
         db.execSQL(query);
@@ -214,7 +215,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
-    public void addColumnToTable (SQLiteDatabase db, String table, String column, String columnType) {
+    public void addColumnToTable(SQLiteDatabase db, String table, String column, String columnType) {
         String query = "ALTER TABLE " + table + " ADD COLUMN " + column + " " + columnType;
         Log.i("DATABASE", query);
         db.execSQL(query);

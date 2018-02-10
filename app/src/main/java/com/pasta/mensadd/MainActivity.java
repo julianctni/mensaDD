@@ -4,6 +4,8 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.nfc.NfcAdapter;
@@ -15,7 +17,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
@@ -45,79 +46,17 @@ public class MainActivity extends AppCompatActivity
         implements BottomNavigation.OnMenuItemSelectionListener, View.OnClickListener {
 
     public static boolean NFC_SUPPORTED = false;
-    private Toolbar mToolbar;
     private BottomNavigation mBottomNav;
     private RelativeLayout mCardCheckContainer;
     private FloatingActionButton mSaveBalanceButton;
     private FloatingActionButton mHideBalanceButton;
-    private static TextView mHeadingToolbar;
-    private static ImageView mAppLogoToolbar;
+    private TextView mHeadingToolbar;
+    private ImageView mAppLogoToolbar;
     private NfcAdapter mNfcAdapter;
     private ValueData mCurrentValueData;
 
     private float mCardCheckHeight;
     private boolean mCardCheckVisible;
-
-
-    @Override
-    public void onMenuItemSelect(int id, int position, boolean b) {
-        for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++){
-            getSupportFragmentManager().popBackStack();
-        }
-
-        switch (id) {
-            case R.id.nav_mensa:
-                FragmentController.showCanteenListFragment(getSupportFragmentManager());
-                updateToolbar(id, "");
-                break;
-            case R.id.nav_news:
-                FragmentController.showNewsFragment(getSupportFragmentManager());
-                updateToolbar(id, getString(R.string.nav_news));
-                break;
-            case R.id.nav_map:
-                FragmentController.showMapFragment(getSupportFragmentManager());
-                updateToolbar(id, getString(R.string.nav_map));
-                break;
-            case R.id.nav_card_history:
-                FragmentController.showBalanceHistoryFragment(getSupportFragmentManager());
-                updateToolbar(id, getString(R.string.nav_card_history));
-                break;
-        }
-    }
-
-    @Override
-    public void onMenuItemReselect(int id, int position, boolean b) {
-
-    }
-
-    public static void updateToolbar(int id, String title) {
-        if (id == R.id.nav_mensa) {
-            mAppLogoToolbar.setVisibility(View.VISIBLE);
-            mHeadingToolbar.setVisibility(View.GONE);
-        } else {
-            mAppLogoToolbar.setVisibility(View.GONE);
-            mHeadingToolbar.setText(title);
-            mHeadingToolbar.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Toast.makeText(getApplicationContext(), "backstack: "+getSupportFragmentManager().getBackStackEntryCount(), Toast.LENGTH_SHORT).show();
-        if (mBottomNav.getSelectedIndex() == 0) {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
-                updateToolbar(R.id.nav_mensa, "");
-            super.onBackPressed();
-        } else if (mBottomNav.getSelectedIndex() == 1 && getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            super.onBackPressed();
-            updateToolbar(R.id.nav_map, getString(R.string.nav_map));
-        } else {
-            FragmentController.showCanteenListFragment(getSupportFragmentManager());
-            updateToolbar(R.id.nav_mensa, "");
-            mBottomNav.setSelectedIndex(0, true);
-        }
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         mBottomNav = findViewById(R.id.bottomNavigation);
         mBottomNav.setOnMenuItemClickListener(this);
-        mToolbar = findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
             if (getSupportActionBar() != null) {
@@ -139,7 +78,7 @@ public class MainActivity extends AppCompatActivity
         mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.cyan_dark)));
         mSaveBalanceButton.setOnClickListener(this);
         mHideBalanceButton = findViewById(R.id.hideBalanceButton);
-        mHideBalanceButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor( "#CC3C51")));
+        mHideBalanceButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CC3C51")));
         mHideBalanceButton.setOnClickListener(this);
 
         mCardCheckContainer = findViewById(R.id.cardCheckContainer);
@@ -159,13 +98,14 @@ public class MainActivity extends AppCompatActivity
         }
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-        sharedPref.edit().remove("first_start");
+        sharedPref.edit().remove("first_start").apply();
+        sharedPref.edit().remove("pref_show_tut").apply();
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this.getApplicationContext());
 
         NFC_SUPPORTED = (mNfcAdapter != null);
 
-        if (NFC_SUPPORTED && !sharedPref.getBoolean(getString(R.string.pref_key_autostart_set),false)) {
+        if (NFC_SUPPORTED && !sharedPref.getBoolean(getString(R.string.pref_key_autostart_set), false)) {
             AutostartRegister.register(this.getPackageManager(), true);
             sharedPref.edit().putBoolean(getString(R.string.pref_key_autostart_set), true).apply();
             sharedPref.edit().putBoolean(getString(R.string.pref_autostart_key), true).apply();
@@ -189,6 +129,62 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onMenuItemSelect(int id, int position, boolean b) {
+        for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+            getSupportFragmentManager().popBackStack();
+        }
+        switch (id) {
+            case R.id.nav_mensa:
+                FragmentController.showCanteenListFragment(getSupportFragmentManager());
+                updateToolbar(id, "");
+                break;
+            case R.id.nav_news:
+                FragmentController.showNewsFragment(getSupportFragmentManager());
+                updateToolbar(id, getString(R.string.nav_news));
+                break;
+            case R.id.nav_map:
+                FragmentController.showMapFragment(getSupportFragmentManager());
+                updateToolbar(id, getString(R.string.nav_map));
+                break;
+            case R.id.nav_card_history:
+                FragmentController.showBalanceHistoryFragment(getSupportFragmentManager());
+                updateToolbar(id, getString(R.string.nav_card_history));
+                break;
+        }
+    }
+
+    @Override
+    public void onMenuItemReselect(int id, int position, boolean b) {
+    }
+
+    public void updateToolbar(int id, String title) {
+        if (id == R.id.nav_mensa) {
+            mAppLogoToolbar.setVisibility(View.VISIBLE);
+            mHeadingToolbar.setVisibility(View.GONE);
+        } else {
+            mAppLogoToolbar.setVisibility(View.GONE);
+            mHeadingToolbar.setText(title);
+            mHeadingToolbar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mBottomNav.getSelectedIndex() == 0) {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                updateToolbar(R.id.nav_mensa, "");
+            super.onBackPressed();
+        } else if (mBottomNav.getSelectedIndex() == 1 && getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            super.onBackPressed();
+            updateToolbar(R.id.nav_map, getString(R.string.nav_map));
+        } else {
+            FragmentController.showCanteenListFragment(getSupportFragmentManager());
+            updateToolbar(R.id.nav_mensa, "");
+            mBottomNav.setSelectedIndex(0, true);
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
@@ -208,7 +204,8 @@ public class MainActivity extends AppCompatActivity
             hideAnim.setDuration(150);
             hideAnim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
-                public void onAnimationStart(Animation animation) {}
+                public void onAnimationStart(Animation animation) {
+                }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
@@ -217,7 +214,8 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {}
+                public void onAnimationRepeat(Animation animation) {
+                }
             });
             mSaveBalanceButton.startAnimation(hideAnim);
             mHideBalanceButton.startAnimation(hideAnim);
@@ -237,7 +235,7 @@ public class MainActivity extends AppCompatActivity
 
     private String moneyStr(int i) {
         int euros = i / 1000;
-        int cents = i/10 % 100;
+        int cents = i / 10 % 100;
         String centsStr = Integer.toString(cents);
         if (cents < 10)
             centsStr = "0" + centsStr;
@@ -245,12 +243,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void storeCardData(){
-        float cardBalance = (float)mCurrentValueData.value/1000;
-        float lastTransaction = (float)mCurrentValueData.lastTransaction/1000;
+    private void storeCardData() {
+        float cardBalance = (float) mCurrentValueData.value / 1000;
+        float lastTransaction = (float) mCurrentValueData.lastTransaction / 1000;
         DatabaseController dbController = new DatabaseController(this.getApplicationContext());
         if (cardBalance != dbController.getLastInsertedBalance()) {
-            dbController.updateBalanceTable(new Date().getTime(),cardBalance,lastTransaction);
+            dbController.updateBalanceTable(new Date().getTime(), cardBalance, lastTransaction);
             Toast.makeText(this.getApplicationContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
             BalanceHistoryFragment fragment = (BalanceHistoryFragment) getSupportFragmentManager().findFragmentByTag(FragmentController.TAG_BALANCE_HISTORY);
             if (fragment != null) {
@@ -277,7 +275,8 @@ public class MainActivity extends AppCompatActivity
             Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight, 200);
             animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
-                public void onAnimationStart(Animation animation) {}
+                public void onAnimationStart(Animation animation) {
+                }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
@@ -285,7 +284,8 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {}
+                public void onAnimationRepeat(Animation animation) {
+                }
             });
             mCardCheckContainer.setAnimation(animation);
             mCardCheckContainer.startAnimation(animation);
@@ -330,7 +330,5 @@ public class MainActivity extends AppCompatActivity
         mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
                 mTechLists);
     }
-
-
 
 }

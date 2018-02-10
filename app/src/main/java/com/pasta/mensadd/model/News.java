@@ -12,17 +12,13 @@ public class News {
     private String mDate;
     private String mHeading;
     private String mContentShort;
-    private String mContentLong;
-    private String mImgLink;
     private String mLink;
 
-    public News(String mCategory, String mDate, String mHeading, String mContentShort, String mImgLink, String mLink) {
+    public News(String mCategory, String mDate, String mHeading, String mContentShort, String mLink) {
         this.mCategory = mCategory;
         this.mDate = mDate;
         this.mHeading = mHeading;
         this.mContentShort = mContentShort;
-        this.mContentLong = mContentLong;
-        this.mImgLink = mImgLink;
         this.mLink = mLink;
     }
 
@@ -42,16 +38,9 @@ public class News {
         return mContentShort;
     }
 
-    public String getContentLong() {
-        return mContentLong;
+    public String getLink() {
+        return mLink;
     }
-
-    public String getImgLink() {
-        return mImgLink;
-    }
-
-
-    public String getLink () { return mLink; }
 
 
 }

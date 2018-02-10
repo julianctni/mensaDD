@@ -2,14 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="8dp"
     android:layout_marginTop="8dp"
     android:background="#FFFFFF"
+    app:elevation="1dp"
     android:orientation="vertical"
-    android:paddingTop="12dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
-    android:elevation="1dp">
+    android:paddingTop="12dp">
 
     <TextView
         android:id="@+id/newsDate"
@@ -31,40 +32,45 @@
 
     <TextView
         android:id="@+id/newsText"
-        android:includeFontPadding="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/newsHeading"
         android:layout_marginTop="4dp"
-        android:layout_below="@id/newsHeading"/>
+        android:includeFontPadding="false" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/newsText"
-        android:gravity="right">
+        android:gravity="end">
 
         <Button
             android:id="@+id/newsShareButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
+            android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:textColor="#888888"
-            android:drawableLeft="@drawable/ic_share_black_20dp"
-            android:drawableTint="#888888"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:text="@string/news_share_button"/>
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_share_grey_20dp"
+            android:drawableStart="@drawable/ic_share_grey_20dp"
+            android:focusable="true"
+            android:text="@string/news_share_button"
+            android:textColor="#888888" />
 
         <Button
             android:id="@+id/newsDetailsButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:textColor="#888888"
-            android:drawableLeft="@drawable/ic_public_black_20dp"
-            android:drawableTint="#888888"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:text="@string/news_details_button"/>
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_public_grey_20dp"
+            android:drawableStart="@drawable/ic_public_grey_20dp"
+            android:focusable="true"
+            android:text="@string/news_details_button"
+            android:textColor="#888888" />
 
     </LinearLayout>
 </RelativeLayout>

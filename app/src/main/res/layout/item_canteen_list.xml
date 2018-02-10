@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,9 +8,9 @@
     android:layout_marginRight="8dp"
     android:layout_marginTop="6dp"
     android:clickable="true"
-    android:longClickable="false"
+    android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardElevation="3dp"
+    android:longClickable="false"
     card_view:cardCornerRadius="2dp">
 
     <LinearLayout
@@ -31,29 +30,31 @@
                 android:id="@+id/mensaFavorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:contentDescription="@string/icon_favorite"
+                android:src="@drawable/ic_favorite_white_24dp"
                 android:tint="@color/pink_dark"
-                android:visibility="gone"
-                android:src="@drawable/ic_favorite_white_24dp"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/mensaName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
                 android:includeFontPadding="false"
                 android:textColor="#444444"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/mensaAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/mensaName"
                 android:includeFontPadding="false"
                 android:textColor="#444444"
                 android:textSize="16sp"
-                android:textStyle="normal"
-                android:layout_below="@id/mensaName"/>
+                android:textStyle="normal" />
         </RelativeLayout>
 
         <LinearLayout
@@ -63,10 +64,10 @@
 
             <TextView
                 android:id="@+id/mensaHours"
-                android:textSize="12sp"
-                android:textColor="#444444"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#444444"
+                android:textSize="12sp" />
         </LinearLayout>
 
     </LinearLayout>

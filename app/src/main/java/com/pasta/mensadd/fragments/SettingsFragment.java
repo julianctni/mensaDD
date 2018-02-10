@@ -5,11 +5,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,9 +26,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         findPreference(getString(R.string.pref_reset_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                DatabaseController dbController = new DatabaseController(getActivity().getApplicationContext());
+                DatabaseController dbController = new DatabaseController(getContext());
                 dbController.deleteAllData();
-                Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.delete_data), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.delete_data), Toast.LENGTH_LONG).show();
 
                 return false;
             }
@@ -47,19 +45,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);
-        MainActivity.updateToolbar(-1, getString(R.string.nav_settings));
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null)
+            activity.updateToolbar(-1, getString(R.string.nav_settings));
     }
+
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.pref_autostart_key))){
+        if (key.equals(getString(R.string.pref_autostart_key)) && getActivity() != null) {
             AutostartRegister.register(getActivity().getPackageManager(), sharedPreferences.getBoolean(key, false));
         }
     }

@@ -2,6 +2,7 @@ package com.pasta.mensadd.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,8 @@ public class BalanceCheckFragment extends Fragment {
     private TextView mViewLastTransaction;
 
 
-    public BalanceCheckFragment() {}
+    public BalanceCheckFragment() {
+    }
 
     public static BalanceCheckFragment newInstance(String cardBalance, String lastTransaction) {
         BalanceCheckFragment fragment = new BalanceCheckFragment();
@@ -39,16 +41,16 @@ public class BalanceCheckFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_balance_check, container, false);
-        mViewCardBalance = (TextView)view.findViewById(R.id.balanceContent);
-        mViewLastTransaction = (TextView)view.findViewById(R.id.lastTransactionContent);
+        mViewCardBalance = view.findViewById(R.id.balanceContent);
+        mViewLastTransaction = view.findViewById(R.id.lastTransactionContent);
         updateContent(mCardBalance, mLastTransaction);
         return view;
     }
 
-    public void updateContent (String balance, String lastTransaction) {
+    public void updateContent(String balance, String lastTransaction) {
         mViewCardBalance.setText(balance);
         mViewLastTransaction.setText(lastTransaction);
     }

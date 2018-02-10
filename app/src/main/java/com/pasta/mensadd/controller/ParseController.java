@@ -29,35 +29,32 @@ public class ParseController {
     public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMAN);
     public static final int PARSE_SUCCESS = 10;
 
-    public boolean parseCanteens(String message, DatabaseController dbController,
+    public void parseCanteens(String message, DatabaseController dbController,
                                  SharedPreferences prefs, LoadCanteensCallback callback) {
         CanteenParserTask canteenParserTask = new CanteenParserTask(dbController, message, prefs, callback);
         canteenParserTask.execute();
-        return true;
     }
 
-    public boolean parseNews(String message, LoadNewsCallback callback) {
+    public void parseNews(String message, LoadNewsCallback callback) {
         NewsParserTask newsParserTask = new NewsParserTask(message, callback);
         newsParserTask.execute();
-        return true;
     }
 
-    public boolean parseMealsForCanteen(String canteenCode, String message, DatabaseController
+    public void parseMealsForCanteen(String canteenCode, String message, DatabaseController
             dbController, LoadMealsCallback callback) {
         MealParserTask mealParserTask = new MealParserTask(dbController, canteenCode, message, callback);
         mealParserTask.execute();
-        return true;
     }
 
 
-    private class MealParserTask extends AsyncTask<Void, Void, Boolean> {
+    private static class MealParserTask extends AsyncTask<Void, Void, Boolean> {
         DatabaseController mDbController;
         String mCanteenCode;
         String mMessage;
         LoadMealsCallback mMealsCallback;
 
 
-        public MealParserTask(DatabaseController dbController, String canteenCode, String message, LoadMealsCallback callback){
+        MealParserTask(DatabaseController dbController, String canteenCode, String message, LoadMealsCallback callback){
             mDbController = dbController;
             mCanteenCode = canteenCode;
             mMessage = message;
@@ -121,14 +118,14 @@ public class ParseController {
         }
     }
 
-    private class CanteenParserTask extends AsyncTask<Void, Void, Boolean> {
+    private static class CanteenParserTask extends AsyncTask<Void, Void, Boolean> {
         DatabaseController mDbController;
         String mMessage;
         LoadCanteensCallback mCanteensCallback;
         SharedPreferences mPrefs;
 
 
-        public CanteenParserTask(DatabaseController dbController, String message, SharedPreferences prefs, LoadCanteensCallback callback){
+        CanteenParserTask(DatabaseController dbController, String message, SharedPreferences prefs, LoadCanteensCallback callback){
             mDbController = dbController;
             mMessage = message;
             mCanteensCallback = callback;
@@ -150,14 +147,14 @@ public class ParseController {
                     LatLng position = new LatLng(Double.parseDouble(gpsArray.get(0).toString()),
                             Double.parseDouble(gpsArray.get(1).toString()));
                     JSONArray hourArray = canteen.getJSONArray("hours");
-                    String hours = "";
+                    StringBuilder hours = new StringBuilder();
                     for (int j = 0; j < hourArray.length(); j++) {
-                        hours += hourArray.get(j);
+                        hours.append(hourArray.get(j));
                         if (j < hourArray.length() - 1)
-                            hours += "\n";
+                            hours.append("\n");
                     }
                     int priority = mPrefs.getInt("priority_" + code, 0);
-                    Canteen m = new Canteen(name, code, position, address, hours, priority);
+                    Canteen m = new Canteen(name, code, position, address, hours.toString(), priority);
                     DataHolder.getInstance().getCanteenList().add(m);
                 }
                 mDbController.updateCanteenTable();
@@ -176,11 +173,11 @@ public class ParseController {
         }
     }
 
-    private class NewsParserTask extends AsyncTask<Void, Void, Boolean> {
+    private static class NewsParserTask extends AsyncTask<Void, Void, Boolean> {
         String mMessage;
         LoadNewsCallback mLoadNewsCallback;
 
-        public NewsParserTask(String message, LoadNewsCallback callback){
+        NewsParserTask(String message, LoadNewsCallback callback){
             mMessage = message;
             mLoadNewsCallback = callback;
         }
@@ -196,9 +193,8 @@ public class ParseController {
                     String category = news.getString("newsCategory");
                     String textShort = news.getString("newsContentShort");
                     String newsLink = news.getString("newsLink");
-                    String imgLink = news.getString("newsImgLink");
 
-                    News n = new News(category, date, heading, textShort, imgLink, newsLink);
+                    News n = new News(category, date, heading, textShort, newsLink);
                     DataHolder.getInstance().getNewsList().add(n);
                 }
             } catch (JSONException e) {

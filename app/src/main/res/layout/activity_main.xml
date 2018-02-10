@@ -1,53 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout android:id="@+id/CoordinatorLayout01"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CoordinatorLayout01"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            android:elevation="0dp">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:elevation="0dp"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <ImageView
-                android:id="@+id/toolbarImage"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:contentDescription="@string/content_app_logo"
-                android:src="@drawable/banner"
-                android:visibility="visible"/>
+        <ImageView
+            android:id="@+id/toolbarImage"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:contentDescription="@string/content_app_logo"
+            android:src="@drawable/banner"
+            android:visibility="visible" />
 
-            <TextView
-                android:id="@+id/heading_toolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:textColor="#EEE"
-                android:textSize="20sp"
-                android:visibility="gone"/>
+        <TextView
+            android:id="@+id/heading_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:textColor="#EEE"
+            android:textSize="20sp"
+            android:visibility="gone" />
 
-        </android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize">
-    </RelativeLayout>
+        android:layout_marginTop="?attr/actionBarSize" />
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="-6dp"
-        app:layout_behavior="com.pasta.mensadd.CardCheckBehavior"
-        app:layout_anchor="@id/bottomNavigation">
+        app:layout_anchor="@id/bottomNavigation"
+        app:layout_behavior="com.pasta.mensadd.CardCheckBehavior">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -57,12 +56,11 @@
                 android:id="@+id/cardCheckContainer"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="#EEEEEE"
-                android:visibility="visible"
-                android:elevation="10dp"
                 android:layout_alignParentBottom="true"
-                tools:targetApi="lollipop">
-            </RelativeLayout>
+                android:background="#EEEEEE"
+                android:elevation="10dp"
+                android:visibility="visible"
+                tools:targetApi="lollipop" />
 
         </RelativeLayout>
 
@@ -77,28 +75,32 @@
                 android:id="@+id/saveBalanceButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/ic_save_black_24dp"
                 android:tint="#FFFFFF"
                 android:visibility="gone"
-                android:layout_alignParentRight="true"
                 app:fabSize="normal"
-                app:useCompatPadding="true"/>
-
+                app:useCompatPadding="true" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/hideBalanceButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignRight="@id/saveBalanceButton"
+                android:layout_alignEnd="@id/saveBalanceButton"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="65dp"
+                android:layout_marginEnd="65dp"
                 android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/ic_clear_black_18dp"
                 android:tint="#FFFFFF"
                 android:visibility="gone"
-                android:layout_alignRight="@id/saveBalanceButton"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="65dp"
                 app:fabSize="mini"
-                app:useCompatPadding="true"/>
+                app:useCompatPadding="true" />
         </RelativeLayout>
 
     </android.support.design.widget.CoordinatorLayout>
@@ -108,10 +110,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        android:elevation="8dp"
+        app:elevation="8dp"
+        app:bbn_badgeProvider="@string/bbn_badgeProvider"
         app:bbn_entries="@menu/bottom_menu"
         app:bbn_scrollEnabled="true"
-        app:bbn_badgeProvider="@string/bbn_badgeProvider"
         app:layout_behavior="@string/bbn_phone_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

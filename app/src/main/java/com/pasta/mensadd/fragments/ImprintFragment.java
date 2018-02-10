@@ -4,6 +4,7 @@ package com.pasta.mensadd.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -21,17 +22,18 @@ import com.pasta.mensadd.R;
 public class ImprintFragment extends Fragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_imprint, container, false);
-        //MainActivity.hideToolbarShadow(false);
         setHasOptionsMenu(true);
-        TextView licenseView = (TextView) v.findViewById(R.id.imprintLicense);
+        TextView licenseView = v.findViewById(R.id.imprintLicense);
 
         licenseView.setMovementMethod(LinkMovementMethod.getInstance());
         licenseView.setText(Html
                 .fromHtml(getString(R.string.imprint_license)));
-        MainActivity.updateToolbar(-1, getString(R.string.pref_imprint));
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null)
+            activity.updateToolbar(-1, getString(R.string.pref_imprint));
         return v;
     }
 
@@ -46,7 +48,7 @@ public class ImprintFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.feedback:
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto","julianctni@gmail.com", null));
+                        "mailto", "julianctni@gmail.com", null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "feedback mensaDD");
                 startActivity(Intent.createChooser(emailIntent, getString(R.string.send_feedback_mail)));
                 return true;

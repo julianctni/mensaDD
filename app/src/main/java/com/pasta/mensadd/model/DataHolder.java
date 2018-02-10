@@ -6,18 +6,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Locale;
 
 public class DataHolder {
 
     private static DataHolder mInstance;
-    private HashMap<String,Canteen> mCanteenMap = new HashMap<>();
     private ArrayList<Canteen> mCanteenList = new ArrayList<>();
     private ArrayList<News> mNewsList = new ArrayList<>();
 
-    private DataHolder(){}
+    private DataHolder() {
+    }
 
-    public static DataHolder getInstance(){
+    public static DataHolder getInstance() {
         if (mInstance == null) {
             mInstance = new DataHolder();
         }
@@ -29,21 +29,23 @@ public class DataHolder {
         return mCanteenList;
     }
 
-    public ArrayList<News> getNewsList() { return mNewsList; }
+    public ArrayList<News> getNewsList() {
+        return mNewsList;
+    }
 
-    public Canteen getCanteen(String code){
-        for (Canteen m : mCanteenList){
+    public Canteen getCanteen(String code) {
+        for (Canteen m : mCanteenList) {
             if (m.getCode().equals(code))
                 return m;
         }
         return null;
     }
 
-    public void sortCanteenList(){
+    public void sortCanteenList() {
         Collections.sort(mCanteenList, new PriorityComparator());
     }
 
-    public void sortNewsList(){
+    public void sortNewsList() {
         Collections.sort(mNewsList, new DateComparator());
     }
 
@@ -67,7 +69,8 @@ public class DataHolder {
     }
 
     private class DateComparator implements Comparator<News> {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
+
         @Override
         public int compare(News n1, News n2) {
             Date d1, d2;

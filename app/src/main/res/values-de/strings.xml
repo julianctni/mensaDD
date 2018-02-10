@@ -49,12 +49,12 @@
     <string name="tutorial_balancehistory_content">Wenn du dein Guthaben abrufst, kannst du diese Daten über den Speichern-Button persistent auf deinem Gerät speichern. Im Menü kannst du dir anschließend den Verlauf deines Mensaguthabens anschauen.</string>
     <string name="tutorial_map_content">Alternativ zur Listenansicht lassen sich nun auch alle Mensen auf einer Karte anzeigen. Diese erreichst du über das Hauptmenü.</string>
     <string name="tutorial_other_header">Sonstiges</string>
-    <string name="tutorial_other_content">Beim Teilen von Gerichten kannst du nun auch Bilder mitsenden (siehe Einstellungen). Die Speisepläne werden nun serverseitig von der Seite des Studentenwerks eingelesen. Dies erspart Zeit und Rechenaufwand auf deinem Smartphone.</string>
+    <string name="tutorial_other_content">Falls euch die App gefällt oder ihr Dinge vermisst, würde ich mich über Feedback in Form einer Mail (siehe Impressum) oder einer Bewertung im Play Store freuen!</string>
     <string name="tutorial_button_continue">Weiter</string>
     <string name="tutorial_button_close">Schliessen</string>
     <string name="tutorial_button_back">Zurück</string>
     <string name="canteens_loading_progress">Mensen werden geladen...</string>
-    <string name="tutorial_header_content">zur neuen Version von mensaDD! Es gibt viel Neues zu entdecken. Ich wünsche viel Spaß damit und stets guten Appetit! ;)</string>
+    <string name="tutorial_header_content">zu Version 3.0 von mensaDD! Es gibt viel Neues zu entdecken. Ich wünsche viel Spaß damit und stets guten Appetit! ;-)</string>
     <string name="delete_data">Daten wurden erfolgreich gelöscht.</string>
     <string name="app_version">Version 2.0.2 / Feb 2018</string>
     <string name="pref_veg_meals_title">Grüne Gerichte</string>
@@ -62,6 +62,19 @@
     <string name="meals_no_image">kein Bild verfügbar</string>
     <string name="meals_loading_image">Bild wird geladen...</string>
     <string name="news_share_button">Teilen</string>
+    <string name="icon_favorite">Favorit</string>
+    <string name="news_details_button">Details</string>
+    <string name="image_meal">Foto des Gerichts</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="menu_show_position">Aktuelle Position</string>
+    <string name="menu_send_feedback">Feedback senden</string>
+    <string name="menu_set_favorite">Als Favorit setzen</string>
+    <string name="tutorial_news_content">In einem neuen Bereich der App sind nun die aktuellsten Neuigkeiten des Studentenwerks einsehbar. Diese beziehen sich auf Mensen und diverse Sonderaktionen. Du erreichst den Bereich über die neue Navigationsleiste. Neuigkeiten können zusätzlich geteilt und direkt auf der Website des Studentenwerks angezeigt werden.</string>
+    <string name="tutorial_navigation_header">Navigation</string>
+    <string name="tutorial_navigation_content">Die verschiedenen Menüpunkte (Mensen, Karte,...) finden sich nun am unteren Display-Rand. Sie sind von jeder Seite aus einsehbar.</string>
+    <string name="tutorial_news_header">Neuigkeiten</string>
+    <string name="tutorial_favorites_content">Du kannst ab sofort deine Lieblingsmensen als solche markieren. Sie werden dann automatisch oben in der Liste erscheinen.</string>
+    <string name="tutorial_favorites_header">Favoriten</string>
 
 
 </resources>

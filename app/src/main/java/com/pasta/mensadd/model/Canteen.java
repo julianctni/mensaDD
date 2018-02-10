@@ -19,7 +19,7 @@ public class Canteen {
     private HashMap<String, ArrayList<Meal>> mealMap = new HashMap<>();
 
 
-    public Canteen(String name, String code, LatLng position, String address, String hour, int priority){
+    public Canteen(String name, String code, LatLng position, String address, String hour, int priority) {
         mName = name;
         mCode = code;
         mHours = hour;
@@ -40,15 +40,15 @@ public class Canteen {
     }
 
 
-    public String getCode(){
+    public String getCode() {
         return mCode;
     }
 
-    public long getLastMealUpdate(){
+    public long getLastMealUpdate() {
         return mLastMealUpdate;
     }
 
-    public void setLastMealUpdate(long lastUpdate){
+    public void setLastMealUpdate(long lastUpdate) {
         mLastMealUpdate = lastUpdate;
     }
 
@@ -56,11 +56,11 @@ public class Canteen {
         return mealMap;
     }
 
-    public int getListPriority(){
+    public int getListPriority() {
         return mListPriority;
     }
 
-    public LatLng getPosition () {
+    public LatLng getPosition() {
         return mPosition;
     }
 
@@ -68,7 +68,7 @@ public class Canteen {
         return mHours;
     }
 
-    public void increasePriority(){
+    public void increasePriority() {
         if (mListPriority != Canteen.FAVORITE) mListPriority += 1;
     }
 
@@ -80,9 +80,11 @@ public class Canteen {
         return mName;
     }
 
-    public boolean isFavorite() { return mListPriority == Canteen.FAVORITE;}
+    public boolean isFavorite() {
+        return mListPriority == Canteen.FAVORITE;
+    }
 
-    public void setAsFavorite (boolean favorite) {
+    public void setAsFavorite(boolean favorite) {
         if (favorite) mListPriority = Canteen.FAVORITE;
         else mListPriority = 0;
     }
