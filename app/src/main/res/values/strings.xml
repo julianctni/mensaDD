@@ -26,10 +26,9 @@
     <string name="no_data_available">No data available.</string>
 
     <string name="imprint_credits">A big thank you to the just mentioned developers, who published their source code as free software and thus supported the development of mensaDD.\n\nFurthermore many thanks to  Paul for his support during implementation and to the  Perry Rhodan Youth for testing during development.\n\nAnd last but not least I\'d like to give a big thanks  to all the people who use this app and their useful feedback! ;-)</string>
-    <string name="imprint_license">The NFC balance check uses source code from <![CDATA[<a href="https://github.com/jakobwenzel/MensaGuthaben">Jakob Wenzel</a>]]> and <![CDATA[<a href="https://github.com/codebutler/farebot">Farebot</a>]]>. The graph visualization of the balance history has been realized with <![CDATA[<a href="https://github.com/lecho/hellocharts-android">hellocharts</a>]]>. The map view uses the <![CDATA[<a href="https://www.mapbox.com/android-sdk/">Mapbox Android SDK</a>]]>.\n\nThe source code of mensaDD is available on<![CDATA[<a href="https://github.com/julianctni/mensaDD">GitHub</a>]]>, licensed under GPL.</string>
+    <string name="imprint_license">The NFC balance check uses source code from <![CDATA[<a href="https://github.com/jakobwenzel/MensaGuthaben">Jakob Wenzel</a>]]> and <![CDATA[<a href="https://github.com/codebutler/farebot">Farebot</a>]]>. The graph visualization of the balance history has been realized with <![CDATA[<a href="https://github.com/lecho/hellocharts-android">hellocharts</a>]]>. The map view uses the <![CDATA[<a href="https://www.mapbox.com/android-sdk/">Mapbox Android SDK</a>]]>. The bottom navigation was realized with <![CDATA[<a href="https://github.com/sephiroth74/Material-BottomNavigation">Material-BottomNavigation</a>]]>.\n\nThe source code of mensaDD is available on<![CDATA[<a href="https://github.com/julianctni/mensaDD">GitHub</a>]]>, licensed under GPL.</string>
     <string name="imprint_credits_header">Credits</string>
     <string name="imprint_license_header"><![CDATA[Licenses & co.]]></string>
-    <string name="imprint_love_pasta" translatable="false">love pasta, hate racism!</string>
     <string name="imprint_general">I am not liable for any inaccuracies in the meal data.\nThe meal information gets downloaded from the website of the Studentenwerk Dresden and parsed by an external server.\n\nIf you have any wishes or suggestions, just write me an E-Mail!</string>
     <string name="imprint_general_header">Annotations</string>
     <string name="content_share">Share</string>
@@ -46,7 +45,7 @@
     <string name="balance_check_last_transactions">Last transactions</string>
     <string name="balance_check_not_enough_data">Not enough data available.</string>
     <string name="balance_check_footnote">The balance data is only stored on your device. If you uninstall the application all data is gone. In order to manually reset all data, go to settings.</string>
-    <string name="app_version">Version 2.0.2 / Feb 2018</string>
+    <string name="app_version">Version 3.0 / Feb 2018</string>
     <string name="imprint_developer" translatable="false">Pasta Software\naka Julian Catoni</string>
     <string name="meals_no_food_icon" translatable="false">no_food_today</string>
     <string name="meals_loading_progress">Loading meals...</string>
