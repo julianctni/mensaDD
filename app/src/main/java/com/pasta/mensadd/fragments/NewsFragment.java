@@ -43,7 +43,8 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
         mNewsListAdapter = new NewsListAdapter(DataHolder.getInstance().getNewsList(), this);
         mNewsList.setAdapter(mNewsListAdapter);
         mNewsList.setLayoutManager(layoutParams);
-        NetworkController.getInstance(getActivity()).getNews(this);
+        if (DataHolder.getInstance().getNewsList().isEmpty())
+            NetworkController.getInstance(getActivity()).getNews(this);
         return view;
     }
 

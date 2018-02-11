@@ -2,7 +2,10 @@ package com.pasta.mensadd.controller;
 
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
+import com.mapbox.mapboxsdk.maps.MapFragment;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.CanteenMapFragment;
@@ -26,15 +29,21 @@ public class FragmentController {
 
 
     public static void showCanteenListFragment(FragmentManager fm) {
-        fm.beginTransaction().replace(R.id.mainContainer, new CanteenListFragment(), TAG_CANTEEN_LIST).commit();
+        CanteenListFragment f = (CanteenListFragment) fm.findFragmentByTag(TAG_CANTEEN_LIST);
+        if (f == null) f = new CanteenListFragment();
+        createAnimatedTransaction(fm).replace(R.id.mainContainer, f, TAG_CANTEEN_LIST).addToBackStack(null).commit();
     }
 
     public static void showMapFragment(FragmentManager fm) {
-        fm.beginTransaction().replace(R.id.mainContainer, new CanteenMapFragment(), TAG_MAP).commit();
+        CanteenMapFragment f = (CanteenMapFragment) fm.findFragmentByTag(TAG_MAP);
+        if (f == null) f = new CanteenMapFragment();
+        createAnimatedTransaction(fm).replace(R.id.mainContainer, f, TAG_MAP).addToBackStack(null).commit();
     }
 
     public static void showNewsFragment(FragmentManager fm) {
-        fm.beginTransaction().replace(R.id.mainContainer, new NewsFragment(), TAG_NEWS).commit();
+        NewsFragment f = (NewsFragment) fm.findFragmentByTag(TAG_NEWS);
+        if (f == null) f = new NewsFragment();
+        createAnimatedTransaction(fm).replace(R.id.mainContainer, f, TAG_NEWS).addToBackStack(null).commit();
     }
 
     public static void showBalanceCheckFragment(FragmentManager fm, String current, String lastTransaction) {
@@ -50,19 +59,31 @@ public class FragmentController {
     }
 
     public static void showSettingsFragment(FragmentManager fm) {
-        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new SettingsFragment(), TAG_SETTINGS).commit();
+        SettingsFragment f = (SettingsFragment) fm.findFragmentByTag(TAG_SETTINGS);
+        if (f == null) f = new SettingsFragment();
+        createAnimatedTransaction(fm).addToBackStack("").replace(R.id.mainContainer, f, TAG_SETTINGS).commit();
     }
 
     public static void showImprintFragment(FragmentManager fm) {
-        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, new ImprintFragment(), TAG_IMPRINT).commit();
+        ImprintFragment f = (ImprintFragment) fm.findFragmentByTag(TAG_IMPRINT);
+        if (f == null) f = new ImprintFragment();
+        fm.beginTransaction().addToBackStack(null).replace(R.id.mainContainer, f, TAG_IMPRINT).commit();
     }
 
     public static void showMealWeekFragment(FragmentManager fm, String mensaId) {
-        fm.beginTransaction().addToBackStack("").replace(R.id.mainContainer, MealWeekFragment.newInstance(mensaId), TAG_MEAL_WEEK).commit();
+        createAnimatedTransaction(fm).addToBackStack("").replace(R.id.mainContainer, MealWeekFragment.newInstance(mensaId), TAG_MEAL_WEEK).commit();
     }
 
     public static void showBalanceHistoryFragment(FragmentManager fm) {
-        fm.beginTransaction().replace(R.id.mainContainer, new BalanceHistoryFragment(), TAG_BALANCE_HISTORY).commit();
+        BalanceHistoryFragment f = (BalanceHistoryFragment) fm.findFragmentByTag(TAG_BALANCE_HISTORY);
+        if (f == null) f = new BalanceHistoryFragment();
+        createAnimatedTransaction(fm).replace(R.id.mainContainer, f, TAG_BALANCE_HISTORY).commit();
+    }
+
+    public static FragmentTransaction createAnimatedTransaction(FragmentManager fm){
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+        return transaction;
     }
 
 

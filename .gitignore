@@ -60,3 +60,6 @@ freeline_project_description.json
 /.idea/libraries
 .DS_Store
 /build
+
+# config
+/app/src/main/res/values/mensadd_config.xml

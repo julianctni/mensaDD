@@ -27,7 +27,6 @@
             android:longClickable="false"
             android:visibility="gone"
             card_view:cardCornerRadius="2dp"
-            card_view:cardElevation="3dp"
             card_view:contentPadding="20dp">
 
             <LinearLayout

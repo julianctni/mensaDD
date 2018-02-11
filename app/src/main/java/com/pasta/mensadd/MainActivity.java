@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         mBottomNav = findViewById(R.id.bottomNavigation);
         mBottomNav.setOnMenuItemClickListener(this);
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity
             sharedPref.edit().putBoolean(getString(R.string.pref_autostart_key), true).apply();
         }
         if (!NFC_SUPPORTED) {
-            mBottomNav.inflateMenu(R.menu.bottom_menu_no_nfc);
+            mBottomNav.inflateMenu(R.menu.bottom_menu);
         } else {
             mBottomNav.inflateMenu(R.menu.bottom_menu);
         }
@@ -130,9 +131,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMenuItemSelect(int id, int position, boolean b) {
-        for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
-            getSupportFragmentManager().popBackStack();
-        }
         switch (id) {
             case R.id.nav_mensa:
                 FragmentController.showCanteenListFragment(getSupportFragmentManager());
@@ -149,6 +147,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_card_history:
                 FragmentController.showBalanceHistoryFragment(getSupportFragmentManager());
                 updateToolbar(id, getString(R.string.nav_card_history));
+                break;
+            case R.id.show_preferences:
+                FragmentController.showSettingsFragment(getSupportFragmentManager());
+                updateToolbar(id, getString(R.string.nav_settings));
                 break;
         }
     }
@@ -170,13 +172,20 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        String currentFragmentTag = getSupportFragmentManager().findFragmentById(R.id.mainContainer).getTag();
         if (mBottomNav.getSelectedIndex() == 0) {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+            if (currentFragmentTag.equals(FragmentController.TAG_MEAL_WEEK)) {
                 updateToolbar(R.id.nav_mensa, "");
-            super.onBackPressed();
-        } else if (mBottomNav.getSelectedIndex() == 1 && getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            super.onBackPressed();
+                super.onBackPressed();
+            } else {
+                this.finishAffinity();
+            }
+        } else if (mBottomNav.getSelectedIndex() == 1 && currentFragmentTag.equals(FragmentController.TAG_MEAL_WEEK)) {
             updateToolbar(R.id.nav_map, getString(R.string.nav_map));
+            super.onBackPressed();
+        } else if (currentFragmentTag.equals(FragmentController.TAG_IMPRINT)) {
+            updateToolbar(R.id.show_preferences, getString(R.string.nav_settings));
+            super.onBackPressed();
         } else {
             FragmentController.showCanteenListFragment(getSupportFragmentManager());
             updateToolbar(R.id.nav_mensa, "");

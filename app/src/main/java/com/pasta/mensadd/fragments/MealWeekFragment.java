@@ -157,8 +157,8 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback {
                 }
                 if (getContext() != null) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                    int priority = canteen.isFavorite() ? Canteen.FAVORITE : 0;
-                    prefs.edit().putInt("priority_" + mMensaId, priority).apply();
+                    //int priority = canteen.isFavorite() ? Canteen.FAVORITE : 0;
+                    prefs.edit().putInt("priority_" + mMensaId, canteen.getListPriority()).apply();
                 }
                 DataHolder.getInstance().sortCanteenList();
                 return true;

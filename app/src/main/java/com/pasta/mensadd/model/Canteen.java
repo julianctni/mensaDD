@@ -69,7 +69,7 @@ public class Canteen {
     }
 
     public void increasePriority() {
-        if (mListPriority != Canteen.FAVORITE) mListPriority += 1;
+        mListPriority += 1;
     }
 
     public String getAddress() {
@@ -81,11 +81,11 @@ public class Canteen {
     }
 
     public boolean isFavorite() {
-        return mListPriority == Canteen.FAVORITE;
+        return mListPriority >= Canteen.FAVORITE;
     }
 
     public void setAsFavorite(boolean favorite) {
-        if (favorite) mListPriority = Canteen.FAVORITE;
+        if (favorite) mListPriority += Canteen.FAVORITE;
         else mListPriority = 0;
     }
 

@@ -69,10 +69,9 @@
         android:id="@+id/mapview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        mapbox:access_token="pk.eyJ1IjoicGFzdGFzb2Z0d2FyZSIsImEiOiJhZjJkYjBhNzMyMTNiMzI4ZmY5NDM0MDU1YjJmNTlmZCJ9.-nkTpeqduWxnSeizwuyV2Q"
-        mapbox:style_url="mapbox://styles/mapbox/streets-v9"
-        mapbox:center_latitude="51.053130"
-        mapbox:center_longitude="13.744334"
-        mapbox:zoom="12" />
+        mapbox:mapbox_styleUrl="@string/mapbox_style_url"
+        mapbox:mapbox_cameraTargetLat="@string/mapbox_center_latitude"
+        mapbox:mapbox_cameraTargetLng="@string/mapbox_center_longitude"
+        mapbox:mapbox_cameraZoom="12" />
 
 </RelativeLayout>

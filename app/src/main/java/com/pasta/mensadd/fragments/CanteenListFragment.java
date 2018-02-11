@@ -15,20 +15,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.adapter.CanteenListAdapter;
 import com.pasta.mensadd.controller.DatabaseController;
-import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.controller.ParseController;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.networking.LoadCanteensCallback;
@@ -64,7 +59,6 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_canteen_list, container, false);
-        setHasOptionsMenu(true);
         if (getContext() != null)
             mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         mTutorialPage1 = view.findViewById(R.id.tutorialPage1);
@@ -105,6 +99,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         mCanteenListAdapter.notifyDataSetChanged();
     }
 
+    /*
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.fragment_canteens_menu, menu);
@@ -121,7 +116,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
                 return super.onOptionsItemSelected(item);
         }
     }
-
+    */
     @Override
     public void onResponseMessage(int responseType, String message) {
         if (responseType == NetworkController.SUCCESS) {

@@ -78,7 +78,7 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
             } catch (ArrayIndexOutOfBoundsException e) {
                 return;
             }
-            if (mFragment.getActivity() != null && !DataHolder.getInstance().getCanteen(mensaId).isFavorite()) {
+            if (mFragment.getActivity() != null) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mFragment.getActivity().getApplicationContext());
                 int priority = prefs.getInt("priority_" + mensaId, 0);
                 priority += 1;
