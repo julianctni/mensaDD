@@ -26,7 +26,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.0-beta.1@aar') {
+    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.0@aar') {
         transitive = true
     }
     implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
