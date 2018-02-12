@@ -75,6 +75,7 @@
     <string name="tutorial_news_header">Neuigkeiten</string>
     <string name="tutorial_favorites_content">Du kannst ab sofort deine Lieblingsmensen als solche markieren. Sie werden dann automatisch oben in der Liste erscheinen.</string>
     <string name="tutorial_favorites_header">Favoriten</string>
+    <string name="toast_enable_location">Du musst zunächst die Ortung in den Systemeinstellungen aktivieren.</string>
 
 
 </resources>

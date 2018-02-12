@@ -2,14 +2,17 @@ package com.pasta.mensadd.fragments;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,10 +22,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationListener;
 import com.mapbox.mapboxsdk.location.LocationServices;
@@ -45,6 +50,7 @@ public class CanteenMapFragment extends Fragment {
     private TextView mCanteenAddress;
     private TextView mCanteenHours;
     private CardView mInfoCard;
+    private Location mLastLocation;
 
     private String mCurrentCanteen = "";
 
@@ -66,7 +72,7 @@ public class CanteenMapFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-        if (getContext() != null)
+        if (getContext() != null && mLocationServices == null)
             mLocationServices = LocationServices.getLocationServices(getContext());
         setHasOptionsMenu(true);
         mMapView = view.findViewById(R.id.mapview);
@@ -123,9 +129,11 @@ public class CanteenMapFragment extends Fragment {
                         });
                     }
                 });
+                if (mLastLocation != null)
+                    mMapboxMap.setMyLocationEnabled(true);
             }
+
         });
-        //MainActivity.updateNavDrawer(R.id.nav_map);
         return view;
     }
 
@@ -207,32 +215,50 @@ public class CanteenMapFragment extends Fragment {
 
     @UiThread
     public void toggleGps() {
+        LocationManager lm = (LocationManager) getContext().getSystemService( Context.LOCATION_SERVICE );
         // Check if user has granted location permission
         if (!mLocationServices.areLocationPermissionsGranted() && getActivity() != null) {
 
             ActivityCompat.requestPermissions(getActivity(), new String[]{
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_LOCATION);
-        } else {
+        } else if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             enableLocation();
+        } else {
+            Toast.makeText(getContext(), getString(R.string.toast_enable_location), Toast.LENGTH_SHORT).show();
         }
 
     }
 
     private void enableLocation() {
-        mLocationServices.addLocationListener(new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                if (location != null) {
-                    mMapboxMap.setCameraPosition(new CameraPosition.Builder()
-                            .target(new LatLng(location))
-                            .zoom(13)
-                            .build());
+        if (mLastLocation != null) {
+            moveCamera(mLastLocation);
+        } else {
+            mLocationServices.addLocationListener(new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    if (location != null) {
+                        moveCamera(location);
+                        mLastLocation = location;
+                    }
                 }
+            });
+
+            mMapboxMap.setMyLocationEnabled(true);
+        }
+    }
+
+    public void moveCamera(Location location){
+        final CameraPosition newPosition = new CameraPosition.Builder()
+                .target(new LatLng(location))
+                .zoom(13)
+                .build();
+        mMapboxMap.animateCamera(new CameraUpdate() {
+            @Override
+            public CameraPosition getCameraPosition(@NonNull MapboxMap mapboxMap) {
+                return newPosition;
             }
         });
-
-        mMapboxMap.setMyLocationEnabled(true);
     }
 
     @Override
