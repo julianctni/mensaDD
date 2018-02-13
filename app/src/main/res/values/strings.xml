@@ -88,10 +88,16 @@
     <string name="tutorial_navigation_header">Navigation</string>
     <string name="tutorial_navigation_content">The app navigation has been updated. The different views (canteens, map,...) are now reachable from everywhere through the bottom navigation bar.</string>
     <string name="tutorial_favorites_header">Favorites</string>
-    <string name="tutorial_favorites_content">You can now mark one or more canteens as your favorite. They will automatically appear at the top of the list.</string>
+    <string name="tutorial_favorites_content">You can now mark one or more canteens as your favorite. They will automatically appear at the top of the list. Just look out for the heart icons!</string>
     <string name="tutorial_news_header">News</string>
     <string name="tutorial_news_content">There is a new app section, which fetches the latest news concerning canteens and special offers from the Studentenwerk Dresden. It is reachable through the new bottom navigation. You can also share the news or directly view them on the Studentenwerk\'s website.</string>
     <string name="toast_enable_location">You first have to enable GPS/location in your system settings.</string>
+    <string name="toast_add_favorite">Canteen added to favorites.</string>
+    <string name="toast_remove_favorite">Canteen removed from favorites.</string>
+    <string name="news_loading_progress">Loading news...</string>
+    <string name="toast_loading_news_fail">Could not load news because of missing internet connection.</string>
+    <string name="toast_loading_canteens_fail">Could not load canteens because of missing internet connection.</string>
+    <string name="toast_loading_meals_fail">Could not load meals because of missing internet connection.</string>
 
 
 </resources>

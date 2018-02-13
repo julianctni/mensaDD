@@ -54,8 +54,8 @@ public class CanteenMapFragment extends Fragment {
 
     private String mCurrentCanteen = "";
 
-    private int mMapZoom = 12;
-    private LatLng mMapCenter = new LatLng(51.053130, 13.744334);
+    private int mMapZoom = 11;
+    private LatLng mMapCenter = new LatLng(51.04868491509959, 13.759391673955406);
 
 
     public CanteenMapFragment() {
@@ -251,7 +251,6 @@ public class CanteenMapFragment extends Fragment {
     public void moveCamera(Location location){
         final CameraPosition newPosition = new CameraPosition.Builder()
                 .target(new LatLng(location))
-                .zoom(13)
                 .build();
         mMapboxMap.animateCamera(new CameraUpdate() {
             @Override

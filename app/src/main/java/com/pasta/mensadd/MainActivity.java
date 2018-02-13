@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     private ImageView mAppLogoToolbar;
     private NfcAdapter mNfcAdapter;
     private ValueData mCurrentValueData;
+    private Toolbar mToolbar;
 
     private float mCardCheckHeight;
     private boolean mCardCheckVisible;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         mBottomNav = findViewById(R.id.bottomNavigation);
         mBottomNav.setOnMenuItemClickListener(this);
-        Toolbar mToolbar = findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
             if (getSupportActionBar() != null) {
@@ -191,6 +192,7 @@ public class MainActivity extends AppCompatActivity
             updateToolbar(R.id.nav_mensa, "");
             mBottomNav.setSelectedIndex(0, true);
         }
+        mToolbar.setNavigationIcon(null);
     }
 
     @Override

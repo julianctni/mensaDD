@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.adapter.NewsListAdapter;
@@ -25,6 +27,7 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
 
     private NewsListAdapter mNewsListAdapter;
     private RecyclerView mNewsList;
+    private LinearLayout mProgress;
 
     public NewsFragment() {
     }
@@ -40,6 +43,7 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
         mNewsList = view.findViewById(R.id.newsList);
+        mProgress = view.findViewById(R.id.newsProgressLayout);
         mNewsListAdapter = new NewsListAdapter(DataHolder.getInstance().getNewsList(), this);
         mNewsList.setAdapter(mNewsListAdapter);
         mNewsList.setLayoutManager(layoutParams);
@@ -74,6 +78,9 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
             DataHolder.getInstance().sortNewsList();
             mNewsListAdapter.notifyDataSetChanged();
             mNewsList.setVisibility(View.VISIBLE);
+            mProgress.setVisibility(View.GONE);
+        } else {
+            mProgress.setVisibility(View.GONE);
         }
     }
 }

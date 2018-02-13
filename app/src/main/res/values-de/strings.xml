@@ -73,9 +73,15 @@
     <string name="tutorial_navigation_header">Navigation</string>
     <string name="tutorial_navigation_content">Die verschiedenen Menüpunkte (Mensen, Karte,...) finden sich nun am unteren Display-Rand. Sie sind von jeder Seite aus einsehbar.</string>
     <string name="tutorial_news_header">Neuigkeiten</string>
-    <string name="tutorial_favorites_content">Du kannst ab sofort deine Lieblingsmensen als solche markieren. Sie werden dann automatisch oben in der Liste erscheinen.</string>
+    <string name="tutorial_favorites_content">Du kannst ab sofort deine Lieblingsmensen als solche markieren. Sie werden dann automatisch oben in der Liste erscheinen. Halte Ausschau nach den Herz-Icons!</string>
     <string name="tutorial_favorites_header">Favoriten</string>
     <string name="toast_enable_location">Du musst zunächst die Ortung in den Systemeinstellungen aktivieren.</string>
+    <string name="toast_remove_favorite">Mensa aus Favoriten entfernt.</string>
+    <string name="toast_add_favorite">Mensa zu Favoriten hinzugefügt.</string>
+    <string name="news_loading_progress">Neuigkeiten werden geladen...</string>
+    <string name="toast_loading_meals_fail">Speiseplan konnte nicht geladen werden. Keine Internetverbindung vorhanden.</string>
+    <string name="toast_loading_news_fail">Neuigkeiten konnten nicht geladen werden. Keine Internetverbindung vorhanden.</string>
+    <string name="toast_loading_canteens_fail">Mensen konnte nicht geladen werden. Keine Internetverbindung vorhanden.</string>
 
 
 </resources>

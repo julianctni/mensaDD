@@ -19,6 +19,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.News;
@@ -132,7 +133,7 @@ public class NetworkController {
         if (isConnectedToInternet(mCtx))
             doJSONArrayRequest(URL_PREFIX+URL_GET_CANTEENS, callback);
         else {
-            Toast.makeText(mCtx, "Mensen konnten nicht aktualisiert werden. Keine Internetverbindung vorhanden.", Toast.LENGTH_LONG).show();
+            Toast.makeText(mCtx, mCtx.getString(R.string.toast_loading_canteens_fail), Toast.LENGTH_LONG).show();
             callback.onResponseMessage(NO_INTERNET,"");
         }
     }
@@ -141,7 +142,7 @@ public class NetworkController {
         if (isConnectedToInternet(mCtx))
             doJSONArrayRequest(URL_PREFIX+URL_GET_NEWS, callback);
         else {
-            Toast.makeText(mCtx, "News konnten nicht geladen werden. Keine Internetverbindung vorhanden.", Toast.LENGTH_LONG).show();
+            Toast.makeText(mCtx, mCtx.getString(R.string.toast_loading_news_fail), Toast.LENGTH_LONG).show();
             callback.onResponseMessage(NO_INTERNET,"");
         }
     }
@@ -150,7 +151,7 @@ public class NetworkController {
         if (isConnectedToInternet(mCtx))
             doJSONArrayRequest(URL_PREFIX+URL_GET_MEALS+canteenCode+".json", callback);
         else {
-            Toast.makeText(mCtx, "Speiseplan konnte nicht aktualisiert werden. Keine Internetverbindung vorhanden.", Toast.LENGTH_LONG).show();
+            Toast.makeText(mCtx, mCtx.getString(R.string.toast_loading_meals_fail), Toast.LENGTH_LONG).show();
             callback.onResponseMessage(NO_INTERNET, "");
         }
     }

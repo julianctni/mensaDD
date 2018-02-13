@@ -3,14 +3,21 @@ package com.pasta.mensadd.adapter;
 import android.content.SharedPreferences;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.model.Canteen;
@@ -43,9 +50,9 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
         holder.mAddress.setText(item.getAddress());
         holder.mHours.setText(item.getHours());
         if (item.isFavorite())
-            holder.mFavorite.setVisibility(View.VISIBLE);
+            holder.mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_pink_24dp));
         else
-            holder.mFavorite.setVisibility(View.GONE);
+            holder.mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_border_grey_24dp));
     }
 
     @Override
@@ -65,28 +72,42 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
             mName = itemView.findViewById(R.id.mensaName);
             mAddress = itemView.findViewById(R.id.mensaAddress);
             mHours = itemView.findViewById(R.id.mensaHours);
-            mFavorite = itemView.findViewById(R.id.mensaFavorite);
+            mFavorite = itemView.findViewById(R.id.canteenItemFav);
             mListItemHeader = itemView.findViewById(R.id.mensaListItemHeader);
             itemView.setOnClickListener(this);
+            mFavorite.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            String mensaId;
-            try {
-                mensaId = mCanteens.get(getAdapterPosition()).getCode();
-            } catch (ArrayIndexOutOfBoundsException e) {
-                return;
+            if (v.getId() == R.id.canteenItemFav) {
+                if (mCanteens.get(getAdapterPosition()).isFavorite()) {
+                    mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_border_grey_24dp));
+                    mCanteens.get(getAdapterPosition()).setAsFavorite(false, mFragment.getContext());
+                    Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.toast_remove_favorite), Toast.LENGTH_SHORT).show();
+                } else {
+                    mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_pink_24dp));
+                    mCanteens.get(getAdapterPosition()).setAsFavorite(true, mFragment.getContext());
+                    Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.toast_add_favorite), Toast.LENGTH_SHORT).show();
+                }
+                mFavorite.startAnimation(Utils.getFavoriteScaleOutAnimation(mFavorite));
+            } else {
+                String mensaId;
+                try {
+                    mensaId = mCanteens.get(getAdapterPosition()).getCode();
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    return;
+                }
+                if (mFragment.getActivity() != null) {
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mFragment.getActivity().getApplicationContext());
+                    int priority = prefs.getInt("priority_" + mensaId, 0);
+                    priority += 1;
+                    prefs.edit().putInt("priority_" + mensaId, priority).apply();
+                }
+                DataHolder.getInstance().getCanteen(mensaId).increasePriority();
+                DataHolder.getInstance().sortCanteenList();
+                FragmentController.showMealWeekFragment(mFragment.getFragmentManager(), mensaId);
             }
-            if (mFragment.getActivity() != null) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mFragment.getActivity().getApplicationContext());
-                int priority = prefs.getInt("priority_" + mensaId, 0);
-                priority += 1;
-                prefs.edit().putInt("priority_" + mensaId, priority).apply();
-            }
-            DataHolder.getInstance().getCanteen(mensaId).increasePriority();
-            DataHolder.getInstance().sortCanteenList();
-            FragmentController.showMealWeekFragment(mFragment.getFragmentManager(), mensaId);
         }
     }
 }

@@ -1,5 +1,10 @@
 package com.pasta.mensadd.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
+
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.ArrayList;
@@ -84,9 +89,12 @@ public class Canteen {
         return mListPriority >= Canteen.FAVORITE;
     }
 
-    public void setAsFavorite(boolean favorite) {
+    public void setAsFavorite(boolean favorite, Context context) {
         if (favorite) mListPriority += Canteen.FAVORITE;
         else mListPriority = 0;
+        Log.i("FAVORITE", mCode+": "+mListPriority+"");
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putInt("priority_" + getCode(), mListPriority).apply();
     }
 
 
