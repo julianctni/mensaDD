@@ -23,7 +23,7 @@
     <string name="pref_share_image_title">Share meal images</string>
     <string name="pref_share_image_summary">Some apps (Threema, FB Messenger...) just share the image without text if this option is activated.</string>
     <string name="meals_no_food">Unfortunately there\'s no food today.</string>
-    <string name="no_data_available">No data available.</string>
+    <string name="balance_check_explanation">In order to check your balance enable NFC and just put your phone onto your emeal card. This is possible from everywhere inside the app.</string>
 
     <string name="imprint_credits">A big thank you to the just mentioned developers, who published their source code as free software and thus supported the development of mensaDD.\n\nFurthermore many thanks to  Paul for his support during implementation and to the  Perry Rhodan Youth for testing during development.\n\nAnd last but not least I\'d like to give a big thanks  to all the people who use this app and their useful feedback! ;-)</string>
     <string name="imprint_license">The NFC balance check uses source code from <![CDATA[<a href="https://github.com/jakobwenzel/MensaGuthaben">Jakob Wenzel</a>]]> and <![CDATA[<a href="https://github.com/codebutler/farebot">Farebot</a>]]>. The graph visualization of the balance history has been realized with <![CDATA[<a href="https://github.com/lecho/hellocharts-android">hellocharts</a>]]>. The map view uses the <![CDATA[<a href="https://www.mapbox.com/android-sdk/">Mapbox Android SDK</a>]]>. The bottom navigation was realized with <![CDATA[<a href="https://github.com/sephiroth74/Material-BottomNavigation">Material-BottomNavigation</a>]]>.\n\nThe source code of mensaDD is available on<![CDATA[<a href="https://github.com/julianctni/mensaDD">GitHub</a>]]>, licensed under GPL.</string>
@@ -99,7 +99,7 @@
     <string name="toast_loading_canteens_fail">Could not load canteens because of missing internet connection.</string>
     <string name="toast_loading_meals_fail">Could not load meals because of missing internet connection.</string>
     <string name="pref_bacon_key" translatable="false">pref_bacon</string>
-    <string name="toast_bacon">MAKE BAUCHSPECK GREAT AGAIN!</string>
+    <string name="toast_bacon" translatable="false">MAKE BAUCHSPECK GREAT AGAIN!</string>
 
 
 </resources>

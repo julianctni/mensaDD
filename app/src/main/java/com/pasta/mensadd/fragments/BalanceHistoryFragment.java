@@ -217,7 +217,7 @@ public class BalanceHistoryFragment extends Fragment {
             }, 500);
         } else {
             if (mBalance.isEmpty()) {
-                mCurrentBalance.setText(getString(R.string.no_data_available));
+                mCurrentBalance.setText(getString(R.string.balance_check_explanation));
             }
         }
     }

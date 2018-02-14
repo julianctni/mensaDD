@@ -99,24 +99,6 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         mCanteenListAdapter.notifyDataSetChanged();
     }
 
-    /*
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.fragment_canteens_menu, menu);
-        super.onCreateOptionsMenu(menu, menuInflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.show_preferences:
-                FragmentController.showSettingsFragment(getFragmentManager());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    */
     @Override
     public void onResponseMessage(int responseType, String message) {
         if (responseType == NetworkController.SUCCESS) {
@@ -144,8 +126,10 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     public void showTutorial(){
         try {
             PackageInfo info = this.getContext().getPackageManager().getPackageInfo(this.getContext().getPackageName(), 0);
-            if (mSharedPrefs.getBoolean("pref_show_tut_" + info.versionCode, true))
+            if (mSharedPrefs.getBoolean("pref_show_tut_" + info.versionCode, true) && info.versionCode == 20) {
                 mTutorialCard.setVisibility(View.VISIBLE);
+                mSharedPrefs.edit().remove("pref_show_tut_" + (info.versionCode - 1));
+            }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
