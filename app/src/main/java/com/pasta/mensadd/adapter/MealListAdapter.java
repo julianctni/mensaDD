@@ -91,6 +91,11 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         if (item.containsAlcohol()) holder.mAlcohol.setVisibility(View.VISIBLE);
         else holder.mAlcohol.setVisibility(View.GONE);
 
+        if (item.getName().contains("Bauchspeck") && mPrefs.getBoolean(mFragment.getString(R.string.pref_bacon_key), false))
+            holder.mBacon.setVisibility(View.VISIBLE);
+        else
+            holder.mBacon.setVisibility(View.GONE);
+
         if (mPrefs.getBoolean(mFragment.getString(R.string.pref_veg_meals_key), true) && (item.isVegan() || item.isVegetarian())) {
             holder.mHeaderLayout.setBackgroundColor(mFragment.getResources().getColor(R.color.card_meal_header_veg));
             holder.mName.setTextColor(mFragment.getResources().getColor(R.color.card_text_light));
@@ -127,6 +132,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         private ImageView mVegetarian;
         private ImageView mAlcohol;
         private ImageView mGarlic;
+        private ImageView mBacon;
         private TextView mMealContent;
         private LinearLayout mMealDetails;
         private FloatingActionButton mShareButton;
@@ -147,6 +153,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mVegetarian = itemView.findViewById(R.id.vegetarian);
             mAlcohol = itemView.findViewById(R.id.alcohol);
             mGarlic = itemView.findViewById(R.id.garlic);
+            mBacon = itemView.findViewById(R.id.bacon);
             mMealContent = itemView.findViewById(R.id.mealContent);
             mMealImage = itemView.findViewById(R.id.mealImage);
             mMealImageProgress = itemView.findViewById(R.id.mealImageProgressBar);
