@@ -81,6 +81,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + BALANCES_TABLE_NAME + ";");
         db.close();
         prefs.edit().remove(CanteenListFragment.KEY_LAST_CANTEENS_UPDATE).apply();
+        prefs.edit().remove("pref_bacon").apply();
         for (Canteen c : DataHolder.getInstance().getCanteenList()) {
             prefs.edit().remove("priority_" + c.getCode()).apply();
         }

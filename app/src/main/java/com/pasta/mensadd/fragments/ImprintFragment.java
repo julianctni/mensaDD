@@ -27,12 +27,14 @@ import com.pasta.mensadd.R;
 public class ImprintFragment extends Fragment implements View.OnClickListener {
 
     private int mEasterCount = 0;
+    SharedPreferences mPrefs;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_imprint, container, false);
         setHasOptionsMenu(true);
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         TextView licenseView = v.findViewById(R.id.imprintLicense);
 
         licenseView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -76,15 +78,11 @@ public class ImprintFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.banner_imprint) {
+        if (v.getId() == R.id.banner_imprint && !mPrefs.getBoolean(getString(R.string.pref_bacon_key), false)) {
             mEasterCount += 1;
             if (mEasterCount == 7) {
                 Toast.makeText(getContext(), getString(R.string.toast_bacon), Toast.LENGTH_LONG).show();
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                prefs.edit().putBoolean(getString(R.string.pref_bacon_key), true).apply();
-            } else if (mEasterCount >= 2) {
-                Toast.makeText(getContext(), 7 - mEasterCount+"", Toast.LENGTH_SHORT).show();
-
+                mPrefs.edit().putBoolean(getString(R.string.pref_bacon_key), true).apply();
             }
         }
     }
