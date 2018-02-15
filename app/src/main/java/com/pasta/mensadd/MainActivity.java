@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity
                 updateToolbar(id, getString(R.string.nav_settings));
                 break;
         }
+        mToolbar.setNavigationIcon(null);
     }
 
     @Override
@@ -193,6 +194,7 @@ public class MainActivity extends AppCompatActivity
             mBottomNav.setSelectedIndex(0, true);
         }
         mToolbar.setNavigationIcon(null);
+        mBottomNav.setExpanded(true, true);
     }
 
     @Override
