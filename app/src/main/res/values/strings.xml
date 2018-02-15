@@ -100,6 +100,7 @@
     <string name="toast_loading_meals_fail">Could not load meals because of missing internet connection.</string>
     <string name="pref_bacon_key" translatable="false">pref_bacon</string>
     <string name="toast_bacon" translatable="false">MAKE BAUCHSPECK GREAT AGAIN!</string>
+    <string name="imprint_icon_bacon">The bacon icon was created by Jacob Halton from the Noun Project and slightly modified by myself.</string>
 
 
 </resources>

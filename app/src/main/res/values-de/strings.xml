@@ -82,6 +82,7 @@
     <string name="toast_loading_meals_fail">Speiseplan konnte nicht geladen werden. Keine Internetverbindung vorhanden.</string>
     <string name="toast_loading_news_fail">Neuigkeiten konnten nicht geladen werden. Keine Internetverbindung vorhanden.</string>
     <string name="toast_loading_canteens_fail">Mensen konnte nicht geladen werden. Keine Internetverbindung vorhanden.</string>
+    <string name="imprint_icon_bacon">Das Bauchspeck-Icon wurde von Jacob Halton von \"The Noun Project\" erstellt und leicht von mir abgeändert.</string>
 
 
 </resources>

@@ -35,6 +35,9 @@ public class ImprintFragment extends Fragment implements View.OnClickListener {
         View v = inflater.inflate(R.layout.fragment_imprint, container, false);
         setHasOptionsMenu(true);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        TextView baconView = v.findViewById(R.id.imprintLicenseBacon);
+        if (mPrefs.getBoolean(getString(R.string.pref_bacon_key), false))
+            baconView.setVisibility(View.VISIBLE);
         TextView licenseView = v.findViewById(R.id.imprintLicense);
 
         licenseView.setMovementMethod(LinkMovementMethod.getInstance());
