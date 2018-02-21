@@ -96,6 +96,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     @Override
     public void onResume() {
         super.onResume();
+        showTutorial();
         mCanteenListAdapter.notifyDataSetChanged();
     }
 
@@ -107,7 +108,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         } else if (responseType == ParseController.PARSE_SUCCESS) {
             mProgressLayout.setVisibility(View.GONE);
             mCanteenListAdapter.notifyDataSetChanged();
-            showTutorial();
+            //showTutorial();
             mCanteenList.setVisibility(View.VISIBLE);
         } else {
             readCanteensFromDb();
@@ -119,7 +120,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         dbController.readCanteensFromDb();
         mProgressLayout.setVisibility(View.GONE);
         mCanteenListAdapter.notifyDataSetChanged();
-        showTutorial();
+        //showTutorial();
         mCanteenList.setVisibility(View.VISIBLE);
     }
 
@@ -128,7 +129,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
             PackageInfo info = this.getContext().getPackageManager().getPackageInfo(this.getContext().getPackageName(), 0);
             if (mSharedPrefs.getBoolean("pref_show_tut_" + info.versionCode, true) && info.versionCode == 20) {
                 mTutorialCard.setVisibility(View.VISIBLE);
-                mSharedPrefs.edit().remove("pref_show_tut_" + (info.versionCode - 1));
+                mSharedPrefs.edit().remove("pref_show_tut_" + (info.versionCode - 1)).apply();
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

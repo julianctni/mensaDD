@@ -1,35 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/newsListRefresher"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/newsProgressLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/canteenListProgressBar"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp" />
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/newsProgressLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/news_loading_progress"
-            android:textColor="#AAAAAA"
-            android:textSize="18sp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/newsListProgressBar"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/news_loading_progress"
+                android:textColor="#AAAAAA"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/newsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#eeeeee" />
+
     </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/newsList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#eeeeee" />
-
-</LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

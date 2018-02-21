@@ -4,6 +4,7 @@ package com.pasta.mensadd.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
     private NewsListAdapter mNewsListAdapter;
     private RecyclerView mNewsList;
     private LinearLayout mProgress;
+    private SwipeRefreshLayout mNewsRefresher;
 
     public NewsFragment() {
     }
@@ -47,8 +49,17 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
         mNewsListAdapter = new NewsListAdapter(DataHolder.getInstance().getNewsList(), this);
         mNewsList.setAdapter(mNewsListAdapter);
         mNewsList.setLayoutManager(layoutParams);
+        mNewsRefresher = view.findViewById(R.id.newsListRefresher);
+        mNewsRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                NetworkController.getInstance(getActivity()).getNews(NewsFragment.this);
+            }
+        });
         if (DataHolder.getInstance().getNewsList().isEmpty())
             NetworkController.getInstance(getActivity()).getNews(this);
+        else
+            mProgress.setVisibility(View.GONE);
         return view;
     }
 
@@ -79,8 +90,10 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
             mNewsListAdapter.notifyDataSetChanged();
             mNewsList.setVisibility(View.VISIBLE);
             mProgress.setVisibility(View.GONE);
+            mNewsRefresher.setRefreshing(false);
         } else {
             mProgress.setVisibility(View.GONE);
+            mNewsRefresher.setRefreshing(false);
         }
     }
 }
