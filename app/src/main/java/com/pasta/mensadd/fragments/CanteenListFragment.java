@@ -108,7 +108,6 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         } else if (responseType == ParseController.PARSE_SUCCESS) {
             mProgressLayout.setVisibility(View.GONE);
             mCanteenListAdapter.notifyDataSetChanged();
-            //showTutorial();
             mCanteenList.setVisibility(View.VISIBLE);
         } else {
             readCanteensFromDb();
@@ -120,7 +119,6 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         dbController.readCanteensFromDb();
         mProgressLayout.setVisibility(View.GONE);
         mCanteenListAdapter.notifyDataSetChanged();
-        //showTutorial();
         mCanteenList.setVisibility(View.VISIBLE);
     }
 

@@ -1,6 +1,8 @@
 package com.pasta.mensadd.fragments;
 
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -27,7 +29,6 @@ import com.pasta.mensadd.networking.NetworkController;
 public class NewsFragment extends Fragment implements LoadNewsCallback {
 
     private NewsListAdapter mNewsListAdapter;
-    private RecyclerView mNewsList;
     private LinearLayout mProgress;
     private SwipeRefreshLayout mNewsRefresher;
 
@@ -44,7 +45,7 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
-        mNewsList = view.findViewById(R.id.newsList);
+        RecyclerView mNewsList = view.findViewById(R.id.newsList);
         mProgress = view.findViewById(R.id.newsProgressLayout);
         mNewsListAdapter = new NewsListAdapter(DataHolder.getInstance().getNewsList(), this);
         mNewsList.setAdapter(mNewsListAdapter);
@@ -56,10 +57,14 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
                 NetworkController.getInstance(getActivity()).getNews(NewsFragment.this);
             }
         });
-        if (DataHolder.getInstance().getNewsList().isEmpty())
+        if (DataHolder.getInstance().getNewsList().isEmpty()) {
             NetworkController.getInstance(getActivity()).getNews(this);
-        else
+        } else {
             mProgress.setVisibility(View.GONE);
+        }
+
+        ProgressBar progressBar = view.findViewById(R.id.newsListProgressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
         return view;
     }
 
@@ -88,7 +93,6 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
         } else if (responseType == ParseController.PARSE_SUCCESS) {
             DataHolder.getInstance().sortNewsList();
             mNewsListAdapter.notifyDataSetChanged();
-            mNewsList.setVisibility(View.VISIBLE);
             mProgress.setVisibility(View.GONE);
             mNewsRefresher.setRefreshing(false);
         } else {
