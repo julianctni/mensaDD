@@ -39,6 +39,7 @@ import com.pasta.mensadd.fragments.BalanceHistoryFragment;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
 
@@ -132,6 +133,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMenuItemSelect(int id, int position, boolean b) {
+
         switch (id) {
             case R.id.nav_mensa:
                 FragmentController.showCanteenListFragment(getSupportFragmentManager());
@@ -255,7 +257,6 @@ public class MainActivity extends AppCompatActivity
         return euros + "," + centsStr + "\u20AC";
     }
 
-
     private void storeCardData() {
         float cardBalance = (float) mCurrentValueData.value / 1000;
         float lastTransaction = (float) mCurrentValueData.lastTransaction / 1000;
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this.getApplicationContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
             BalanceHistoryFragment fragment = (BalanceHistoryFragment) getSupportFragmentManager().findFragmentByTag(FragmentController.TAG_BALANCE_HISTORY);
             if (fragment != null) {
-                fragment.updateBalanceHistory();
+                fragment.updateBalanceHistory(false);
             }
         } else {
             Toast.makeText(this.getApplicationContext(), getString(R.string.balance_already_saved), Toast.LENGTH_SHORT).show();

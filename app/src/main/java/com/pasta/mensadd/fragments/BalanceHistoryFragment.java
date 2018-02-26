@@ -75,7 +75,7 @@ public class BalanceHistoryFragment extends Fragment {
         mCurrentLastTransaction = v.findViewById(R.id.currentLastTransaction);
         noBalanceText = v.findViewById(R.id.notEnoughDataForLine);
         noTransactionText = v.findViewById(R.id.notEnoughDataForColumn);
-        updateBalanceHistory();
+        updateBalanceHistory(true);
 
         return v;
     }
@@ -101,30 +101,34 @@ public class BalanceHistoryFragment extends Fragment {
             axisValues.add(new AxisValue(i).setLabel(mDateFormat.format(date)));
         }
 
-
         Line line = new Line(values).setColor(getResources().getColor(R.color.pink_dark)).setCubic(false).setFilled(true).setHasPoints(false);
         List<Line> lines = new ArrayList<>();
         lines.add(line);
 
+
         LineChartData data = new LineChartData();
+
         Axis axisY = new Axis().setHasLines(true).setMaxLabelChars(4).setFormatter(new SimpleAxisValueFormatter().setAppendedText("€".toCharArray()));
         Axis axisX = new Axis(axisValues).setMaxLabelChars(5);
+
 
         data.setAxisYLeft(axisY);
         data.setAxisXBottom(axisX);
         data.setLines(lines);
 
+        for (int j = 0; j < line.getValues().size(); j++) {
+            line.getValues().get(j).setTarget(j, mBalance.get(j));
+        }
+
         mBalanceChart.setLineChartData(data);
+        /*
         mBalanceChart.setViewportCalculationEnabled(false);
-        Viewport viewport = new Viewport(mBalanceChart.getMaximumViewport());
+        Viewport viewport = new Viewport(mBalanceChart.getCurrentViewport());
         viewport.bottom = 0;
         viewport.top = (int) (mMaxBalance * 1.3);
         mBalanceChart.setMaximumViewport(viewport);
         mBalanceChart.setCurrentViewport(viewport);
-
-        for (int j = 0; j < line.getValues().size(); j++) {
-            line.getValues().get(j).setTarget(j, mBalance.get(j));
-        }
+        */
     }
 
     public void setUpTransactionsChart() {
@@ -150,13 +154,15 @@ public class BalanceHistoryFragment extends Fragment {
         data.setAxisYLeft(axisY);
 
         mTransactionChart.setColumnChartData(data);
+
+        /*
         mTransactionChart.setViewportCalculationEnabled(false);
-        Viewport viewport = new Viewport(mTransactionChart.getMaximumViewport());
+        Viewport viewport = new Viewport(mTransactionChart.getCurrentViewport());
         viewport.bottom = 0;
         viewport.top = (int) (mMaxTransaction * 1.3);
         mTransactionChart.setMaximumViewport(viewport);
         mTransactionChart.setCurrentViewport(viewport);
-
+        */
         for (int j = 0; j < data.getColumns().size(); j++) {
             for (SubcolumnValue value : data.getColumns().get(j).getValues()) {
                 value.setTarget(mTransactions.get(j));
@@ -164,7 +170,7 @@ public class BalanceHistoryFragment extends Fragment {
         }
     }
 
-    public void updateBalanceHistory() {
+    public void updateBalanceHistory(boolean firstSetup) {
         mBalance.clear();
         mTransactions.clear();
         mTimestamps.clear();
@@ -208,18 +214,23 @@ public class BalanceHistoryFragment extends Fragment {
             setUpTransactionsChart();
             noBalanceText.setVisibility(View.GONE);
             noTransactionText.setVisibility(View.GONE);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mBalanceChart.startDataAnimation();
-                    mTransactionChart.startDataAnimation();
-                }
-            }, 500);
+            if (firstSetup)
+                animateGraphs();
         } else {
             if (mBalance.isEmpty()) {
                 mCurrentBalance.setText(getString(R.string.balance_check_explanation));
             }
         }
+    }
+
+    public void animateGraphs(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mBalanceChart.startDataAnimation();
+                mTransactionChart.startDataAnimation();
+            }
+        }, 500);
     }
 
 }
