@@ -121,6 +121,9 @@ public class BalanceHistoryFragment extends Fragment {
         }
 
         mBalanceChart.setLineChartData(data);
+
+        mBalanceChart.setZoomEnabled(false);
+        mBalanceChart.setScrollEnabled(false);
         /*
         mBalanceChart.setViewportCalculationEnabled(false);
         Viewport viewport = new Viewport(mBalanceChart.getCurrentViewport());
@@ -154,7 +157,8 @@ public class BalanceHistoryFragment extends Fragment {
         data.setAxisYLeft(axisY);
 
         mTransactionChart.setColumnChartData(data);
-
+        mTransactionChart.setZoomEnabled(false);
+        mTransactionChart.setScrollEnabled(false);
         /*
         mTransactionChart.setViewportCalculationEnabled(false);
         Viewport viewport = new Viewport(mTransactionChart.getCurrentViewport());

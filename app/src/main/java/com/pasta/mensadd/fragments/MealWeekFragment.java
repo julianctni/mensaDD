@@ -161,11 +161,11 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback {
                 if (canteen.isFavorite()) {
                     item.setIcon(R.drawable.ic_favorite_border_white_24dp);
                     canteen.setAsFavorite(false, getContext());
-                    Toast.makeText(getContext(), getString(R.string.toast_remove_favorite), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), getString(R.string.toast_remove_favorite), Toast.LENGTH_SHORT).show();
                 } else {
                     item.setIcon(R.drawable.ic_favorite_pink_24dp);
                     canteen.setAsFavorite(true, getContext());
-                    Toast.makeText(getContext(), getString(R.string.toast_add_favorite), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), getString(R.string.toast_add_favorite), Toast.LENGTH_SHORT).show();
                 }
                 View favButton = mToolbar.findViewById(R.id.set_canteen_favorite);
                 favButton.startAnimation(Utils.getFavoriteScaleOutAnimation(favButton));

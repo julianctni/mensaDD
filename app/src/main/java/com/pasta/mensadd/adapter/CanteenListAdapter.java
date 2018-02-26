@@ -84,11 +84,11 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
                 if (mCanteens.get(getAdapterPosition()).isFavorite()) {
                     mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_border_grey_24dp));
                     mCanteens.get(getAdapterPosition()).setAsFavorite(false, mFragment.getContext());
-                    Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.toast_remove_favorite), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.toast_remove_favorite), Toast.LENGTH_SHORT).show();
                 } else {
                     mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_pink_24dp));
                     mCanteens.get(getAdapterPosition()).setAsFavorite(true, mFragment.getContext());
-                    Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.toast_add_favorite), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.toast_add_favorite), Toast.LENGTH_SHORT).show();
                 }
                 mFavorite.startAnimation(Utils.getFavoriteScaleOutAnimation(mFavorite));
             } else {

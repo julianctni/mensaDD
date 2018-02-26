@@ -107,26 +107,29 @@ public class CanteenMapFragment extends Fragment {
                 mMapboxMap.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(@NonNull LatLng point) {
-                        ScaleAnimation hideAnim = new ScaleAnimation(1, 0, 1, 0, Animation
-                                .RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                        hideAnim.setDuration(150);
-                        mInfoCard.startAnimation(hideAnim);
-                        hideAnim.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
+                        if (mInfoCard.getVisibility() == View.VISIBLE) {
+                            ScaleAnimation hideAnim = new ScaleAnimation(1, 0, 1, 0, Animation
+                                    .RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                            hideAnim.setDuration(150);
+                            mInfoCard.startAnimation(hideAnim);
+                            hideAnim.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                mInfoCard.setVisibility(View.GONE);
-                            }
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    mInfoCard.setVisibility(View.GONE);
+                                    mCurrentCanteen = "";
+                                }
 
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
                 });
                 if (mLastLocation != null)

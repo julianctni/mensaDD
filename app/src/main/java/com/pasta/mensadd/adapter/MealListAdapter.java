@@ -216,10 +216,10 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                     String url = mMeals.get(getAdapterPosition()).getImgLink();
                     if (url.length() > 1) {
                         expandLayout(mMealDetails);
-                        mMealImageProgress.setVisibility(View.GONE);
+                        mMealImageStatus.setText(mFragment.getContext().getText(R.string.meals_loading_image));
+                        mMealImageProgress.setVisibility(View.VISIBLE);
                         mMealImageStatus.setVisibility(View.VISIBLE);
                         mMealImage.setVisibility(View.GONE);
-                        mMealImageStatus.setText(mFragment.getContext().getText(R.string.meals_loading_image));
                         NetworkController.getInstance(mFragment.getContext()).loadMealImage(url, this);
                     } else {
                         mMealImageProgress.setVisibility(View.GONE);
