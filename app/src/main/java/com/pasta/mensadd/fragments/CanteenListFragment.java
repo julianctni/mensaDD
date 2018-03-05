@@ -26,7 +26,7 @@ import com.pasta.mensadd.adapter.CanteenListAdapter;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.ParseController;
 import com.pasta.mensadd.model.DataHolder;
-import com.pasta.mensadd.networking.LoadCanteensCallback;
+import com.pasta.mensadd.networking.callbacks.LoadCanteensCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
 import java.util.Date;
@@ -81,7 +81,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
 
         if (mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE, 0) == 0 || new Date().getTime() - mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE, 0) > 86400000) {
-            NetworkController.getInstance(getActivity()).getCanteenList(this);
+            NetworkController.getInstance(getActivity()).fetchCanteens(this);
             Log.i("Parsing canteens", "Doing request");
         } else if (DataHolder.getInstance().getCanteenList().isEmpty()) {
             readCanteensFromDb();

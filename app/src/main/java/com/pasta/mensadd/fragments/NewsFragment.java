@@ -23,7 +23,7 @@ import com.pasta.mensadd.adapter.NewsListAdapter;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.controller.ParseController;
 import com.pasta.mensadd.model.DataHolder;
-import com.pasta.mensadd.networking.LoadNewsCallback;
+import com.pasta.mensadd.networking.callbacks.LoadNewsCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
 public class NewsFragment extends Fragment implements LoadNewsCallback {
@@ -54,11 +54,11 @@ public class NewsFragment extends Fragment implements LoadNewsCallback {
         mNewsRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                NetworkController.getInstance(getActivity()).getNews(NewsFragment.this);
+                NetworkController.getInstance(getActivity()).fetchNews(NewsFragment.this);
             }
         });
         if (DataHolder.getInstance().getNewsList().isEmpty()) {
-            NetworkController.getInstance(getActivity()).getNews(this);
+            NetworkController.getInstance(getActivity()).fetchNews(this);
         } else {
             mProgress.setVisibility(View.GONE);
         }

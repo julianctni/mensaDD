@@ -29,7 +29,7 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.MealDayFragment;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
-import com.pasta.mensadd.networking.LoadImageCallback;
+import com.pasta.mensadd.networking.callbacks.LoadImageCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
 import java.io.File;
@@ -220,7 +220,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
                         mMealImageProgress.setVisibility(View.VISIBLE);
                         mMealImageStatus.setVisibility(View.VISIBLE);
                         mMealImage.setVisibility(View.GONE);
-                        NetworkController.getInstance(mFragment.getContext()).loadMealImage(url, this);
+                        NetworkController.getInstance(mFragment.getContext()).fetchMealImage(url, this);
                     } else {
                         mMealImageProgress.setVisibility(View.GONE);
                         mMealImage.setVisibility(View.GONE);

@@ -19,7 +19,7 @@ import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.ParseController;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
-import com.pasta.mensadd.networking.LoadMealsCallback;
+import com.pasta.mensadd.networking.callbacks.LoadMealsCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class MealDayFragment extends Fragment implements LoadMealsCallback {
         mMealRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                NetworkController.getInstance(getContext()).getMealsForCanteen(mMensaId, MealDayFragment.this);
+                NetworkController.getInstance(getContext()).fetchMeals(mMensaId, MealDayFragment.this);
             }
         });
         CardView noFoodToday = view.findViewById(R.id.noFoodToday);

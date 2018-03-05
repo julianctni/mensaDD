@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
@@ -31,7 +30,7 @@ import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.controller.ParseController;
 import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.model.DataHolder;
-import com.pasta.mensadd.networking.LoadMealsCallback;
+import com.pasta.mensadd.networking.callbacks.LoadMealsCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
 import java.text.SimpleDateFormat;
@@ -124,11 +123,11 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback {
         ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
         if (mCanteen.getMealMap().isEmpty()) {
-            NetworkController.getInstance(getContext()).getMealsForCanteen(mCanteen.getCode(), this);
+            NetworkController.getInstance(getContext()).fetchMeals(mCanteen.getCode(), this);
             Log.i("Loading meals", "Loading meals from server...");
         } else {
             if (mCanteen.getLastMealUpdate() < new Date().getTime() - 240000) {
-                NetworkController.getInstance(getContext()).getMealsForCanteen(mCanteen.getCode(), this);
+                NetworkController.getInstance(getContext()).fetchMeals(mCanteen.getCode(), this);
                 Log.i("LOADING MEALS", "List not empty, getting meals from server");
             } else {
                 Log.i("LOADING MEALS", "MealMap not empty, no refresh needed");

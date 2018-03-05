@@ -10,9 +10,9 @@ import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.model.Meal;
 import com.pasta.mensadd.model.News;
-import com.pasta.mensadd.networking.LoadCanteensCallback;
-import com.pasta.mensadd.networking.LoadMealsCallback;
-import com.pasta.mensadd.networking.LoadNewsCallback;
+import com.pasta.mensadd.networking.callbacks.LoadCanteensCallback;
+import com.pasta.mensadd.networking.callbacks.LoadMealsCallback;
+import com.pasta.mensadd.networking.callbacks.LoadNewsCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,7 +64,7 @@ public class ParseController {
 
         protected Boolean doInBackground(Void... canteens) {
             try {
-                JSONArray mealDays = new JSONArray(mMessage);
+                JSONArray mealDays = new JSONObject(mMessage).getJSONArray("meals");
                 mDbController.deleteMealsOfCanteen(mCanteenCode);
                 Date day = new Date();
                 for (int i = 0; i < mealDays.length(); i++) {
@@ -136,7 +136,8 @@ public class ParseController {
         protected Boolean doInBackground(Void... canteens) {
             DataHolder.getInstance().getCanteenList().clear();
             try {
-                JSONArray json = new JSONArray(mMessage);
+                JSONArray json = new JSONObject(mMessage).getJSONArray("canteens");
+
                 for (int i = 0; i < json.length(); i++) {
                     JSONObject canteen = json.getJSONObject(i);
                     String name = canteen.getString("name");
@@ -185,7 +186,7 @@ public class ParseController {
         protected Boolean doInBackground(Void... canteens) {
             DataHolder.getInstance().getNewsList().clear();
             try {
-                JSONArray json = new JSONArray(mMessage);
+                JSONArray json = new JSONObject(mMessage).getJSONArray("news");
                 for (int i = 0; i < json.length(); i++) {
                     JSONObject news = json.getJSONObject(i);
                     String heading = news.getString("newsHeading");

@@ -126,8 +126,8 @@
     <orderEntry type="library" name="com.android.support:transition-27.0.2" level="project" />
     <orderEntry type="library" name="com.mapbox.mapboxsdk:mapbox-android-sdk-4.2.0" level="project" />
     <orderEntry type="library" name="com.android.support:recyclerview-v7-27.0.2" level="project" />
-    <orderEntry type="library" name="com.android.volley:volley-1.0.0" level="project" />
     <orderEntry type="library" name="com.readystatesoftware.systembartint:systembartint:1.0.4@jar" level="project" />
+    <orderEntry type="library" name="com.android.volley:volley-1.1.0" level="project" />
     <orderEntry type="library" name="com.google.guava:guava:18.0@jar" level="project" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.7@jar" level="project" />
     <orderEntry type="library" name="com.squareup.okhttp3:logging-interceptor:3.3.1@jar" level="project" />

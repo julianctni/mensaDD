@@ -1,4 +1,4 @@
-package com.pasta.mensadd.networking;
+package com.pasta.mensadd.networking.callbacks;
 
 import android.graphics.Bitmap;
 
