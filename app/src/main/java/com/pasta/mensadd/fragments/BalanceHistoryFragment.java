@@ -75,6 +75,13 @@ public class BalanceHistoryFragment extends Fragment {
         mCurrentLastTransaction = v.findViewById(R.id.currentLastTransaction);
         noBalanceText = v.findViewById(R.id.notEnoughDataForLine);
         noTransactionText = v.findViewById(R.id.notEnoughDataForColumn);
+
+        mTransactionChart.setZoomEnabled(false);
+        mTransactionChart.setScrollEnabled(false);
+        mTransactionChart.setClickable(false);
+        mBalanceChart.setZoomEnabled(false);
+        mBalanceChart.setScrollEnabled(false);
+        mBalanceChart.setClickable(false);
         updateBalanceHistory(true);
 
         return v;
@@ -122,8 +129,6 @@ public class BalanceHistoryFragment extends Fragment {
 
         mBalanceChart.setLineChartData(data);
 
-        mBalanceChart.setZoomEnabled(false);
-        mBalanceChart.setScrollEnabled(false);
         /*
         mBalanceChart.setViewportCalculationEnabled(false);
         Viewport viewport = new Viewport(mBalanceChart.getCurrentViewport());
@@ -157,8 +162,7 @@ public class BalanceHistoryFragment extends Fragment {
         data.setAxisYLeft(axisY);
 
         mTransactionChart.setColumnChartData(data);
-        mTransactionChart.setZoomEnabled(false);
-        mTransactionChart.setScrollEnabled(false);
+
         /*
         mTransactionChart.setViewportCalculationEnabled(false);
         Viewport viewport = new Viewport(mTransactionChart.getCurrentViewport());

@@ -7,7 +7,7 @@ android {
         applicationId "com.pasta.mensadd"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 20
+        versionCode 21
         versionName "3.0"
     }
     buildTypes {
