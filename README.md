@@ -1,7 +1,7 @@
 # mensaDD
 An Android application for student canteens in Dresden.
 
-**Available on [Google Play Store](https://play.google.com/store/apps/details?id=com.pasta.mensadd) and will soon be available on [F-Droid](https://f-droid.org).**
+**Available on [Google Play Store](https://play.google.com/store/apps/details?id=com.pasta.mensadd).**
 
 
 ## API
