@@ -1,20 +1,15 @@
 package com.pasta.mensadd.adapter;
 
 import android.content.SharedPreferences;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
@@ -49,10 +44,11 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
         holder.mName.setText(item.getName());
         holder.mAddress.setText(item.getAddress());
         holder.mHours.setText(item.getHours());
-        if (item.isFavorite())
+        if (item.isFavorite()) {
             holder.mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_pink_24dp));
-        else
+        } else {
             holder.mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_border_grey_24dp));
+        }
     }
 
     @Override

@@ -21,7 +21,7 @@
     <string name="balance_check_last_transaction">Last transaction</string>
     <string name="pref_share_image_key" translatable="false">share_image</string>
     <string name="pref_share_image_title">Share meal images</string>
-    <string name="pref_share_image_summary">Some apps (Threema, FB Messenger...) just share the image without text if this option is activated.</string>
+    <string name="pref_share_image_summary">Some apps (Threema, FB Messenger...) just share the image without text i this option is activated.</string>
     <string name="meals_no_food">Unfortunately there\'s no food today.</string>
     <string name="balance_check_explanation">In order to check your balance enable NFC and just put your phone onto your emeal card. This is possible from everywhere inside the app.</string>
 
@@ -45,8 +45,8 @@
     <string name="balance_check_last_transactions">Last transactions</string>
     <string name="balance_check_not_enough_data">Not enough data available.</string>
     <string name="balance_check_footnote">The balance data is only stored on your device. If you uninstall the application all data is gone. In order to manually reset all data, go to settings.</string>
-    <string name="app_version">Version 3.0 / Feb 2018</string>
-    <string name="imprint_developer" translatable="false">Pasta Software\naka Julian Catoni</string>
+    <string name="app_version">Version 3.0.1 / May 2018</string>
+    <string name="imprint_developer" translatable="false">Julian Catoni</string>
     <string name="meals_no_food_icon" translatable="false">no_food_today</string>
     <string name="meals_loading_progress">Loading meals...</string>
     <string name="no_meal_image" translatable="false">no meal image</string>

@@ -22,7 +22,6 @@ public class Utils {
         scaleOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
             }
 
             @Override

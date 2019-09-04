@@ -56,7 +56,7 @@
     <string name="canteens_loading_progress">Mensen werden geladen...</string>
     <string name="tutorial_header_content">zu Version 3.0 von mensaDD! Es gibt viel Neues zu entdecken. Ich wünsche viel Spaß damit und stets guten Appetit! ;-)</string>
     <string name="delete_data">Daten wurden erfolgreich gelöscht.</string>
-    <string name="app_version">Version 3.0 / Feb 2018</string>
+    <string name="app_version">Version 3.0 .1/ May 2018</string>
     <string name="pref_veg_meals_title">Grüne Gerichte</string>
     <string name="pref_veg_meals_summary">Vegane und vegetarische Gerichte grün einfärben</string>
     <string name="meals_no_image">kein Bild verfügbar</string>

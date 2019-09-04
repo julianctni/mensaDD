@@ -1,11 +1,8 @@
 package com.pasta.mensadd.controller;
 
-import android.graphics.Bitmap;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.mapbox.mapboxsdk.maps.MapFragment;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.fragments.CanteenMapFragment;
