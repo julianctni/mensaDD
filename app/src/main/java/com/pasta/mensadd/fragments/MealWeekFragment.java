@@ -123,11 +123,11 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback {
         ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
         if (mCanteen.getMealMap().isEmpty()) {
-            NetworkController.getInstance(getContext()).fetchMeals(mCanteen.getCode(), this);
+            NetworkController.getInstance(getContext()).fetchMeals(mCanteen.getId(), this);
             Log.i("Loading meals", "Loading meals from server...");
         } else {
             if (mCanteen.getLastMealUpdate() < new Date().getTime() - 240000) {
-                NetworkController.getInstance(getContext()).fetchMeals(mCanteen.getCode(), this);
+                NetworkController.getInstance(getContext()).fetchMeals(mCanteen.getId(), this);
                 Log.i("LOADING MEALS", "List not empty, getting meals from server");
             } else {
                 Log.i("LOADING MEALS", "MealMap not empty, no refresh needed");
@@ -146,7 +146,7 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback {
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.fragment_meals_menu, menu);
-        if (DataHolder.getInstance().getCanteen(mMensaId).isFavorite()) {
+        if (DataHolder.getInstance().getCanteen(mMensaId).getListPriority() >= Utils.FAVORITE_PRIORITY) {
             menu.findItem(R.id.set_canteen_favorite).setIcon(R.drawable.ic_favorite_pink_24dp);
         }
 
@@ -157,13 +157,13 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback {
         switch (item.getItemId()) {
             case R.id.set_canteen_favorite:
                 Canteen canteen = DataHolder.getInstance().getCanteen(mMensaId);
-                if (canteen.isFavorite()) {
+                if (canteen.getListPriority() >= Utils.FAVORITE_PRIORITY) {
                     item.setIcon(R.drawable.ic_favorite_border_white_24dp);
-                    canteen.setAsFavorite(false, getContext());
+                    canteen.setListPriority(0);
                     //Toast.makeText(getContext(), getString(R.string.toast_remove_favorite), Toast.LENGTH_SHORT).show();
                 } else {
                     item.setIcon(R.drawable.ic_favorite_pink_24dp);
-                    canteen.setAsFavorite(true, getContext());
+                    canteen.setListPriority(canteen.getListPriority() + Utils.FAVORITE_PRIORITY);
                     //Toast.makeText(getContext(), getString(R.string.toast_add_favorite), Toast.LENGTH_SHORT).show();
                 }
                 View favButton = mToolbar.findViewById(R.id.set_canteen_favorite);
@@ -192,14 +192,14 @@ public class MealWeekFragment extends Fragment implements LoadMealsCallback {
         if (responseType == NetworkController.SUCCESS) {
             Log.i("Loading meals", "Received data, start parsing");
             ParseController p = new ParseController();
-            p.parseMealsForCanteen(mCanteen.getCode(), message, mDatabaseController, this);
+            p.parseMealsForCanteen(mCanteen.getId(), message, mDatabaseController, this);
         } else if (responseType == ParseController.PARSE_SUCCESS) {
             Log.i("Loading meals", "Finished parsing, showing content");
             mProgressLayout.setVisibility(View.GONE);
             mViewPager.setVisibility(View.VISIBLE);
             mCanteen.setLastMealUpdate(new Date().getTime());
         } else {
-            mDatabaseController.readMealsFromDb(mCanteen.getCode());
+            mDatabaseController.readMealsFromDb(mCanteen.getId());
         }
     }
 

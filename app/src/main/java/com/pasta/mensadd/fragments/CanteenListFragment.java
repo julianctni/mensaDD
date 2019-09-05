@@ -8,7 +8,10 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,13 +28,16 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.adapter.CanteenListAdapter;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.ParseController;
+import com.pasta.mensadd.model.Canteen;
+import com.pasta.mensadd.model.CanteensViewModel;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.networking.callbacks.LoadCanteensCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
 import java.util.Date;
+import java.util.List;
 
-public class CanteenListFragment extends Fragment implements LoadCanteensCallback, View.OnClickListener {
+public class CanteenListFragment extends Fragment implements LoadCanteensCallback, View.OnClickListener, CanteenListAdapter.OnFavoriteClickListener {
 
     private CanteenListAdapter mCanteenListAdapter;
     private SharedPreferences mSharedPrefs;
@@ -46,6 +52,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
 
     public static String KEY_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
 
+    CanteensViewModel mCanteensViewModel;
 
     public CanteenListFragment() {
     }
@@ -53,6 +60,21 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mCanteensViewModel = new ViewModelProvider(getActivity()).get(CanteensViewModel.class);
+        mCanteensViewModel.getAllCanteens().observe(this, new Observer<List<Canteen>>() {
+            @Override
+            public void onChanged(List<Canteen> canteens) {
+                if (!canteens.isEmpty()) {
+                    mProgressLayout.setVisibility(View.GONE);
+                }
+                mCanteenListAdapter.setCanteens(canteens);
+            }
+        });
     }
 
     @Override
@@ -74,12 +96,16 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
         DataHolder.getInstance().sortCanteenList();
         mCanteenListAdapter = new CanteenListAdapter(DataHolder.getInstance().getCanteenList(), this);
+        mCanteenListAdapter.setOnFavoriteClickListener(this);
         mCanteenList.setAdapter(mCanteenListAdapter);
         mCanteenList.setLayoutManager(layoutParams);
 
         ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#CCCCCC"), PorterDuff.Mode.MULTIPLY);
 
+        //NetworkController.getInstance(getActivity()).fetchCanteens(this);
+
+        /*
         if (mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE, 0) == 0 || new Date().getTime() - mSharedPrefs.getLong(KEY_LAST_CANTEENS_UPDATE, 0) > 86400000) {
             NetworkController.getInstance(getActivity()).fetchCanteens(this);
             Log.i("Parsing canteens", "Doing request");
@@ -88,7 +114,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         } else {
             mProgressLayout.setVisibility(View.GONE);
             mCanteenList.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         return view;
     }
@@ -167,5 +193,10 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
                 mTutorialContinueBtn.setText(getResources().getString(R.string.tutorial_button_continue));
             }
         }
+    }
+
+    @Override
+    public void onFavoriteClick(Canteen canteen) {
+        mCanteensViewModel.updateCanteen(canteen);
     }
 }

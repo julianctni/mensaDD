@@ -13,6 +13,9 @@ import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.PreferenceManager;
 import androidx.appcompat.widget.Toolbar;
 import android.util.TypedValue;
@@ -33,10 +36,13 @@ import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.fragments.BalanceHistoryFragment;
+import com.pasta.mensadd.model.Canteen;
+import com.pasta.mensadd.model.CanteensViewModel;
 
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
 
@@ -57,11 +63,15 @@ public class MainActivity extends AppCompatActivity
     private float mCardCheckHeight;
     private boolean mCardCheckVisible;
 
+    private CanteensViewModel mCanteenViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        mCanteenViewModel = new ViewModelProvider(this).get(CanteensViewModel.class);
+
         mBottomNav = findViewById(R.id.bottomNavigation);
         mBottomNav.setOnMenuItemClickListener(this);
         mToolbar = findViewById(R.id.toolbar);

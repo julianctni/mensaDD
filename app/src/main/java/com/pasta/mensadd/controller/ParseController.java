@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.model.DataHolder;
@@ -145,8 +146,6 @@ public class ParseController {
                     String address = canteen.getString("address");
                     JSONArray gpsArray = canteen.getJSONArray("coordinates");
                     Log.i("Parsing canteens", name);
-                    LatLng position = new LatLng(Double.parseDouble(gpsArray.get(0).toString()),
-                            Double.parseDouble(gpsArray.get(1).toString()));
                     JSONArray hourArray = canteen.getJSONArray("hours");
                     StringBuilder hours = new StringBuilder();
                     for (int j = 0; j < hourArray.length(); j++) {
@@ -155,7 +154,7 @@ public class ParseController {
                             hours.append("\n");
                     }
                     int priority = mPrefs.getInt("priority_" + code, 0);
-                    Canteen m = new Canteen(name, code, position, address, hours.toString(), priority);
+                    Canteen m = new Canteen(code, name, hours.toString(), address, Double.parseDouble(gpsArray.get(0).toString()), Double.parseDouble(gpsArray.get(1).toString()), Utils.calculateCanteenPriority(code, priority));
                     DataHolder.getInstance().getCanteenList().add(m);
                 }
                 mDbController.updateCanteenTable();

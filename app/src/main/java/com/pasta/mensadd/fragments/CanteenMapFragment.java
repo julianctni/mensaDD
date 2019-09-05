@@ -143,7 +143,7 @@ public class CanteenMapFragment extends Fragment {
     public void drawCanteensOnMap(MapboxMap map) {
         for (Canteen c : DataHolder.getInstance().getCanteenList()) {
             map.addMarker(new MarkerOptions()
-                    .position(c.getPosition()).title(c.getCode()));
+                    .position(new LatLng(c.getPosLat(), c.getPosLong())).title(c.getId()));
         }
         map.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
             @Override

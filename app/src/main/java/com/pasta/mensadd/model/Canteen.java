@@ -2,7 +2,13 @@ package com.pasta.mensadd.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import android.util.Log;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -10,51 +16,47 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+@Entity(tableName = "table_canteens")
 public class Canteen {
 
-    public static final int FAVORITE = 9999999;
-    private String mName;
-    private String mHours;
-    private String mAddress;
-    private String mCode;
-    private LatLng mPosition;
-    private int mListPriority;
-    private long mLastMealUpdate;
+    @NonNull
+    @PrimaryKey
+    private String id;
+    private String name;
+    private String hours;
+    private String address;
+    private double posLat;
+    private double posLong;
+    private long lastMealUpdate;
+    private int listPriority;
+
+    @Ignore
     private HashMap<String, ArrayList<Meal>> mealMap = new HashMap<>();
 
-
-    public Canteen(String name, String code, LatLng position, String address, String hour, int priority) {
-        mName = name;
-        mCode = code;
-        mHours = hour;
-        mAddress = address;
-        mPosition = position;
-        if (mCode.contains("zeltschloesschen") || mCode.contains("alte-mensa"))
-            if (priority < 2)
-                mListPriority = 2;
-            else
-                mListPriority = priority;
-        else if (mCode.contains("siedepunkt") || mCode.contains("mensa-reichenbachstrasse"))
-            if (priority < 1)
-                mListPriority = 1;
-            else
-                mListPriority = priority;
-        else
-            mListPriority = priority;
+    public Canteen(String id, String name, String hours, String address, double posLat, double posLong, int listPriority) {
+        this.id = id;
+        this.name = name;
+        this.hours = hours;
+        this.address = address;
+        this.posLat = posLat;
+        this.posLong = posLong;
+        this.listPriority = listPriority;
     }
 
+    public String getId() {
+        return id;
+    }
 
-    public String getCode() {
-        return mCode;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getLastMealUpdate() {
-        return mLastMealUpdate;
+        return lastMealUpdate;
     }
 
     public void setLastMealUpdate(long lastUpdate) {
-        mLastMealUpdate = lastUpdate;
+        lastMealUpdate = lastUpdate;
     }
 
     public HashMap<String, ArrayList<Meal>> getMealMap() {
@@ -62,40 +64,34 @@ public class Canteen {
     }
 
     public int getListPriority() {
-        return mListPriority;
+        return listPriority;
     }
 
-    public LatLng getPosition() {
-        return mPosition;
+    public void setListPriority(int listPriority) {
+        this.listPriority = listPriority;
     }
 
     public String getHours() {
-        return mHours;
+        return hours;
     }
 
     public void increasePriority() {
-        mListPriority += 1;
+        listPriority += 1;
     }
 
     public String getAddress() {
-        return mAddress;
+        return address;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
-    public boolean isFavorite() {
-        return mListPriority >= Canteen.FAVORITE;
+    public double getPosLat() {
+        return posLat;
     }
 
-    public void setAsFavorite(boolean favorite, Context context) {
-        if (favorite) mListPriority += Canteen.FAVORITE;
-        else mListPriority = 0;
-        Log.i("FAVORITE", mCode+": "+mListPriority+"");
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        prefs.edit().putInt("priority_" + getCode(), mListPriority).apply();
+    public double getPosLong() {
+        return posLong;
     }
-
-
 }

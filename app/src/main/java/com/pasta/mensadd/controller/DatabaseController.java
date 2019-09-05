@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.fragments.CanteenListFragment;
 import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.model.DataHolder;
@@ -83,7 +83,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         prefs.edit().remove(CanteenListFragment.KEY_LAST_CANTEENS_UPDATE).apply();
         prefs.edit().remove("pref_bacon").apply();
         for (Canteen c : DataHolder.getInstance().getCanteenList()) {
-            prefs.edit().remove("priority_" + c.getCode()).apply();
+            prefs.edit().remove("priority_" + c.getId()).apply();
         }
     }
 
@@ -102,7 +102,7 @@ public class DatabaseController extends SQLiteOpenHelper {
             double posLong = c.getDouble(c.getColumnIndex(CANTEEN_POS_LONG));
             int priority = prefs.getInt("priority_" + code, 0);
             Log.i("CANTEENPRIO", code + ": " + priority);
-            Canteen canteen = new Canteen(name, code, new LatLng(posLat, posLong), address, hours, priority);
+            Canteen canteen = new Canteen(code, name, hours, address, posLat, posLong, Utils.calculateCanteenPriority(code, priority));
             DataHolder.getInstance().getCanteenList().add(canteen);
         }
         DataHolder.getInstance().sortCanteenList();
@@ -162,12 +162,12 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + CANTEENS_TABLE_NAME + ";");
         for (Canteen c : DataHolder.getInstance().getCanteenList()) {
             ContentValues values = new ContentValues();
-            values.put(DatabaseController.CANTEEN_ID, c.getCode());
+            values.put(DatabaseController.CANTEEN_ID, c.getId());
             values.put(DatabaseController.CANTEEN_NAME, c.getName());
             values.put(DatabaseController.CANTEEN_ADDRESS, c.getAddress());
             values.put(DatabaseController.CANTEEN_HOURS, c.getHours());
-            values.put(DatabaseController.CANTEEN_POS_LAT, c.getPosition().getLatitude());
-            values.put(DatabaseController.CANTEEN_POS_LONG, c.getPosition().getLongitude());
+            values.put(DatabaseController.CANTEEN_POS_LAT, c.getPosLat());
+            values.put(DatabaseController.CANTEEN_POS_LONG, c.getPosLong());
             db.insert(CANTEENS_TABLE_NAME, null, values);
         }
         db.close();

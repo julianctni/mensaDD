@@ -19,13 +19,14 @@ import com.pasta.mensadd.model.Canteen;
 import com.pasta.mensadd.model.DataHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.ViewHolder> {
 
-    private ArrayList<Canteen> mCanteens;
+    private List<Canteen> mCanteens;
     private CanteenListFragment mFragment;
-
+    private OnFavoriteClickListener mOnFavoriteClickListener;
     public CanteenListAdapter(ArrayList<Canteen> items, CanteenListFragment fragment) {
         mCanteens = items;
         mFragment = fragment;
@@ -44,7 +45,7 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
         holder.mName.setText(item.getName());
         holder.mAddress.setText(item.getAddress());
         holder.mHours.setText(item.getHours());
-        if (item.isFavorite()) {
+        if (item.getListPriority() >= Utils.FAVORITE_PRIORITY) {
             holder.mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_pink_24dp));
         } else {
             holder.mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_border_grey_24dp));
@@ -54,6 +55,20 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
     @Override
     public int getItemCount() {
         return mCanteens.size();
+    }
+
+    public void setCanteens(List<Canteen> canteens) {
+        this.mCanteens = canteens;
+        notifyDataSetChanged();
+    }
+
+
+    public void setOnFavoriteClickListener(OnFavoriteClickListener listener) {
+        this.mOnFavoriteClickListener = listener;
+    }
+
+    public interface OnFavoriteClickListener {
+        void onFavoriteClick(Canteen canteen);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -77,20 +92,21 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.canteenItemFav) {
-                if (mCanteens.get(getAdapterPosition()).isFavorite()) {
+                boolean isFavorite = mCanteens.get(getAdapterPosition()).getListPriority() >= Utils.FAVORITE_PRIORITY;
+                Canteen canteen = mCanteens.get(getAdapterPosition());
+                mOnFavoriteClickListener.onFavoriteClick(canteen);
+                if (isFavorite) {
                     mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_border_grey_24dp));
-                    mCanteens.get(getAdapterPosition()).setAsFavorite(false, mFragment.getContext());
-                    //Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.toast_remove_favorite), Toast.LENGTH_SHORT).show();
+                    canteen.setListPriority(0);
                 } else {
                     mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_pink_24dp));
-                    mCanteens.get(getAdapterPosition()).setAsFavorite(true, mFragment.getContext());
-                    //Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.toast_add_favorite), Toast.LENGTH_SHORT).show();
+                    canteen.setListPriority(Utils.FAVORITE_PRIORITY + canteen.getListPriority());
                 }
                 mFavorite.startAnimation(Utils.getFavoriteScaleOutAnimation(mFavorite));
             } else {
                 String mensaId;
                 try {
-                    mensaId = mCanteens.get(getAdapterPosition()).getCode();
+                    mensaId = mCanteens.get(getAdapterPosition()).getId();
                 } catch (ArrayIndexOutOfBoundsException e) {
                     return;
                 }

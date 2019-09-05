@@ -35,7 +35,7 @@ public class DataHolder {
 
     public Canteen getCanteen(String code) {
         for (Canteen m : mCanteenList) {
-            if (m.getCode().equals(code))
+            if (m.getId().equals(code))
                 return m;
         }
         return null;
