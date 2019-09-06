@@ -1,4 +1,4 @@
-package com.pasta.mensadd.fragments;
+package com.pasta.mensadd.ui.fragments;
 
 
 import android.content.SharedPreferences;
@@ -16,7 +16,7 @@ import androidx.preference.PreferenceManager;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,19 +25,20 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.adapter.CanteenListAdapter;
+import com.pasta.mensadd.controller.FragmentController;
+import com.pasta.mensadd.ui.adapter.CanteenListAdapter;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.ParseController;
-import com.pasta.mensadd.model.Canteen;
-import com.pasta.mensadd.model.CanteensViewModel;
+import com.pasta.mensadd.database.entity.Canteen;
+import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.networking.callbacks.LoadCanteensCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
-public class CanteenListFragment extends Fragment implements LoadCanteensCallback, View.OnClickListener, CanteenListAdapter.OnFavoriteClickListener {
+public class CanteenListFragment extends Fragment implements LoadCanteensCallback, View.OnClickListener, CanteenListAdapter.OnFavoriteClickListener, CanteenListAdapter.OnCanteenClickListener {
 
     private CanteenListAdapter mCanteenListAdapter;
     private SharedPreferences mSharedPrefs;
@@ -50,12 +51,7 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
     private CardView mTutorialCard;
     private LinearLayout mProgressLayout;
 
-    public static String KEY_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
-
-    CanteensViewModel mCanteensViewModel;
-
-    public CanteenListFragment() {
-    }
+    private CanteensViewModel mCanteensViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,8 +91,9 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
         mTutorialContinueBtn.setOnClickListener(this);
         LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
         DataHolder.getInstance().sortCanteenList();
-        mCanteenListAdapter = new CanteenListAdapter(DataHolder.getInstance().getCanteenList(), this);
+        mCanteenListAdapter = new CanteenListAdapter(new ArrayList<Canteen>(), this);
         mCanteenListAdapter.setOnFavoriteClickListener(this);
+        mCanteenListAdapter.setOnCanteenClickListener(this);
         mCanteenList.setAdapter(mCanteenListAdapter);
         mCanteenList.setLayoutManager(layoutParams);
 
@@ -197,6 +194,15 @@ public class CanteenListFragment extends Fragment implements LoadCanteensCallbac
 
     @Override
     public void onFavoriteClick(Canteen canteen) {
+        canteen.setAsFavorite(!canteen.isFavorite());
         mCanteensViewModel.updateCanteen(canteen);
+    }
+
+    @Override
+    public void onCanteenClick(Canteen canteen) {
+        canteen.increasePriority();
+        mCanteensViewModel.updateCanteen(canteen);
+        mCanteensViewModel.setSelectedCanteen(canteen);
+        FragmentController.showMealWeekFragment(getFragmentManager());
     }
 }

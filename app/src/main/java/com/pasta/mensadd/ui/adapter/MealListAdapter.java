@@ -1,4 +1,4 @@
-package com.pasta.mensadd.adapter;
+package com.pasta.mensadd.ui.adapter;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -26,9 +26,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.fragments.MealDayFragment;
+import com.pasta.mensadd.ui.fragments.MealDayFragment;
 import com.pasta.mensadd.model.DataHolder;
-import com.pasta.mensadd.model.Meal;
+import com.pasta.mensadd.database.entity.Meal;
 import com.pasta.mensadd.networking.callbacks.LoadImageCallback;
 import com.pasta.mensadd.networking.NetworkController;
 
@@ -36,21 +36,27 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHolder> {
 
-    private ArrayList<Meal> mMeals;
+    private List<Meal> mMeals;
     private MealDayFragment mFragment;
     private SharedPreferences mPrefs;
 
     private SparseBooleanArray mExpandStates = new SparseBooleanArray();
 
-    public MealListAdapter(ArrayList<Meal> items, MealDayFragment fragment) {
+    public MealListAdapter(List<Meal> items, MealDayFragment fragment) {
         mMeals = items;
         mFragment = fragment;
         if (mFragment.getActivity() != null)
             mPrefs = PreferenceManager.getDefaultSharedPreferences(mFragment.getActivity().getApplicationContext());
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.mMeals = meals;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -79,16 +85,16 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         if (item.isVegetarian()) holder.mVegetarian.setVisibility(View.VISIBLE);
         else holder.mVegetarian.setVisibility(View.GONE);
 
-        if (item.containsPork()) holder.mPork.setVisibility(View.VISIBLE);
+        if (item.isPork()) holder.mPork.setVisibility(View.VISIBLE);
         else holder.mPork.setVisibility(View.GONE);
 
-        if (item.containsBeef()) holder.mBeef.setVisibility(View.VISIBLE);
+        if (item.isBeef()) holder.mBeef.setVisibility(View.VISIBLE);
         else holder.mBeef.setVisibility(View.GONE);
 
-        if (item.containsGarlic()) holder.mGarlic.setVisibility(View.VISIBLE);
+        if (item.isGarlic()) holder.mGarlic.setVisibility(View.VISIBLE);
         else holder.mGarlic.setVisibility(View.GONE);
 
-        if (item.containsAlcohol()) holder.mAlcohol.setVisibility(View.VISIBLE);
+        if (item.isAlcohol()) holder.mAlcohol.setVisibility(View.VISIBLE);
         else holder.mAlcohol.setVisibility(View.GONE);
 
         if (item.getName().contains("Bauchspeck") && mPrefs.getBoolean(mFragment.getString(R.string.pref_bacon_key), false))

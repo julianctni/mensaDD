@@ -1,13 +1,14 @@
-package com.pasta.mensadd.model;
+package com.pasta.mensadd.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
-import androidx.room.Ignore;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.pasta.mensadd.database.entity.Canteen;
 
 import java.util.List;
 
@@ -28,5 +29,8 @@ public interface CanteenDao {
 
     @Query("SELECT * FROM table_canteens ORDER BY listPriority DESC")
     LiveData<List<Canteen>> getAllCanteens();
+
+    @Query("SELECT * FROM table_canteens WHERE id = :canteenId")
+    Canteen getCanteenById(String canteenId);
 
 }

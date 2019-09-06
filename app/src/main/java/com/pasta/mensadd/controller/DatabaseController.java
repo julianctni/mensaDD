@@ -9,11 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.pasta.mensadd.Utils;
-import com.pasta.mensadd.fragments.CanteenListFragment;
-import com.pasta.mensadd.model.Canteen;
+import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.model.DataHolder;
-import com.pasta.mensadd.model.Meal;
+import com.pasta.mensadd.database.entity.Meal;
 
 import java.util.ArrayList;
 
@@ -80,7 +78,7 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + CANTEENS_TABLE_NAME + ";");
         db.execSQL("DELETE FROM " + BALANCES_TABLE_NAME + ";");
         db.close();
-        prefs.edit().remove(CanteenListFragment.KEY_LAST_CANTEENS_UPDATE).apply();
+        prefs.edit().remove("lastCanteenUpdate").apply();
         prefs.edit().remove("pref_bacon").apply();
         for (Canteen c : DataHolder.getInstance().getCanteenList()) {
             prefs.edit().remove("priority_" + c.getId()).apply();
@@ -102,7 +100,7 @@ public class DatabaseController extends SQLiteOpenHelper {
             double posLong = c.getDouble(c.getColumnIndex(CANTEEN_POS_LONG));
             int priority = prefs.getInt("priority_" + code, 0);
             Log.i("CANTEENPRIO", code + ": " + priority);
-            Canteen canteen = new Canteen(code, name, hours, address, posLat, posLong, Utils.calculateCanteenPriority(code, priority));
+            Canteen canteen = new Canteen(code, name, hours, address, posLat, posLong, 0);
             DataHolder.getInstance().getCanteenList().add(canteen);
         }
         DataHolder.getInstance().sortCanteenList();
@@ -129,7 +127,7 @@ public class DatabaseController extends SQLiteOpenHelper {
             boolean garlic = (c.getInt(c.getColumnIndex(MEAL_GARLIC)) == 1);
             boolean vegan = (c.getInt(c.getColumnIndex(MEAL_VEGAN)) == 1);
             boolean vegetarian = (c.getInt(c.getColumnIndex(MEAL_VEGETARIAN)) == 1);
-            Meal m = new Meal(name, location, imgLink, details, price, canteenCode, date, vegan, vegetarian, porc, beef, garlic, alcohol);
+            Meal m = new Meal("test", name, location, imgLink, details, price, canteenCode, date, vegan, vegetarian, porc, beef, garlic, alcohol);
             if (DataHolder.getInstance().getCanteen(canteenCode).getMealMap().get(date) == null) {
                 ArrayList<Meal> meals = new ArrayList<>();
                 meals.add(m);
@@ -189,11 +187,11 @@ public class DatabaseController extends SQLiteOpenHelper {
         values.put(DatabaseController.MEAL_IMG_LINK, m.getImgLink());
         values.put(DatabaseController.MEAL_VEGAN, m.isVegan() ? 1 : 0);
         values.put(DatabaseController.MEAL_VEGETARIAN, m.isVegetarian() ? 1 : 0);
-        values.put(DatabaseController.MEAL_PORC, m.containsPork() ? 1 : 0);
-        values.put(DatabaseController.MEAL_BEEF, m.containsBeef() ? 1 : 0);
-        values.put(DatabaseController.MEAL_ALCOHOL, m.containsAlcohol() ? 1 : 0);
-        values.put(DatabaseController.MEAL_GARLIC, m.containsGarlic() ? 1 : 0);
-        values.put(DatabaseController.MEAL_CANTEEN_CODE, m.getCanteenCode());
+        values.put(DatabaseController.MEAL_PORC, m.isPork() ? 1 : 0);
+        values.put(DatabaseController.MEAL_BEEF, m.isBeef() ? 1 : 0);
+        values.put(DatabaseController.MEAL_ALCOHOL, m.isAlcohol() ? 1 : 0);
+        values.put(DatabaseController.MEAL_GARLIC, m.isGarlic() ? 1 : 0);
+        values.put(DatabaseController.MEAL_CANTEEN_CODE, m.getCanteenId());
         values.put(DatabaseController.MEAL_DATE, m.getDate());
         db.insert(MEALS_TABLE_NAME, null, values);
         db.close();

@@ -4,14 +4,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.fragments.CanteenListFragment;
-import com.pasta.mensadd.fragments.CanteenMapFragment;
-import com.pasta.mensadd.fragments.BalanceCheckFragment;
-import com.pasta.mensadd.fragments.BalanceHistoryFragment;
-import com.pasta.mensadd.fragments.ImprintFragment;
-import com.pasta.mensadd.fragments.MealWeekFragment;
-import com.pasta.mensadd.fragments.NewsFragment;
-import com.pasta.mensadd.fragments.SettingsFragment;
+import com.pasta.mensadd.database.entity.Meal;
+import com.pasta.mensadd.ui.fragments.CanteenListFragment;
+import com.pasta.mensadd.ui.fragments.CanteenMapFragment;
+import com.pasta.mensadd.ui.fragments.BalanceCheckFragment;
+import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
+import com.pasta.mensadd.ui.fragments.ImprintFragment;
+import com.pasta.mensadd.ui.fragments.MealWeekFragment;
+import com.pasta.mensadd.ui.fragments.NewsFragment;
+import com.pasta.mensadd.ui.fragments.SettingsFragment;
 
 public class FragmentController {
 
@@ -67,8 +68,8 @@ public class FragmentController {
         fm.beginTransaction().addToBackStack(null).replace(R.id.mainContainer, f, TAG_IMPRINT).commit();
     }
 
-    public static void showMealWeekFragment(FragmentManager fm, String mensaId) {
-        createAnimatedTransaction(fm).addToBackStack("").replace(R.id.mainContainer, MealWeekFragment.newInstance(mensaId), TAG_MEAL_WEEK).commit();
+    public static void showMealWeekFragment(FragmentManager fm) {
+        createAnimatedTransaction(fm).addToBackStack("").replace(R.id.mainContainer, new MealWeekFragment(), TAG_MEAL_WEEK).commit();
     }
 
     public static void showBalanceHistoryFragment(FragmentManager fm) {

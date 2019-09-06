@@ -1,4 +1,4 @@
-package com.pasta.mensadd.fragments;
+package com.pasta.mensadd.ui.fragments;
 
 
 import android.os.Bundle;

@@ -1,5 +1,7 @@
 package com.pasta.mensadd.model;
 
+import com.pasta.mensadd.database.entity.Canteen;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

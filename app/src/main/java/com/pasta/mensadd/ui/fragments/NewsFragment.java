@@ -1,4 +1,4 @@
-package com.pasta.mensadd.fragments;
+package com.pasta.mensadd.ui.fragments;
 
 
 import android.graphics.Color;
@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.adapter.NewsListAdapter;
+import com.pasta.mensadd.ui.adapter.NewsListAdapter;
 import com.pasta.mensadd.controller.FragmentController;
 import com.pasta.mensadd.controller.ParseController;
 import com.pasta.mensadd.model.DataHolder;

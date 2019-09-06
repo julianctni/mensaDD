@@ -6,15 +6,11 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
 
-import com.pasta.mensadd.model.Canteen;
-
 /**
  * Created by julian on 13.02.18.
  */
 
 public class Utils {
-
-    public static int FAVORITE_PRIORITY = 999999;
 
     public static ScaleAnimation getFavoriteScaleOutAnimation(final View view) {
         final ScaleAnimation scaleOut = new ScaleAnimation(0.0f, 1.3f, 0.0f, 1.3f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -39,22 +35,5 @@ public class Utils {
             }
         });
         return scaleOut;
-    }
-
-    public static int calculateCanteenPriority(String canteenId, int priority) {
-        int canteenPriority;
-        if (canteenId.contains("zeltschloesschen") || canteenId.contains("alte-mensa"))
-            if (priority < 2)
-                canteenPriority = 2;
-            else
-                canteenPriority = priority;
-        else if (canteenId.contains("siedepunkt") || canteenId.contains("mensa-reichenbachstrasse"))
-            if (priority < 1)
-                canteenPriority = 1;
-            else
-                canteenPriority = priority;
-        else
-            canteenPriority = priority;
-        return canteenPriority;
     }
 }

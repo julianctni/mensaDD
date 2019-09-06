@@ -1,17 +1,9 @@
-package com.pasta.mensadd.model;
-
-import android.content.Context;
-import android.content.SharedPreferences;
+package com.pasta.mensadd.database.entity;
 
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import android.util.Log;
-
-import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +24,8 @@ public class Canteen {
 
     @Ignore
     private HashMap<String, ArrayList<Meal>> mealMap = new HashMap<>();
+    @Ignore
+    private static final int FAVORITE_PRIORITY_EXTRA = 9999999;
 
     public Canteen(String id, String name, String hours, String address, double posLat, double posLong, int listPriority) {
         this.id = id;
@@ -93,5 +87,13 @@ public class Canteen {
 
     public double getPosLong() {
         return posLong;
+    }
+
+    public void setAsFavorite(boolean favorite) {
+        this.listPriority = favorite ? this.listPriority + FAVORITE_PRIORITY_EXTRA : this.listPriority - FAVORITE_PRIORITY_EXTRA;
+    }
+
+    public boolean isFavorite() {
+        return this.listPriority >= FAVORITE_PRIORITY_EXTRA;
     }
 }

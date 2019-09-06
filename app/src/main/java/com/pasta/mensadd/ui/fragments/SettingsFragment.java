@@ -1,4 +1,4 @@
-package com.pasta.mensadd.fragments;
+package com.pasta.mensadd.ui.fragments;
 
 
 import android.content.SharedPreferences;
@@ -11,7 +11,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import android.view.View;
 import android.widget.Toast;
 
-import com.pasta.mensadd.MainActivity;
+import com.pasta.mensadd.ui.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
 import com.pasta.mensadd.controller.DatabaseController;

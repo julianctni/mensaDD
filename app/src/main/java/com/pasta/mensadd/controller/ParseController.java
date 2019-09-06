@@ -4,12 +4,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.pasta.mensadd.Utils;
-import com.pasta.mensadd.fragments.CanteenListFragment;
-import com.pasta.mensadd.model.Canteen;
+import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.model.DataHolder;
-import com.pasta.mensadd.model.Meal;
+import com.pasta.mensadd.database.entity.Meal;
 import com.pasta.mensadd.model.News;
 import com.pasta.mensadd.networking.callbacks.LoadCanteensCallback;
 import com.pasta.mensadd.networking.callbacks.LoadMealsCallback;
@@ -88,7 +85,7 @@ public class ParseController {
                         String location = jsonMeal.getString("mealLocation");
                         String name = jsonMeal.getString("name");
                         String price = jsonMeal.getString("price");
-                        Meal meal = new Meal(name, location, imgLink, details, price, mCanteenCode, String
+                        Meal meal = new Meal("test", name, location, imgLink, details, price, mCanteenCode, String
                                 .valueOf(mealDay.keys().next()), vegan == 1, vegetarian == 1, pork ==
                                 1, beef == 1, garlic == 1, alcohol == 1);
                         mealList.add(meal);
@@ -154,12 +151,10 @@ public class ParseController {
                             hours.append("\n");
                     }
                     int priority = mPrefs.getInt("priority_" + code, 0);
-                    Canteen m = new Canteen(code, name, hours.toString(), address, Double.parseDouble(gpsArray.get(0).toString()), Double.parseDouble(gpsArray.get(1).toString()), Utils.calculateCanteenPriority(code, priority));
+                    Canteen m = new Canteen(code, name, hours.toString(), address, Double.parseDouble(gpsArray.get(0).toString()), Double.parseDouble(gpsArray.get(1).toString()), 0);
                     DataHolder.getInstance().getCanteenList().add(m);
                 }
                 mDbController.updateCanteenTable();
-                mPrefs.edit().putLong(CanteenListFragment.KEY_LAST_CANTEENS_UPDATE, new Date().getTime
-                        ()).apply();
             } catch (JSONException e) {
                 e.printStackTrace();
                 return false;

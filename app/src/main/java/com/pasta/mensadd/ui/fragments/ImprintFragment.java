@@ -1,4 +1,4 @@
-package com.pasta.mensadd.fragments;
+package com.pasta.mensadd.ui.fragments;
 
 
 import android.content.Intent;
@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pasta.mensadd.MainActivity;
+import com.pasta.mensadd.ui.MainActivity;
 import com.pasta.mensadd.R;
 
 public class ImprintFragment extends Fragment implements View.OnClickListener {

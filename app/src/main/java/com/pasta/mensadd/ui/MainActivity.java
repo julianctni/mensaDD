@@ -1,4 +1,4 @@
-package com.pasta.mensadd;
+package com.pasta.mensadd.ui;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -13,9 +13,7 @@ import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.preference.PreferenceManager;
 import androidx.appcompat.widget.Toolbar;
 import android.util.TypedValue;
@@ -28,6 +26,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pasta.mensadd.R;
+import com.pasta.mensadd.ViewHeightAnimation;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
@@ -35,14 +35,12 @@ import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.controller.DatabaseController;
 import com.pasta.mensadd.controller.FragmentController;
-import com.pasta.mensadd.fragments.BalanceHistoryFragment;
-import com.pasta.mensadd.model.Canteen;
-import com.pasta.mensadd.model.CanteensViewModel;
+import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
+import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
 
@@ -63,14 +61,13 @@ public class MainActivity extends AppCompatActivity
     private float mCardCheckHeight;
     private boolean mCardCheckVisible;
 
-    private CanteensViewModel mCanteenViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
-        mCanteenViewModel = new ViewModelProvider(this).get(CanteensViewModel.class);
+        new ViewModelProvider(this).get(CanteensViewModel.class);
 
         mBottomNav = findViewById(R.id.bottomNavigation);
         mBottomNav.setOnMenuItemClickListener(this);
@@ -231,8 +228,8 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    mSaveBalanceButton.setVisibility(View.GONE);
-                    mHideBalanceButton.setVisibility(View.GONE);
+                    mSaveBalanceButton.hide();
+                    mHideBalanceButton.hide();
                 }
 
                 @Override
@@ -248,6 +245,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             loadCard(tag);
@@ -289,9 +287,9 @@ public class MainActivity extends AppCompatActivity
             ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
             showAnim.setDuration(250);
             showAnim.setStartOffset(100);
-            mSaveBalanceButton.setVisibility(View.VISIBLE);
+            mSaveBalanceButton.show();
             mSaveBalanceButton.startAnimation(showAnim);
-            mHideBalanceButton.setVisibility(View.VISIBLE);
+            mHideBalanceButton.show();
             mHideBalanceButton.startAnimation(showAnim);
             Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight, 200);
             animation.setAnimationListener(new Animation.AnimationListener() {

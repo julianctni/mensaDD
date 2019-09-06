@@ -1,4 +1,4 @@
-package com.pasta.mensadd.fragments;
+package com.pasta.mensadd.ui.fragments;
 
 
 import android.Manifest;
@@ -36,7 +36,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.controller.FragmentController;
-import com.pasta.mensadd.model.Canteen;
+import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.model.DataHolder;
 
 
@@ -90,7 +90,7 @@ public class CanteenMapFragment extends Fragment {
         mInfoCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentController.showMealWeekFragment(getFragmentManager(), mCurrentCanteen);
+                FragmentController.showMealWeekFragment(getFragmentManager());
             }
         });
         mMapView.onCreate(savedInstanceState);

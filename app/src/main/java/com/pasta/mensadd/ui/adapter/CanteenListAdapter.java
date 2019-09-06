@@ -1,4 +1,4 @@
-package com.pasta.mensadd.adapter;
+package com.pasta.mensadd.ui.adapter;
 
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.controller.FragmentController;
-import com.pasta.mensadd.fragments.CanteenListFragment;
-import com.pasta.mensadd.model.Canteen;
+import com.pasta.mensadd.ui.fragments.CanteenListFragment;
+import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.model.DataHolder;
 
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
     private List<Canteen> mCanteens;
     private CanteenListFragment mFragment;
     private OnFavoriteClickListener mOnFavoriteClickListener;
+    private OnCanteenClickListener mOnCanteenClickListener;
     public CanteenListAdapter(ArrayList<Canteen> items, CanteenListFragment fragment) {
         mCanteens = items;
         mFragment = fragment;
@@ -45,7 +46,7 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
         holder.mName.setText(item.getName());
         holder.mAddress.setText(item.getAddress());
         holder.mHours.setText(item.getHours());
-        if (item.getListPriority() >= Utils.FAVORITE_PRIORITY) {
+        if (item.isFavorite()) {
             holder.mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_pink_24dp));
         } else {
             holder.mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_border_grey_24dp));
@@ -67,8 +68,8 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
         this.mOnFavoriteClickListener = listener;
     }
 
-    public interface OnFavoriteClickListener {
-        void onFavoriteClick(Canteen canteen);
+    public void setOnCanteenClickListener(OnCanteenClickListener listener) {
+        this.mOnCanteenClickListener = listener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -92,24 +93,18 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.canteenItemFav) {
-                boolean isFavorite = mCanteens.get(getAdapterPosition()).getListPriority() >= Utils.FAVORITE_PRIORITY;
-                Canteen canteen = mCanteens.get(getAdapterPosition());
-                mOnFavoriteClickListener.onFavoriteClick(canteen);
-                if (isFavorite) {
-                    mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_border_grey_24dp));
-                    canteen.setListPriority(0);
-                } else {
-                    mFavorite.setImageDrawable(mFragment.getResources().getDrawable(R.drawable.ic_favorite_pink_24dp));
-                    canteen.setListPriority(Utils.FAVORITE_PRIORITY + canteen.getListPriority());
-                }
+                boolean isFavorite = mCanteens.get(getAdapterPosition()).isFavorite();
+                mOnFavoriteClickListener.onFavoriteClick(mCanteens.get(getAdapterPosition()));
+                int favIconId = isFavorite ? R.drawable.ic_favorite_border_grey_24dp : R.drawable.ic_favorite_pink_24dp;
+                mFavorite.setImageDrawable(mFragment.getResources().getDrawable(favIconId));
                 mFavorite.startAnimation(Utils.getFavoriteScaleOutAnimation(mFavorite));
             } else {
-                String mensaId;
                 try {
-                    mensaId = mCanteens.get(getAdapterPosition()).getId();
+                    mOnCanteenClickListener.onCanteenClick(mCanteens.get(getAdapterPosition()));
                 } catch (ArrayIndexOutOfBoundsException e) {
                     return;
                 }
+                /*
                 if (mFragment.getActivity() != null) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mFragment.getActivity().getApplicationContext());
                     int priority = prefs.getInt("priority_" + mensaId, 0);
@@ -117,9 +112,18 @@ public class CanteenListAdapter extends RecyclerView.Adapter<CanteenListAdapter.
                     prefs.edit().putInt("priority_" + mensaId, priority).apply();
                 }
                 DataHolder.getInstance().getCanteen(mensaId).increasePriority();
-                DataHolder.getInstance().sortCanteenList();
                 FragmentController.showMealWeekFragment(mFragment.getFragmentManager(), mensaId);
+                */
+
             }
         }
+    }
+
+    public interface OnFavoriteClickListener {
+        void onFavoriteClick(Canteen canteen);
+    }
+
+    public interface OnCanteenClickListener {
+        void onCanteenClick(Canteen canteen);
     }
 }

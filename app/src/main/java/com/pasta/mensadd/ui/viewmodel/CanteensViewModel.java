@@ -1,4 +1,4 @@
-package com.pasta.mensadd.model;
+package com.pasta.mensadd.ui.viewmodel;
 
 import android.app.Application;
 
@@ -6,12 +6,16 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.pasta.mensadd.database.entity.Canteen;
+import com.pasta.mensadd.database.repository.CanteenRepository;
+
 import java.util.List;
 
 public class CanteensViewModel extends AndroidViewModel {
 
     private CanteenRepository canteenRepository;
     private LiveData<List<Canteen>> canteens;
+    private Canteen selectedCanteen;
 
     public CanteensViewModel(@NonNull Application application) {
         super(application);
@@ -39,5 +43,11 @@ public class CanteensViewModel extends AndroidViewModel {
         return canteens;
     }
 
+    public Canteen getSelectedCanteen() {
+        return selectedCanteen;
+    }
 
+    public void setSelectedCanteen(Canteen selectedCanteen) {
+        this.selectedCanteen = selectedCanteen;
+    }
 }
