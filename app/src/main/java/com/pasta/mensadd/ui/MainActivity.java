@@ -27,14 +27,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.ViewHeightAnimation;
+import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
 import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
-import com.pasta.mensadd.controller.DatabaseController;
-import com.pasta.mensadd.controller.FragmentController;
+import com.pasta.mensadd.DatabaseController;
 import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         new ViewModelProvider(this).get(CanteensViewModel.class);
 
         mBottomNav = findViewById(R.id.bottomNavigation);
-        mBottomNav.setOnMenuItemClickListener(this);
+        mBottomNav.setMenuItemSelectionListener(this);
         mToolbar = findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
@@ -211,7 +210,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
 
-        Animation animation = new ViewHeightAnimation(mCardCheckContainer, (int) mCardCheckHeight, 0, 150);
+        Animation animation = Utils.getViewHeightAnimation(mCardCheckContainer, (int) mCardCheckHeight, 0, 150);
         if (v.getId() == R.id.saveBalanceButton) {
             storeCardData();
         }
@@ -291,7 +290,7 @@ public class MainActivity extends AppCompatActivity
             mSaveBalanceButton.startAnimation(showAnim);
             mHideBalanceButton.show();
             mHideBalanceButton.startAnimation(showAnim);
-            Animation animation = new ViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight, 200);
+            Animation animation = Utils.getViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight, 200);
             animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {

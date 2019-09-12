@@ -1,8 +1,15 @@
 package com.pasta.mensadd.ui.adapter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,20 +17,34 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.database.entity.Meal;
 import com.pasta.mensadd.ui.fragments.NewsFragment;
-import com.pasta.mensadd.model.News;
+import com.pasta.mensadd.database.entity.News;
 
 import java.util.ArrayList;
 
 
-public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
+public class NewsListAdapter extends ListAdapter<News, NewsListAdapter.ViewHolder> {
 
-    private ArrayList<News> mNews;
-    private NewsFragment mFragment;
+    private Context mContext;
 
-    public NewsListAdapter(ArrayList<News> items, NewsFragment fragment) {
-        mNews = items;
-        mFragment = fragment;
+    private static final DiffUtil.ItemCallback<News> DIFF_CALLBACK = new DiffUtil.ItemCallback<News>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull News o, @NonNull News n) {
+            return o.getId().equals(n.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull News o, @NonNull News n) {
+            return o.getHeading().equals(n.getHeading()) &&
+                    o.getCategory().equals(n.getCategory()) &&
+                    o.getContentShort().equals(n.getContentShort());
+        }
+    };
+
+    public NewsListAdapter(Context context) {
+        super(DIFF_CALLBACK);
+        mContext = context;
     }
 
     @Override
@@ -35,17 +56,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        News item = mNews.get(position);
+        News item = getItem(position);
         holder.mHeading.setText(item.getHeading());
         holder.mText.setText(item.getContentShort());
         holder.mDate.setText(item.getDate());
         holder.mCategory.setText(item.getCategory());
     }
 
-    @Override
-    public int getItemCount() {
-        return mNews.size();
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView mHeading;
@@ -70,9 +87,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.newsShareButton){
-                shareNews(mNews.get(getAdapterPosition()));
+                shareNews(getItem(getAdapterPosition()));
             } else if (v.getId() == R.id.newsDetailsButton){
-                openDetailsInBrowser(mNews.get(getAdapterPosition()));
+                openDetailsInBrowser(getItem(getAdapterPosition()));
             }
 
         }
@@ -87,14 +104,14 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         shareIntent.setType("text/plain");
-        if (mFragment.getActivity() != null)
-            mFragment.getActivity().startActivity(Intent.createChooser(shareIntent, mFragment.getString(R.string.content_share)));
+        if (mContext != null)
+            mContext.startActivity(Intent.createChooser(shareIntent, mContext.getString(R.string.content_share)));
     }
 
     private void openDetailsInBrowser(News news) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(news.getLink()));
-        if (mFragment.getActivity() != null) {
-            mFragment.getActivity().startActivity(intent);
+        if (mContext != null) {
+            mContext.startActivity(intent);
         }
 
     }

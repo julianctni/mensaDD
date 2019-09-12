@@ -1,55 +1,59 @@
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/mealListRefresher"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <ProgressBar
+        android:id="@+id/mealListProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="10dp"
+        android:layout_marginTop="-4dp"
+        android:layout_marginBottom="-4dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/pink"
+        android:visibility="visible" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mealList"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/noFoodToday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:longClickable="false"
+        android:visibility="gone"
+        android:layout_below="@id/mealListProgressBar"
+        card_view:cardCornerRadius="2dp"
+        card_view:contentPadding="20dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/noFoodToday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:longClickable="false"
-            android:visibility="gone"
-            card_view:cardCornerRadius="2dp"
-            card_view:contentPadding="20dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:contentDescription="@string/meals_no_food_icon"
+                android:src="@drawable/ic_sentiment_neutral_black"
+                android:tint="#AAAAAA" />
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:text="@string/meals_no_food"
+                android:textAlignment="center"
+                android:textSize="24sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/meals_no_food"
-                    android:textAlignment="center"
-                    android:textSize="24sp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mealList"
+        android:layout_below="@id/mealListProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:contentDescription="@string/meals_no_food_icon"
-                    android:src="@drawable/ic_sentiment_neutral_black"
-                    android:tint="#AAAAAA"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-    </LinearLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</RelativeLayout>

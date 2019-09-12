@@ -1,14 +1,13 @@
-package com.pasta.mensadd.controller;
+package com.pasta.mensadd.ui;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.database.entity.Meal;
-import com.pasta.mensadd.ui.fragments.CanteenListFragment;
-import com.pasta.mensadd.ui.fragments.CanteenMapFragment;
 import com.pasta.mensadd.ui.fragments.BalanceCheckFragment;
 import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
+import com.pasta.mensadd.ui.fragments.CanteenListFragment;
+import com.pasta.mensadd.ui.fragments.CanteenMapFragment;
 import com.pasta.mensadd.ui.fragments.ImprintFragment;
 import com.pasta.mensadd.ui.fragments.MealWeekFragment;
 import com.pasta.mensadd.ui.fragments.NewsFragment;

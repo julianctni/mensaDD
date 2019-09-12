@@ -7,18 +7,20 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.pasta.mensadd.database.dao.MealDao;
+import com.pasta.mensadd.database.dao.NewsDao;
 import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.database.dao.CanteenDao;
 import com.pasta.mensadd.database.entity.Meal;
+import com.pasta.mensadd.database.entity.News;
 
-@Database(entities = {Canteen.class, Meal.class}, version = 6, exportSchema = false)
+@Database(entities = {Canteen.class, Meal.class, News.class}, version = 6, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;
 
     public abstract CanteenDao canteenDao();
-
     public abstract MealDao mealDao();
+    public abstract NewsDao newsDao();
 
     public static synchronized AppDatabase getInstance(Context context) {
         if (instance == null) {

@@ -99,7 +99,7 @@ public class Meal {
         return location;
     }
 
-    private String formatDetails(String content) {
+    public String formatDetails(String content) {
         return Html.fromHtml("&#149;").toString() + " " + content.replace(", ", "\n" + Html.fromHtml("&#149;").toString() + " ");
     }
 }

@@ -35,9 +35,9 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.controller.FragmentController;
+import com.pasta.mensadd.ui.FragmentController;
 import com.pasta.mensadd.database.entity.Canteen;
-import com.pasta.mensadd.model.DataHolder;
+import com.pasta.mensadd.DataHolder;
 
 
 public class CanteenMapFragment extends Fragment {

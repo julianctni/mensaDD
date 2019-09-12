@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.pasta.mensadd"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 23
         versionName "3.0"
@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 
 }
 
@@ -25,22 +29,23 @@ repositories {
 }
 
 dependencies {
-    def room_version = "2.2.0-beta01"
+    def room_version = "2.2.0-rc01"
     def archLifecycleVersion = '2.2.0-alpha03'
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
+    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
     implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.0@aar') {
         transitive = true
     }
+
     implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -48,5 +53,5 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.4'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'it.sephiroth.android.library.bottomnavigation:bottom-navigation:2.0.2'
+    implementation 'it.sephiroth.android.library.bottomnavigation:bottom-navigation:3.0.0'
 }

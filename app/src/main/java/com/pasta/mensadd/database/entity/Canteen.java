@@ -20,6 +20,7 @@ public class Canteen {
     private double posLat;
     private double posLong;
     private long lastMealUpdate;
+    private long lastMealScraping;
     private int listPriority;
 
     @Ignore
@@ -95,5 +96,13 @@ public class Canteen {
 
     public boolean isFavorite() {
         return this.listPriority >= FAVORITE_PRIORITY_EXTRA;
+    }
+
+    public long getLastMealScraping() {
+        return lastMealScraping;
+    }
+
+    public void setLastMealScraping(long lastMealScraping) {
+        this.lastMealScraping = lastMealScraping;
     }
 }

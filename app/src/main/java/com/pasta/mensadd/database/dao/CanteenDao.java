@@ -33,4 +33,7 @@ public interface CanteenDao {
     @Query("SELECT * FROM table_canteens WHERE id = :canteenId")
     Canteen getCanteenById(String canteenId);
 
+    @Query("SELECT * FROM table_canteens WHERE id = :canteenId")
+    LiveData<Canteen> getCanteenByIdAsync(String canteenId);
+
 }

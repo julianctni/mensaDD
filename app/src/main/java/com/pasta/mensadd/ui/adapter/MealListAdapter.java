@@ -3,6 +3,7 @@ package com.pasta.mensadd.ui.adapter;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -10,9 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,38 +23,52 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.ui.fragments.MealDayFragment;
-import com.pasta.mensadd.model.DataHolder;
 import com.pasta.mensadd.database.entity.Meal;
-import com.pasta.mensadd.networking.callbacks.LoadImageCallback;
 import com.pasta.mensadd.networking.NetworkController;
+import com.pasta.mensadd.networking.callbacks.LoadImageCallback;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
-public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHolder> {
+public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.ViewHolder> {
 
-    private List<Meal> mMeals;
-    private MealDayFragment mFragment;
+    private static final DiffUtil.ItemCallback<Meal> DIFF_CALLBACK = new DiffUtil.ItemCallback<Meal>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Meal o, @NonNull Meal n) {
+            return o.getId().equals(n.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Meal o, @NonNull Meal n) {
+            return (o.isAlcohol() && n.isAlcohol()) &&
+                    (o.isBeef() && n.isBeef()) &&
+                    (o.isGarlic() && n.isGarlic()) &&
+                    (o.isPork() && n.isPork()) &&
+                    (o.isVegetarian() && n.isVegetarian()) &&
+                    (o.isVegan() && n.isVegan()) &&
+                    o.getDetails().equals(n.getDetails()) &&
+                    o.getName().equals(n.getName()) &&
+                    o.getPrice().equals(n.getPrice());
+        }
+    };
+    private Context mContext;
     private SharedPreferences mPrefs;
-
     private SparseBooleanArray mExpandStates = new SparseBooleanArray();
 
-    public MealListAdapter(List<Meal> items, MealDayFragment fragment) {
-        mMeals = items;
-        mFragment = fragment;
-        if (mFragment.getActivity() != null)
-            mPrefs = PreferenceManager.getDefaultSharedPreferences(mFragment.getActivity().getApplicationContext());
-    }
-
-    public void setMeals(List<Meal> meals) {
-        this.mMeals = meals;
-        notifyDataSetChanged();
+    public MealListAdapter(Context context) {
+        super(DIFF_CALLBACK);
+        mContext = context;
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
     @Override
@@ -68,10 +80,10 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Meal item = mMeals.get(position);
+        Meal item = getItem(position);
         holder.mName.setText(item.getName());
         holder.mPrice.setText(item.getPrice());
-        holder.mMealContent.setText(item.getDetails());
+        holder.mMealContent.setText(item.formatDetails(item.getDetails()));
 
         if (item.getLocation().length() > 0) {
             holder.mLocation.setText(item.getLocation());
@@ -97,19 +109,19 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         if (item.isAlcohol()) holder.mAlcohol.setVisibility(View.VISIBLE);
         else holder.mAlcohol.setVisibility(View.GONE);
 
-        if (item.getName().contains("Bauchspeck") && mPrefs.getBoolean(mFragment.getString(R.string.pref_bacon_key), false))
+        if (item.getName().contains("Bauchspeck") && mPrefs.getBoolean(mContext.getString(R.string.pref_bacon_key), false))
             holder.mBacon.setVisibility(View.VISIBLE);
         else
             holder.mBacon.setVisibility(View.GONE);
 
-        if (mPrefs.getBoolean(mFragment.getString(R.string.pref_veg_meals_key), true) && (item.isVegan() || item.isVegetarian())) {
-            holder.mHeaderLayout.setBackgroundColor(mFragment.getResources().getColor(R.color.card_meal_header_veg));
-            holder.mName.setTextColor(mFragment.getResources().getColor(R.color.card_text_light));
-            holder.mLocation.setTextColor(mFragment.getResources().getColor(R.color.card_text_light));
+        if (mPrefs.getBoolean(mContext.getString(R.string.pref_veg_meals_key), true) && (item.isVegan() || item.isVegetarian())) {
+            holder.mHeaderLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_meal_header_veg));
+            holder.mName.setTextColor(mContext.getResources().getColor(R.color.card_text_light));
+            holder.mLocation.setTextColor(mContext.getResources().getColor(R.color.card_text_light));
         } else {
-            holder.mHeaderLayout.setBackgroundColor(mFragment.getResources().getColor(R.color.card_meal_header));
-            holder.mName.setTextColor(mFragment.getResources().getColor(R.color.card_text_dark));
-            holder.mLocation.setTextColor(mFragment.getResources().getColor(R.color.card_text_dark));
+            holder.mHeaderLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_meal_header));
+            holder.mName.setTextColor(mContext.getResources().getColor(R.color.card_text_dark));
+            holder.mLocation.setTextColor(mContext.getResources().getColor(R.color.card_text_dark));
         }
 
         if (mExpandStates.indexOfKey(position) >= 0 && mExpandStates.get(position)) {
@@ -119,11 +131,6 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             holder.mMealDetails.setVisibility(View.GONE);
             holder.mShareButton.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return mMeals.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, LoadImageCallback {
@@ -164,7 +171,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             mMealImage = itemView.findViewById(R.id.mealImage);
             mMealImageProgress = itemView.findViewById(R.id.mealImageProgressBar);
             mShareButton = itemView.findViewById(R.id.shareButton);
-            mShareButton.setBackgroundTintList(ColorStateList.valueOf(mFragment.getResources().getColor(R.color.pink)));
+            mShareButton.setBackgroundTintList(ColorStateList.valueOf(mContext.getResources().getColor(R.color.pink)));
             mShareButton.setOnClickListener(this);
             mMealImage.setOnClickListener(this);
             itemView.setOnClickListener(this);
@@ -173,29 +180,29 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
         @SuppressLint("SetWorldReadable")
         private void shareMeal() {
-            Meal meal = mMeals.get(getAdapterPosition());
+            Meal meal = getItem(getAdapterPosition());
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             String shareText = meal.getName() + "\n" + meal.getPrice() + "\n#"
-                    + DataHolder.getInstance().getCanteen(mFragment.getCanteenId()).getName()
-                    .replaceAll("\\s+", "") + " " + mFragment.getString(R.string.content_share_hungry) + " #mensaDD";
+                    + meal.getCanteenId()
+                    .replaceAll("\\s+", "") + " " + mContext.getString(R.string.content_share_hungry) + " #mensaDD";
 
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 
             Bitmap bitmap = ((BitmapDrawable) mMealImage.getDrawable()).getBitmap();
-            boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(mFragment.getContext()).getBoolean(mFragment.getString(R.string.pref_share_image_key), false);
+            boolean shareImagePref = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(mContext.getString(R.string.pref_share_image_key), false);
 
             if (shareImagePref && meal.getImgLink().length() > 1) {
                 try {
                     String filename = Math.abs(meal.getName().hashCode()) + ".jpeg";
-                    if (mFragment.getContext() != null) {
-                        File file = new File(mFragment.getContext().getFilesDir(), filename);
+                    if (mContext != null) {
+                        File file = new File(mContext.getFilesDir(), filename);
                         FileOutputStream fOut = new FileOutputStream(file);
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
                         fOut.flush();
                         fOut.close();
                         //file.setReadable(true, false);
-                        Uri fileUri = FileProvider.getUriForFile(mFragment.getContext(), "com.pasta.mensadd.fileprovider", file);
+                        Uri fileUri = FileProvider.getUriForFile(mContext, "com.pasta.mensadd.fileprovider", file);
                         shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
                         shareIntent.setType("image/jpeg");
                         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -206,8 +213,8 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             } else {
                 shareIntent.setType("text/plain");
             }
-            if (mFragment.getActivity() != null)
-                mFragment.getActivity().startActivity(Intent.createChooser(shareIntent, mFragment.getString(R.string.content_share)));
+            if (mContext != null)
+                mContext.startActivity(Intent.createChooser(shareIntent, mContext.getString(R.string.content_share)));
         }
 
         @Override
@@ -217,20 +224,20 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             } else {
                 mMealImage.getLayoutParams().width = mHeaderLayout.getMeasuredWidth();
                 if (mMealDetails.getVisibility() == View.GONE) {
-                    if (mFragment.getContext() != null)
-                        mMealImageStatus.setText(mFragment.getContext().getText(R.string.meals_loading_image));
-                    String url = mMeals.get(getAdapterPosition()).getImgLink();
+                    if (mContext != null)
+                        mMealImageStatus.setText(mContext.getText(R.string.meals_loading_image));
+                    String url = getItem(getAdapterPosition()).getImgLink();
                     if (url.length() > 1) {
                         expandLayout(mMealDetails);
-                        mMealImageStatus.setText(mFragment.getContext().getText(R.string.meals_loading_image));
+                        mMealImageStatus.setText(mContext.getText(R.string.meals_loading_image));
                         mMealImageProgress.setVisibility(View.VISIBLE);
                         mMealImageStatus.setVisibility(View.VISIBLE);
                         mMealImage.setVisibility(View.GONE);
-                        NetworkController.getInstance(mFragment.getContext()).fetchMealImage(url, this);
+                        NetworkController.getInstance(mContext).fetchMealImage(url, this);
                     } else {
                         mMealImageProgress.setVisibility(View.GONE);
                         mMealImage.setVisibility(View.GONE);
-                        mMealImageStatus.setText(mFragment.getContext().getText(R.string.meals_no_image));
+                        mMealImageStatus.setText(mContext.getText(R.string.meals_no_image));
                         mMealImageStatus.setVisibility(View.VISIBLE);
                         expandLayout(mMealDetails);
                     }
@@ -331,12 +338,12 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             } else {
                 mMealImageProgress.setVisibility(View.GONE);
                 mMealImage.setVisibility(View.GONE);
-                if (mFragment.getContext() != null)
-                    mMealImageStatus.setText(mFragment.getContext().getText(R.string.meals_no_image));
+                if (mContext != null)
+                    mMealImageStatus.setText(mContext.getText(R.string.meals_no_image));
                 mMealImageStatus.setVisibility(View.VISIBLE);
             }
             if (responseType == NetworkController.NO_INTERNET) {
-                Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.img_load_no_connection), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mContext.getString(R.string.img_load_no_connection), Toast.LENGTH_SHORT).show();
             }
             expandLayout(mMealDetails);
         }
