@@ -1,0 +1,27 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/canteenListProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginTop="-4dp"
+        android:layout_marginBottom="-4dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/pink"
+        android:visibility="visible" />
+
+    <include layout="@layout/tutorial"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/canteenList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FEFEFE"/>
+
+
+</LinearLayout>
