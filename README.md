@@ -6,7 +6,7 @@ An Android application for student canteens in Dresden.
 
 ## API
 
-The used API is protected by an key. So if you want to use the app by compiling it yourself, you won't have access to the canteen, meal and news data. Furthermore you need to get an access token for mapbox.
+The used API is protected by a key. So if you want to use the app by compiling it yourself, you won't have access to the canteen, meal and news data. Furthermore you need to get an access token for mapbox.
 You have to add a file called `/res/values/mensadd_config.xml` with the following content:
 
 ```xml
