@@ -61,6 +61,10 @@ public class CanteensViewModel extends AndroidViewModel {
         this.selectedCanteen = selectedCanteen;
     }
 
+    public LiveData<Canteen> getCanteenById(String id) {
+        return canteenRepository.getCanteenById(id);
+    }
+
     public boolean isRefreshing() {
         return isRefreshing;
     }

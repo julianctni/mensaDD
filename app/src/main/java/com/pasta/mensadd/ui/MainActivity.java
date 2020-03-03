@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.Mapbox;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
@@ -42,6 +43,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
+
+import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigation.OnMenuItemSelectionListener, View.OnClickListener {
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_main);
 
         new ViewModelProvider(this).get(CanteensViewModel.class);
