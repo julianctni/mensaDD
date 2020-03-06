@@ -97,7 +97,7 @@ public class CanteenMapFragment extends Fragment {
 
 
     private void initMap(MapboxMap map, List<Canteen> canteens) {
-        map.setStyle(Style.LIGHT, style -> {
+        map.setStyle(getResources().getString(R.string.mapbox_style_url), style -> {
             if (PermissionsManager.areLocationPermissionsGranted(getContext())) {
                 enableLocationComponent(style);
             }
