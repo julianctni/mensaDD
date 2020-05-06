@@ -88,3 +88,5 @@ lint/tmp/
 
 # config
 /app/src/main/res/values/mensadd_config.xml
+
+.DS_Store
