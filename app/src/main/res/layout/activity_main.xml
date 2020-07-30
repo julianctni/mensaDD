@@ -20,6 +20,7 @@
             android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
+            android:layout_marginStart="1dp"
             android:contentDescription="@string/content_app_logo"
             android:src="@drawable/banner"
             android:visibility="visible" />

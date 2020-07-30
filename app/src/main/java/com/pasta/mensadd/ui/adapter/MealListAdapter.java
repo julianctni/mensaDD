@@ -101,7 +101,12 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
         Meal item = getItem(position);
         holder.mName.setText(item.getName());
         holder.mPrice.setText(item.getPrice());
-        holder.mMealContent.setText(item.formatDetails(item.getDetails()));
+        if (item.getDetails().isEmpty()) {
+            holder.mMealContent.setVisibility(View.GONE);
+        } else {
+            holder.mMealContent.setVisibility(View.VISIBLE);
+            holder.mMealContent.setText(item.formatDetails(item.getDetails()));
+        }
 
         if (item.getLocation().length() > 0) {
             holder.mLocation.setText(item.getLocation());

@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="56dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <LinearLayout
