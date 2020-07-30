@@ -74,11 +74,9 @@ public class MealDayFragment extends Fragment {
         String day = MealsViewModel.DATE_FORMAT.format(date);
         mMealsViewModel.getMealsByCanteenByDay(mCanteensViewModel.getSelectedCanteen(), day).observe(this, meals -> {
             updateMeals(meals);
-        });
-
-        mMealsViewModel.getCanteenById(mCanteensViewModel.getSelectedCanteen().getId()).observe(this, canteen -> {
-            if (canteen.getLastMealScraping() != 0) {
-                mMealListAdapter.setLastMealUpdate(canteen.getLastMealScraping());
+            long lastUpdate = mCanteensViewModel.getSelectedCanteen().getLastMealScraping();
+            if (lastUpdate != 0) {
+                mMealListAdapter.setLastMealUpdate(lastUpdate);
             }
         });
 
