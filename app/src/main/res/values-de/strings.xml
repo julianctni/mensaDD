@@ -86,5 +86,6 @@
     <string name="last_server_check">Stand von %1$s Uhr</string>
     <string name="button_close">Schließen</string>
     <string name="button_meals">Speiseplan</string>
-
+    <string name="today">heute</string>
+    <string name="tomorrow">morgen</string>
 </resources>

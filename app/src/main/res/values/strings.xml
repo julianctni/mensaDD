@@ -105,5 +105,7 @@
     <string name="dots" translatable="false">...</string>
     <string name="button_close">Close</string>
     <string name="button_meals">Meals</string>
+    <string name="today">today</string>
+    <string name="tomorrow">tomorrow</string>
 
 </resources>

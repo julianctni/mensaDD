@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerTabStrip;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.database.entity.Canteen;
@@ -64,8 +65,6 @@ public class MealWeekFragment extends Fragment {
         MealsViewModel mMealsViewModel = new ViewModelProvider(this).get(MealsViewModel.class);
         mCanteensViewModel = new ViewModelProvider(getActivity()).get(CanteensViewModel.class);
         mMealsViewModel.refreshMeals(mCanteensViewModel.getSelectedCanteen());
-        PagerTabStrip mTabStrip = view.findViewById(R.id.pager_tab_strip);
-        mTabStrip.setTabIndicatorColorResource(R.color.colorPrimary);
         TextView header = view.getRootView().findViewById(R.id.heading_toolbar);
         header.setText(mCanteensViewModel.getSelectedCanteen().getName());
         header.setVisibility(View.VISIBLE);
@@ -120,17 +119,25 @@ public class MealWeekFragment extends Fragment {
             String dateFormat;
             if (Locale.getDefault().getLanguage().equals("de")) {
                 locale = Locale.GERMANY;
-                dateFormat = "EEEE, dd.MM.yyyy";
+                dateFormat = "EEE, dd.MM.";
             } else {
                 locale = Locale.ENGLISH;
-                dateFormat = "EEEE, MM-dd-yyyy";
+                dateFormat = "EEE, MM-dd";
             }
             SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, locale);
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
             for (int d = 0; d <= PAGE_COUNT; d++) {
                 mFragmentList.add(MealDayFragment.newInstance(d));
-                mFragmentTitleList.add(sdf.format(cal.getTime()));
+                String title = "";
+                if (d == 0) {
+                    title = getString(R.string.today);
+                } else if (d == 1) {
+                    title = getString(R.string.tomorrow);
+                } else {
+                    title = sdf.format(cal.getTime());
+                }
+                mFragmentTitleList.add(title);
                 cal.add(Calendar.DATE, 1);
             }
         }

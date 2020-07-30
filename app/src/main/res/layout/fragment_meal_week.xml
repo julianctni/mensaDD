@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.viewpager.widget.ViewPager
@@ -10,8 +10,14 @@
         android:layout_height="match_parent"
         android:visibility="gone">
 
-        <androidx.viewpager.widget.PagerTabStrip
+        <com.google.android.material.tabs.TabLayout
             android:id="@+id/pager_tab_strip"
+            app:tabMode="scrollable"
+            app:tabContentStart="72dp"
+            app:tabIndicatorColor="@color/pink_dark"
+            app:tabTextColor="@color/card_content_text"
+            app:tabSelectedTextColor="@color/card_content_text"
+            app:tabIndicatorFullWidth="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
