@@ -8,8 +8,8 @@
     android:background="@color/card_header"
     android:elevation="2dp"
     android:orientation="vertical"
-    android:paddingLeft="12dp"
-    android:paddingRight="12dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     android:paddingTop="12dp">
 
     <TextView
