@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +56,7 @@ public class CanteenMapFragment extends Fragment {
     private TextView mCanteenName;
     private TextView mCanteenAddress;
     private TextView mCanteenHours;
-    private CardView mInfoCard;
+    private LinearLayout mInfoCard;
 
     private PermissionsManager mPermissionManager;
     private LocationComponent mLocationComponent;
@@ -113,10 +114,6 @@ public class CanteenMapFragment extends Fragment {
                     mCanteenHours.setText(canteen.getHours());
                     if (mInfoCard.getVisibility() == View.GONE) {
                         mInfoCard.setVisibility(View.VISIBLE);
-                        ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation
-                                .RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                        showAnim.setDuration(150);
-                        mInfoCard.startAnimation(showAnim);
                         mCanteensViewModel.setSelectedCanteen(canteen);
                     }
                 });
