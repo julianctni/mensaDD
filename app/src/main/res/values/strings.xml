@@ -103,5 +103,7 @@
     <string name="imprint_icon_bacon">The bacon icon was created by Jacob Halton from the Noun Project and slightly modified by myself.</string>
     <string name="last_server_check">Last update: %1$s</string>
     <string name="dots" translatable="false">...</string>
+    <string name="button_close">Close</string>
+    <string name="button_meals">Meals</string>
 
 </resources>

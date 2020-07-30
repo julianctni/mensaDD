@@ -1,18 +1,10 @@
 package com.pasta.mensadd.ui.fragments;
 
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.UiThread;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.cardview.widget.CardView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,42 +16,51 @@ import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mapbox.mapboxsdk.annotations.Marker;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdate;
+import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.gson.JsonPrimitive;
+import com.mapbox.android.core.permissions.PermissionsListener;
+import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.location.LocationListener;
-import com.mapbox.mapboxsdk.location.LocationServices;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
+import com.mapbox.mapboxsdk.location.LocationComponentOptions;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.ui.FragmentController;
 import com.pasta.mensadd.database.entity.Canteen;
-import com.pasta.mensadd.DataHolder;
+import com.pasta.mensadd.ui.FragmentController;
+import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CanteenMapFragment extends Fragment {
     private MapView mMapView;
-    private MapboxMap mMapboxMap;
-    private LocationServices mLocationServices;
-    private static final int PERMISSIONS_LOCATION = 0;
+    private MapboxMap mMap;
 
     private TextView mCanteenName;
     private TextView mCanteenAddress;
     private TextView mCanteenHours;
     private CardView mInfoCard;
-    private Location mLastLocation;
 
-    private String mCurrentCanteen = "";
+    private PermissionsManager mPermissionManager;
+    private LocationComponent mLocationComponent;
 
-    private int mMapZoom = 11;
-    private LatLng mMapCenter = new LatLng(51.04868491509959, 13.759391673955406);
-
-
-    public CanteenMapFragment() {
-    }
+    private CanteensViewModel mCanteensViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,97 +73,101 @@ public class CanteenMapFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-        if (getContext() != null && mLocationServices == null)
-            mLocationServices = LocationServices.getLocationServices(getContext());
+        mCanteensViewModel = new ViewModelProvider(getActivity()).get(CanteensViewModel.class);
+
         setHasOptionsMenu(true);
         mMapView = view.findViewById(R.id.mapview);
         mCanteenAddress = view.findViewById(R.id.mapInfoCardCanteenAddress);
         mCanteenHours = view.findViewById(R.id.mapInfoCardCanteenHours);
         mCanteenName = view.findViewById(R.id.mapInfoCardCanteenName);
         mInfoCard = view.findViewById(R.id.mapInfoCard);
-        if (!mCurrentCanteen.isEmpty()) {
-            Canteen c = DataHolder.getInstance().getCanteen(mCurrentCanteen);
-            mCanteenName.setText(c.getName());
-            mCanteenAddress.setText(c.getAddress());
-            mCanteenHours.setText(c.getHours());
-            mInfoCard.setVisibility(View.VISIBLE);
-        }
-        mInfoCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentController.showMealWeekFragment(getFragmentManager());
-            }
-        });
+        MaterialButton buttonClose = view.findViewById(R.id.mapViewCloseButton);
+        buttonClose.setOnClickListener(button -> mInfoCard.setVisibility(View.GONE));
+        MaterialButton buttonMeals = view.findViewById(R.id.mapViewToMealsButton);
+        buttonMeals.setOnClickListener(button -> FragmentController.showMealWeekFragment(getFragmentManager()));
         mMapView.onCreate(savedInstanceState);
-
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(final MapboxMap mapboxMap) {
-                mMapboxMap = mapboxMap;
-                mMapboxMap.setCameraPosition(new CameraPosition.Builder()
-                        .target(mMapCenter)
-                        .zoom(mMapZoom)
-                        .build());
-                drawCanteensOnMap(mapboxMap);
-                mMapboxMap.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
-                    @Override
-                    public void onMapClick(@NonNull LatLng point) {
-                        if (mInfoCard.getVisibility() == View.VISIBLE) {
-                            ScaleAnimation hideAnim = new ScaleAnimation(1, 0, 1, 0, Animation
-                                    .RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                            hideAnim.setDuration(150);
-                            mInfoCard.startAnimation(hideAnim);
-                            hideAnim.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    mInfoCard.setVisibility(View.GONE);
-                                    mCurrentCanteen = "";
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-
-                                }
-                            });
-                        }
-                    }
-                });
-                if (mLastLocation != null)
-                    mMapboxMap.setMyLocationEnabled(true);
-            }
-
+        mMapView.getMapAsync(mapboxMap -> {
+            mMap = mapboxMap;
+            mCanteensViewModel.getAllCanteens().observe(CanteenMapFragment.this, canteens -> {
+                initMap(mapboxMap, canteens);
+            });
         });
         return view;
     }
 
-    public void drawCanteensOnMap(MapboxMap map) {
-        for (Canteen c : DataHolder.getInstance().getCanteenList()) {
-            map.addMarker(new MarkerOptions()
-                    .position(new LatLng(c.getPosLat(), c.getPosLong())).title(c.getId()));
-        }
-        map.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(@NonNull Marker marker) {
-                Canteen c = DataHolder.getInstance().getCanteen(marker.getTitle());
-                mCurrentCanteen = marker.getTitle();
-                mCanteenName.setText(c.getName());
-                mCanteenAddress.setText(c.getAddress());
-                mCanteenHours.setText(c.getHours());
-                if (mInfoCard.getVisibility() == View.GONE) {
-                    mInfoCard.setVisibility(View.VISIBLE);
-                    ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation
-                            .RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                    showAnim.setDuration(150);
-                    mInfoCard.startAnimation(showAnim);
-                }
-                return true;
+
+    private void initMap(MapboxMap map, List<Canteen> canteens) {
+        map.setStyle(getResources().getString(R.string.mapbox_style_url), style -> {
+            if (PermissionsManager.areLocationPermissionsGranted(getContext())) {
+                enableLocationComponent(style);
             }
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.map_marker);
+            map.getStyle().addImage("mensa-marker", bm);
+            SymbolManager symbolManager = new SymbolManager(mMapView, map, style);
+            List<SymbolOptions> canteenSymbols = new ArrayList<>();
+            symbolManager.setIconAllowOverlap(true);
+            symbolManager.addClickListener(symbol -> {
+                mCanteensViewModel.getCanteenById(symbol.getData().getAsString()).observe(getActivity(), canteen -> {
+                    mCanteenName.setText(canteen.getName());
+                    mCanteenAddress.setText(canteen.getAddress());
+                    mCanteenHours.setText(canteen.getHours());
+                    if (mInfoCard.getVisibility() == View.GONE) {
+                        mInfoCard.setVisibility(View.VISIBLE);
+                        ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation
+                                .RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                        showAnim.setDuration(150);
+                        mInfoCard.startAnimation(showAnim);
+                        mCanteensViewModel.setSelectedCanteen(canteen);
+                    }
+                });
+            });
+            LatLngBounds.Builder bounds = new LatLngBounds.Builder();
+            for (Canteen c : canteens) {
+
+                JsonPrimitive jsonId = new JsonPrimitive(c.getId());
+                LatLng position = new LatLng(c.getPosLat(), c.getPosLong());
+                bounds.include(position);
+                canteenSymbols.add(new SymbolOptions().withLatLng(position).withIconImage("mensa-marker").withData(jsonId));
+            }
+            mMap.easeCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 50), 1500);
+            symbolManager.create(canteenSymbols);
         });
+    }
+
+    private void enableLocationComponent(@NonNull Style loadedMapStyle) {
+        if (PermissionsManager.areLocationPermissionsGranted(getContext())) {
+            LocationComponentOptions locationComponentOptions = LocationComponentOptions.builder(getContext()).build();
+
+            LocationComponentActivationOptions locationComponentActivationOptions = LocationComponentActivationOptions
+                    .builder(getContext(), loadedMapStyle)
+                    .locationComponentOptions(locationComponentOptions)
+                    .useDefaultLocationEngine(true)
+                    .build();
+
+            mLocationComponent = mMap.getLocationComponent();
+            mLocationComponent.activateLocationComponent(locationComponentActivationOptions);
+            mLocationComponent.setLocationComponentEnabled(true);
+            mLocationComponent.setCameraMode(CameraMode.TRACKING);
+            mLocationComponent.setRenderMode(RenderMode.COMPASS);
+
+        } else {
+            mPermissionManager = new PermissionsManager(new PermissionsListener() {
+                @Override
+                public void onExplanationNeeded(List<String> permissionsToExplain) {
+                    Toast.makeText(getContext(), getString(R.string.toast_enable_location), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onPermissionResult(boolean granted) {
+                    if (granted) {
+                        mMap.getStyle(style -> Log.i("i", "i"));
+                    } else {
+                        Toast.makeText(getContext(), "Location services not allowed", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            mPermissionManager.requestLocationPermissions(getActivity());
+        }
     }
 
     @Override
@@ -172,11 +177,19 @@ public class CanteenMapFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        mMapView.onStop();
+        if (mLocationComponent != null)
+            mLocationComponent.onStop();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         mMapView.onPause();
-        mMapZoom = (int) mMapboxMap.getCameraPosition().zoom;
-        mMapCenter = mMapboxMap.getCameraPosition().target;
+        // mMapZoom = (int) mMap.getCameraPosition().zoom;
+        //mMapCenter = mMap.getCameraPosition().target;
     }
 
     @Override
@@ -192,9 +205,11 @@ public class CanteenMapFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         mMapView.onDestroy();
+        if (mLocationComponent != null)
+            mLocationComponent.onDestroy();
     }
 
     @Override
@@ -207,8 +222,8 @@ public class CanteenMapFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_location:
-                if (mMapboxMap != null) {
-                    toggleGps();
+                if (mMap != null) {
+                    toggleGps(mMap.getStyle());
                 }
                 return true;
             default:
@@ -217,63 +232,13 @@ public class CanteenMapFragment extends Fragment {
     }
 
     @UiThread
-    public void toggleGps() {
-        LocationManager lm = (LocationManager) getContext().getSystemService( Context.LOCATION_SERVICE );
-        // Check if user has granted location permission
-        if (!mLocationServices.areLocationPermissionsGranted() && getActivity() != null) {
-
-            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_LOCATION);
-        } else if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            enableLocation();
-        } else {
-            Toast.makeText(getContext(), getString(R.string.toast_enable_location), Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    private void enableLocation() {
-        if (mLastLocation != null) {
-            moveCamera(mLastLocation);
-        } else {
-            mLocationServices.addLocationListener(new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    if (location != null) {
-                        moveCamera(location);
-                        mLastLocation = location;
-                    }
-                }
-            });
-
-            mMapboxMap.setMyLocationEnabled(true);
-        }
-    }
-
-    public void moveCamera(Location location){
-        final CameraPosition newPosition = new CameraPosition.Builder()
-                .target(new LatLng(location))
-                .build();
-        mMapboxMap.animateCamera(new CameraUpdate() {
-            @Override
-            public CameraPosition getCameraPosition(@NonNull MapboxMap mapboxMap) {
-                return newPosition;
-            }
-        });
+    public void toggleGps(Style style) {
+        enableLocationComponent(style);
     }
 
     @Override
     public void onRequestPermissionsResult(
             int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_LOCATION: {
-                if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    enableLocation();
-                }
-            }
-        }
+        mPermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
 }
