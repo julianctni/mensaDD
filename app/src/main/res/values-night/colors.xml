@@ -29,4 +29,6 @@
     <color name="fab_share">@color/pink_dark</color>
     <color name="card_header_vegeterian">#3F584D</color>
     <color name="meal_icon">#B4B4B4</color>
+    <color name="tab_text_selected">#EDEDED</color>
+    <color name="tab_text">#AAEDEDED</color>
 </resources>
