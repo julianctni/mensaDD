@@ -180,7 +180,8 @@ public class CanteenMapFragment extends Fragment {
     public void onStop() {
         super.onStop();
         mMapView.onStop();
-        mLocationComponent.onStop();
+        if (mLocationComponent != null)
+            mLocationComponent.onStop();
     }
 
     @Override
@@ -207,7 +208,8 @@ public class CanteenMapFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mMapView.onDestroy();
-        mLocationComponent.onDestroy();
+        if (mLocationComponent != null)
+            mLocationComponent.onDestroy();
     }
 
     @Override
