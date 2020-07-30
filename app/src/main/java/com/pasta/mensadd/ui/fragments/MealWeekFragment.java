@@ -13,11 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerTabStrip;
 import androidx.viewpager.widget.ViewPager;
@@ -25,11 +23,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.database.entity.Canteen;
-import com.pasta.mensadd.networking.callbacks.LoadMealsCallback;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,8 +61,6 @@ public class MealWeekFragment extends Fragment {
             mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
             mToolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
         }
-        final TextView lastCanteenUpdateText = view.findViewById(R.id.lastCanteenUpdateText);
-        final CardView lastCanteenUpdateCard = view.findViewById(R.id.lastCanteenUpdate);
         MealsViewModel mMealsViewModel = new ViewModelProvider(this).get(MealsViewModel.class);
         mCanteensViewModel = new ViewModelProvider(getActivity()).get(CanteensViewModel.class);
         mMealsViewModel.refreshMeals(mCanteensViewModel.getSelectedCanteen());
@@ -82,13 +76,6 @@ public class MealWeekFragment extends Fragment {
             MealDayPagerAdapter mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
             mViewPager.setAdapter(mPagerAdapter);
         }
-        mMealsViewModel.getCanteenById(mCanteensViewModel.getSelectedCanteen().getId()).observe(this, canteen -> {
-            if (canteen.getLastMealScraping() != 0) {
-                lastCanteenUpdateCard.setVisibility(View.VISIBLE);
-                DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
-                lastCanteenUpdateText.setText(getString(R.string.last_server_check, dateFormat.format(new Date(canteen.getLastMealScraping()))));
-            }
-        });
     }
 
     @Override

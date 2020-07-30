@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -38,9 +39,15 @@ import com.pasta.mensadd.networking.callbacks.LoadImageCallback;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
-public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.ViewHolder> {
+public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewHolder> {
+
+    private static final int TYPE_MEAL = 1;
+    private static final int TYPE_LAST_UPDATE = 2;
 
     private static final DiffUtil.ItemCallback<Meal> DIFF_CALLBACK = new DiffUtil.ItemCallback<Meal>() {
         @Override
@@ -64,6 +71,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.ViewHolde
     private Context mContext;
     private SharedPreferences mPrefs;
     private SparseBooleanArray mExpandStates = new SparseBooleanArray();
+    private long mLastUpdate;
 
     public MealListAdapter(Context context) {
         super(DIFF_CALLBACK);
@@ -72,14 +80,24 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.ViewHolde
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MealViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        int layoutId = viewType == TYPE_LAST_UPDATE ? R.layout.item_meal_list_last : R.layout.item_meal_list;
         View v = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.item_meal_list, parent, false);
-        return new ViewHolder(v);
+                layoutId, parent, false);
+        return new MealViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public int getItemViewType(int position) {
+        if (position == getCurrentList().size()-1) {
+            return TYPE_LAST_UPDATE;
+        } else {
+            return TYPE_MEAL;
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MealListAdapter.MealViewHolder holder, int position) {
         Meal item = getItem(position);
         holder.mName.setText(item.getName());
         holder.mPrice.setText(item.getPrice());
@@ -131,10 +149,20 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.ViewHolde
             holder.mMealDetails.setVisibility(View.GONE);
             holder.mShareButton.setVisibility(View.GONE);
         }
+
+        if (holder.mLastUpdate != null) {
+            DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
+            holder.mLastUpdate.setText(mContext.getString(R.string.last_server_check, dateFormat.format(new Date(mLastUpdate))));
+        }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, LoadImageCallback {
+    public void setLastMealUpdate(long lastMealUpdate) {
+        mLastUpdate = lastMealUpdate;
+    }
+
+    public class MealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, LoadImageCallback {
         private LinearLayout mHeaderLayout;
+        private CardView mMealCard;
         private TextView mName;
         private TextView mLocation;
         private TextView mPrice;
@@ -151,9 +179,11 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.ViewHolde
         private FloatingActionButton mShareButton;
         private ImageView mMealImage;
         private ProgressBar mMealImageProgress;
+        private TextView mLastUpdate;
 
-        private ViewHolder(View itemView) {
+        private MealViewHolder(View itemView) {
             super(itemView);
+            mMealCard = itemView.findViewById(R.id.mealCard);
             mHeaderLayout = itemView.findViewById(R.id.mealListItemHeader);
             mMealDetails = itemView.findViewById(R.id.mealDetails);
             mName = itemView.findViewById(R.id.mealName);
@@ -173,8 +203,9 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.ViewHolde
             mShareButton = itemView.findViewById(R.id.shareButton);
             mShareButton.setBackgroundTintList(ColorStateList.valueOf(mContext.getResources().getColor(R.color.pink)));
             mShareButton.setOnClickListener(this);
-            mMealImage.setOnClickListener(this);
-            itemView.setOnClickListener(this);
+            //mMealImage.setOnClickListener(this);
+            mMealCard.setOnClickListener(this);
+            mLastUpdate = itemView.findViewById(R.id.lastCanteenUpdateText);
         }
 
 

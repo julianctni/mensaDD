@@ -2,6 +2,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fragment_background"
     android:orientation="vertical">
 
     <ProgressBar
@@ -19,13 +20,13 @@
         android:id="@+id/noFoodToday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:clickable="true"
+        android:layout_margin="12dp"
+        card_view:cardBackgroundColor="@color/card_content"
         android:foreground="?android:attr/selectableItemBackground"
         android:longClickable="false"
         android:visibility="gone"
         android:layout_below="@id/mealListProgressBar"
-        card_view:cardCornerRadius="2dp"
+        card_view:cardCornerRadius="6dp"
         card_view:contentPadding="20dp">
 
         <LinearLayout
@@ -39,12 +40,13 @@
                 android:layout_marginTop="10dp"
                 android:contentDescription="@string/meals_no_food_icon"
                 android:src="@drawable/ic_sentiment_neutral_black"
-                android:tint="#AAAAAA" />
+                android:tint="@color/card_content_text" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/meals_no_food"
+                android:textColor="@color/card_content_text"
                 android:textAlignment="center"
                 android:textSize="24sp" />
         </LinearLayout>

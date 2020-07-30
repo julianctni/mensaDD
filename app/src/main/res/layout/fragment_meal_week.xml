@@ -23,31 +23,4 @@
 
     </androidx.viewpager.widget.ViewPager>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/lastCanteenUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginTop="54dp"
-        card_view:cardBackgroundColor="@color/cyan_dark"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="4dp"
-        android:visibility="gone"
-        android:layout_alignParentEnd="true">
-
-        <TextView
-            android:id="@+id/lastCanteenUpdateText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/card_text_light"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:fontFamily="sans-serif-condensed"
-            android:textSize="10sp"
-            android:includeFontPadding="false"
-            android:text="@string/dots"/>
-    </androidx.cardview.widget.CardView>
-
 </RelativeLayout>
