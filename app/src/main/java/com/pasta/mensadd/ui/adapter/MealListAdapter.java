@@ -115,13 +115,13 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.ViewHolde
             holder.mBacon.setVisibility(View.GONE);
 
         if (mPrefs.getBoolean(mContext.getString(R.string.pref_veg_meals_key), true) && (item.isVegan() || item.isVegetarian())) {
-            holder.mHeaderLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_meal_header_veg));
+            holder.mHeaderLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_header_vegeterian));
             holder.mName.setTextColor(mContext.getResources().getColor(R.color.card_text_light));
             holder.mLocation.setTextColor(mContext.getResources().getColor(R.color.card_text_light));
         } else {
-            holder.mHeaderLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_meal_header));
-            holder.mName.setTextColor(mContext.getResources().getColor(R.color.card_text_dark));
-            holder.mLocation.setTextColor(mContext.getResources().getColor(R.color.card_text_dark));
+            holder.mHeaderLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_header));
+            holder.mName.setTextColor(mContext.getResources().getColor(R.color.card_header_text));
+            holder.mLocation.setTextColor(mContext.getResources().getColor(R.color.card_header_text));
         }
 
         if (mExpandStates.indexOfKey(position) >= 0 && mExpandStates.get(position)) {

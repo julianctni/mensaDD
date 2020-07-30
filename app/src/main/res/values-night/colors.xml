@@ -3,7 +3,7 @@
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorPrimaryTransp">#CC2e394d</color>
-    <color name="colorAccent">#2e394d</color>
+    <color name="colorAccent">@color/cyan_dark</color>
     <color name="text_primary">#EEEEEE</color>
     <color name="text_secondary">#EEEEEE</color>
     <color name="window_background">#2e394d</color>
@@ -26,4 +26,7 @@
     <color name="card_header_text">#EDEDED</color>
     <color name="card_content">#444444</color>
     <color name="card_content_text">#EDEDED</color>
+    <color name="fab_share">@color/pink_dark</color>
+    <color name="card_header_vegeterian">#3F584D</color>
+    <color name="meal_icon">#B4B4B4</color>
 </resources>
