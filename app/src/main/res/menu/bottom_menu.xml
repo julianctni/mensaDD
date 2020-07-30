@@ -1,9 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#f0f0f0"
-    app:bbn_itemColorActive="@color/colorPrimaryDark"
-    app:bbn_rippleColor="#AAAAAA"
-    app:bbn_itemColorInactive="#888888">
+    android:background="@color/bottom_nav_background"
+    app:bbn_itemColorActive="@color/bottom_nav_icon_active"
+    app:bbn_rippleColor="@color/bottom_nav_ripple_color"
+    app:bbn_itemColorInactive="@color/bottom_nav_icon_inactive">
     <item
         android:id="@+id/nav_mensa"
         android:icon="@drawable/ic_restaurant_24dp"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2e394d</color>
-    <color name="colorPrimaryDark">#262f40</color>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorPrimaryTransp">#CC2e394d</color>
     <color name="colorAccent">#2e394d</color>
     <color name="text_primary">#EEEEEE</color>
@@ -17,13 +17,13 @@
     <color name="card_meal_header_veg">#7fb29b</color>
     <color name="card_meal_header">#EBEBEB</color>
 
-    <color name="fragment_background">#FEFEFE</color>
-    <color name="bottom_nav_background">#F0F0F0</color>
-    <color name="bottom_nav_icon_active">@color/colorPrimaryDark</color>
-    <color name="bottom_nav_icon_inactive">#888888</color>
-    <color name="bottom_nav_ripple_color">#AAAAAA</color>
-    <color name="card_header">#EBEBEB</color>
-    <color name="card_header_text">#444444</color>
-    <color name="card_content">#FFFFFF</color>
-    <color name="card_content_text">#444444</color>
+    <color name="fragment_background">#000000</color>
+    <color name="bottom_nav_background">#222222</color>
+    <color name="bottom_nav_icon_active">#DDDDDD</color>
+    <color name="bottom_nav_icon_inactive">#444444</color>
+    <color name="bottom_nav_ripple_color">#333333</color>
+    <color name="card_header">#333333</color>
+    <color name="card_header_text">#EDEDED</color>
+    <color name="card_content">#444444</color>
+    <color name="card_content_text">#EDEDED</color>
 </resources>
