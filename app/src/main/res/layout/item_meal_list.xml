@@ -87,7 +87,7 @@
                             android:id="@+id/mealImageStatus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableStart="@drawable/ic_image_white_24dp"
+                            android:drawableStart="@drawable/ic_outline_image_24"
                             android:drawableTint="@color/card_header_text"
                             android:drawablePadding="6dp"
                             android:gravity="center_vertical"
@@ -120,6 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:textColor="@color/card_content_text"
                     android:paddingLeft="12dp"
                     android:paddingRight="12dp" />
             </LinearLayout>
@@ -237,7 +238,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:src="@drawable/ic_baseline_share_24"
+            android:src="@drawable/ic_outline_share_24"
             app:tint="#FFFFFF"
             app:backgroundTint="@color/fab_share"
             android:visibility="visible"

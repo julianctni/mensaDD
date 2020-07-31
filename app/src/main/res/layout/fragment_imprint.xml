@@ -1,7 +1,8 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,6 +13,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -21,7 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:background="@color/card_content"
+                android:padding="12dp">
 
                 <ImageView
                     android:id="@+id/banner_imprint"
@@ -29,7 +32,8 @@
                     android:layout_height="35dp"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/app_name"
-                    android:tint="#888888"
+                    android:layout_marginTop="4dp"
+                    android:tint="@color/card_content_text"
                     android:src="@drawable/banner"/>
 
                 <TextView
@@ -37,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="@string/app_version"
-                    android:textColor="#888888"
+                    android:textColor="@color/card_content_text"
                     android:textSize="14sp"
                     android:textStyle="bold"/>
 
@@ -47,7 +51,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="10dp"
                     android:text="@string/imprint_developer"
-                    android:textColor="#888888"
+                    android:textColor="@color/card_content_text"
                     android:textStyle="bold"
                     android:textSize="18sp"/>
             </LinearLayout>
@@ -56,6 +60,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp">
@@ -64,7 +69,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:background="@color/card_content"
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -72,14 +78,14 @@
                     android:layout_marginBottom="5dp"
                     android:text="@string/imprint_general_header"
                     android:textStyle="bold"
-                    android:textColor="#888888"
+                    android:textColor="@color/card_content_text"
                     android:textSize="18sp"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/imprint_general"
-                    android:textColor="#888888"
+                    android:textColor="@color/card_content_text"
                     android:textSize="14sp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -88,6 +94,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp">
@@ -96,7 +103,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:background="@color/card_content"
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -104,7 +112,7 @@
                     android:layout_marginBottom="5dp"
                     android:text="@string/imprint_license_header"
                     android:textStyle="bold"
-                    android:textColor="#888888"
+                    android:textColor="@color/card_content_text"
                     android:textSize="18sp"/>
 
                 <TextView
@@ -112,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/imprint_license"
-                    android:textColor="#888888"
+                    android:textColor="@color/card_content_text"
                     android:textSize="14sp"/>
 
                 <TextView
@@ -122,7 +130,7 @@
                     android:layout_marginTop="8dp"
                     android:visibility="gone"
                     android:text="@string/imprint_icon_bacon"
-                    android:textColor="#888888"
+                    android:textColor="@color/card_content_text"
                     android:textSize="14sp"/>
 
             </LinearLayout>
@@ -131,6 +139,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp">
@@ -139,7 +148,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:background="@color/card_content"
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -147,14 +157,14 @@
                     android:layout_marginBottom="5dp"
                     android:text="@string/imprint_credits_header"
                     android:textStyle="bold"
-                    android:textColor="#888888"
+                    android:textColor="@color/card_content_text"
                     android:textSize="18sp"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/imprint_credits"
-                    android:textColor="#888888"
+                    android:textColor="@color/card_content_text"
                     android:textSize="14sp"/>
 
             </LinearLayout>

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="8dp"
     android:layout_marginTop="8dp"
-    android:background="@color/card_header"
+    android:background="@color/card_content"
     android:elevation="2dp"
     android:orientation="vertical"
     android:paddingStart="16dp"
@@ -16,14 +16,14 @@
         android:id="@+id/newsDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/card_header_text"/>
+        android:textColor="@color/card_content_text"/>
 
     <TextView
         android:id="@+id/newsCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:textColor="@color/card_header_text" />
+        android:textColor="@color/card_content_text" />
 
     <TextView
         android:id="@+id/newsHeading"
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/newsDate"
         android:textSize="18sp"
-        android:textColor="@color/card_header_text" />
+        android:textColor="@color/card_content_text" />
 
     <TextView
         android:id="@+id/newsText"
@@ -40,7 +40,7 @@
         android:layout_below="@id/newsHeading"
         android:layout_marginTop="4dp"
         android:includeFontPadding="false"
-        android:textColor="@color/card_header_text" />
+        android:textColor="@color/card_content_text" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,12 +58,12 @@
             android:layout_marginEnd="15dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            app:icon="@drawable/ic_baseline_share_24"
-            app:iconTint="@color/card_header_text"
+            app:icon="@drawable/ic_outline_share_24"
+            app:iconTint="@color/card_content_text"
             app:iconPadding="5dp"
             android:focusable="true"
             android:text="@string/news_share_button"
-            android:textColor="@color/card_header_text" />
+            android:textColor="@color/card_content_text" />
 
         <Button
             android:id="@+id/newsDetailsButton"
@@ -73,11 +73,11 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             app:icon="@drawable/ic_public_grey_20dp"
-            app:iconTint="@color/card_header_text"
+            app:iconTint="@color/card_content_text"
             app:iconPadding="5dp"
             android:focusable="true"
             android:text="@string/news_details_button"
-            android:textColor="@color/card_header_text"/>
+            android:textColor="@color/card_content_text"/>
 
     </LinearLayout>
 </RelativeLayout>
