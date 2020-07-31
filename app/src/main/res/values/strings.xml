@@ -53,6 +53,23 @@
     <string name="vegan_meal" translatable="false">vegan</string>
     <string name="pref_reset_summary">Deletes all locally stored meals, priorities of clicked canteens and balance data.</string>
     <string name="pref_reset_title">Delete all data</string>
+    <string name="pref_dark_mode_key" translatable="false">pref_dark_mode</string>
+    <string name="pref_dark_mode_yes" translatable="false">dark</string>
+    <string name="pref_dark_mode_no" translatable="false">light</string>
+    <string name="pref_dark_mode_auto" translatable="false">auto</string>
+    <string-array name="pref_dark_mode_entries">
+        <item>Dark mode</item>
+        <item>Light mode</item>
+        <item>Follow system settings</item>
+    </string-array>
+    <string-array name="pref_dark_mode_values">
+        <item>@string/pref_dark_mode_yes</item>
+        <item>@string/pref_dark_mode_no</item>
+        <item>@string/pref_dark_mode_auto</item>
+    </string-array>
+    <string name="pref_dark_mode_title">Dark mode</string>
+    <string name="pref_dark_mode_summary">Switch to dark mode</string>
+    <string name="pref_dark_mode_follow_system_summary">The color scheme is automatically adjusted according to the system settings.</string>
     <string name="send_feedback_mail">Write a feedback mail</string>
     <string name="tutorial_header">Welcome</string>
     <string name="tutorial_design_header">Design</string>

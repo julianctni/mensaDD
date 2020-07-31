@@ -19,8 +19,15 @@
         android:key="@string/pref_veg_meals_key"
         android:title="@string/pref_veg_meals_title"
         android:summary="@string/pref_veg_meals_summary"
-        android:drawableTint="@color/pink_dark"
         android:defaultValue="true" />
+
+    <ListPreference
+        android:key="@string/pref_dark_mode_key"
+        android:title="@string/pref_dark_mode_title"
+        android:summary="@string/pref_dark_mode_summary"
+        android:entries="@array/pref_dark_mode_entries"
+        android:entryValues="@array/pref_dark_mode_values"
+        android:defaultValue="@string/pref_dark_mode_auto"/>
 
     <Preference
         android:key="@string/pref_reset_key"

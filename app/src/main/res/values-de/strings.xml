@@ -38,6 +38,14 @@
     <string name="meals_loading_progress">Speiseplan wird geladen...</string>
     <string name="pref_reset_summary">Alle lokal gespeicherten Speisepläne, Prioritätsdaten der Mensaliste und Guthabendaten werden gelöscht.</string>
     <string name="pref_reset_title">Daten löschen</string>
+    <string name="pref_dark_mode_title">Nachtmodus</string>
+    <string name="pref_dark_mode_summary">Heller, dunkler oder systemweiter Farbmodus</string>
+    <string name="pref_dark_mode_follow_system_summary">Das Farbschema wird automatisch entsprechend den Systemeinstellungen angepasst.</string>
+    <string-array name="pref_dark_mode_entries">
+        <item>Dunkel</item>
+        <item>Hell</item>
+        <item>Systemeinstellung</item>
+    </string-array>
     <string name="send_feedback_mail">Feedback E-Mail verfassen</string>
     <string name="tutorial_header">Willkommen</string>
     <string name="tutorial_design_header">Design</string>

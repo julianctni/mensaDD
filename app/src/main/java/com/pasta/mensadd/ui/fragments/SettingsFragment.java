@@ -2,12 +2,16 @@ package com.pasta.mensadd.ui.fragments;
 
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+
 import android.view.View;
 import android.widget.Toast;
 
@@ -41,6 +45,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 return false;
             }
         });
+
         findPreference(getString(R.string.pref_autostart_key)).setVisible(MainActivity.NFC_SUPPORTED);
     }
 
@@ -56,12 +61,23 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
+
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(getString(R.string.pref_autostart_key)) && getActivity() != null) {
             AutostartRegister.register(getActivity().getPackageManager(), sharedPreferences.getBoolean(key, false));
+        } else if (key.equals(getString(R.string.pref_dark_mode_key))) {
+            String value = sharedPreferences.getString(key, getString(R.string.pref_dark_mode_auto));
+
+            if (value.equals(getString(R.string.pref_dark_mode_yes))) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else if (value.equals(getString(R.string.pref_dark_mode_no))){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else if (value.equals(getString(R.string.pref_dark_mode_auto))) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            }
         }
     }
 
