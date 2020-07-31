@@ -87,12 +87,11 @@
                             android:id="@+id/mealImageStatus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_image_white_24dp"
                             android:drawableStart="@drawable/ic_image_white_24dp"
+                            android:drawableTint="@color/card_header_text"
                             android:drawablePadding="6dp"
                             android:gravity="center_vertical"
                             android:paddingBottom="8dp"
-                            android:layout_marginLeft="12dp"
                             android:layout_marginStart="12dp"
                             android:paddingTop="8dp"
                             android:text="@string/meals_no_image"
@@ -157,19 +156,19 @@
                         android:layout_height="25dp"
                         android:adjustViewBounds="true"
                         android:tint="@color/meal_icon"
-                        android:paddingLeft="8dp"
                         android:paddingStart="8dp"
-                        android:src="@drawable/vegetarian" />
+                        android:paddingBottom="2dp"
+                        android:src="@drawable/ic_vegeterian" />
 
                     <ImageView
                         android:id="@+id/bacon"
                         android:layout_width="wrap_content"
-                        android:layout_height="28dp"
+                        android:layout_height="25dp"
                         android:adjustViewBounds="true"
                         android:paddingLeft="6dp"
                         android:paddingStart="6dp"
                         android:tint="#8f3946"
-                        android:src="@drawable/ic_bacon_black_24dp" />
+                        android:src="@drawable/ic_bacon" />
 
                     <ImageView
                         android:id="@+id/pork"
@@ -177,9 +176,9 @@
                         android:layout_height="25dp"
                         android:adjustViewBounds="true"
                         android:tint="@color/meal_icon"
-                        android:paddingLeft="8dp"
                         android:paddingStart="8dp"
-                        android:src="@drawable/pork" />
+                        android:paddingBottom="1dp"
+                        android:src="@drawable/ic_pork" />
 
                     <ImageView
                         android:id="@+id/beef"
@@ -187,9 +186,9 @@
                         android:layout_height="25dp"
                         android:adjustViewBounds="true"
                         android:tint="@color/meal_icon"
-                        android:paddingLeft="8dp"
                         android:paddingStart="8dp"
-                        android:src="@drawable/beef" />
+                        android:paddingBottom="1dp"
+                        android:src="@drawable/ic_beef" />
 
                     <ImageView
                         android:id="@+id/alcohol"
@@ -197,19 +196,19 @@
                         android:layout_height="25dp"
                         android:adjustViewBounds="true"
                         android:tint="@color/meal_icon"
-                        android:paddingLeft="8dp"
                         android:paddingStart="8dp"
-                        android:src="@drawable/alcohol" />
+                        android:paddingTop="2dp"
+                        android:src="@drawable/ic_alcohol" />
 
                     <ImageView
                         android:id="@+id/garlic"
                         android:layout_width="wrap_content"
                         android:layout_height="25dp"
                         android:adjustViewBounds="true"
-                        android:paddingLeft="8dp"
                         android:paddingStart="8dp"
+                        android:paddingTop="2dp"
                         android:tint="@color/meal_icon"
-                        android:src="@drawable/garlic" />
+                        android:src="@drawable/ic_garlik" />
 
                 </LinearLayout>
 

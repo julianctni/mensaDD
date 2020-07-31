@@ -1,6 +1,8 @@
 package com.pasta.mensadd.ui.fragments;
 
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -82,7 +85,11 @@ public class MealWeekFragment extends Fragment {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.fragment_meals_menu, menu);
         if (mCanteensViewModel.getSelectedCanteen().isFavorite()) {
-            menu.findItem(R.id.set_canteen_favorite).setIcon(R.drawable.ic_favorite_pink_24dp);
+            menu.findItem(R.id.set_canteen_favorite).setIcon(R.drawable.ic_baseline_favorite_24);
+            menu.findItem(R.id.set_canteen_favorite).getIcon().setColorFilter(ContextCompat.getColor(this.getContext(), R.color.pink_dark), PorterDuff.Mode.SRC_IN);
+        } else {
+            menu.findItem(R.id.set_canteen_favorite).setIcon(R.drawable.ic_baseline_favorite_border_24);
+            menu.findItem(R.id.set_canteen_favorite).getIcon().setColorFilter(ContextCompat.getColor(this.getContext(), R.color.white), PorterDuff.Mode.SRC_IN);
         }
 
     }
@@ -92,8 +99,10 @@ public class MealWeekFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.set_canteen_favorite:
                 Canteen canteen = mCanteensViewModel.getSelectedCanteen();
-                int iconId = canteen.isFavorite() ? R.drawable.ic_favorite_border_white_24dp : R.drawable.ic_favorite_pink_24dp;
-                item.setIcon(iconId);
+                int favIconId = canteen.isFavorite() ? R.drawable.ic_baseline_favorite_border_24 : R.drawable.ic_baseline_favorite_24;
+                int favIconColor = canteen.isFavorite() ? R.color.white : R.color.pink_dark;
+                item.setIcon(favIconId);
+                item.getIcon().setColorFilter(ContextCompat.getColor(this.getContext(), favIconColor), PorterDuff.Mode.SRC_IN);
                 canteen.setAsFavorite(!canteen.isFavorite());
                 mCanteensViewModel.updateCanteen(canteen);
                 View favButton = mToolbar.findViewById(R.id.set_canteen_favorite);

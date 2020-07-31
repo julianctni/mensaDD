@@ -31,4 +31,5 @@
     <color name="meal_icon">#8E8E8E</color>
     <color name="tab_text_selected">#FFFFFF</color>
     <color name="tab_text">#AAFFFFFF</color>
+    <color name="white">#FFFFFFFF</color>
 </resources>

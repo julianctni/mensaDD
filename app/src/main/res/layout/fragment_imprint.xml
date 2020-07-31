@@ -29,7 +29,8 @@
                     android:layout_height="35dp"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/app_name"
-                    android:src="@drawable/banner_grey"/>
+                    android:tint="#888888"
+                    android:src="@drawable/banner"/>
 
                 <TextView
                     android:layout_width="match_parent"

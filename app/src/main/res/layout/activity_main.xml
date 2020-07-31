@@ -21,6 +21,7 @@
             android:layout_gravity="start"
             android:layout_marginStart="0dp"
             android:contentDescription="@string/content_app_logo"
+            android:tint="@android:color/white"
             android:src="@drawable/banner"
             android:visibility="visible" />
 
