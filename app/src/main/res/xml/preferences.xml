@@ -33,10 +33,10 @@
         android:key="@string/pref_reset_key"
         android:title="@string/pref_reset_title"
         android:summary="@string/pref_reset_summary"
-        android:icon="@drawable/ic_delete_forever_black_24dp"/>
+        android:icon="@drawable/ic_delete_forever_24dp"/>
 
     <Preference
         android:key="@string/pref_imprint"
         android:title="@string/pref_imprint"
-        android:icon="@drawable/ic_info_outline_black_24dp"/>
+        android:icon="@drawable/ic_info_outline_24dp"/>
 </PreferenceScreen>
