@@ -7,19 +7,22 @@
         android:key="@string/pref_autostart_key"
         android:title="@string/pref_autostart_title"
         android:summary="@string/pref_autostart_summary"
-        android:defaultValue="true" />
+        android:defaultValue="true"
+        android:icon="@drawable/ic_baseline_nfc_24"/>
 
     <CheckBoxPreference
         android:key="@string/pref_share_image_key"
         android:title="@string/pref_share_image_title"
         android:summary="@string/pref_share_image_summary"
-        android:defaultValue="false" />
+        android:defaultValue="false"
+        android:icon="@drawable/ic_outline_share_24"/>
 
     <CheckBoxPreference
         android:key="@string/pref_veg_meals_key"
         android:title="@string/pref_veg_meals_title"
         android:summary="@string/pref_veg_meals_summary"
-        android:defaultValue="true" />
+        android:defaultValue="true"
+        android:icon="@drawable/ic_outline_color_lens_24"/>
 
     <ListPreference
         android:key="@string/pref_dark_mode_key"
@@ -27,16 +30,17 @@
         android:summary="@string/pref_dark_mode_summary"
         android:entries="@array/pref_dark_mode_entries"
         android:entryValues="@array/pref_dark_mode_values"
-        android:defaultValue="@string/pref_dark_mode_auto"/>
+        android:defaultValue="@string/pref_dark_mode_auto"
+        android:icon="@drawable/ic_outline_brightness_4_24"/>
 
     <Preference
         android:key="@string/pref_reset_key"
         android:title="@string/pref_reset_title"
         android:summary="@string/pref_reset_summary"
-        android:icon="@drawable/ic_delete_forever_24dp"/>
+        android:icon="@drawable/ic_outline_delete_forever_24"/>
 
     <Preference
         android:key="@string/pref_imprint"
         android:title="@string/pref_imprint"
-        android:icon="@drawable/ic_info_outline_24dp"/>
+        android:icon="@drawable/ic_outline_info_24"/>
 </PreferenceScreen>
