@@ -4,20 +4,20 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.appcompat.widget.Toolbar;
+
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
@@ -28,7 +28,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mapbox.android.core.permissions.PermissionsListener;
+import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
@@ -38,15 +41,15 @@ import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.DatabaseController;
 import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
+import com.pasta.mensadd.ui.fragments.CanteenMapFragment;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
-
-import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigation.OnMenuItemSelectionListener, View.OnClickListener {
@@ -64,6 +67,8 @@ public class MainActivity extends AppCompatActivity
 
     private float mCardCheckHeight;
     private boolean mCardCheckVisible;
+
+    private PermissionsManager mPermissionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -362,6 +367,17 @@ public class MainActivity extends AppCompatActivity
                 IsoDep.class.getName(), NfcA.class.getName()}};
         mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
                 mTechLists);
+    }
+
+    public void requestLocationPermission(PermissionsListener permissionsListener){
+        mPermissionManager = new PermissionsManager(permissionsListener);
+        mPermissionManager.requestLocationPermissions(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        mPermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }
