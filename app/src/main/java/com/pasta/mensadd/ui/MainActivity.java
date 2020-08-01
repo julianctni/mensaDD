@@ -96,10 +96,10 @@ public class MainActivity extends AppCompatActivity
         mHeadingToolbar = findViewById(R.id.heading_toolbar);
         mAppLogoToolbar = findViewById(R.id.toolbarImage);
         mSaveBalanceButton = findViewById(R.id.saveBalanceButton);
-        mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.cyan_dark)));
+        //mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.cyan_dark)));
         mSaveBalanceButton.setOnClickListener(this);
         mHideBalanceButton = findViewById(R.id.hideBalanceButton);
-        mHideBalanceButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CC3C51")));
+        //mHideBalanceButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CC3C51")));
         mHideBalanceButton.setOnClickListener(this);
 
         mCardCheckContainer = findViewById(R.id.cardCheckContainer);
