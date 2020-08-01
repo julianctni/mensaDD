@@ -21,8 +21,10 @@ import com.pasta.mensadd.ui.adapter.MealListAdapter;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MealDayFragment extends Fragment {
 
@@ -30,7 +32,6 @@ public class MealDayFragment extends Fragment {
     private ProgressBar mProgressBar;
     private MealListAdapter mMealListAdapter;
     private int mPagerPositon = 10;
-    private CardView mLastCanteenUpdate;
     private RecyclerView mRecyclerView;
     private CardView noFoodToday;
 
@@ -60,7 +61,6 @@ public class MealDayFragment extends Fragment {
         mMealsViewModel = new ViewModelProvider(this).get(MealsViewModel.class);
         CanteensViewModel mCanteensViewModel = new ViewModelProvider(getActivity()).get(CanteensViewModel.class);
         mRecyclerView = view.findViewById(R.id.mealList);
-        mLastCanteenUpdate = getParentFragment().getView().findViewById(R.id.lastCanteenUpdate);
         mProgressBar = view.findViewById(R.id.mealListProgressBar);
         mProgressBar.setVisibility(mMealsViewModel.isRefreshing() ? View.VISIBLE : View.GONE);
         noFoodToday = view.findViewById(R.id.noFoodToday);
@@ -68,29 +68,16 @@ public class MealDayFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mMealListAdapter);
         mRecyclerView.setNestedScrollingEnabled(true);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
 
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (!recyclerView.canScrollVertically(-1) && dy < 0) {
-                    mLastCanteenUpdate.setVisibility(View.VISIBLE);
-                    mLastCanteenUpdate.startAnimation(Utils.getLastUpdateScaleAnimation(mLastCanteenUpdate));
-                } else if (recyclerView.computeVerticalScrollOffset() > 200){
-                    mLastCanteenUpdate.setVisibility(View.GONE);
-                }
-            }
-        });
         Date date = new Date();
         date.setTime(date.getTime() + mPagerPositon * 86400000);
         String day = MealsViewModel.DATE_FORMAT.format(date);
         mMealsViewModel.getMealsByCanteenByDay(mCanteensViewModel.getSelectedCanteen(), day).observe(this, meals -> {
             updateMeals(meals);
+            long lastUpdate = mCanteensViewModel.getSelectedCanteen().getLastMealScraping();
+            if (lastUpdate != 0) {
+                mMealListAdapter.setLastMealUpdate(lastUpdate);
+            }
         });
 
         return view;

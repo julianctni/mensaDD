@@ -2,7 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:background="@color/cyan"
+                android:background="@color/balance_check_background"
                 android:elevation="20dp"
                 tools:targetApi="lollipop">
 
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:minLines="1"
                 android:text="@string/balance_check_balance"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
@@ -37,8 +37,8 @@
                 android:textAlignment="center"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
-                android:textColor="#FFFFFF"
-                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
         </LinearLayout>
 
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:minLines="1"
                 android:text="@string/balance_check_last_transaction"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textSize="14sp"/>
 
             <TextView
@@ -63,7 +63,7 @@
                 android:minLines="1"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textSize="14sp"/>
         </LinearLayout>
     </LinearLayout>

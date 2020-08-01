@@ -2,32 +2,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="8dp"
     android:layout_marginTop="8dp"
-    android:background="#FFFFFF"
+    android:background="@color/card_content"
     android:elevation="2dp"
     android:orientation="vertical"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     android:paddingTop="12dp">
 
     <TextView
         android:id="@+id/newsDate"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/card_content_text"/>
 
     <TextView
         android:id="@+id/newsCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:textColor="@color/card_content_text" />
 
     <TextView
         android:id="@+id/newsHeading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/newsDate"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textColor="@color/card_content_text" />
 
     <TextView
         android:id="@+id/newsText"
@@ -35,45 +39,45 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/newsHeading"
         android:layout_marginTop="4dp"
-        android:includeFontPadding="false" />
+        android:includeFontPadding="false"
+        android:textColor="@color/card_content_text" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/newsText"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
         android:gravity="end">
 
         <Button
             android:id="@+id/newsShareButton"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:drawableLeft="@drawable/ic_share_grey_20dp"
-            android:drawableStart="@drawable/ic_share_grey_20dp"
-            android:drawablePadding="5dp"
+            app:icon="@drawable/ic_outline_share_24"
+            app:iconTint="@color/card_content_text"
+            app:iconPadding="5dp"
             android:focusable="true"
             android:text="@string/news_share_button"
-            android:textColor="#888888" />
+            android:textColor="@color/card_content_text" />
 
         <Button
             android:id="@+id/newsDetailsButton"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:drawableLeft="@drawable/ic_public_grey_20dp"
-            android:drawableStart="@drawable/ic_public_grey_20dp"
-            android:drawablePadding="5dp"
+            app:icon="@drawable/ic_baseline_public_24"
+            app:iconTint="@color/card_content_text"
+            app:iconPadding="5dp"
             android:focusable="true"
             android:text="@string/news_details_button"
-            android:textColor="#888888" />
+            android:textColor="@color/card_content_text"/>
 
     </LinearLayout>
 </RelativeLayout>

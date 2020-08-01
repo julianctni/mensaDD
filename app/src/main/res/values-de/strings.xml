@@ -6,14 +6,14 @@
     <string name="nav_license">Lizenzen</string>
     <string name="nav_card_history">Guthaben</string>
     <string name="nav_news">Neuigkeiten</string>
-    <string name="pref_autostart_summary">App wird automatisch gestartet, sobald eine eMeal-Karte erkannt wurde.</string>
+    <string name="pref_autostart_summary">Starte die App, sobald eMeal-Karte erkannt wurde.</string>
     <string name="pref_map_summary">Bei WLan-Verbindung wird die Dresdenkarte beim Start der Kartenansicht auf das Gerät heruntergeladen.</string>
     <string name="pref_autostart_title">NFC-Autostart</string>
     <string name="pref_map_title">Offline-Karte</string>
     <string name="balance_check_balance">Aktuelles Guthaben</string>
     <string name="balance_check_last_transaction">Letzte Abbuchung</string>
     <string name="pref_share_image_title">Bilder zum Gericht teilen</string>
-    <string name="pref_share_image_summary">Einige wenige Apps (Threema, FB Messenger...) teilen leider nur das Bild ohne Text, wenn diese Option aktiviert ist.</string>
+    <string name="pref_share_image_summary">Füge beim Teilen von Gerichten (falls vorhanden) Bild hinzu.</string>
     <string name="meals_no_food">Heute gibt es hier leider kein Essen.</string>
     <string name="balance_check_explanation">Um das Guthaben zu überprüfen, musst du NFC aktivieren und anschließend dein Handy auf die emeal-Karte legen. Dies ist von überall aus möglich.</string>
     <string name="imprint_credits">Ein großes Dankeschön an die zuvor genannten Entwickler, die ihren Quellcode als freie Software zur Verfügung stellen und somit die Entwicklung von mensaDD unterstützt haben.\n\nWeiterer Dank gilt Paul für die Unterstützung bei der Entwicklung und der Perry Rhodan Youth für das Testen während der Entwicklungsphase.\n\nUnd letztendlich auch ein großes Dankeschön an die Nutzer dieser App und deren oft sehr hilfreiches Feedback! ;-)</string>
@@ -36,8 +36,16 @@
     <string name="balance_check_not_enough_data">Nicht genügend Datensätze vorhanden.</string>
     <string name="balance_check_footnote">Alle hier angezeigten Daten werden ausschließlich lokal auf deinem Gerät gespeichert. Bei einer Neuinstallation werden diese somit gelöscht. Manuelles Löschen der Daten ist in den Einstellungen möglich.</string>
     <string name="meals_loading_progress">Speiseplan wird geladen...</string>
-    <string name="pref_reset_summary">Alle lokal gespeicherten Speisepläne, Prioritätsdaten der Mensaliste und Guthabendaten werden gelöscht.</string>
+    <string name="pref_reset_summary">Lösche alle lokal gespeicherten Speisepläne, Favoriten und Guthabendaten.</string>
     <string name="pref_reset_title">Daten löschen</string>
+    <string name="pref_dark_mode_title">Nachtmodus</string>
+    <string name="pref_dark_mode_summary">Wähle zwischen hellem, dunklem oder systemweitem Farbmodus.</string>
+    <string name="pref_dark_mode_follow_system_summary">Das Farbschema wird automatisch entsprechend den Systemeinstellungen angepasst.</string>
+    <string-array name="pref_dark_mode_entries">
+        <item>Dunkel</item>
+        <item>Hell</item>
+        <item>Systemeinstellung</item>
+    </string-array>
     <string name="send_feedback_mail">Feedback E-Mail verfassen</string>
     <string name="tutorial_header">Willkommen</string>
     <string name="tutorial_design_header">Design</string>
@@ -56,9 +64,9 @@
     <string name="canteens_loading_progress">Mensen werden geladen...</string>
     <string name="tutorial_header_content">zu Version 3.0 von mensaDD! Es gibt viel Neues zu entdecken. Ich wünsche viel Spaß damit und stets guten Appetit! ;-)</string>
     <string name="delete_data">Daten wurden erfolgreich gelöscht.</string>
-    <string name="app_version">Version 3.0 .1/ May 2018</string>
+    <string name="app_version">Version 3.1/ Aug 2020</string>
     <string name="pref_veg_meals_title">Grüne Gerichte</string>
-    <string name="pref_veg_meals_summary">Vegane und vegetarische Gerichte grün einfärben</string>
+    <string name="pref_veg_meals_summary">Färbe vegane und vegetarische Gerichte grün ein.</string>
     <string name="meals_no_image">kein Bild verfügbar</string>
     <string name="meals_loading_image">Bild wird geladen...</string>
     <string name="news_share_button">Teilen</string>
@@ -86,5 +94,6 @@
     <string name="last_server_check">Stand von %1$s Uhr</string>
     <string name="button_close">Schließen</string>
     <string name="button_meals">Speiseplan</string>
-
+    <string name="today">heute</string>
+    <string name="tomorrow">morgen</string>
 </resources>

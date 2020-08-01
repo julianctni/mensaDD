@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,9 +60,11 @@ public class CanteenListAdapter extends ListAdapter<Canteen, CanteenListAdapter.
         holder.mAddress.setText(item.getAddress());
         holder.mHours.setText(item.getHours());
         if (item.isFavorite()) {
-            holder.mFavorite.setImageDrawable(mContext.getDrawable(R.drawable.ic_favorite_pink_24dp));
+            holder.mFavorite.setImageDrawable(mContext.getDrawable(R.drawable.ic_baseline_favorite_24));
+            holder.mFavorite.setColorFilter(ContextCompat.getColor(mContext, R.color.pink_dark));
         } else {
-            holder.mFavorite.setImageDrawable(mContext.getDrawable(R.drawable.ic_favorite_border_grey_24dp));
+            holder.mFavorite.setImageDrawable(mContext.getDrawable(R.drawable.ic_baseline_favorite_border_24));
+            holder.mFavorite.setColorFilter(ContextCompat.getColor(mContext, R.color.card_header_text));
         }
     }
 
@@ -96,8 +99,11 @@ public class CanteenListAdapter extends ListAdapter<Canteen, CanteenListAdapter.
             if (v.getId() == R.id.canteenItemFav) {
                 boolean isFavorite = getItem(getAdapterPosition()).isFavorite();
                 mOnFavoriteClickListener.onFavoriteClick(getItem(getAdapterPosition()));
-                int favIconId = isFavorite ? R.drawable.ic_favorite_border_grey_24dp : R.drawable.ic_favorite_pink_24dp;
+                int favIconId = isFavorite ? R.drawable.ic_baseline_favorite_border_24 : R.drawable.ic_baseline_favorite_24;
+                int favIconColor = isFavorite ? R.color.card_header_text : R.color.pink_dark;
+
                 mFavorite.setImageDrawable(mContext.getDrawable(favIconId));
+                mFavorite.setColorFilter(ContextCompat.getColor(mContext, favIconColor));
                 mFavorite.startAnimation(Utils.getFavoriteScaleOutAnimation(mFavorite));
             } else {
                 try {

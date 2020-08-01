@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/feedback"
-        android:icon="@drawable/ic_email_white_24dp"
+        android:icon="@drawable/ic_outline_email_24"
         android:title="@string/menu_send_feedback"
         app:showAsAction="always" />
 

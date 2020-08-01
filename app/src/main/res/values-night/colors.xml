@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorPrimaryTransp">#CC2e394d</color>
+    <color name="colorAccent">@color/cyan</color>
+    <color name="text_primary">#EEEEEE</color>
+    <color name="text_secondary">#EEEEEE</color>
+    <color name="window_background">#2e394d</color>
+    <color name="cyan">#01aaad</color>
+    <color name="pink">#ff4b66</color>
+    <color name="cyan_dark">#006c6e</color>
+    <color name="cyan_super_dark">#003334</color>
+    <color name="pink_dark">#cc3c51</color>
+    <color name="header_grey">#88CCCCCC</color>
+    <color name="card_text_light">#FFFFFF</color>
+    <color name="card_text_dark">#444444</color>
+    <color name="card_meal_header_veg">#7fb29b</color>
+    <color name="card_meal_header">#EBEBEB</color>
+
+    <color name="fragment_background">#000000</color>
+    <color name="bottom_nav_background">#222222</color>
+    <color name="bottom_nav_icon_active">#DDDDDD</color>
+    <color name="bottom_nav_icon_inactive">#444444</color>
+    <color name="bottom_nav_ripple_color">#333333</color>
+    <color name="card_header">#333333</color>
+    <color name="card_header_text">#EDEDED</color>
+    <color name="card_content">#444444</color>
+    <color name="card_content_text">#EDEDED</color>
+    <color name="fab_share">@color/pink_dark</color>
+    <color name="card_header_vegeterian">#3F584D</color>
+    <color name="meal_icon">#B4B4B4</color>
+    <color name="tab_text_selected">#EDEDED</color>
+    <color name="tab_text">#AAEDEDED</color>
+    <color name="balance_check_background">@color/cyan_super_dark</color>
+</resources>

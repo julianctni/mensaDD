@@ -1,6 +1,7 @@
 package com.pasta.mensadd.ui.fragments;
 
 
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,11 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -55,7 +58,7 @@ public class CanteenMapFragment extends Fragment {
     private TextView mCanteenName;
     private TextView mCanteenAddress;
     private TextView mCanteenHours;
-    private CardView mInfoCard;
+    private LinearLayout mInfoCard;
 
     private PermissionsManager mPermissionManager;
     private LocationComponent mLocationComponent;
@@ -88,7 +91,7 @@ public class CanteenMapFragment extends Fragment {
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(mapboxMap -> {
             mMap = mapboxMap;
-            mCanteensViewModel.getAllCanteens().observe(CanteenMapFragment.this, canteens -> {
+            mCanteensViewModel.getAllCanteens().observe(requireActivity(), canteens -> {
                 initMap(mapboxMap, canteens);
             });
         });
@@ -97,7 +100,13 @@ public class CanteenMapFragment extends Fragment {
 
 
     private void initMap(MapboxMap map, List<Canteen> canteens) {
-        map.setStyle(getResources().getString(R.string.mapbox_style_url), style -> {
+        String styleUrl = getResources().getString(R.string.mapbox_style_url);
+        int currentNightMode = getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK;
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            styleUrl = getResources().getString(R.string.mapbox_style_url_dark);
+        }
+        map.setStyle(styleUrl, style -> {
             if (PermissionsManager.areLocationPermissionsGranted(getContext())) {
                 enableLocationComponent(style);
             }
@@ -113,10 +122,6 @@ public class CanteenMapFragment extends Fragment {
                     mCanteenHours.setText(canteen.getHours());
                     if (mInfoCard.getVisibility() == View.GONE) {
                         mInfoCard.setVisibility(View.VISIBLE);
-                        ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation
-                                .RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                        showAnim.setDuration(150);
-                        mInfoCard.startAnimation(showAnim);
                         mCanteensViewModel.setSelectedCanteen(canteen);
                     }
                 });

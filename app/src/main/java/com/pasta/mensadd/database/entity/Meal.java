@@ -100,6 +100,6 @@ public class Meal {
     }
 
     public String formatDetails(String content) {
-        return Html.fromHtml("&#149;").toString() + " " + content.replace(", ", "\n" + Html.fromHtml("&#149;").toString() + " ");
+        return content.isEmpty() ? content : Html.fromHtml("&#149;").toString() + " " + content.replace(", ", "\n" + Html.fromHtml("&#149;").toString() + " ");
     }
 }
