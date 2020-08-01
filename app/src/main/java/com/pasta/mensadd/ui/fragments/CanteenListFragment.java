@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -62,10 +63,10 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
         mCanteenListAdapter.setOnCanteenClickListener(this);
         mCanteenList.setAdapter(mCanteenListAdapter);
         mCanteenList.setLayoutManager(layoutParams);
-        mCanteensViewModel.getAllCanteens().observe(this, canteens -> {
-            progressBar.setVisibility(mCanteensViewModel.isRefreshing() ? View.VISIBLE : View.GONE);
+        mCanteensViewModel.getAllCanteens().observe(getViewLifecycleOwner(), canteens -> {
             mCanteenListAdapter.submitList(canteens);
         });
+        mCanteensViewModel.isRefreshing().observe(getViewLifecycleOwner(), refreshing -> progressBar.setVisibility(refreshing ? View.VISIBLE : View.GONE));
         return view;
     }
 
@@ -75,7 +76,7 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
         showTutorial();
     }
 
-    void showTutorial(){
+    void showTutorial() {
         try {
             PackageInfo info = getContext().getPackageManager().getPackageInfo(this.getContext().getPackageName(), 0);
             if (mSharedPrefs.getBoolean("pref_show_tut_" + info.versionCode, true) && info.versionCode == 20) {

@@ -2,11 +2,11 @@ package com.pasta.mensadd.ui.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
 import com.pasta.mensadd.database.entity.Canteen;
@@ -27,7 +27,7 @@ public class CanteensViewModel extends AndroidViewModel {
     private NetworkController network;
     private Canteen selectedCanteen;
     private SharedPreferences prefs;
-    private boolean isRefreshing;
+    private MutableLiveData<Boolean> isRefreshing;
     private static final int CANTEEN_UPDATE_INTERVAL = 86400000;
     private static final String PREF_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
 
@@ -37,6 +37,7 @@ public class CanteensViewModel extends AndroidViewModel {
         canteens = canteenRepository.getAllCanteens();
         prefs = PreferenceManager.getDefaultSharedPreferences(application);
         network = NetworkController.getInstance(application);
+        isRefreshing = new MutableLiveData<>();
     }
 
     public void updateCanteen(Canteen canteen) {
@@ -65,13 +66,14 @@ public class CanteensViewModel extends AndroidViewModel {
         return canteenRepository.getCanteenById(id);
     }
 
-    public boolean isRefreshing() {
+
+    public LiveData<Boolean> isRefreshing() {
         return isRefreshing;
     }
 
     public void refreshCanteens() {
+        isRefreshing.setValue(true);
         network.fetchCanteens((responseType, message) -> {
-            isRefreshing = true;
             try {
                 JSONArray json = new JSONObject(message).getJSONArray("canteens");
 
@@ -82,7 +84,6 @@ public class CanteensViewModel extends AndroidViewModel {
                     String address = jsonCanteen.getString("address");
                     int priority = jsonCanteen.getInt("priority");
                     JSONArray gpsArray = jsonCanteen.getJSONArray("coordinates");
-                    Log.i("Parsing canteens", name);
                     JSONArray hourArray = jsonCanteen.getJSONArray("hours");
                     StringBuilder hours = new StringBuilder();
                     for (int j = 0; j < hourArray.length(); j++) {
@@ -100,7 +101,7 @@ public class CanteensViewModel extends AndroidViewModel {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            isRefreshing = false;
+            isRefreshing.setValue(false);
         });
     }
 }
