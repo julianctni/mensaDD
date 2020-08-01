@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            app:icon="@drawable/ic_public_grey_20dp"
+            app:icon="@drawable/ic_baseline_public_24"
             app:iconTint="@color/card_content_text"
             app:iconPadding="5dp"
             android:focusable="true"

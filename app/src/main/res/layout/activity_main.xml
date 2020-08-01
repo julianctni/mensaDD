@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@id/saveBalanceButton"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="65dp"
+                android:layout_marginEnd="64dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:src="@drawable/ic_baseline_clear_24"

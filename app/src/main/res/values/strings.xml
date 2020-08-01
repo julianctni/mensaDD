@@ -11,7 +11,7 @@
     <string name="nav_license">Licenses</string>
     <string name="nav_card_history">Card balance</string>
     <string name="nav_news">News</string>
-    <string name="pref_autostart_summary">App opens automatically as soon as an eMeal card is discovered.</string>
+    <string name="pref_autostart_summary">Start the app when an eMeal card is discovered.</string>
     <string name="pref_autostart_key" translatable="false">nfc_autostart</string>
     <string name="pref_map_key" translatable="false">offline-map</string>
     <string name="pref_map_summary">If there is a WiFi connection, the map of Dresden gets downloaded to the device when you start the map.</string>
@@ -21,7 +21,7 @@
     <string name="balance_check_last_transaction">Last transaction</string>
     <string name="pref_share_image_key" translatable="false">share_image</string>
     <string name="pref_share_image_title">Share meal images</string>
-    <string name="pref_share_image_summary">Some apps (Threema, FB Messenger...) just share the image without text i this option is activated.</string>
+    <string name="pref_share_image_summary">If available add image when sharing a meal.</string>
     <string name="meals_no_food">Unfortunately there\'s no food today.</string>
     <string name="balance_check_explanation">In order to check your balance enable NFC and just put your phone onto your emeal card. This is possible from everywhere inside the app.</string>
 
@@ -51,7 +51,7 @@
     <string name="meals_loading_progress">Loading meals...</string>
     <string name="no_meal_image" translatable="false">no meal image</string>
     <string name="vegan_meal" translatable="false">vegan</string>
-    <string name="pref_reset_summary">Deletes all locally stored meals, priorities of clicked canteens and balance data.</string>
+    <string name="pref_reset_summary">Delete all locally stored meals, favorites and balance data.</string>
     <string name="pref_reset_title">Delete all data</string>
     <string name="pref_dark_mode_key" translatable="false">pref_dark_mode</string>
     <string name="pref_dark_mode_yes" translatable="false">dark</string>
@@ -69,7 +69,7 @@
     </string-array>
     <string name="pref_dark_mode_title">Dark mode</string>
     <string name="pref_dark_mode_summary">Switch to dark mode</string>
-    <string name="pref_dark_mode_follow_system_summary">The color scheme is automatically adjusted according to the system settings.</string>
+    <string name="pref_dark_mode_follow_system_summary">Choose between dark, light or system mode.</string>
     <string name="send_feedback_mail">Write a feedback mail</string>
     <string name="tutorial_header">Welcome</string>
     <string name="tutorial_design_header">Design</string>
@@ -91,7 +91,7 @@
     <string name="pref_key_autostart_set" translatable="false">autostart_set</string>
     <string name="pref_veg_meals_key" translatable="false">pref_veg_meals</string>
     <string name="pref_veg_meals_title">Green meals</string>
-    <string name="pref_veg_meals_summary">Green background for vegan and vegetarian meals</string>
+    <string name="pref_veg_meals_summary">Add green background to vegan and vegetarian meals.</string>
     <string name="meals_no_image">no image available</string>
     <string name="meals_loading_image">Loading meal image...</string>
     <string name="news_details_button">Details</string>
