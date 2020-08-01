@@ -14,6 +14,8 @@ You have to add a file called `/res/values/mensadd_config.xml` with the followin
 <resources>
     <string name="mapbox_access_token" type="string" translatable="false">[MAPBOX ACCESS TOKEN]</string>
     <string name="mapbox_style_url" type="string" translatable="false">[MAPBOX STYLE URL]</string>
+    <string name="mapbox_style_url_dark" type="string" translatable="false">[MAPBOX STYLE URL DARK MODE]</string>
+    <string name="mapbox_style_url" type="string" translatable="false">[MAPBOX STYLE URL DEFAULT MODE]</string>
 
     <string name="url_base" type="string" translatable="false">[BASE URL FOR API]</string>
     <string name="url_suffix_news" type="string" translatable="false">[API SUFFIX NEWS]</string>
