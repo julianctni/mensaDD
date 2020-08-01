@@ -189,12 +189,19 @@ public class CanteenMapFragment extends Fragment {
             mLocationComponent.onStop();
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mMapView.onStart();
+    }
+
     @Override
     public void onPause() {
         super.onPause();
         mMapView.onPause();
         // mMapZoom = (int) mMap.getCameraPosition().zoom;
-        //mMapCenter = mMap.getCameraPosition().target;
+        // mMapCenter = mMap.getCameraPosition().target;
     }
 
     @Override
