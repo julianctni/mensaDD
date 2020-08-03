@@ -52,9 +52,10 @@ public class DatabaseController extends SQLiteOpenHelper {
         db.close();
         prefs.edit().remove("lastCanteenUpdate").apply();
         prefs.edit().remove("pref_bacon").apply();
+        /*
         for (Canteen c : DataHolder.getInstance().getCanteenList()) {
             prefs.edit().remove("priority_" + c.getId()).apply();
-        }
+        }*/
     }
 
 
