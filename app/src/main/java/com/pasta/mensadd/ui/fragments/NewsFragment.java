@@ -44,7 +44,7 @@ public class NewsFragment extends Fragment {
         NewsViewModel newsViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
         ProgressBar progressBar = view.findViewById(R.id.newsListProgressBar);
         progressBar.setVisibility(newsViewModel.isRefreshing() ? View.VISIBLE : View.GONE);
-        newsViewModel.getAllNews().observe(this, news -> {
+        newsViewModel.getAllNews().observe(getViewLifecycleOwner(), news -> {
             mNewsListAdapter.submitList(news);
             progressBar.setVisibility(newsViewModel.isRefreshing() ? View.VISIBLE : View.GONE);
         });

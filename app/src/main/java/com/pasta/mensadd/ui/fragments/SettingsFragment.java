@@ -2,7 +2,6 @@ package com.pasta.mensadd.ui.fragments;
 
 
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
 
 import android.view.View;
 import android.widget.Toast;
@@ -18,7 +16,6 @@ import android.widget.Toast;
 import com.pasta.mensadd.ui.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
-import com.pasta.mensadd.DatabaseController;
 import com.pasta.mensadd.ui.FragmentController;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -30,8 +27,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         findPreference(getString(R.string.pref_reset_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                DatabaseController dbController = new DatabaseController(getContext());
-                dbController.deleteAllData();
+                //TODO: Implement app reset
+                //DatabaseController dbController = new DatabaseController(getContext());
+                //dbController.deleteAllData();
                 Toast.makeText(getContext(), getResources().getString(R.string.delete_data), Toast.LENGTH_LONG).show();
 
                 return false;

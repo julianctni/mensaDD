@@ -22,7 +22,9 @@ public class CanteenRepository {
         allCanteens = canteenDao.getAllCanteens();
     }
 
-    public void updateOrInsert(Canteen canteen) { new UpdateOrInsertAsyncTask(canteenDao).execute(canteen); }
+    public void updateOrInsert(Canteen canteen) {
+        new UpdateOrInsertAsyncTask(canteenDao).execute(canteen);
+    }
 
     public void update(Canteen canteen) {
         new UpdateCanteensAsyncTask(canteenDao).execute(canteen);
@@ -38,6 +40,7 @@ public class CanteenRepository {
 
     private static class UpdateCanteensAsyncTask extends AsyncTask<Canteen, Void, Void> {
         private CanteenDao canteenDao;
+
         private UpdateCanteensAsyncTask(CanteenDao canteenDao) {
             this.canteenDao = canteenDao;
         }
@@ -51,6 +54,7 @@ public class CanteenRepository {
 
     private static class UpdateOrInsertAsyncTask extends AsyncTask<Canteen, Void, Void> {
         private CanteenDao canteenDao;
+
         private UpdateOrInsertAsyncTask(CanteenDao canteenDao) {
             this.canteenDao = canteenDao;
         }

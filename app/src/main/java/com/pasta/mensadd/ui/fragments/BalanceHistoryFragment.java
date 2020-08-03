@@ -1,19 +1,20 @@
 package com.pasta.mensadd.ui.fragments;
 
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.DatabaseController;
+import com.pasta.mensadd.database.entity.BalanceEntry;
+import com.pasta.mensadd.ui.viewmodel.BalanceHistoryViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,12 +36,7 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 public class BalanceHistoryFragment extends Fragment {
 
-    private float mMaxBalance;
-    private float mMaxTransaction;
     private SimpleDateFormat mDateFormat;
-    private ArrayList<Float> mBalance = new ArrayList<>();
-    private ArrayList<Float> mTransactions = new ArrayList<>();
-    private ArrayList<Long> mTimestamps = new ArrayList<>();
     private TextView mCurrentBalance;
     private TextView mCurrentLastTransaction;
     private TextView noBalanceText;
@@ -81,7 +77,10 @@ public class BalanceHistoryFragment extends Fragment {
         mBalanceChart.setZoomEnabled(false);
         mBalanceChart.setScrollEnabled(false);
         mBalanceChart.setClickable(false);
-        updateBalanceHistory(true);
+        BalanceHistoryViewModel balanceHistoryViewModel = new ViewModelProvider(this).get(BalanceHistoryViewModel.class);
+        balanceHistoryViewModel.getAllBalanceEntries().observe(getViewLifecycleOwner(), balanceEntries -> {
+            updateBalanceHistory(true, balanceEntries);
+        });
 
         return v;
     }
@@ -96,14 +95,14 @@ public class BalanceHistoryFragment extends Fragment {
     }
 
 
-    public void setUpBalanceChart() {
+    public void setUpBalanceChart(List<BalanceEntry> balanceEntries) {
         List<PointValue> values = new ArrayList<>();
         List<AxisValue> axisValues = new ArrayList<>();
-        for (int i = 0; i < mBalance.size(); i++) {
-            values.add(new PointValue(i, mBalance.get(i)));
-            if (mBalance.get(i) > mMaxBalance)
-                mMaxBalance = mBalance.get(i);
-            Date date = new Date(mTimestamps.get(i));
+        for (int i = 0; i < balanceEntries.size(); i++) {
+            values.add(new PointValue(i, balanceEntries.get(i).getCardBalance()));
+            //if (mBalance.get(i) > mMaxBalance)
+                //mMaxBalance = mBalance.get(i);
+            Date date = new Date(balanceEntries.get(i).getTimestamp());
             axisValues.add(new AxisValue(i).setLabel(mDateFormat.format(date)));
         }
 
@@ -123,32 +122,21 @@ public class BalanceHistoryFragment extends Fragment {
         data.setLines(lines);
 
         for (int j = 0; j < line.getValues().size(); j++) {
-            line.getValues().get(j).setTarget(j, mBalance.get(j));
+            line.getValues().get(j).setTarget(j, balanceEntries.get(j).getCardBalance());
         }
-
         mBalanceChart.setLineChartData(data);
-
-        /*
-        mBalanceChart.setViewportCalculationEnabled(false);
-        Viewport viewport = new Viewport(mBalanceChart.getCurrentViewport());
-        viewport.bottom = 0;
-        viewport.top = (int) (mMaxBalance * 1.3);
-        mBalanceChart.setMaximumViewport(viewport);
-        mBalanceChart.setCurrentViewport(viewport);
-        */
     }
 
-    public void setUpTransactionsChart() {
-        int numColumns = mTransactions.size();
+    public void setUpTransactionsChart(List<BalanceEntry> balanceEntries) {
+        int numColumns = balanceEntries.size();
         List<AxisValue> axisValues = new ArrayList<>();
         List<Column> columns = new ArrayList<>();
         for (int i = 0; i < numColumns; ++i) {
             List<SubcolumnValue> values = new ArrayList<>();
-            values.add(new SubcolumnValue(mTransactions.get(i), getResources().getColor(R.color.cyan_dark)));
-            Date date = new Date(mTimestamps.get(i));
+            values.add(new SubcolumnValue(balanceEntries.get(i).getLastTransaction(), getResources().getColor(R.color.cyan_dark)));
+            Date date = new Date(balanceEntries.get(i).getTimestamp());
             axisValues.add(new AxisValue(i).setLabel(mDateFormat.format(date)));
-            if (mTransactions.get(i) > mMaxTransaction)
-                mMaxTransaction = mTransactions.get(i);
+
             Column column = new Column(values);
             columns.add(column);
         }
@@ -162,69 +150,25 @@ public class BalanceHistoryFragment extends Fragment {
 
         mTransactionChart.setColumnChartData(data);
 
-        /*
-        mTransactionChart.setViewportCalculationEnabled(false);
-        Viewport viewport = new Viewport(mTransactionChart.getCurrentViewport());
-        viewport.bottom = 0;
-        viewport.top = (int) (mMaxTransaction * 1.3);
-        mTransactionChart.setMaximumViewport(viewport);
-        mTransactionChart.setCurrentViewport(viewport);
-        */
         for (int j = 0; j < data.getColumns().size(); j++) {
             for (SubcolumnValue value : data.getColumns().get(j).getValues()) {
-                value.setTarget(mTransactions.get(j));
+                value.setTarget(balanceEntries.get(j).getLastTransaction());
             }
         }
     }
 
-    public void updateBalanceHistory(boolean firstSetup) {
-        mBalance.clear();
-        mTransactions.clear();
-        mTimestamps.clear();
-        DatabaseController dbController = new DatabaseController(getContext());
-        SQLiteDatabase db = dbController.getReadableDatabase();
-        String[] projection = {
-                DatabaseController.BALANCE_ID,
-                DatabaseController.CARD_BALANCE,
-                DatabaseController.LAST_TRANSACTION
-        };
-
-        String sortOrder =
-                DatabaseController.BALANCE_ID + " ASC";
-
-        Cursor c = db.query(
-                DatabaseController.BALANCES_TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-        );
+    public void updateBalanceHistory(boolean firstSetup, List<BalanceEntry> balanceEntries) {
 
 
-        while (c.moveToNext()) {
-            mBalance.add(c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
-            mTransactions.add(c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
-            mTimestamps.add(c.getLong(c.getColumnIndex(DatabaseController.BALANCE_ID)));
-            if (c.isLast()) {
-                String b = getString(R.string.balance_check_balance) + ": " + formatMoneyString("" + c.getFloat(c.getColumnIndex(DatabaseController.CARD_BALANCE)));
-                String t = getString(R.string.balance_check_last_transaction) + ": " + formatMoneyString("" + c.getFloat(c.getColumnIndex(DatabaseController.LAST_TRANSACTION)));
-                mCurrentBalance.setText(b);
-                mCurrentLastTransaction.setText(t);
-            }
-        }
-        c.close();
-
-        if (mBalance.size() > 1) {
-            setUpBalanceChart();
-            setUpTransactionsChart();
+        if (balanceEntries.size() > 1) {
+            setUpBalanceChart(balanceEntries);
+            setUpTransactionsChart(balanceEntries);
             noBalanceText.setVisibility(View.GONE);
             noTransactionText.setVisibility(View.GONE);
             if (firstSetup)
                 animateGraphs();
         } else {
-            if (mBalance.isEmpty()) {
+            if (balanceEntries.isEmpty()) {
                 mCurrentBalance.setText(getString(R.string.balance_check_explanation));
             }
         }

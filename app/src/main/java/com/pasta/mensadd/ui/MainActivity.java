@@ -31,7 +31,6 @@ import android.widget.Toast;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.maps.Style;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
@@ -39,15 +38,14 @@ import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
 import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
-import com.pasta.mensadd.DatabaseController;
+import com.pasta.mensadd.database.entity.BalanceEntry;
+import com.pasta.mensadd.database.repository.BalanceEntryRepository;
 import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
-import com.pasta.mensadd.ui.fragments.CanteenMapFragment;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
 
@@ -282,19 +280,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void storeCardData() {
-        float cardBalance = (float) mCurrentValueData.value / 1000;
+        float cardBalance = (float) mCurrentValueData.value * 0.5f / 1000;
         float lastTransaction = (float) mCurrentValueData.lastTransaction / 1000;
-        DatabaseController dbController = new DatabaseController(this.getApplicationContext());
-        if (cardBalance != dbController.getLastInsertedBalance()) {
-            dbController.updateBalanceTable(new Date().getTime(), cardBalance, lastTransaction);
-            Toast.makeText(this.getApplicationContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
-            BalanceHistoryFragment fragment = (BalanceHistoryFragment) getSupportFragmentManager().findFragmentByTag(FragmentController.TAG_BALANCE_HISTORY);
-            if (fragment != null) {
-                fragment.updateBalanceHistory(false);
+        BalanceEntryRepository balanceEntryRepository = new BalanceEntryRepository(getApplication());
+        balanceEntryRepository.getLatestBalanceEntry().observe(this, balanceEntry -> {
+            if (balanceEntry == null || balanceEntry.getCardBalance() != cardBalance || balanceEntry.getLastTransaction() != lastTransaction) {
+                balanceEntryRepository.insert(new BalanceEntry(new Date().getTime(), cardBalance, lastTransaction));
+                Toast.makeText(this.getApplicationContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
+                BalanceHistoryFragment fragment = (BalanceHistoryFragment) getSupportFragmentManager().findFragmentByTag(FragmentController.TAG_BALANCE_HISTORY);
+            } else {
+                Toast.makeText(this.getApplicationContext(), getString(R.string.balance_already_saved), Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(this.getApplicationContext(), getString(R.string.balance_already_saved), Toast.LENGTH_SHORT).show();
-        }
+        });
     }
 
 
