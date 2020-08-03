@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void storeCardData() {
-        float cardBalance = (float) mCurrentValueData.value * 0.5f / 1000;
+        float cardBalance = (float) mCurrentValueData.value / 1000;
         float lastTransaction = (float) mCurrentValueData.lastTransaction / 1000;
         BalanceEntryRepository balanceEntryRepository = new BalanceEntryRepository(getApplication());
         balanceEntryRepository.getLatestBalanceEntry().observe(this, balanceEntry -> {
