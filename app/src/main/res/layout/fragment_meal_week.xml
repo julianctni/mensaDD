@@ -16,14 +16,13 @@
             app:tabContentStart="72dp"
             app:tabIndicatorColor="@color/pink_dark"
             app:tabTextColor="@color/tab_text"
+            app:tabIndicatorHeight="4dp"
             app:tabSelectedTextColor="@color/tab_text_selected"
             app:tabIndicatorFullWidth="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:background="@color/colorPrimary"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
             android:elevation="2dp"
             android:textColor="#ffffff" />
 

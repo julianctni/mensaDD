@@ -23,11 +23,11 @@ public class CanteenRepository {
     }
 
     public void updateOrInsert(Canteen canteen) {
-        new UpdateOrInsertAsyncTask(canteenDao).execute(canteen);
+        AppDatabase.dbExecutor.execute(() -> canteenDao.insertOrUpdate(canteen));
     }
 
     public void update(Canteen canteen) {
-        new UpdateCanteensAsyncTask(canteenDao).execute(canteen);
+        AppDatabase.dbExecutor.execute(() -> canteenDao.update(canteen));
     }
 
     public LiveData<Canteen> getCanteenById(String id) {
@@ -38,39 +38,4 @@ public class CanteenRepository {
         return allCanteens;
     }
 
-    private static class UpdateCanteensAsyncTask extends AsyncTask<Canteen, Void, Void> {
-        private CanteenDao canteenDao;
-
-        private UpdateCanteensAsyncTask(CanteenDao canteenDao) {
-            this.canteenDao = canteenDao;
-        }
-
-        @Override
-        protected Void doInBackground(Canteen... canteens) {
-            canteenDao.update(canteens[0]);
-            return null;
-        }
-    }
-
-    private static class UpdateOrInsertAsyncTask extends AsyncTask<Canteen, Void, Void> {
-        private CanteenDao canteenDao;
-
-        private UpdateOrInsertAsyncTask(CanteenDao canteenDao) {
-            this.canteenDao = canteenDao;
-        }
-
-        @Override
-        protected Void doInBackground(Canteen... canteens) {
-            Canteen canteen = canteenDao.getCanteenById(canteens[0].getId());
-            if (canteen == null) {
-                canteenDao.insert(canteens[0]);
-            } else {
-                canteens[0].setListPriority(canteen.getListPriority());
-                canteens[0].setLastMealUpdate(canteen.getLastMealUpdate());
-                canteens[0].setLastMealScraping((canteen.getLastMealScraping()));
-                canteenDao.update(canteens[0]);
-            }
-            return null;
-        }
-    }
 }

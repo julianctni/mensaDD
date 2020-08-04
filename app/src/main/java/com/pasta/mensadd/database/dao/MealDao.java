@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.pasta.mensadd.database.entity.Canteen;
@@ -17,11 +18,19 @@ import java.util.Set;
 @Dao
 public interface MealDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Meal meal);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insert(Meal meal);
 
     @Update
     void update(Meal meal);
+
+    @Transaction
+    default void insertOrUpdate(Meal meal) {
+        long id = insert(meal);
+        if (id == -1l) {
+            update(meal);
+        }
+    }
 
     @Query("SELECT * FROM table_meals WHERE canteenId = :canteenId and date = :day")
     LiveData<List<Meal>> getMealsByCanteenByDay(String canteenId, String day);

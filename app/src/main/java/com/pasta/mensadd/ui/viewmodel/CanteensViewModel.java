@@ -28,7 +28,7 @@ public class CanteensViewModel extends AndroidViewModel {
     private Canteen selectedCanteen;
     private SharedPreferences prefs;
     private MutableLiveData<Boolean> isRefreshing;
-    private static final int CANTEEN_UPDATE_INTERVAL = 86400000;
+    private static final int CANTEEN_UPDATE_INTERVAL = 5000;//86400000;
     private static final String PREF_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
 
     public CanteensViewModel(@NonNull Application application) {
@@ -44,7 +44,7 @@ public class CanteensViewModel extends AndroidViewModel {
         canteenRepository.update(canteen);
     }
 
-    public void updateOrInsertCanteen(Canteen canteen) { canteenRepository.updateOrInsert(canteen); }
+    public void insertOrUpdateCanteen(Canteen canteen) { canteenRepository.updateOrInsert(canteen); }
 
     public LiveData<List<Canteen>> getAllCanteens() {
         long lastUpdate = prefs.getLong(PREF_LAST_CANTEENS_UPDATE, 0);
@@ -94,7 +94,7 @@ public class CanteensViewModel extends AndroidViewModel {
                     double posLat = Double.parseDouble(gpsArray.get(0).toString());
                     double posLong = Double.parseDouble(gpsArray.get(1).toString());
                     Canteen m = new Canteen(code, name, hours.toString(), address, posLat, posLong, priority);
-                    updateOrInsertCanteen(m);
+                    insertOrUpdateCanteen(m);
                 }
 
                 prefs.edit().putLong(PREF_LAST_CANTEENS_UPDATE, Calendar.getInstance().getTimeInMillis()).apply();

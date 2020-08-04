@@ -26,7 +26,7 @@ public class MealRepository {
     }
 
     public void insertOrUpdateMeal(Meal meal) {
-        new InsertOrUpdateMealTask(mealDao).execute(meal);
+        AppDatabase.dbExecutor.execute(() -> mealDao.insertOrUpdate(meal));
     }
 
     public LiveData<List<Meal>> getMealsByCanteenByDay(Canteen canteen, String day) {
@@ -37,21 +37,4 @@ public class MealRepository {
         network.fetchMeals(canteen.getId(), callback);
     }
 
-    private static class InsertOrUpdateMealTask extends AsyncTask<Meal, Void, Void> {
-        private MealDao mealDao;
-        private InsertOrUpdateMealTask(MealDao mealDao) {
-            this.mealDao = mealDao;
-        }
-
-        @Override
-        protected Void doInBackground(Meal... meals) {
-            Meal meal = mealDao.getMealById(meals[0].getId());
-            if (meal == null) {
-                mealDao.insert(meals[0]);
-            } else {
-                mealDao.update(meals[0]);
-            }
-            return null;
-        }
-    }
 }

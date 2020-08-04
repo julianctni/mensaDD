@@ -4,9 +4,10 @@ import android.text.Html;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "table_meals")
+@Entity(tableName = "table_meals", foreignKeys = @ForeignKey(entity = Canteen.class, parentColumns = "id", childColumns = "canteenId", onDelete = ForeignKey.CASCADE))
 public class Meal {
 
     @NonNull
@@ -43,9 +44,13 @@ public class Meal {
         this.alcohol = alcohol;
     }
 
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 
-    public void setId(String id) { this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCanteenId() {
         return canteenId;

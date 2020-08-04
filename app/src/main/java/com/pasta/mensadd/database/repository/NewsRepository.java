@@ -24,26 +24,14 @@ public class NewsRepository {
     }
 
     public void insertNews(News news) {
-        new NewsRepository.InsertNewsTask(newsDao).execute(news);
+        AppDatabase.dbExecutor.execute(() -> newsDao.insert(news));
     }
 
     public LiveData<List<News>> getAllNews() {
         return newsDao.getAllNews();
     }
+
     public void refreshNews(LoadNewsCallback callback) {
         network.fetchNews(callback);
-    }
-
-    private static class InsertNewsTask extends AsyncTask<News, Void, Void> {
-        private NewsDao newsDao;
-        private InsertNewsTask(NewsDao newsDao) {
-            this.newsDao = newsDao;
-        }
-
-        @Override
-        protected Void doInBackground(News... news) {
-            newsDao.insert(news[0]);
-            return null;
-        }
     }
 }
