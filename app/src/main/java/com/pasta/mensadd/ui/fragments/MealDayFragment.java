@@ -26,14 +26,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.pasta.mensadd.database.repository.MealRepository.DATE_FORMAT;
+
 public class MealDayFragment extends Fragment {
 
     private static final String TAG_PAGER_POSITION = "pagerPosition";
-    private ProgressBar mProgressBar;
     private MealListAdapter mMealListAdapter;
     private int mPagerPositon = 10;
     private RecyclerView mRecyclerView;
     private CardView noFoodToday;
+    private static final int ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
 
     private MealsViewModel mMealsViewModel;
 
@@ -58,11 +60,8 @@ public class MealDayFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(false);
         View view = inflater.inflate(R.layout.fragment_meal_day, container, false);
-        mMealsViewModel = new ViewModelProvider(this).get(MealsViewModel.class);
-        CanteensViewModel mCanteensViewModel = new ViewModelProvider(getActivity()).get(CanteensViewModel.class);
+        mMealsViewModel = new ViewModelProvider(requireParentFragment()).get(MealsViewModel.class);
         mRecyclerView = view.findViewById(R.id.mealList);
-        mProgressBar = view.findViewById(R.id.mealListProgressBar);
-        mProgressBar.setVisibility(mMealsViewModel.isRefreshing() ? View.VISIBLE : View.GONE);
         noFoodToday = view.findViewById(R.id.noFoodToday);
         mMealListAdapter = new MealListAdapter(this.getContext());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -70,29 +69,28 @@ public class MealDayFragment extends Fragment {
         mRecyclerView.setNestedScrollingEnabled(true);
 
         Date date = new Date();
-        date.setTime(date.getTime() + mPagerPositon * 86400000);
-        String day = MealsViewModel.DATE_FORMAT.format(date);
-        mMealsViewModel.getMealsByCanteenByDay(mCanteensViewModel.getSelectedCanteen(), day).observe(this, meals -> {
+        date.setTime(date.getTime() + mPagerPositon * ONE_DAY_IN_MILLIS);
+        String day = DATE_FORMAT.format(date);
+        mMealsViewModel.getMealsByDay(day).observe(getViewLifecycleOwner(), meals -> {
             updateMeals(meals);
-            long lastUpdate = mCanteensViewModel.getSelectedCanteen().getLastMealScraping();
-            if (lastUpdate != 0) {
-                mMealListAdapter.setLastMealUpdate(lastUpdate);
-            }
         });
-
+        mMealsViewModel.isRefreshing().observe(getViewLifecycleOwner(), isRefreshing -> {
+            ProgressBar progressBar = view.findViewById(R.id.mealListProgressBar);
+            progressBar.setVisibility(isRefreshing ? View.VISIBLE : View.GONE);
+        });
+        mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> mMealListAdapter.setLastMealUpdate(canteen.getLastMealUpdate()));
         return view;
     }
 
     private void updateMeals(List<Meal> meals) {
         if (meals == null) return;
-        if (meals.isEmpty() && !mMealsViewModel.isRefreshing()) {
+        if (meals.isEmpty()) {
             mRecyclerView.setVisibility(View.GONE);
             noFoodToday.setVisibility(View.VISIBLE);
         } else {
             mRecyclerView.setVisibility(View.VISIBLE);
             noFoodToday.setVisibility(View.GONE);
         }
-        mProgressBar.setVisibility(mMealsViewModel.isRefreshing() ? View.VISIBLE : View.GONE);
         mMealListAdapter.submitList(meals);
     }
 }

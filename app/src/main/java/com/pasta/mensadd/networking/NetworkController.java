@@ -103,7 +103,6 @@ public class NetworkController {
 
     public void doJSONRequest(String url, final AbstractCallback callback) {
         JSONObject params = new JSONObject();
-        Log.i("JSON", url);
         try {
             params.put("apiKey", API_KEY);
         } catch (JSONException e) {
@@ -115,14 +114,12 @@ public class NetworkController {
                     @Override
                     public void onResponse(JSONObject response) {
                         callback.onResponseMessage(SUCCESS, response.toString());
-                        Log.i("Parsing canteens", "onResponse");
                     }
 
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("EEEEERROR", error.getMessage());
                         callback.onResponseMessage(ERROR, error.getMessage());
 
                     }
@@ -131,7 +128,6 @@ public class NetworkController {
     }
 
     public void doImageRequest(String url, final LoadImageCallback callback) {
-        Log.i("IMAGE", url);
         ImageRequest request = new ImageRequest(url, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {

@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
+import com.pasta.mensadd.ui.viewmodel.MealsViewModelFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,8 +44,7 @@ public class MealWeekFragment extends Fragment {
 
     private static final int PAGE_COUNT = 5;
     private Toolbar mToolbar;
-    private CanteensViewModel mCanteensViewModel;
-
+    private MealsViewModel mMealsViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -60,61 +61,54 @@ public class MealWeekFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         ViewPager mViewPager = view.findViewById(R.id.mealViewPager);
-        if (getActivity() != null) {
-            mToolbar = getActivity().findViewById(R.id.toolbar);
-            mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-            mToolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
-        }
-        MealsViewModel mMealsViewModel = new ViewModelProvider(this).get(MealsViewModel.class);
-        mCanteensViewModel = new ViewModelProvider(getActivity()).get(CanteensViewModel.class);
-        mMealsViewModel.refreshMeals(mCanteensViewModel.getSelectedCanteen());
+        mToolbar = requireActivity().findViewById(R.id.toolbar);
+        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        mToolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
+        CanteensViewModel canteensViewModel = new ViewModelProvider(requireActivity()).get(CanteensViewModel.class);
+        MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(requireActivity().getApplication(), canteensViewModel.getSelectedCanteen());
+        mMealsViewModel = new ViewModelProvider(this, mealsViewModelFactory).get(MealsViewModel.class);
         TextView header = view.getRootView().findViewById(R.id.heading_toolbar);
-        header.setText(mCanteensViewModel.getSelectedCanteen().getName());
+        header.setText(mMealsViewModel.getCanteen().getName());
         header.setVisibility(View.VISIBLE);
         view.getRootView().findViewById(R.id.toolbarImage).setVisibility(View.GONE);
-
         mViewPager.setVisibility(View.VISIBLE);
         if (mViewPager.getAdapter() == null) {
             MealDayPagerAdapter mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
             mViewPager.setAdapter(mPagerAdapter);
         }
+
+
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.fragment_meals_menu, menu);
-        if (mCanteensViewModel.getSelectedCanteen().isFavorite()) {
+        if (mMealsViewModel.getCanteen().isFavorite()) {
             menu.findItem(R.id.set_canteen_favorite).setIcon(R.drawable.ic_baseline_favorite_24);
             menu.findItem(R.id.set_canteen_favorite).getIcon().setColorFilter(ContextCompat.getColor(this.getContext(), R.color.pink_dark), PorterDuff.Mode.SRC_IN);
         } else {
             menu.findItem(R.id.set_canteen_favorite).setIcon(R.drawable.ic_baseline_favorite_border_24);
             menu.findItem(R.id.set_canteen_favorite).getIcon().setColorFilter(ContextCompat.getColor(this.getContext(), R.color.white), PorterDuff.Mode.SRC_IN);
         }
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.set_canteen_favorite:
-                Canteen canteen = mCanteensViewModel.getSelectedCanteen();
+                Canteen canteen = mMealsViewModel.getCanteen();
                 int favIconId = canteen.isFavorite() ? R.drawable.ic_baseline_favorite_border_24 : R.drawable.ic_baseline_favorite_24;
                 int favIconColor = canteen.isFavorite() ? R.color.white : R.color.pink_dark;
                 item.setIcon(favIconId);
                 item.getIcon().setColorFilter(ContextCompat.getColor(this.getContext(), favIconColor), PorterDuff.Mode.SRC_IN);
                 canteen.setAsFavorite(!canteen.isFavorite());
-                mCanteensViewModel.updateCanteen(canteen);
+                mMealsViewModel.updateCanteen(canteen);
                 View favButton = mToolbar.findViewById(R.id.set_canteen_favorite);
                 favButton.startAnimation(Utils.getFavoriteScaleOutAnimation(favButton));
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     class MealDayPagerAdapter extends FragmentPagerAdapter {

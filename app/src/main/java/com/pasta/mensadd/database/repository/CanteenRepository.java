@@ -28,7 +28,7 @@ public class CanteenRepository {
     private SharedPreferences prefs;
 
     private static final String PREF_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
-    private static final int CANTEEN_UPDATE_INTERVAL = 5000;//86400000;
+    private static final int CANTEEN_UPDATE_INTERVAL = 10 * 60 * 60 * 1000;
 
     public CanteenRepository(Application application) {
         AppDatabase appDatabase = AppDatabase.getInstance(application);
