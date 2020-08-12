@@ -45,7 +45,7 @@ public class MealRepository {
     }
 
     public void insertOrUpdateMeal(Meal meal) {
-        mAppDatabase.getTransactionExecutor().execute(() -> mMealDao.insertOrUpdate(meal));
+        mAppDatabase.getTransactionExecutor().execute(() -> mMealDao.insertOrUpdateMeal(meal));
     }
 
     public LiveData<List<Meal>> getMealsByCanteenByDay(Canteen canteen, String day) {
