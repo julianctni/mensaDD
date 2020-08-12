@@ -7,20 +7,24 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pasta.mensadd.database.entity.Canteen;
+import com.pasta.mensadd.database.repository.CanteenRepository;
+import com.pasta.mensadd.database.repository.MealRepository;
 
 public class MealsViewModelFactory implements ViewModelProvider.Factory {
 
-    private Application mApplication;
+    private MealRepository mMealRepository;
+    private CanteenRepository mCanteenRepository;
     private Canteen mCanteen;
 
-    public MealsViewModelFactory(Application application, Canteen canteen) {
-        mApplication = application;
+    public MealsViewModelFactory(MealRepository mealRepository, CanteenRepository canteenRepository, Canteen canteen) {
+        mMealRepository = mealRepository;
+        mCanteenRepository = canteenRepository;
         mCanteen = canteen;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new MealsViewModel(mApplication, mCanteen);
+        return (T) new MealsViewModel(mMealRepository, mCanteenRepository, mCanteen);
     }
 }
