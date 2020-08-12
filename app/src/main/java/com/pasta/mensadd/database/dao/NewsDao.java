@@ -14,9 +14,9 @@ import java.util.List;
 public interface NewsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(News news);
+    void insertNews(News news);
 
     @Query("SELECT * FROM table_news ORDER BY id DESC")
-    LiveData<List<News>> getAllNews();
+    LiveData<List<News>> getNews();
 
 }
