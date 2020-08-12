@@ -78,7 +78,7 @@ public class MealDayFragment extends Fragment {
             ProgressBar progressBar = view.findViewById(R.id.mealListProgressBar);
             progressBar.setVisibility(isRefreshing ? View.VISIBLE : View.GONE);
         });
-        mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> mMealListAdapter.setLastMealUpdate(canteen.getLastMealUpdate()));
+        mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> mMealListAdapter.setLastMealUpdate(canteen.getLastMealScraping()));
         return view;
     }
 
