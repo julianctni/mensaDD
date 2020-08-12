@@ -41,6 +41,7 @@ import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.database.repository.BalanceEntryRepository;
 import com.pasta.mensadd.database.repository.CanteenRepository;
+import com.pasta.mensadd.networking.NetworkController;
 import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModelFactory;
@@ -78,14 +79,19 @@ public class MainActivity extends AppCompatActivity
 
         if (darkMode.equals(getString(R.string.pref_dark_mode_yes))) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else if (darkMode.equals(getString(R.string.pref_dark_mode_no))){
+        } else if (darkMode.equals(getString(R.string.pref_dark_mode_no))) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         } else if (darkMode.equals(getString(R.string.pref_dark_mode_auto))) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
         Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_main);
-        CanteensViewModelFactory canteensViewModelFactory = new CanteensViewModelFactory(new CanteenRepository(this.getApplication()));
+        CanteenRepository canteenRepository = new CanteenRepository(
+                AppDatabase.getInstance(this),
+                NetworkController.getInstance(this),
+                PreferenceManager.getDefaultSharedPreferences(this)
+        );
+        CanteensViewModelFactory canteensViewModelFactory = new CanteensViewModelFactory(canteenRepository);
         new ViewModelProvider(this, canteensViewModelFactory).get(CanteensViewModel.class);
 
         mBottomNav = findViewById(R.id.bottomNavigation);
@@ -368,7 +374,7 @@ public class MainActivity extends AppCompatActivity
                 mTechLists);
     }
 
-    public void requestLocationPermission(PermissionsListener permissionsListener){
+    public void requestLocationPermission(PermissionsListener permissionsListener) {
         mPermissionManager = new PermissionsManager(permissionsListener);
         mPermissionManager.requestLocationPermissions(this);
     }

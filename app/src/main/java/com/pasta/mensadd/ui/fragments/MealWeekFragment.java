@@ -21,15 +21,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.PagerTabStrip;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
+import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.database.repository.CanteenRepository;
 import com.pasta.mensadd.database.repository.MealRepository;
+import com.pasta.mensadd.networking.NetworkController;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModelFactory;
@@ -67,8 +70,16 @@ public class MealWeekFragment extends Fragment {
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         mToolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
         CanteensViewModel canteensViewModel = new ViewModelProvider(requireActivity()).get(CanteensViewModel.class);
-        MealRepository mealRepository = new MealRepository(requireActivity().getApplication(), canteensViewModel.getSelectedCanteen());
-        CanteenRepository canteenRepository = new CanteenRepository(requireActivity().getApplication());
+        MealRepository mealRepository = new MealRepository(
+                AppDatabase.getInstance(requireContext()),
+                NetworkController.getInstance(requireContext()),
+                canteensViewModel.getSelectedCanteen()
+        );
+        CanteenRepository canteenRepository = new CanteenRepository(
+                AppDatabase.getInstance(requireContext()),
+                NetworkController.getInstance(requireContext()),
+                PreferenceManager.getDefaultSharedPreferences(requireContext())
+        );
         MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(mealRepository, canteenRepository, canteensViewModel.getSelectedCanteen());
         mMealsViewModel = new ViewModelProvider(this, mealsViewModelFactory).get(MealsViewModel.class);
         TextView header = view.getRootView().findViewById(R.id.heading_toolbar);

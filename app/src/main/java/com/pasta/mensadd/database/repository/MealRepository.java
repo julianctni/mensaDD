@@ -36,11 +36,10 @@ public class MealRepository {
     public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMAN);
     public static int FIFTEEN_MINUTES_MILLIS = 15 * 60 * 1000;
 
-    public MealRepository(Application application, Canteen canteen) {
-        AppDatabase appDatabase = AppDatabase.getInstance(application);
+    public MealRepository(AppDatabase appDatabase, NetworkController networkController, Canteen canteen) {
         mealDao = appDatabase.mealDao();
         canteenDao = appDatabase.canteenDao();
-        network = NetworkController.getInstance(application);
+        network = networkController;
         isRefreshing = new MutableLiveData<>();
         if (canteen.getLastMealUpdate() < Calendar.getInstance().getTimeInMillis() - FIFTEEN_MINUTES_MILLIS) {
             refreshMeals(canteen);

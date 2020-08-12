@@ -30,12 +30,11 @@ public class CanteenRepository {
     private static final String PREF_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
     private static final int CANTEEN_UPDATE_INTERVAL = 10 * 60 * 60 * 1000;
 
-    public CanteenRepository(Application application) {
-        AppDatabase appDatabase = AppDatabase.getInstance(application);
+    public CanteenRepository(AppDatabase appDatabase, NetworkController networkController, SharedPreferences sharedPreferences) {
         canteenDao = appDatabase.canteenDao();
         allCanteens = canteenDao.getAllCanteens();
-        network = NetworkController.getInstance(application);
-        prefs = PreferenceManager.getDefaultSharedPreferences(application);
+        network = networkController;
+        prefs = sharedPreferences;
         isRefreshing = new MutableLiveData<>();
     }
 
