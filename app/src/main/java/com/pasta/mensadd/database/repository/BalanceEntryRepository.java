@@ -1,6 +1,5 @@
 package com.pasta.mensadd.database.repository;
 
-import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
@@ -16,8 +15,7 @@ public class BalanceEntryRepository {
     private BalanceEntryDao balanceEntryDao;
     private LiveData<List<BalanceEntry>> balanceEntries;
 
-    public BalanceEntryRepository(Application application) {
-        AppDatabase appDatabase = AppDatabase.getInstance(application);
+    public BalanceEntryRepository(AppDatabase appDatabase) {
         balanceEntryDao = appDatabase.balanceEntryDao();
         balanceEntries = balanceEntryDao.getAll();
     }
@@ -31,7 +29,7 @@ public class BalanceEntryRepository {
     }
 
     public LiveData<List<BalanceEntry>> getAll() {
-        return balanceEntryDao.getAll();
+        return balanceEntries;
     }
 
     private static class InsertAsyncTask extends AsyncTask<BalanceEntry, Void, Void> {

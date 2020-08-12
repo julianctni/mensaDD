@@ -3,6 +3,7 @@ package com.pasta.mensadd.ui.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,8 +14,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.BalanceEntry;
+import com.pasta.mensadd.database.repository.BalanceEntryRepository;
 import com.pasta.mensadd.ui.viewmodel.BalanceHistoryViewModel;
+import com.pasta.mensadd.ui.viewmodel.BalanceHistoryViewModelFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,7 +81,8 @@ public class BalanceHistoryFragment extends Fragment {
         mBalanceChart.setZoomEnabled(false);
         mBalanceChart.setScrollEnabled(false);
         mBalanceChart.setClickable(false);
-        BalanceHistoryViewModel balanceHistoryViewModel = new ViewModelProvider(this).get(BalanceHistoryViewModel.class);
+        BalanceHistoryViewModelFactory balanceHistoryViewModelFactory = new BalanceHistoryViewModelFactory(new BalanceEntryRepository(AppDatabase.getInstance(requireContext())));
+        BalanceHistoryViewModel balanceHistoryViewModel = new ViewModelProvider(this, balanceHistoryViewModelFactory).get(BalanceHistoryViewModel.class);
         balanceHistoryViewModel.getAllBalanceEntries().observe(getViewLifecycleOwner(), balanceEntries -> {
             updateBalanceHistory(true, balanceEntries);
         });
@@ -101,7 +106,7 @@ public class BalanceHistoryFragment extends Fragment {
         for (int i = 0; i < balanceEntries.size(); i++) {
             values.add(new PointValue(i, balanceEntries.get(i).getCardBalance()));
             //if (mBalance.get(i) > mMaxBalance)
-                //mMaxBalance = mBalance.get(i);
+            //mMaxBalance = mBalance.get(i);
             Date date = new Date(balanceEntries.get(i).getTimestamp());
             axisValues.add(new AxisValue(i).setLabel(mDateFormat.format(date)));
         }
@@ -174,7 +179,7 @@ public class BalanceHistoryFragment extends Fragment {
         }
     }
 
-    public void animateGraphs(){
+    public void animateGraphs() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

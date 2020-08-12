@@ -1,24 +1,20 @@
 package com.pasta.mensadd.ui.viewmodel;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.database.repository.BalanceEntryRepository;
 
 import java.util.List;
 
-public class BalanceHistoryViewModel extends AndroidViewModel {
+public class BalanceHistoryViewModel extends ViewModel {
 
     private BalanceEntryRepository balanceEntryRepository;
     private LiveData<List<BalanceEntry>> balanceEntries;
 
-    public BalanceHistoryViewModel(@NonNull Application application) {
-        super(application);
-        balanceEntryRepository = new BalanceEntryRepository(application);
+    public BalanceHistoryViewModel(BalanceEntryRepository balanceEntryRepository) {
+        this.balanceEntryRepository = balanceEntryRepository;
         balanceEntries = balanceEntryRepository.getAll();
     }
 

@@ -37,6 +37,7 @@ import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
 import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
+import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.database.repository.BalanceEntryRepository;
 import com.pasta.mensadd.database.repository.CanteenRepository;
@@ -283,7 +284,7 @@ public class MainActivity extends AppCompatActivity
     private void storeCardData() {
         float cardBalance = (float) mCurrentValueData.value / 1000;
         float lastTransaction = (float) mCurrentValueData.lastTransaction / 1000;
-        BalanceEntryRepository balanceEntryRepository = new BalanceEntryRepository(getApplication());
+        BalanceEntryRepository balanceEntryRepository = new BalanceEntryRepository(AppDatabase.getInstance(getApplicationContext()));
         balanceEntryRepository.getLatestBalanceEntry().observe(this, balanceEntry -> {
             if (balanceEntry == null || balanceEntry.getCardBalance() != cardBalance || balanceEntry.getLastTransaction() != lastTransaction) {
                 balanceEntryRepository.insert(new BalanceEntry(new Date().getTime(), cardBalance, lastTransaction));
