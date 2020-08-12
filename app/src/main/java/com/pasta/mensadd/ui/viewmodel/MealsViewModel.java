@@ -34,7 +34,7 @@ public class MealsViewModel extends ViewModel {
     }
 
     public void updateCanteen(Canteen canteen) {
-        mCanteenRepository.update(canteen);
+        mCanteenRepository.updateCanteen(canteen);
     }
 
     public LiveData<List<Meal>> getMealsByDay(String day) {

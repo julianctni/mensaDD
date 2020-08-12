@@ -16,11 +16,11 @@ public class CanteensViewModel extends ViewModel {
 
     public CanteensViewModel(CanteenRepository canteenRepository) {
         mCanteenRepository = canteenRepository;
-        canteens = canteenRepository.getAllCanteens();
+        canteens = canteenRepository.getCanteens();
     }
 
     public void updateCanteen(Canteen canteen) {
-        mCanteenRepository.update(canteen);
+        mCanteenRepository.updateCanteen(canteen);
     }
 
     public LiveData<List<Canteen>> getAllCanteens() {

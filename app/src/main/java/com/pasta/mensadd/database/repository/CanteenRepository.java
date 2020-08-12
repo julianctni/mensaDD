@@ -1,11 +1,9 @@
 package com.pasta.mensadd.database.repository;
 
-import android.app.Application;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.preference.PreferenceManager;
 
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.dao.CanteenDao;
@@ -21,50 +19,52 @@ import java.util.List;
 
 public class CanteenRepository {
 
-    private CanteenDao canteenDao;
-    private LiveData<List<Canteen>> allCanteens;
-    private NetworkController network;
-    private MutableLiveData<Boolean> isRefreshing;
-    private SharedPreferences prefs;
+    private CanteenDao mCanteenDao;
+    private LiveData<List<Canteen>> mCanteens;
+    private NetworkController mNetworkController;
+    private MutableLiveData<Boolean> mIsRefreshing;
+    private SharedPreferences mSharedPreferences;
+    private AppDatabase mAppDatabase;
 
     private static final String PREF_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
     private static final int CANTEEN_UPDATE_INTERVAL = 10 * 60 * 60 * 1000;
 
     public CanteenRepository(AppDatabase appDatabase, NetworkController networkController, SharedPreferences sharedPreferences) {
-        canteenDao = appDatabase.canteenDao();
-        allCanteens = canteenDao.getAllCanteens();
-        network = networkController;
-        prefs = sharedPreferences;
-        isRefreshing = new MutableLiveData<>();
+        mAppDatabase = appDatabase;
+        mCanteenDao = appDatabase.canteenDao();
+        mCanteens = mCanteenDao.getAllCanteens();
+        mNetworkController = networkController;
+        mSharedPreferences = sharedPreferences;
+        mIsRefreshing = new MutableLiveData<>();
     }
 
     public void insertOrUpdateCanteen(Canteen canteen) {
-        AppDatabase.dbExecutor.execute(() -> canteenDao.insertOrUpdate(canteen));
+        mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.insertOrUpdate(canteen));
     }
 
-    public void update(Canteen canteen) {
-        AppDatabase.dbExecutor.execute(() -> canteenDao.update(canteen));
+    public void updateCanteen(Canteen canteen) {
+        mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.update(canteen));
     }
 
     public LiveData<Canteen> getCanteenById(String id) {
-        return canteenDao.getCanteenByIdAsync(id);
+        return mCanteenDao.getCanteenByIdAsync(id);
     }
 
-    public LiveData<List<Canteen>> getAllCanteens() {
-        long lastUpdate = prefs.getLong(PREF_LAST_CANTEENS_UPDATE, 0);
+    public LiveData<List<Canteen>> getCanteens() {
+        long lastUpdate = mSharedPreferences.getLong(PREF_LAST_CANTEENS_UPDATE, 0);
         if (lastUpdate == 0 || Calendar.getInstance().getTimeInMillis() - lastUpdate > CANTEEN_UPDATE_INTERVAL) {
             refreshCanteens();
         }
-        return allCanteens;
+        return mCanteens;
     }
 
     public LiveData<Boolean> isRefreshing() {
-        return isRefreshing;
+        return mIsRefreshing;
     }
 
     public void refreshCanteens() {
-        isRefreshing.setValue(true);
-        network.fetchCanteens((responseType, message) -> {
+        mIsRefreshing.setValue(true);
+        mNetworkController.fetchCanteens((responseType, message) -> {
             try {
                 JSONArray json = new JSONObject(message).getJSONArray("canteens");
 
@@ -88,11 +88,11 @@ public class CanteenRepository {
                     insertOrUpdateCanteen(m);
                 }
 
-                prefs.edit().putLong(PREF_LAST_CANTEENS_UPDATE, Calendar.getInstance().getTimeInMillis()).apply();
+                mSharedPreferences.edit().putLong(PREF_LAST_CANTEENS_UPDATE, Calendar.getInstance().getTimeInMillis()).apply();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            isRefreshing.setValue(false);
+            mIsRefreshing.setValue(false);
         });
     }
 }
