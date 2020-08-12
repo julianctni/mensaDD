@@ -2,6 +2,7 @@ package com.pasta.mensadd.database.repository;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.dao.CanteenDao;
@@ -38,7 +39,7 @@ public class MealRepository {
         mMealDao = appDatabase.mealDao();
         mCanteenDao = appDatabase.canteenDao();
         mNetworkController = networkController;
-        mIsRefreshing = new MutableLiveData<>();
+        mIsRefreshing = new MutableLiveData<>(false);
         if (canteen.getLastMealUpdate() < Calendar.getInstance().getTimeInMillis() - FIFTEEN_MINUTES_MILLIS) {
             refreshMeals(canteen);
         }
@@ -49,7 +50,8 @@ public class MealRepository {
     }
 
     public LiveData<List<Meal>> getMealsByCanteenByDay(Canteen canteen, String day) {
-        return mMealDao.getMealsByCanteenByDay(canteen.getId(), day);
+        //return mMealDao.getMealsByCanteenByDay(canteen.getId(), day);
+        return Transformations.switchMap(mIsRefreshing, (refreshState) -> mMealDao.getMealsByCanteenByDay(canteen.getId(), day));
     }
 
     public void refreshMeals(Canteen canteen) {

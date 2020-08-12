@@ -15,16 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.Utils;
-import com.pasta.mensadd.database.entity.Meal;
 import com.pasta.mensadd.ui.adapter.MealListAdapter;
-import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
 
-import java.text.DateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import static com.pasta.mensadd.database.repository.MealRepository.DATE_FORMAT;
 
@@ -36,8 +30,6 @@ public class MealDayFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private CardView noFoodToday;
     private static final int ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
-
-    private MealsViewModel mMealsViewModel;
 
     static MealDayFragment newInstance(int position) {
         MealDayFragment fragment = new MealDayFragment();
@@ -60,7 +52,7 @@ public class MealDayFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(false);
         View view = inflater.inflate(R.layout.fragment_meal_day, container, false);
-        mMealsViewModel = new ViewModelProvider(requireParentFragment()).get(MealsViewModel.class);
+        MealsViewModel mMealsViewModel = new ViewModelProvider(requireParentFragment()).get(MealsViewModel.class);
         mRecyclerView = view.findViewById(R.id.mealList);
         noFoodToday = view.findViewById(R.id.noFoodToday);
         mMealListAdapter = new MealListAdapter(this.getContext());
@@ -72,8 +64,11 @@ public class MealDayFragment extends Fragment {
         date.setTime(date.getTime() + mPagerPositon * ONE_DAY_IN_MILLIS);
         String day = DATE_FORMAT.format(date);
         mMealsViewModel.getMealsByDay(day).observe(getViewLifecycleOwner(), meals -> {
-            updateMeals(meals);
+            //noinspection ConstantConditions
+            showNoFoodToday(meals.isEmpty() && !mMealsViewModel.isRefreshing().getValue());
+            mMealListAdapter.submitList(meals);
         });
+
         mMealsViewModel.isRefreshing().observe(getViewLifecycleOwner(), isRefreshing -> {
             ProgressBar progressBar = view.findViewById(R.id.mealListProgressBar);
             progressBar.setVisibility(isRefreshing ? View.VISIBLE : View.GONE);
@@ -82,15 +77,8 @@ public class MealDayFragment extends Fragment {
         return view;
     }
 
-    private void updateMeals(List<Meal> meals) {
-        if (meals == null) return;
-        if (meals.isEmpty()) {
-            mRecyclerView.setVisibility(View.GONE);
-            noFoodToday.setVisibility(View.VISIBLE);
-        } else {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            noFoodToday.setVisibility(View.GONE);
-        }
-        mMealListAdapter.submitList(meals);
+    private void showNoFoodToday(boolean showNoFoodToday) {
+        mRecyclerView.setVisibility(showNoFoodToday ? View.GONE : View.VISIBLE);
+        noFoodToday.setVisibility(showNoFoodToday ? View.VISIBLE : View.GONE);
     }
 }
