@@ -1,9 +1,5 @@
 package com.pasta.mensadd.database.repository;
 
-import android.app.Application;
-import android.os.AsyncTask;
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -13,7 +9,6 @@ import com.pasta.mensadd.database.dao.MealDao;
 import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.database.entity.Meal;
 import com.pasta.mensadd.networking.NetworkController;
-import com.pasta.mensadd.networking.callbacks.LoadMealsCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,40 +23,39 @@ import java.util.Locale;
 
 public class MealRepository {
 
-    private MealDao mealDao;
-    private CanteenDao canteenDao;
-    private NetworkController network;
-    private static MutableLiveData<Boolean> isRefreshing;
+    private MealDao mMealDao;
+    private CanteenDao mCanteenDao;
+    private NetworkController mNetworkController;
+    private MutableLiveData<Boolean> mIsRefreshing;
+    private AppDatabase mAppDatabase;
 
     public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMAN);
-    public static int FIFTEEN_MINUTES_MILLIS = 15 * 60 * 1000;
+    public static final int FIFTEEN_MINUTES_MILLIS = 15 * 60 * 1000;
+    private static final int ONE_DAY_MILLIS = 24 * 60 * 60 * 1000;
 
     public MealRepository(AppDatabase appDatabase, NetworkController networkController, Canteen canteen) {
-        mealDao = appDatabase.mealDao();
-        canteenDao = appDatabase.canteenDao();
-        network = networkController;
-        isRefreshing = new MutableLiveData<>();
+        mAppDatabase = appDatabase;
+        mMealDao = appDatabase.mealDao();
+        mCanteenDao = appDatabase.canteenDao();
+        mNetworkController = networkController;
+        mIsRefreshing = new MutableLiveData<>();
         if (canteen.getLastMealUpdate() < Calendar.getInstance().getTimeInMillis() - FIFTEEN_MINUTES_MILLIS) {
             refreshMeals(canteen);
         }
     }
 
-    public void updateCanteen(Canteen canteen) {
-        AppDatabase.dbExecutor.execute(() -> canteenDao.update(canteen));
-    }
-
     public void insertOrUpdateMeal(Meal meal) {
-        AppDatabase.dbExecutor.execute(() -> mealDao.insertOrUpdate(meal));
+        mAppDatabase.getTransactionExecutor().execute(() -> mMealDao.insertOrUpdate(meal));
     }
 
     public LiveData<List<Meal>> getMealsByCanteenByDay(Canteen canteen, String day) {
-        return mealDao.getMealsByCanteenByDay(canteen.getId(), day);
+        return mMealDao.getMealsByCanteenByDay(canteen.getId(), day);
     }
 
-    public void refreshMeals(final Canteen canteen) {
+    public void refreshMeals(Canteen canteen) {
 
-        isRefreshing.setValue(true);
-        network.fetchMeals(canteen.getId(), (responseType, message) -> {
+        mIsRefreshing.setValue(true);
+        mNetworkController.fetchMeals(canteen.getId(), (responseType, message) -> {
 
             try {
                 JSONObject data = new JSONObject(message);
@@ -92,22 +86,22 @@ public class MealRepository {
                         mealList.add(meal);
                         insertOrUpdateMeal(meal);
                     }
-                    day.setTime(day.getTime() + 86400000);
+                    day.setTime(day.getTime() + ONE_DAY_MILLIS);
                 }
 
                 canteen.setLastMealUpdate(Calendar.getInstance().getTimeInMillis());
                 canteen.setLastMealScraping(lastScraping);
-                updateCanteen(canteen);
+                mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.update(canteen));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            isRefreshing.setValue(false);
+            mIsRefreshing.setValue(false);
         });
 
     }
 
     public LiveData<Boolean> isRefreshing() {
-        return isRefreshing;
+        return mIsRefreshing;
     }
 
 }
