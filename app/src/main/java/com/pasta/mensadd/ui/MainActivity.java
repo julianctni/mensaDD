@@ -9,15 +9,6 @@ import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
-import androidx.appcompat.widget.Toolbar;
-
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
@@ -28,6 +19,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -40,8 +39,10 @@ import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.database.repository.BalanceEntryRepository;
+import com.pasta.mensadd.database.repository.CanteenRepository;
 import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
+import com.pasta.mensadd.ui.viewmodel.CanteensViewModelFactory;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -83,8 +84,8 @@ public class MainActivity extends AppCompatActivity
         }
         Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_main);
-
-        new ViewModelProvider(this).get(CanteensViewModel.class);
+        CanteensViewModelFactory canteensViewModelFactory = new CanteensViewModelFactory(new CanteenRepository(this.getApplication()));
+        new ViewModelProvider(this, canteensViewModelFactory).get(CanteensViewModel.class);
 
         mBottomNav = findViewById(R.id.bottomNavigation);
         mBottomNav.setMenuItemSelectionListener(this);

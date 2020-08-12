@@ -1,30 +1,26 @@
 package com.pasta.mensadd.ui.viewmodel;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.database.repository.CanteenRepository;
 
 import java.util.List;
 
-public class CanteensViewModel extends AndroidViewModel {
+public class CanteensViewModel extends ViewModel {
 
-    private CanteenRepository canteenRepository;
+    private CanteenRepository mCanteenRepository;
     private LiveData<List<Canteen>> canteens;
     private Canteen selectedCanteen;
 
-    public CanteensViewModel(@NonNull Application application) {
-        super(application);
-        canteenRepository = new CanteenRepository(application);
+    public CanteensViewModel(CanteenRepository canteenRepository) {
+        mCanteenRepository = canteenRepository;
         canteens = canteenRepository.getAllCanteens();
     }
 
     public void updateCanteen(Canteen canteen) {
-        canteenRepository.update(canteen);
+        mCanteenRepository.update(canteen);
     }
 
     public LiveData<List<Canteen>> getAllCanteens() {
@@ -40,11 +36,11 @@ public class CanteensViewModel extends AndroidViewModel {
     }
 
     public LiveData<Canteen> getCanteenById(String id) {
-        return canteenRepository.getCanteenById(id);
+        return mCanteenRepository.getCanteenById(id);
     }
 
     public LiveData<Boolean> isRefreshing() {
-        return canteenRepository.isRefreshing();
+        return mCanteenRepository.isRefreshing();
     }
 
 }
