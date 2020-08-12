@@ -91,7 +91,7 @@ public class MealRepository {
 
                 canteen.setLastMealUpdate(Calendar.getInstance().getTimeInMillis());
                 canteen.setLastMealScraping(lastScraping);
-                mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.update(canteen));
+                mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.updateCanteen(canteen));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

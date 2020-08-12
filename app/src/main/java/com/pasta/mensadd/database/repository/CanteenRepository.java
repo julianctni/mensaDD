@@ -32,18 +32,18 @@ public class CanteenRepository {
     public CanteenRepository(AppDatabase appDatabase, NetworkController networkController, SharedPreferences sharedPreferences) {
         mAppDatabase = appDatabase;
         mCanteenDao = appDatabase.canteenDao();
-        mCanteens = mCanteenDao.getAllCanteens();
+        mCanteens = mCanteenDao.getCanteens();
         mNetworkController = networkController;
         mSharedPreferences = sharedPreferences;
         mIsRefreshing = new MutableLiveData<>();
     }
 
     public void insertOrUpdateCanteen(Canteen canteen) {
-        mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.insertOrUpdate(canteen));
+        mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.insertOrUpdateCanteen(canteen));
     }
 
     public void updateCanteen(Canteen canteen) {
-        mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.update(canteen));
+        mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.updateCanteen(canteen));
     }
 
     public LiveData<Canteen> getCanteenById(String id) {

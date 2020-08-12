@@ -2,7 +2,6 @@ package com.pasta.mensadd.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -17,20 +16,20 @@ import java.util.List;
 public interface CanteenDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long insert(Canteen canteen);
+    long insertCanteen(Canteen canteen);
 
     @Update
-    void update(Canteen canteen);
+    void updateCanteen(Canteen canteen);
 
     @Transaction
-    default void insertOrUpdate(Canteen canteen) {
-        long id = insert(canteen);
+    default void insertOrUpdateCanteen(Canteen canteen) {
+        long id = insertCanteen(canteen);
         if (id == -1l) {
             Canteen c = getCanteenById(canteen.getId());
             canteen.setListPriority(c.getListPriority());
             canteen.setLastMealUpdate(c.getLastMealUpdate());
             canteen.setLastMealScraping((c.getLastMealScraping()));
-            update(canteen);
+            updateCanteen(canteen);
         }
     }
 
@@ -38,7 +37,7 @@ public interface CanteenDao {
     void deleteAllCanteens();
 
     @Query("SELECT * FROM table_canteens ORDER BY listPriority DESC")
-    LiveData<List<Canteen>> getAllCanteens();
+    LiveData<List<Canteen>> getCanteens();
 
     @Query("SELECT * FROM table_canteens WHERE id = :canteenId")
     Canteen getCanteenById(String canteenId);

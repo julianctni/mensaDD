@@ -93,7 +93,7 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(mapboxMap -> {
             mMap = mapboxMap;
-            mCanteensViewModel.getAllCanteens().observe(requireActivity(), canteens ->
+            mCanteensViewModel.getCanteens().observe(requireActivity(), canteens ->
                     initMap(mapboxMap, canteens));
         });
         return view;
