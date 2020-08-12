@@ -1,8 +1,5 @@
 package com.pasta.mensadd.database.repository;
 
-import android.app.Application;
-import android.os.AsyncTask;
-
 import androidx.lifecycle.LiveData;
 
 import com.pasta.mensadd.database.AppDatabase;
@@ -14,13 +11,12 @@ import com.pasta.mensadd.networking.callbacks.LoadNewsCallback;
 import java.util.List;
 
 public class NewsRepository {
-    private NetworkController network;
+    private NetworkController networkController;
     private NewsDao newsDao;
 
-    public NewsRepository(Application application) {
-        AppDatabase appDatabase = AppDatabase.getInstance(application);
+    public NewsRepository(AppDatabase appDatabase, NetworkController networkController) {
         newsDao = appDatabase.newsDao();
-        network = NetworkController.getInstance(application);
+        this.networkController = networkController;
     }
 
     public void insertNews(News news) {
@@ -32,6 +28,6 @@ public class NewsRepository {
     }
 
     public void refreshNews(LoadNewsCallback callback) {
-        network.fetchNews(callback);
+        networkController.fetchNews(callback);
     }
 }
