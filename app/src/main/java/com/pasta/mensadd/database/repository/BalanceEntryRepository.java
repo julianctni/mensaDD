@@ -1,7 +1,5 @@
 package com.pasta.mensadd.database.repository;
 
-import android.os.AsyncTask;
-
 import androidx.lifecycle.LiveData;
 
 import com.pasta.mensadd.database.AppDatabase;
@@ -12,37 +10,25 @@ import java.util.List;
 
 public class BalanceEntryRepository {
 
-    private BalanceEntryDao balanceEntryDao;
-    private LiveData<List<BalanceEntry>> balanceEntries;
+    private BalanceEntryDao mBalanceEntryDao;
+    private LiveData<List<BalanceEntry>> mBalanceEntries;
+    private AppDatabase mAppDatabase;
 
     public BalanceEntryRepository(AppDatabase appDatabase) {
-        balanceEntryDao = appDatabase.balanceEntryDao();
-        balanceEntries = balanceEntryDao.getAll();
+        mAppDatabase = appDatabase;
+        mBalanceEntryDao = mAppDatabase.balanceEntryDao();
+        mBalanceEntries = mBalanceEntryDao.getAll();
     }
 
-    public void insert(BalanceEntry balanceEntry) {
-        new InsertAsyncTask(balanceEntryDao).execute(balanceEntry);
+    public void insertBalanceEntry(BalanceEntry balanceEntry) {
+        mAppDatabase.getTransactionExecutor().execute(() -> mBalanceEntryDao.insert(balanceEntry));
     }
 
     public LiveData<BalanceEntry> getLatestBalanceEntry() {
-        return balanceEntryDao.getLatestBalanceEntry();
+        return mBalanceEntryDao.getLatestBalanceEntry();
     }
 
-    public LiveData<List<BalanceEntry>> getAll() {
-        return balanceEntries;
-    }
-
-    private static class InsertAsyncTask extends AsyncTask<BalanceEntry, Void, Void> {
-        private BalanceEntryDao balanceEntryDao;
-
-        private InsertAsyncTask(BalanceEntryDao balanceEntryDao) {
-            this.balanceEntryDao = balanceEntryDao;
-        }
-
-        @Override
-        protected Void doInBackground(BalanceEntry... balanceEntries) {
-            balanceEntryDao.insert(balanceEntries[0]);
-            return null;
-        }
+    public LiveData<List<BalanceEntry>> getAllBalanceEntries() {
+        return mBalanceEntries;
     }
 }

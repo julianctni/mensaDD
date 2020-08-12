@@ -15,7 +15,7 @@ public class BalanceHistoryViewModel extends ViewModel {
 
     public BalanceHistoryViewModel(BalanceEntryRepository balanceEntryRepository) {
         this.balanceEntryRepository = balanceEntryRepository;
-        balanceEntries = balanceEntryRepository.getAll();
+        balanceEntries = balanceEntryRepository.getAllBalanceEntries();
     }
 
     public LiveData<List<BalanceEntry>> getAllBalanceEntries() {

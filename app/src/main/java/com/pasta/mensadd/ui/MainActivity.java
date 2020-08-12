@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity
         BalanceEntryRepository balanceEntryRepository = new BalanceEntryRepository(AppDatabase.getInstance(getApplicationContext()));
         balanceEntryRepository.getLatestBalanceEntry().observe(this, balanceEntry -> {
             if (balanceEntry == null || balanceEntry.getCardBalance() != cardBalance || balanceEntry.getLastTransaction() != lastTransaction) {
-                balanceEntryRepository.insert(new BalanceEntry(new Date().getTime(), cardBalance, lastTransaction));
+                balanceEntryRepository.insertBalanceEntry(new BalanceEntry(new Date().getTime(), cardBalance, lastTransaction));
                 Toast.makeText(this.getApplicationContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
                 BalanceHistoryFragment fragment = (BalanceHistoryFragment) getSupportFragmentManager().findFragmentByTag(FragmentController.TAG_BALANCE_HISTORY);
             } else {
