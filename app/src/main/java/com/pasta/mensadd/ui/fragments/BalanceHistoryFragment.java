@@ -83,7 +83,7 @@ public class BalanceHistoryFragment extends Fragment {
         mBalanceChart.setClickable(false);
         BalanceHistoryViewModelFactory balanceHistoryViewModelFactory = new BalanceHistoryViewModelFactory(new BalanceEntryRepository(AppDatabase.getInstance(requireContext())));
         BalanceHistoryViewModel balanceHistoryViewModel = new ViewModelProvider(this, balanceHistoryViewModelFactory).get(BalanceHistoryViewModel.class);
-        balanceHistoryViewModel.getAllBalanceEntries().observe(getViewLifecycleOwner(), balanceEntries -> {
+        balanceHistoryViewModel.getBalanceEntries().observe(getViewLifecycleOwner(), balanceEntries -> {
             updateBalanceHistory(true, balanceEntries);
         });
 

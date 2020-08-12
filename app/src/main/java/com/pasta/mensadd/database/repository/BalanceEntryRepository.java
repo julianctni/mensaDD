@@ -17,18 +17,18 @@ public class BalanceEntryRepository {
     public BalanceEntryRepository(AppDatabase appDatabase) {
         mAppDatabase = appDatabase;
         mBalanceEntryDao = mAppDatabase.balanceEntryDao();
-        mBalanceEntries = mBalanceEntryDao.getAll();
+        mBalanceEntries = mBalanceEntryDao.getBalanceEntries();
     }
 
     public void insertBalanceEntry(BalanceEntry balanceEntry) {
-        mAppDatabase.getTransactionExecutor().execute(() -> mBalanceEntryDao.insert(balanceEntry));
+        mAppDatabase.getTransactionExecutor().execute(() -> mBalanceEntryDao.insertBalanceEntry(balanceEntry));
     }
 
     public LiveData<BalanceEntry> getLatestBalanceEntry() {
         return mBalanceEntryDao.getLatestBalanceEntry();
     }
 
-    public LiveData<List<BalanceEntry>> getAllBalanceEntries() {
+    public LiveData<List<BalanceEntry>> getBalanceEntries() {
         return mBalanceEntries;
     }
 }

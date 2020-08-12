@@ -10,15 +10,13 @@ import java.util.List;
 
 public class BalanceHistoryViewModel extends ViewModel {
 
-    private BalanceEntryRepository balanceEntryRepository;
-    private LiveData<List<BalanceEntry>> balanceEntries;
+    private LiveData<List<BalanceEntry>> mBalanceEntries;
 
     public BalanceHistoryViewModel(BalanceEntryRepository balanceEntryRepository) {
-        this.balanceEntryRepository = balanceEntryRepository;
-        balanceEntries = balanceEntryRepository.getAllBalanceEntries();
+        mBalanceEntries = balanceEntryRepository.getBalanceEntries();
     }
 
-    public LiveData<List<BalanceEntry>> getAllBalanceEntries() {
-        return balanceEntries;
+    public LiveData<List<BalanceEntry>> getBalanceEntries() {
+        return mBalanceEntries;
     }
 }
