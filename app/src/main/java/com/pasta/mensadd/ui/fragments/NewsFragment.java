@@ -23,17 +23,15 @@ import com.pasta.mensadd.ui.viewmodel.NewsViewModelFactory;
 
 public class NewsFragment extends Fragment {
 
-    private NewsListAdapter mNewsListAdapter;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-        LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
-        RecyclerView mNewsList = view.findViewById(R.id.newsList);
-        mNewsListAdapter = new NewsListAdapter(this.getContext());
-        mNewsList.setLayoutManager(layoutParams);
-        mNewsList.setAdapter(mNewsListAdapter);
+        LinearLayoutManager layoutParams = new LinearLayoutManager(requireActivity());
+        RecyclerView newsListRecyclerView = view.findViewById(R.id.newsList);
+        NewsListAdapter newsListAdapter = new NewsListAdapter(this.requireContext());
+        newsListRecyclerView.setLayoutManager(layoutParams);
+        newsListRecyclerView.setAdapter(newsListAdapter);
         NewsViewModelFactory newsViewModelFactory = new NewsViewModelFactory(
                 new NewsRepository(AppDatabase.getInstance(requireContext()),
                         NetworkController.getInstance(requireContext())));
@@ -42,7 +40,7 @@ public class NewsFragment extends Fragment {
             ProgressBar progressBar = view.findViewById(R.id.newsListProgressBar);
             progressBar.setVisibility(isRefreshing ? View.VISIBLE : View.GONE);
         });
-        newsViewModel.getNews().observe(getViewLifecycleOwner(), news -> mNewsListAdapter.submitList(news));
+        newsViewModel.getNews().observe(getViewLifecycleOwner(), newsListAdapter::submitList);
         return view;
     }
 }
