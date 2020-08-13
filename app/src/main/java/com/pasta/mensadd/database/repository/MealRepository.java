@@ -45,8 +45,8 @@ public class MealRepository {
         }
     }
 
-    public void insertOrUpdateMeal(Meal meal) {
-        mAppDatabase.getTransactionExecutor().execute(() -> mMealDao.insertOrUpdateMeal(meal));
+    public void insertOrUpdateMeals(List<Meal> meals) {
+        mAppDatabase.getTransactionExecutor().execute(() -> mMealDao.insertOrUpdateMeals(meals));
     }
 
     public LiveData<List<Meal>> getMealsByCanteenByDay(Canteen canteen, String day) {
@@ -86,11 +86,11 @@ public class MealRepository {
                         String canteenId = canteen.getId();
                         Meal meal = new Meal(id, name, price, details, imgLink, canteenId, date, location, vegetarian, vegan, pork, beef, garlic, alc);
                         mealList.add(meal);
-                        insertOrUpdateMeal(meal);
+                        //insertOrUpdateMeal(meal);
                     }
                     day.setTime(day.getTime() + ONE_DAY_MILLIS);
                 }
-
+                insertOrUpdateMeals(mealList);
                 canteen.setLastMealUpdate(Calendar.getInstance().getTimeInMillis());
                 canteen.setLastMealScraping(lastScraping);
                 mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.updateCanteen(canteen));
