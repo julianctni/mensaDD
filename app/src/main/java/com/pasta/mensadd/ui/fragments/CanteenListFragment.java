@@ -1,25 +1,22 @@
 package com.pasta.mensadd.ui.fragments;
 
 
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.ui.FragmentController;
@@ -28,31 +25,26 @@ import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 
 public class CanteenListFragment extends Fragment implements View.OnClickListener, CanteenListAdapter.OnFavoriteClickListener, CanteenListAdapter.OnCanteenClickListener {
 
-    private SharedPreferences mSharedPrefs;
-    private LinearLayout mTutorialPage1;
-    private LinearLayout mTutorialPage2;
-    private LinearLayout mTutorialPage3;
-    private Button mTutorialContinueBtn;
-    private Button mTutorialBackBtn;
     private CardView mTutorialCard;
     private CanteensViewModel mCanteensViewModel;
+    private PackageInfo mPackageInfo;
+    private PreferenceService mPreferenceService;
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_canteen_list, container, false);
-        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        try {
+            mPackageInfo = requireContext().getPackageManager().getPackageInfo(requireContext().getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        mPreferenceService = new PreferenceService(requireContext());
         mCanteensViewModel = new ViewModelProvider(requireActivity()).get(CanteensViewModel.class);
-        mTutorialPage1 = view.findViewById(R.id.tutorialPage1);
-        mTutorialPage2 = view.findViewById(R.id.tutorialPage2);
-        mTutorialPage3 = view.findViewById(R.id.tutorialPage3);
-        mTutorialContinueBtn = view.findViewById(R.id.tutorialContinueButton);
-        mTutorialBackBtn = view.findViewById(R.id.tutorialBackButton);
         mTutorialCard = view.findViewById(R.id.tutorialCard);
         RecyclerView canteenListRecyclerView = view.findViewById(R.id.canteenList);
-        mTutorialBackBtn.setOnClickListener(this);
-        mTutorialContinueBtn.setOnClickListener(this);
+        view.findViewById(R.id.latestUpdatesCloseButton).setOnClickListener(this);
         LinearLayoutManager layoutParams = new LinearLayoutManager(requireActivity());
         CanteenListAdapter canteenListAdapter = new CanteenListAdapter(requireContext());
         canteenListAdapter.setOnFavoriteClickListener(this);
@@ -74,48 +66,18 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
     }
 
     void showTutorial() {
-        try {
-            PackageInfo info = requireContext().getPackageManager().getPackageInfo(requireContext().getPackageName(), 0);
-            if (mSharedPrefs.getBoolean("pref_show_tut_" + info.versionCode, true) && info.versionCode == 20) {
-                mTutorialCard.setVisibility(View.VISIBLE);
-                mSharedPrefs.edit().remove("pref_show_tut_" + (info.versionCode - 1)).apply();
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        if (mPackageInfo != null && mPreferenceService.getBooleanPreference("pref_show_tut_" + mPackageInfo.versionCode, true)) {
+            mTutorialCard.setVisibility(View.VISIBLE);
+            mPreferenceService.removePreference("pref_show_tut_" + (mPackageInfo.versionCode - 1));
         }
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.tutorialContinueButton) {
-            if (mTutorialPage1.getVisibility() == View.VISIBLE) {
-                mTutorialPage1.setVisibility(View.GONE);
-                mTutorialPage2.setVisibility(View.VISIBLE);
-                mTutorialBackBtn.setVisibility(View.VISIBLE);
-            } else if (mTutorialPage2.getVisibility() == View.VISIBLE) {
-                mTutorialPage2.setVisibility(View.GONE);
-                mTutorialPage3.setVisibility(View.VISIBLE);
-                mTutorialContinueBtn.setText(getResources().getString(R.string.tutorial_button_close));
-            } else if (mTutorialPage3.getVisibility() == View.VISIBLE) {
-                mTutorialCard.setVisibility(View.GONE);
-                try {
-                    PackageInfo info = requireContext().getPackageManager().getPackageInfo(requireContext().getPackageName(), 0);
-                    mSharedPrefs.edit().putBoolean("pref_show_tut_" + info.versionCode, false).apply();
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        } else if (view.getId() == R.id.tutorialBackButton) {
-            if (mTutorialPage2.getVisibility() == View.VISIBLE) {
-                mTutorialPage2.setVisibility(View.GONE);
-                mTutorialPage1.setVisibility(View.VISIBLE);
-                mTutorialBackBtn.setVisibility(View.GONE);
-            } else if (mTutorialPage3.getVisibility() == View.VISIBLE) {
-                mTutorialPage3.setVisibility(View.GONE);
-                mTutorialPage2.setVisibility(View.VISIBLE);
-                mTutorialContinueBtn.setText(getResources().getString(R.string.tutorial_button_continue));
+        if (view.getId() == R.id.latestUpdatesCloseButton) {
+            mTutorialCard.setVisibility(View.GONE);
+            if (mPackageInfo != null) {
+                mPreferenceService.setBooleanPreference("pref_show_tut_" + mPackageInfo.versionCode, false);
             }
         }
     }
