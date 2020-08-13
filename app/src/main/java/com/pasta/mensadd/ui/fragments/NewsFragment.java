@@ -3,9 +3,6 @@ package com.pasta.mensadd.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -20,7 +17,6 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.repository.NewsRepository;
 import com.pasta.mensadd.networking.NetworkController;
-import com.pasta.mensadd.ui.FragmentController;
 import com.pasta.mensadd.ui.adapter.NewsListAdapter;
 import com.pasta.mensadd.ui.viewmodel.NewsViewModel;
 import com.pasta.mensadd.ui.viewmodel.NewsViewModelFactory;
@@ -28,14 +24,6 @@ import com.pasta.mensadd.ui.viewmodel.NewsViewModelFactory;
 public class NewsFragment extends Fragment {
 
     private NewsListAdapter mNewsListAdapter;
-
-    public NewsFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -56,22 +44,5 @@ public class NewsFragment extends Fragment {
         });
         newsViewModel.getNews().observe(getViewLifecycleOwner(), news -> mNewsListAdapter.submitList(news));
         return view;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.fragment_canteens_menu, menu);
-        super.onCreateOptionsMenu(menu, menuInflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.show_preferences:
-                FragmentController.showSettingsFragment(getFragmentManager());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }
