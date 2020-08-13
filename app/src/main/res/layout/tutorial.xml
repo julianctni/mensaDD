@@ -15,17 +15,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="14dp">
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/latestUpdatesHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
             android:text="@string/latest_updates_heading"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
@@ -34,8 +35,7 @@
             android:layout_height="wrap_content"
             android:text="@string/latest_updates_content"
             android:textColor="@color/white"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/latestUpdatesCloseButton"

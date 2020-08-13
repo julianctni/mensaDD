@@ -77,5 +77,5 @@
     <string name="location_permission_missing">Berechtigung für GPS-Zugriff wird benötigt.</string>
     <string name="location_permission_missing_check">Erneut fragen</string>
     <string name="latest_updates_heading">Was ist neu?</string>
-    <string name="latest_updates_content">Alles ist neu!</string>
+    <string name="latest_updates_content">Die Kartenansicht wurde überarbeitet. Und es gibt jetzt einen Dark Mode! Außerdem wurden diverse weitere Design-Anpassungen vorgenommen, zum Teil sichtbar, zum Teil unter der Haube.\n\nNa dann, bon appétit!</string>
 </resources>
