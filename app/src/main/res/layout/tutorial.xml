@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tutorialCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="6dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginTop="6dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="8dp"
     android:longClickable="false"
-    android:textColor="#FFFFFF"
-    android:visibility="gone"
-    card_view:cardBackgroundColor="#1ab2b5"
-    card_view:cardCornerRadius="2dp"
-    card_view:cardElevation="3dp">
+    android:visibility="visible"
+    card_view:cardBackgroundColor="@color/cyan_dark"
+    card_view:cardCornerRadius="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,176 +17,36 @@
         android:orientation="vertical"
         android:padding="14dp">
 
-        <LinearLayout
-            android:id="@+id/tutorialPage1"
+        <TextView
+            android:id="@+id/latestUpdatesHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="@string/tutorial_header"
-                android:textColor="#111"
-                android:textSize="22sp"
-                android:textAllCaps="true"
-                android:textStyle="bold"/>
+            android:layout_marginBottom="6dp"
+            android:text="@string/latest_updates_heading"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
-                android:textColor="#111"
-                android:textStyle="bold"
-                android:text="@string/tutorial_header_content"
-                android:textSize="15sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="@string/tutorial_navigation_header"
-                android:textColor="#111"
-                android:textSize="18sp"
-                android:textAllCaps="true"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
-                android:textColor="#111"
-                android:textStyle="bold"
-                android:text="@string/tutorial_navigation_content"
-                android:textSize="15sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tutorialPage2"
+        <TextView
+            android:id="@+id/latestUpdatesContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:text="@string/latest_updates_content"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="@string/tutorial_news_header"
-                android:drawableRight="@drawable/ic_view_agenda_black_24dp"
-                android:drawableEnd="@drawable/ic_view_agenda_black_24dp"
-                android:drawablePadding="10dp"
-                android:textColor="#111"
-                android:textSize="18sp"
-                android:textAllCaps="true"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
-                android:textColor="#111"
-                android:textStyle="bold"
-                android:text="@string/tutorial_news_content"
-                android:textSize="15sp"/>
-
-            <!--
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:textColor="#111"
-                android:textSize="18sp"
-                android:textAllCaps="true"
-                android:text="@string/tutorial_balancehistory_header"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#111"
-                android:textStyle="bold"
-                android:text="@string/tutorial_balancehistory_content"
-                android:textSize="15sp"/>-->
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/tutorialPage3"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/latestUpdatesCloseButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:text="@string/tutorial_favorites_header"
-                android:drawableEnd="@drawable/ic_baseline_favorite_24"
-                android:drawableTint="@color/pink_dark"
-                android:drawablePadding="10dp"
-                android:textColor="#111"
-                android:textSize="18sp"
-                android:textAllCaps="true"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
-                android:textColor="#111"
-                android:textStyle="bold"
-                android:text="@string/tutorial_favorites_content"
-                android:textSize="15sp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:text="@string/tutorial_other_header"
-                android:textColor="#111"
-                android:textSize="18sp"
-                android:textAllCaps="true"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#111"
-                android:textStyle="bold"
-                android:text="@string/tutorial_other_content"
-                android:textSize="15sp"/>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <Button
-                android:id="@+id/tutorialBackButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:textStyle="bold"
-                android:textColor="#111"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:text="@string/tutorial_button_back"/>
-
-            <Button
-                android:id="@+id/tutorialContinueButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textStyle="bold"
-                android:textColor="#111"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:text="@string/tutorial_button_continue"/>
-        </RelativeLayout>
-
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="end"
+            android:text="@string/button_close"
+            android:textColor="@color/white"/>
     </LinearLayout>
-
-
 
 </androidx.cardview.widget.CardView>

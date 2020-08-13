@@ -7,7 +7,6 @@
     <string name="nav_card_history">Guthaben</string>
     <string name="nav_news">Neuigkeiten</string>
     <string name="pref_autostart_summary">Starte die App, sobald eMeal-Karte erkannt wurde.</string>
-    <string name="pref_map_summary">Bei WLan-Verbindung wird die Dresdenkarte beim Start der Kartenansicht auf das Gerät heruntergeladen.</string>
     <string name="pref_autostart_title">NFC-Autostart</string>
     <string name="pref_map_title">Offline-Karte</string>
     <string name="balance_check_balance">Aktuelles Guthaben</string>
@@ -47,22 +46,7 @@
         <item>Systemeinstellung</item>
     </string-array>
     <string name="send_feedback_mail">Feedback E-Mail verfassen</string>
-    <string name="tutorial_header">Willkommen</string>
-    <string name="tutorial_design_header">Design</string>
-    <string name="tutorial_design_content">Das Design wurde komplett überarbeitet. Die Startseite stellt eine Liste aller Mensen dar. Je häufiger du eine Mensa auswählst, desto weiter oben erscheint sie in der Liste. Das Hauptmenü lässt sich per Swipe vom linken Displayrand öffnen.</string>
-    <string name="tutorial_map_header">Kartenansicht</string>
-    <string name="tutorial_balance_header">Guthabencheck (NFC)</string>
-    <string name="tutorial_balance_content">Um das Guthaben deiner eMeal-Karte zu überprüfen, genügt es, die Karte bei eingeschaltetem NFC an das Handy zu halten. In den Einstellungen lässt sich aktivieren, dass sich mensaDD automatisch öffnet, sobald die Karte erkannt wurde.</string>
-    <string name="tutorial_balancehistory_header">Guthabenverlauf</string>
-    <string name="tutorial_balancehistory_content">Wenn du dein Guthaben abrufst, kannst du diese Daten über den Speichern-Button persistent auf deinem Gerät speichern. Im Menü kannst du dir anschließend den Verlauf deines Mensaguthabens anschauen.</string>
-    <string name="tutorial_map_content">Alternativ zur Listenansicht lassen sich nun auch alle Mensen auf einer Karte anzeigen. Diese erreichst du über das Hauptmenü.</string>
-    <string name="tutorial_other_header">Sonstiges</string>
-    <string name="tutorial_other_content">Falls euch die App gefällt oder ihr Dinge vermisst, würde ich mich über Feedback in Form einer Mail (siehe Impressum) oder einer Bewertung im Play Store freuen!</string>
-    <string name="tutorial_button_continue">Weiter</string>
-    <string name="tutorial_button_close">Schliessen</string>
-    <string name="tutorial_button_back">Zurück</string>
     <string name="canteens_loading_progress">Mensen werden geladen...</string>
-    <string name="tutorial_header_content">zu Version 3.0 von mensaDD! Es gibt viel Neues zu entdecken. Ich wünsche viel Spaß damit und stets guten Appetit! ;-)</string>
     <string name="delete_data">Daten wurden erfolgreich gelöscht.</string>
     <string name="app_version">Version 3.1 / Aug 2020</string>
     <string name="pref_veg_meals_title">Grüne Gerichte</string>
@@ -77,12 +61,6 @@
     <string name="menu_show_position">Aktuelle Position</string>
     <string name="menu_send_feedback">Feedback senden</string>
     <string name="menu_set_favorite">Als Favorit setzen</string>
-    <string name="tutorial_news_content">In einem neuen Bereich der App sind nun die aktuellsten Neuigkeiten des Studentenwerks einsehbar. Diese beziehen sich auf Mensen und diverse Sonderaktionen. Du erreichst den Bereich über die neue Navigationsleiste. Neuigkeiten können zusätzlich geteilt und direkt auf der Website des Studentenwerks angezeigt werden.</string>
-    <string name="tutorial_navigation_header">Navigation</string>
-    <string name="tutorial_navigation_content">Die verschiedenen Menüpunkte (Mensen, Karte,...) finden sich nun am unteren Display-Rand. Sie sind von jeder Seite aus einsehbar.</string>
-    <string name="tutorial_news_header">Neuigkeiten</string>
-    <string name="tutorial_favorites_content">Du kannst ab sofort deine Lieblingsmensen als solche markieren. Sie werden dann automatisch oben in der Liste erscheinen. Halte Ausschau nach den Herz-Icons!</string>
-    <string name="tutorial_favorites_header">Favoriten</string>
     <string name="toast_enable_location">Bitte GPS aktivieren und erneut versuchen.</string>
     <string name="toast_remove_favorite">Mensa aus Favoriten entfernt.</string>
     <string name="toast_add_favorite">Mensa zu Favoriten hinzugefügt.</string>
@@ -98,4 +76,6 @@
     <string name="tomorrow">morgen</string>
     <string name="location_permission_missing">Berechtigung für GPS-Zugriff wird benötigt.</string>
     <string name="location_permission_missing_check">Erneut fragen</string>
+    <string name="latest_updates_heading">Was ist neu?</string>
+    <string name="latest_updates_content">Alles ist neu!</string>
 </resources>

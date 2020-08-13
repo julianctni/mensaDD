@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity
             FragmentController.showCanteenListFragment(getSupportFragmentManager());
         }
 
-        preferenceService.removePreferenceByKey("first_start");
-        preferenceService.removePreferenceByKey("pref_show_tut");
+        preferenceService.removePreference("first_start");
+        preferenceService.removePreference("pref_show_tut");
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this.getApplicationContext());
 

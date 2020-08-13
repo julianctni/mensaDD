@@ -42,12 +42,8 @@ public class PreferenceService {
         return mSharedPreferences.getString(mContext.getString(R.string.pref_dark_mode_key), mContext.getString(R.string.pref_dark_mode_auto));
     }
 
-    public void removePreferenceByKey(String key) {
+    public void removePreference(String key) {
         mSharedPreferences.edit().remove(key).apply();
-    }
-
-    public boolean isNfcAutostartSettingEnabled() {
-        return mSharedPreferences.getBoolean(mContext.getString(R.string.pref_key_autostart_set), true);
     }
 
     public boolean isNfcAutostartRegistered() {
@@ -60,5 +56,13 @@ public class PreferenceService {
 
     public void setNfcAutostartSetting(boolean enable) {
         mSharedPreferences.edit().putBoolean(mContext.getString(R.string.pref_autostart_key), enable).apply();
+    }
+
+    public boolean getBooleanPreference(String key, boolean defValue) {
+        return mSharedPreferences.getBoolean(key, defValue);
+    }
+
+    public void setBooleanPreference(String key, boolean value) {
+        mSharedPreferences.edit().putBoolean(key, value).apply();
     }
 }
