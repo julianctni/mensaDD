@@ -77,7 +77,7 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
         if (view.getId() == R.id.latestUpdatesCloseButton) {
             mTutorialCard.setVisibility(View.GONE);
             if (mPackageInfo != null) {
-                //mPreferenceService.setBooleanPreference("pref_show_tut_" + mPackageInfo.versionCode, false);
+                mPreferenceService.setBooleanPreference("pref_show_tut_" + mPackageInfo.versionCode, false);
             }
         }
     }
