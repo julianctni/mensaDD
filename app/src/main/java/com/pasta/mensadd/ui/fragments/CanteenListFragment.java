@@ -5,16 +5,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +12,22 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.ui.FragmentController;
 import com.pasta.mensadd.ui.adapter.CanteenListAdapter;
-import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 
 public class CanteenListFragment extends Fragment implements View.OnClickListener, CanteenListAdapter.OnFavoriteClickListener, CanteenListAdapter.OnCanteenClickListener {
 
-    private CanteenListAdapter mCanteenListAdapter;
     private SharedPreferences mSharedPrefs;
     private LinearLayout mTutorialPage1;
     private LinearLayout mTutorialPage2;
@@ -45,29 +42,28 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_canteen_list, container, false);
-        if (getContext() != null)
-            mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        mCanteensViewModel = new ViewModelProvider(getActivity()).get(CanteensViewModel.class);
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        mCanteensViewModel = new ViewModelProvider(requireActivity()).get(CanteensViewModel.class);
         mTutorialPage1 = view.findViewById(R.id.tutorialPage1);
         mTutorialPage2 = view.findViewById(R.id.tutorialPage2);
         mTutorialPage3 = view.findViewById(R.id.tutorialPage3);
         mTutorialContinueBtn = view.findViewById(R.id.tutorialContinueButton);
         mTutorialBackBtn = view.findViewById(R.id.tutorialBackButton);
-        ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
         mTutorialCard = view.findViewById(R.id.tutorialCard);
-        RecyclerView mCanteenList = view.findViewById(R.id.canteenList);
+        RecyclerView canteenListRecyclerView = view.findViewById(R.id.canteenList);
         mTutorialBackBtn.setOnClickListener(this);
         mTutorialContinueBtn.setOnClickListener(this);
-        LinearLayoutManager layoutParams = new LinearLayoutManager(getActivity());
-        mCanteenListAdapter = new CanteenListAdapter(this.getContext());
-        mCanteenListAdapter.setOnFavoriteClickListener(this);
-        mCanteenListAdapter.setOnCanteenClickListener(this);
-        mCanteenList.setAdapter(mCanteenListAdapter);
-        mCanteenList.setLayoutManager(layoutParams);
-        mCanteensViewModel.getCanteens().observe(getViewLifecycleOwner(), canteens -> {
-            mCanteenListAdapter.submitList(canteens);
+        LinearLayoutManager layoutParams = new LinearLayoutManager(requireActivity());
+        CanteenListAdapter canteenListAdapter = new CanteenListAdapter(requireContext());
+        canteenListAdapter.setOnFavoriteClickListener(this);
+        canteenListAdapter.setOnCanteenClickListener(this);
+        canteenListRecyclerView.setAdapter(canteenListAdapter);
+        canteenListRecyclerView.setLayoutManager(layoutParams);
+        mCanteensViewModel.getCanteens().observe(getViewLifecycleOwner(), canteenListAdapter::submitList);
+        mCanteensViewModel.isRefreshing().observe(getViewLifecycleOwner(), refreshing -> {
+            ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
+            progressBar.setVisibility(refreshing ? View.VISIBLE : View.GONE);
         });
-        mCanteensViewModel.isRefreshing().observe(getViewLifecycleOwner(), refreshing -> progressBar.setVisibility(refreshing ? View.VISIBLE : View.GONE));
         return view;
     }
 
@@ -79,7 +75,7 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
 
     void showTutorial() {
         try {
-            PackageInfo info = getContext().getPackageManager().getPackageInfo(this.getContext().getPackageName(), 0);
+            PackageInfo info = requireContext().getPackageManager().getPackageInfo(requireContext().getPackageName(), 0);
             if (mSharedPrefs.getBoolean("pref_show_tut_" + info.versionCode, true) && info.versionCode == 20) {
                 mTutorialCard.setVisibility(View.VISIBLE);
                 mSharedPrefs.edit().remove("pref_show_tut_" + (info.versionCode - 1)).apply();
@@ -103,7 +99,7 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
             } else if (mTutorialPage3.getVisibility() == View.VISIBLE) {
                 mTutorialCard.setVisibility(View.GONE);
                 try {
-                    PackageInfo info = getContext().getPackageManager().getPackageInfo(this.getContext().getPackageName(), 0);
+                    PackageInfo info = requireContext().getPackageManager().getPackageInfo(requireContext().getPackageName(), 0);
                     mSharedPrefs.edit().putBoolean("pref_show_tut_" + info.versionCode, false).apply();
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
@@ -135,6 +131,6 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
         canteen.increasePriority();
         mCanteensViewModel.updateCanteen(canteen);
         mCanteensViewModel.setSelectedCanteen(canteen);
-        FragmentController.showMealWeekFragment(getFragmentManager());
+        FragmentController.showMealWeekFragment(getParentFragmentManager());
     }
 }
