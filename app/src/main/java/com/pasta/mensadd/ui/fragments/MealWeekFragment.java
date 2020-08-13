@@ -1,7 +1,6 @@
 package com.pasta.mensadd.ui.fragments;
 
 
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,11 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
-import androidx.viewpager.widget.PagerTabStrip;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
+import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.database.AppDatabase;
@@ -78,7 +74,7 @@ public class MealWeekFragment extends Fragment {
         CanteenRepository canteenRepository = new CanteenRepository(
                 AppDatabase.getInstance(requireContext()),
                 NetworkController.getInstance(requireContext()),
-                PreferenceManager.getDefaultSharedPreferences(requireContext())
+                new PreferenceService(requireContext())
         );
         MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(mealRepository, canteenRepository, canteensViewModel.getSelectedCanteen());
         mMealsViewModel = new ViewModelProvider(this, mealsViewModelFactory).get(MealsViewModel.class);

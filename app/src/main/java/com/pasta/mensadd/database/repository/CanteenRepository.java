@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.dao.CanteenDao;
 import com.pasta.mensadd.database.entity.Canteen;
@@ -23,18 +24,17 @@ public class CanteenRepository {
     private LiveData<List<Canteen>> mCanteens;
     private NetworkController mNetworkController;
     private MutableLiveData<Boolean> mIsRefreshing;
-    private SharedPreferences mSharedPreferences;
+    private PreferenceService mPreferenceService;
     private AppDatabase mAppDatabase;
 
-    private static final String PREF_LAST_CANTEENS_UPDATE = "lastCanteenUpdate";
     private static final int CANTEEN_UPDATE_INTERVAL = 10 * 60 * 60 * 1000;
 
-    public CanteenRepository(AppDatabase appDatabase, NetworkController networkController, SharedPreferences sharedPreferences) {
+    public CanteenRepository(AppDatabase appDatabase, NetworkController networkController, PreferenceService preferenceService) {
         mAppDatabase = appDatabase;
         mCanteenDao = appDatabase.canteenDao();
         mCanteens = mCanteenDao.getCanteens();
         mNetworkController = networkController;
-        mSharedPreferences = sharedPreferences;
+        mPreferenceService = preferenceService;
         mIsRefreshing = new MutableLiveData<>();
     }
 
@@ -51,7 +51,7 @@ public class CanteenRepository {
     }
 
     public LiveData<List<Canteen>> getCanteens() {
-        long lastUpdate = mSharedPreferences.getLong(PREF_LAST_CANTEENS_UPDATE, 0);
+        long lastUpdate = mPreferenceService.getLastCanteenUpdate();
         if (lastUpdate == 0 || Calendar.getInstance().getTimeInMillis() - lastUpdate > CANTEEN_UPDATE_INTERVAL) {
             refreshCanteens();
         }
@@ -87,8 +87,7 @@ public class CanteenRepository {
                     Canteen m = new Canteen(code, name, hours.toString(), address, posLat, posLong, priority);
                     insertOrUpdateCanteen(m);
                 }
-
-                mSharedPreferences.edit().putLong(PREF_LAST_CANTEENS_UPDATE, Calendar.getInstance().getTimeInMillis()).apply();
+                mPreferenceService.setLastCanteenUpdate(Calendar.getInstance().getTimeInMillis());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

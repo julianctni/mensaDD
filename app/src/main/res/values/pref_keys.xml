@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_veg_meals_key" translatable="false">pref_veg_meals</string>
+    <string name="pref_autostart_key" translatable="false">nfc_autostart</string>
+    <string name="pref_share_image_key" translatable="false">share_image</string>
+    <string name="pref_key_autostart_set" translatable="false">autostart_set</string>
+    <string name="pref_reset_key" translatable="false">pref_reset</string>
+    <string name="pref_dark_mode_key" translatable="false">pref_dark_mode</string>
+</resources>

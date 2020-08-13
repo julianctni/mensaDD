@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.database.entity.Meal;
 import com.pasta.mensadd.networking.NetworkController;
@@ -69,14 +70,14 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
         }
     };
     private Context mContext;
-    private SharedPreferences mPrefs;
+    private PreferenceService mPreferenceService;
     private SparseBooleanArray mExpandStates = new SparseBooleanArray();
     private long mLastUpdate;
 
     public MealListAdapter(Context context) {
         super(DIFF_CALLBACK);
         mContext = context;
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mPreferenceService = new PreferenceService(context);
     }
 
     @Override
@@ -132,12 +133,12 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
         if (item.isAlcohol()) holder.mAlcohol.setVisibility(View.VISIBLE);
         else holder.mAlcohol.setVisibility(View.GONE);
 
-        if (item.getName().contains("Bauchspeck") && mPrefs.getBoolean(mContext.getString(R.string.pref_bacon_key), false))
+        if (item.getName().contains("Bauchspeck") && mPreferenceService.isBaconFeatureEnabled())
             holder.mBacon.setVisibility(View.VISIBLE);
         else
             holder.mBacon.setVisibility(View.GONE);
 
-        if (mPrefs.getBoolean(mContext.getString(R.string.pref_veg_meals_key), true) && (item.isVegan() || item.isVegetarian())) {
+        if (mPreferenceService.isGreenVeggieMealsEnabled() && (item.isVegan() || item.isVegetarian())) {
             holder.mHeaderLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_header_vegeterian));
             holder.mName.setTextColor(mContext.getResources().getColor(R.color.card_text_light));
             holder.mLocation.setTextColor(mContext.getResources().getColor(R.color.card_text_light));

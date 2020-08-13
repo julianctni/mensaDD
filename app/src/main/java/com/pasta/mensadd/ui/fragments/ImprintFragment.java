@@ -2,13 +2,8 @@ package com.pasta.mensadd.ui.fragments;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -21,22 +16,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pasta.mensadd.ui.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
+import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.ui.MainActivity;
 
 public class ImprintFragment extends Fragment implements View.OnClickListener {
 
     private int mEasterCount = 0;
-    SharedPreferences mPrefs;
+    private PreferenceService mPreferenceService;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_imprint, container, false);
         setHasOptionsMenu(true);
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         TextView baconView = v.findViewById(R.id.imprintLicenseBacon);
-        if (mPrefs.getBoolean(getString(R.string.pref_bacon_key), false))
+        mPreferenceService = new PreferenceService(requireContext());
+        if (mPreferenceService.isBaconFeatureEnabled())
             baconView.setVisibility(View.VISIBLE);
         TextView licenseView = v.findViewById(R.id.imprintLicense);
 
@@ -81,11 +81,11 @@ public class ImprintFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.banner_imprint && !mPrefs.getBoolean(getString(R.string.pref_bacon_key), false)) {
+        if (v.getId() == R.id.banner_imprint && !mPreferenceService.isBaconFeatureEnabled()) {
             mEasterCount += 1;
             if (mEasterCount == 7) {
                 Toast.makeText(getContext(), getString(R.string.toast_bacon), Toast.LENGTH_LONG).show();
-                mPrefs.edit().putBoolean(getString(R.string.pref_bacon_key), true).apply();
+                mPreferenceService.setBaconFeatureEnabled(true);
             }
         }
     }

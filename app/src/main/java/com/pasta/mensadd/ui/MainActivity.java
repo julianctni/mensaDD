@@ -3,7 +3,6 @@ package com.pasta.mensadd.ui;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
@@ -24,12 +23,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
@@ -75,7 +74,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String darkMode = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.pref_dark_mode_key), getString(R.string.pref_dark_mode_auto));
+        PreferenceService preferenceService = new PreferenceService(this);
+        String darkMode = preferenceService.getDarkModeSetting();
 
         if (darkMode.equals(getString(R.string.pref_dark_mode_yes))) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         CanteenRepository canteenRepository = new CanteenRepository(
                 AppDatabase.getInstance(this),
                 NetworkController.getInstance(this),
-                PreferenceManager.getDefaultSharedPreferences(this)
+                preferenceService
         );
         CanteensViewModelFactory canteensViewModelFactory = new CanteensViewModelFactory(canteenRepository);
         new ViewModelProvider(this, canteensViewModelFactory).get(CanteensViewModel.class);
@@ -129,19 +129,19 @@ public class MainActivity extends AppCompatActivity
             FragmentController.showCanteenListFragment(getSupportFragmentManager());
         }
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-        sharedPref.edit().remove("first_start").apply();
-        sharedPref.edit().remove("pref_show_tut").apply();
+        preferenceService.removePreferenceByKey("first_start");
+        preferenceService.removePreferenceByKey("pref_show_tut");
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this.getApplicationContext());
 
         NFC_SUPPORTED = (mNfcAdapter != null);
 
-        if (NFC_SUPPORTED && !sharedPref.getBoolean(getString(R.string.pref_key_autostart_set), false)) {
+        if (NFC_SUPPORTED && !preferenceService.isNfcAutostartRegistered()) {
             AutostartRegister.register(this.getPackageManager(), true);
-            sharedPref.edit().putBoolean(getString(R.string.pref_key_autostart_set), true).apply();
-            sharedPref.edit().putBoolean(getString(R.string.pref_autostart_key), true).apply();
+            preferenceService.setNfcAutostartRegistered(true);
+            preferenceService.setNfcAutostartSetting(true);
         }
+
         if (!NFC_SUPPORTED) {
             mBottomNav.inflateMenu(R.menu.bottom_menu);
         } else {
