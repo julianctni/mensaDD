@@ -4,12 +4,8 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,16 +16,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.pasta.mensadd.cardcheck.CardCheckService;
-import com.pasta.mensadd.cardcheck.OnCardLoadedCallback;
 import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
+import com.pasta.mensadd.cardcheck.CardCheckService;
+import com.pasta.mensadd.cardcheck.OnCardLoadedCallback;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.repository.CanteenRepository;
@@ -42,21 +36,15 @@ import java.util.Calendar;
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
 
 public class MainActivity extends AppCompatActivity
-        implements BottomNavigation.OnMenuItemSelectionListener, View.OnClickListener {
+        implements BottomNavigation.OnMenuItemSelectionListener {
 
     public static boolean NFC_SUPPORTED;
     private BottomNavigation mBottomNav;
-    private RelativeLayout mCardCheckContainer;
-    private FloatingActionButton mSaveBalanceButton;
-    private FloatingActionButton mHideBalanceButton;
     private TextView mHeadingToolbar;
     private ImageView mAppLogoToolbar;
     private NfcAdapter mNfcAdapter;
     private Toolbar mToolbar;
     private CardCheckService mCardCheckService;
-
-    private float mCardCheckHeight;
-    private boolean mCardCheckVisible;
 
     private PermissionsManager mPermissionManager;
 
@@ -96,14 +84,6 @@ public class MainActivity extends AppCompatActivity
 
         mHeadingToolbar = findViewById(R.id.heading_toolbar);
         mAppLogoToolbar = findViewById(R.id.toolbarImage);
-        mSaveBalanceButton = findViewById(R.id.saveBalanceButton);
-        mSaveBalanceButton.setOnClickListener(this);
-        mHideBalanceButton = findViewById(R.id.hideBalanceButton);
-        mHideBalanceButton.setOnClickListener(this);
-
-        mCardCheckContainer = findViewById(R.id.cardCheckContainer);
-        mCardCheckContainer.setOnClickListener(this);
-        mCardCheckHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
 
 
         boolean isDecember = Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER;
@@ -215,44 +195,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onClick(View v) {
-
-        Animation animation = Utils.getViewHeightAnimation(mCardCheckContainer, (int) mCardCheckHeight, 0, 150);
-        if (v.getId() == R.id.saveBalanceButton) {
-            mCardCheckService.storeCardData((hasSavedCardData) -> {
-                int messageId = hasSavedCardData ? R.string.balance_saved : R.string.balance_already_saved;
-                Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
-            });
-        }
-        if (v.getId() == R.id.saveBalanceButton || v.getId() == R.id.hideBalanceButton) {
-            mCardCheckContainer.setAnimation(animation);
-            mCardCheckContainer.startAnimation(animation);
-            mCardCheckVisible = false;
-            ScaleAnimation hideAnim = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            hideAnim.setDuration(150);
-            hideAnim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mSaveBalanceButton.hide();
-                    mHideBalanceButton.hide();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-            mSaveBalanceButton.startAnimation(hideAnim);
-            mHideBalanceButton.startAnimation(hideAnim);
-
-        }
-    }
-
-
-    @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
@@ -274,33 +216,8 @@ public class MainActivity extends AppCompatActivity
 
 
     private void updateCardCheckFragment(ValueData value) {
-        if (!mCardCheckVisible) {
-            FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), mCardCheckService.moneyStr(value.value), mCardCheckService.moneyStr(value.lastTransaction));
-            ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            showAnim.setDuration(250);
-            showAnim.setStartOffset(100);
-            mSaveBalanceButton.show();
-            mSaveBalanceButton.startAnimation(showAnim);
-            mHideBalanceButton.show();
-            mHideBalanceButton.startAnimation(showAnim);
-            Animation animation = Utils.getViewHeightAnimation(mCardCheckContainer, 0, (int) mCardCheckHeight, 200);
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-            mCardCheckContainer.setAnimation(animation);
-            mCardCheckContainer.startAnimation(animation);
-            mCardCheckVisible = true;
+        if (getSupportFragmentManager().findFragmentByTag(FragmentController.TAG_BALANCE_CHECK) == null) {
+            FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), mCardCheckService.moneyStr(value.value), mCardCheckService.moneyStr(value.lastTransaction), mCardCheckService);
         } else {
             FragmentController.updateBalanceCheckFragment(getSupportFragmentManager(), mCardCheckService.moneyStr(value.value), mCardCheckService.moneyStr(value.lastTransaction));
         }

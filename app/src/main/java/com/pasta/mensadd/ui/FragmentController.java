@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.cardcheck.CardCheckService;
 import com.pasta.mensadd.ui.fragments.BalanceCheckFragment;
 import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
 import com.pasta.mensadd.ui.fragments.CanteenListFragment;
@@ -43,8 +44,8 @@ public class FragmentController {
         createAnimatedTransaction(fm).replace(R.id.mainContainer, f, TAG_NEWS).addToBackStack(null).commit();
     }
 
-    public static void showBalanceCheckFragment(FragmentManager fm, String current, String lastTransaction) {
-        BalanceCheckFragment fragment = BalanceCheckFragment.newInstance(current, lastTransaction);
+    public static void showBalanceCheckFragment(FragmentManager fm, String current, String lastTransaction, CardCheckService cardCheckService) {
+        BalanceCheckFragment fragment = BalanceCheckFragment.newInstance(current, lastTransaction, cardCheckService);
         fm.beginTransaction().replace(R.id.cardCheckContainer, fragment, TAG_BALANCE_CHECK).commitAllowingStateLoss();
     }
 
@@ -77,7 +78,7 @@ public class FragmentController {
         createAnimatedTransaction(fm).replace(R.id.mainContainer, f, TAG_BALANCE_HISTORY).commit();
     }
 
-    public static FragmentTransaction createAnimatedTransaction(FragmentManager fm){
+    public static FragmentTransaction createAnimatedTransaction(FragmentManager fm) {
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         return transaction;

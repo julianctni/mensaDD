@@ -1,73 +1,61 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="@color/balance_check_background"
-                android:elevation="20dp"
-                tools:targetApi="lollipop">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/balanceCheckWrapper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/balance_check_background"
+    android:paddingHorizontal="12dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="6dp"
+    android:elevation="18dp"
+    tools:targetApi="lollipop">
 
-
-    <LinearLayout
-        android:id="@+id/balanceLayout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/balanceContent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical">
+        android:text="@string/balance_check_balance"
+        android:minLines="1"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <TextView
+        android:id="@+id/lastTransactionContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:layout_below="@id/balanceContent"
+        android:text="@string/balance_check_last_transaction"
+        android:minLines="1"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/balanceHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minLines="1"
-                android:text="@string/balance_check_balance"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
+    <Button
+        android:id="@+id/closeBalanceCheckButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_below="@id/lastTransactionContent"
+        android:layout_toStartOf="@id/saveBalanceButton"
+        android:text="@string/button_close"
+        android:textColor="@color/white"/>
 
-            <TextView
-                android:id="@+id/balanceContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minLines="1"
-                android:textAlignment="center"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/lastTransactionHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minLines="1"
-                android:text="@string/balance_check_last_transaction"
-                android:textColor="@color/white"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:id="@+id/lastTransactionContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minLines="1"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:textColor="@color/white"
-                android:textSize="14sp"/>
-        </LinearLayout>
-    </LinearLayout>
-
+    <Button
+        android:id="@+id/saveBalanceButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_below="@id/lastTransactionContent"
+        android:layout_alignParentEnd="true"
+        android:text="@string/button_save_balance_values"
+        android:textColor="@color/white"/>
 
 </RelativeLayout>
 

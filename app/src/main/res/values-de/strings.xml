@@ -9,8 +9,8 @@
     <string name="pref_autostart_summary">Starte die App, sobald eMeal-Karte erkannt wurde.</string>
     <string name="pref_autostart_title">NFC-Autostart</string>
     <string name="pref_map_title">Offline-Karte</string>
-    <string name="balance_check_balance">Aktuelles Guthaben</string>
-    <string name="balance_check_last_transaction">Letzte Abbuchung</string>
+    <string name="balance_check_balance">Aktuelles Guthaben: %1$s€</string>
+    <string name="balance_check_last_transaction">Letzte Abbuchung: %1$s€</string>
     <string name="pref_share_image_title">Bilder zum Gericht teilen</string>
     <string name="pref_share_image_summary">Füge beim Teilen von Gerichten (falls vorhanden) Bild hinzu.</string>
     <string name="meals_no_food">Heute gibt es hier leider kein Essen.</string>
@@ -72,6 +72,7 @@
     <string name="last_server_check">Stand von %1$s Uhr</string>
     <string name="button_close">Schließen</string>
     <string name="button_meals">Speiseplan</string>
+    <string name="button_save_balance_values">Speichern</string>
     <string name="today">heute</string>
     <string name="tomorrow">morgen</string>
     <string name="location_permission_missing">Berechtigung für GPS-Zugriff wird benötigt.</string>

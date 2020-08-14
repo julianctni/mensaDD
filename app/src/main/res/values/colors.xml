@@ -33,7 +33,7 @@
     <color name="tab_text_selected">#FFFFFF</color>
     <color name="tab_text">#AAFFFFFF</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="balance_check_background">@color/cyan</color>
+    <color name="balance_check_background">@color/cyan_dark</color>
     <color name="balance_check_save_button">@color/cyan_dark</color>
     <color name="balance_check_cancel_button">@color/pink_dark</color>
 </resources>

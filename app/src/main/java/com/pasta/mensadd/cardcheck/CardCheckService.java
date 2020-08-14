@@ -44,7 +44,7 @@ public class CardCheckService {
                 mCurrentValueData = value;
                 onCardLoadedCallback.onCardLoadSuccess(value);
             } else
-               onCardLoadedCallback.onCardLoadError(true);
+                onCardLoadedCallback.onCardLoadError(true);
             tech.close();
         } catch (DesfireException ex) {
             onCardLoadedCallback.onCardLoadError(false);
@@ -84,6 +84,6 @@ public class CardCheckService {
         String centsStr = Integer.toString(cents);
         if (cents < 10)
             centsStr = "0" + centsStr;
-        return euros + "," + centsStr + "\u20AC";
+        return euros + "." + centsStr;
     }
 }
