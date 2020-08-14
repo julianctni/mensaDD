@@ -1,15 +1,10 @@
 package com.pasta.mensadd.ui;
 
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.nfc.tech.IsoDep;
-import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -22,39 +17,34 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.pasta.mensadd.cardcheck.CardCheckService;
+import com.pasta.mensadd.cardcheck.OnCardLoadedCallback;
 import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.cardcheck.AutostartRegister;
-import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
-import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
-import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.database.AppDatabase;
-import com.pasta.mensadd.database.entity.BalanceEntry;
-import com.pasta.mensadd.database.repository.BalanceEntryRepository;
 import com.pasta.mensadd.database.repository.CanteenRepository;
 import com.pasta.mensadd.networking.NetworkController;
-import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModelFactory;
 
-import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigation.OnMenuItemSelectionListener, View.OnClickListener {
 
-    public static boolean NFC_SUPPORTED = false;
+    public static boolean NFC_SUPPORTED;
     private BottomNavigation mBottomNav;
     private RelativeLayout mCardCheckContainer;
     private FloatingActionButton mSaveBalanceButton;
@@ -62,8 +52,8 @@ public class MainActivity extends AppCompatActivity
     private TextView mHeadingToolbar;
     private ImageView mAppLogoToolbar;
     private NfcAdapter mNfcAdapter;
-    private ValueData mCurrentValueData;
     private Toolbar mToolbar;
+    private CardCheckService mCardCheckService;
 
     private float mCardCheckHeight;
     private boolean mCardCheckVisible;
@@ -107,10 +97,8 @@ public class MainActivity extends AppCompatActivity
         mHeadingToolbar = findViewById(R.id.heading_toolbar);
         mAppLogoToolbar = findViewById(R.id.toolbarImage);
         mSaveBalanceButton = findViewById(R.id.saveBalanceButton);
-        //mSaveBalanceButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.cyan_dark)));
         mSaveBalanceButton.setOnClickListener(this);
         mHideBalanceButton = findViewById(R.id.hideBalanceButton);
-        //mHideBalanceButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CC3C51")));
         mHideBalanceButton.setOnClickListener(this);
 
         mCardCheckContainer = findViewById(R.id.cardCheckContainer);
@@ -118,12 +106,8 @@ public class MainActivity extends AppCompatActivity
         mCardCheckHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
 
 
-        Calendar cal = Calendar.getInstance();
-        if (cal.get(Calendar.MONTH) == 11) {
-            mAppLogoToolbar.setImageDrawable(getResources().getDrawable(R.drawable.banner_christmas));
-        } else {
-            mAppLogoToolbar.setImageDrawable(getResources().getDrawable(R.drawable.banner));
-        }
+        boolean isDecember = Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER;
+        mAppLogoToolbar.setImageDrawable(getResources().getDrawable(isDecember ? R.drawable.banner_christmas : R.drawable.banner));
 
         if (getSupportFragmentManager().findFragmentById(R.id.mainContainer) == null) {
             FragmentController.showCanteenListFragment(getSupportFragmentManager());
@@ -133,31 +117,29 @@ public class MainActivity extends AppCompatActivity
         preferenceService.removePreference("pref_show_tut");
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this.getApplicationContext());
-
         NFC_SUPPORTED = (mNfcAdapter != null);
 
-        if (NFC_SUPPORTED && !preferenceService.isNfcAutostartRegistered()) {
-            AutostartRegister.register(this.getPackageManager(), true);
-            preferenceService.setNfcAutostartRegistered(true);
-            preferenceService.setNfcAutostartSetting(true);
+        if (NFC_SUPPORTED) {
+            mCardCheckService = new CardCheckService(this);
+            if (!preferenceService.isNfcAutostartRegistered()) {
+                AutostartRegister.register(this.getPackageManager(), true);
+                preferenceService.setNfcAutostartRegistered(true);
+                preferenceService.setNfcAutostartSetting(true);
+            }
+            if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
+                onNewIntent(getIntent());
+            }
         }
 
-        if (!NFC_SUPPORTED) {
-            mBottomNav.inflateMenu(R.menu.bottom_menu);
-        } else {
-            mBottomNav.inflateMenu(R.menu.bottom_menu);
-        }
-
-        if (NFC_SUPPORTED && NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
-            onNewIntent(getIntent());
-        }
+        mBottomNav.inflateMenu(NFC_SUPPORTED ? R.menu.bottom_menu : R.menu.bottom_menu_no_nfc);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mNfcAdapter != null)
-            setUpCardCheck();
+        if (NFC_SUPPORTED) {
+            mCardCheckService.setUpCardCheck(mNfcAdapter);
+        }
     }
 
     @Override
@@ -205,7 +187,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        String currentFragmentTag = getSupportFragmentManager().findFragmentById(R.id.mainContainer).getTag();
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.mainContainer);
+        if (currentFragment == null || currentFragment.getTag() == null) {
+            return;
+        }
+        String currentFragmentTag = currentFragment.getTag();
         if (mBottomNav.getSelectedIndex() == 0) {
             if (currentFragmentTag.equals(FragmentController.TAG_MEAL_WEEK)) {
                 updateToolbar(R.id.nav_mensa, "");
@@ -229,16 +215,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
-
-    @Override
     public void onClick(View v) {
 
         Animation animation = Utils.getViewHeightAnimation(mCardCheckContainer, (int) mCardCheckHeight, 0, 150);
         if (v.getId() == R.id.saveBalanceButton) {
-            storeCardData();
+            mCardCheckService.storeCardData((hasSavedCardData) -> {
+                int messageId = hasSavedCardData ? R.string.balance_saved : R.string.balance_already_saved;
+                Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
+            });
         }
         if (v.getId() == R.id.saveBalanceButton || v.getId() == R.id.hideBalanceButton) {
             mCardCheckContainer.setAnimation(animation);
@@ -273,41 +257,25 @@ public class MainActivity extends AppCompatActivity
         super.onNewIntent(intent);
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            loadCard(tag);
+            mCardCheckService.loadCard(tag, new OnCardLoadedCallback() {
+                @Override
+                public void onCardLoadSuccess(ValueData valueData) {
+                    updateCardCheckFragment(valueData);
+                }
+
+                @Override
+                public void onCardLoadError(boolean cardNotSupported) {
+                    int messageId = cardNotSupported ? R.string.balance_check_card_not_supported : R.string.balance_check_fail;
+                    Toast.makeText(MainActivity.this, getString(messageId), Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 
 
-    private String moneyStr(int i) {
-        int euros = i / 1000;
-        int cents = i / 10 % 100;
-        String centsStr = Integer.toString(cents);
-        if (cents < 10)
-            centsStr = "0" + centsStr;
-        return euros + "," + centsStr + "\u20AC";
-    }
-
-    private void storeCardData() {
-        float cardBalance = (float) mCurrentValueData.value / 1000;
-        float lastTransaction = (float) mCurrentValueData.lastTransaction / 1000;
-        BalanceEntryRepository balanceEntryRepository = new BalanceEntryRepository(AppDatabase.getInstance(getApplicationContext()));
-        balanceEntryRepository.getLatestBalanceEntry().observe(this, balanceEntry -> {
-            if (balanceEntry == null || balanceEntry.getCardBalance() != cardBalance || balanceEntry.getLastTransaction() != lastTransaction) {
-                balanceEntryRepository.insertBalanceEntry(new BalanceEntry(new Date().getTime(), cardBalance, lastTransaction));
-                Toast.makeText(this.getApplicationContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
-                BalanceHistoryFragment fragment = (BalanceHistoryFragment) getSupportFragmentManager().findFragmentByTag(FragmentController.TAG_BALANCE_HISTORY);
-            } else {
-                Toast.makeText(this.getApplicationContext(), getString(R.string.balance_already_saved), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
     private void updateCardCheckFragment(ValueData value) {
-
-        mCurrentValueData = value;
         if (!mCardCheckVisible) {
-            FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
+            FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), mCardCheckService.moneyStr(value.value), mCardCheckService.moneyStr(value.lastTransaction));
             ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
             showAnim.setDuration(250);
             showAnim.setStartOffset(100);
@@ -334,45 +302,10 @@ public class MainActivity extends AppCompatActivity
             mCardCheckContainer.startAnimation(animation);
             mCardCheckVisible = true;
         } else {
-            FragmentController.updateBalanceCheckFragment(getSupportFragmentManager(), moneyStr(value.value), moneyStr(value.lastTransaction));
+            FragmentController.updateBalanceCheckFragment(getSupportFragmentManager(), mCardCheckService.moneyStr(value.value), mCardCheckService.moneyStr(value.lastTransaction));
         }
     }
 
-    private void loadCard(Tag tag) {
-        IsoDep tech = IsoDep.get(tag);
-        try {
-            tech.connect();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        try {
-            DesfireProtocol desfireTag = new DesfireProtocol(tech);
-            ValueData value = Readers.getInstance().readCard(desfireTag);
-            if (value != null)
-                updateCardCheckFragment(value);
-            else
-                Toast.makeText(this, getString(R.string.balance_check_card_not_supported), Toast.LENGTH_LONG).show();
-            tech.close();
-        } catch (DesfireException ex) {
-            ex.printStackTrace();
-            Toast.makeText(this, getString(R.string.balance_check_fail), Toast.LENGTH_LONG).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setUpCardCheck() {
-        PendingIntent mPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        IntentFilter tech = new IntentFilter(
-                NfcAdapter.ACTION_TECH_DISCOVERED);
-        IntentFilter[] mFilters = new IntentFilter[]{tech,};
-        String[][] mTechLists = new String[][]{new String[]{
-                IsoDep.class.getName(), NfcA.class.getName()}};
-        mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
-                mTechLists);
-    }
 
     public void requestLocationPermission(PermissionsListener permissionsListener) {
         mPermissionManager = new PermissionsManager(permissionsListener);
@@ -381,7 +314,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(
-            int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         mPermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
