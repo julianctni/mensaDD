@@ -7,14 +7,13 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
+import android.util.Log;
 
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
 import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
 import com.pasta.mensadd.cardcheck.cardreader.Readers;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
-import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.BalanceEntry;
-import com.pasta.mensadd.database.repository.BalanceEntryRepository;
 import com.pasta.mensadd.ui.MainActivity;
 
 import java.io.IOException;
@@ -22,8 +21,8 @@ import java.util.Date;
 
 public class CardCheckService {
 
-    private ValueData mCurrentValueData;
     private MainActivity mMainActivity;
+    private BalanceEntry mBalanceEntry;
 
     public CardCheckService(MainActivity mainActivity) {
         mMainActivity = mainActivity;
@@ -39,10 +38,12 @@ public class CardCheckService {
         }
         try {
             DesfireProtocol desfireTag = new DesfireProtocol(tech);
-            ValueData value = Readers.getInstance().readCard(desfireTag);
-            if (value != null) {
-                mCurrentValueData = value;
-                onCardLoadedCallback.onCardLoadSuccess(value);
+            ValueData valueData = Readers.getInstance().readCard(desfireTag);
+            if (valueData != null) {
+                float cardBalance = (float) valueData.value / 1000;
+                float lastTransaction = (float) valueData.lastTransaction / 1000;
+                mBalanceEntry = new BalanceEntry(new Date().getTime(), cardBalance, lastTransaction);
+                onCardLoadedCallback.onCardLoadSuccess(mBalanceEntry);
             } else
                 onCardLoadedCallback.onCardLoadError(true);
             tech.close();
@@ -51,6 +52,18 @@ public class CardCheckService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public BalanceEntry getBalanceEntry() {
+        return mBalanceEntry;
+    }
+
+    public String getLastTransactionAsString() {
+        return moneyStr(mBalanceEntry.getLastTransaction());
+    }
+
+    public String getCurrentBalanceAsString() {
+        return moneyStr(mBalanceEntry.getCardBalance());
     }
 
     public void setUpCardCheck(NfcAdapter nfcAdapter) {
@@ -65,22 +78,9 @@ public class CardCheckService {
                 mTechLists);
     }
 
-    public void storeCardData(OnCardDataStoredCallback onCardDataStoredCallback) {
-        float cardBalance = (float) mCurrentValueData.value / 1000;
-        float lastTransaction = (float) mCurrentValueData.lastTransaction / 1000;
-        BalanceEntryRepository balanceEntryRepository = new BalanceEntryRepository(AppDatabase.getInstance(mMainActivity.getApplicationContext()));
-        balanceEntryRepository.getLatestBalanceEntry().observe(mMainActivity, balanceEntry -> {
-            boolean isNewData = balanceEntry == null || balanceEntry.getCardBalance() != cardBalance || balanceEntry.getLastTransaction() != lastTransaction;
-            if (isNewData) {
-                balanceEntryRepository.insertBalanceEntry(new BalanceEntry(new Date().getTime(), cardBalance, lastTransaction));
-            }
-            onCardDataStoredCallback.onCardDataStored(isNewData);
-        });
-    }
-
-    public String moneyStr(int i) {
-        int euros = i / 1000;
-        int cents = i / 10 % 100;
+    public String moneyStr(float f) {
+        int euros = (int)f;
+        int cents = (int)(f * 100 % 100);
         String centsStr = Integer.toString(cents);
         if (cents < 10)
             centsStr = "0" + centsStr;

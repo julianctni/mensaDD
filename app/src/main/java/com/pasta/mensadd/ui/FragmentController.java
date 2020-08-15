@@ -44,15 +44,15 @@ public class FragmentController {
         createAnimatedTransaction(fm).replace(R.id.mainContainer, f, TAG_NEWS).addToBackStack(null).commit();
     }
 
-    public static void showBalanceCheckFragment(FragmentManager fm, String current, String lastTransaction, CardCheckService cardCheckService) {
-        BalanceCheckFragment fragment = BalanceCheckFragment.newInstance(current, lastTransaction, cardCheckService);
+    public static void showBalanceCheckFragment(FragmentManager fm, CardCheckService cardCheckService) {
+        BalanceCheckFragment fragment = BalanceCheckFragment.newInstance(cardCheckService);
         fm.beginTransaction().replace(R.id.cardCheckContainer, fragment, TAG_BALANCE_CHECK).commitAllowingStateLoss();
     }
 
-    public static void updateBalanceCheckFragment(FragmentManager fm, String current, String lastTransaction) {
+    public static void updateBalanceCheckFragment(FragmentManager fm) {
         BalanceCheckFragment fragment = (BalanceCheckFragment) fm.findFragmentByTag(TAG_BALANCE_CHECK);
         if (fragment != null) {
-            fragment.updateContent(current, lastTransaction);
+            fragment.updateContent();
         }
     }
 

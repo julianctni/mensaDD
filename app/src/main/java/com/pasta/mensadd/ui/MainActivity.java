@@ -26,6 +26,7 @@ import com.pasta.mensadd.cardcheck.CardCheckService;
 import com.pasta.mensadd.cardcheck.OnCardLoadedCallback;
 import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.database.AppDatabase;
+import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.database.repository.CanteenRepository;
 import com.pasta.mensadd.networking.NetworkController;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
@@ -201,8 +202,8 @@ public class MainActivity extends AppCompatActivity
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             mCardCheckService.loadCard(tag, new OnCardLoadedCallback() {
                 @Override
-                public void onCardLoadSuccess(ValueData valueData) {
-                    updateCardCheckFragment(valueData);
+                public void onCardLoadSuccess(BalanceEntry balanceEntry) {
+                    updateCardCheckFragment();
                 }
 
                 @Override
@@ -215,11 +216,11 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void updateCardCheckFragment(ValueData value) {
+    private void updateCardCheckFragment() {
         if (getSupportFragmentManager().findFragmentByTag(FragmentController.TAG_BALANCE_CHECK) == null) {
-            FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), mCardCheckService.moneyStr(value.value), mCardCheckService.moneyStr(value.lastTransaction), mCardCheckService);
+            FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), mCardCheckService);
         } else {
-            FragmentController.updateBalanceCheckFragment(getSupportFragmentManager(), mCardCheckService.moneyStr(value.value), mCardCheckService.moneyStr(value.lastTransaction));
+            FragmentController.updateBalanceCheckFragment(getSupportFragmentManager());
         }
     }
 
