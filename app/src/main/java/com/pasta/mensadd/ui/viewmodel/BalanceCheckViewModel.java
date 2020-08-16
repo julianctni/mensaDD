@@ -10,6 +10,7 @@ public class BalanceCheckViewModel extends ViewModel {
 
     private BalanceEntryRepository mBalanceEntryRepository;
     private LiveData<BalanceEntry> mLatestBalanceEntry;
+    private BalanceEntry mCurrentBalanceEntry;
 
     public BalanceCheckViewModel(BalanceEntryRepository balanceEntryRepository) {
         mBalanceEntryRepository = balanceEntryRepository;
@@ -18,6 +19,14 @@ public class BalanceCheckViewModel extends ViewModel {
 
     public void insertBalanceEntry(BalanceEntry balanceEntry) {
         mBalanceEntryRepository.insertBalanceEntry(balanceEntry);
+    }
+
+    public void setCurrentBalanceEntry(BalanceEntry balanceEntry) {
+        mCurrentBalanceEntry = balanceEntry;
+    }
+
+    public BalanceEntry getCurrentBalanceEntry() {
+        return mCurrentBalanceEntry;
     }
 
     public LiveData<BalanceEntry> getLastBalanceEntry() {

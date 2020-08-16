@@ -4,6 +4,7 @@ package com.pasta.mensadd.ui.fragments;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -43,8 +44,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 return false;
             }
         });
-
-        findPreference(getString(R.string.pref_autostart_key)).setVisible(MainActivity.NFC_SUPPORTED);
+        boolean nfcSupported = NfcAdapter.getDefaultAdapter(requireContext()) != null;
+        findPreference(getString(R.string.pref_autostart_key)).setVisible(nfcSupported);
     }
 
     @Override

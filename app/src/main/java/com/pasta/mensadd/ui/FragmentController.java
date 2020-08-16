@@ -4,7 +4,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.cardcheck.CardCheckService;
+import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.ui.fragments.BalanceCheckFragment;
 import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
 import com.pasta.mensadd.ui.fragments.CanteenListFragment;
@@ -44,16 +44,13 @@ public class FragmentController {
         createAnimatedTransaction(fm).replace(R.id.mainContainer, f, TAG_NEWS).addToBackStack(null).commit();
     }
 
-    public static void showBalanceCheckFragment(FragmentManager fm, CardCheckService cardCheckService) {
-        BalanceCheckFragment fragment = BalanceCheckFragment.newInstance(cardCheckService);
-        fm.beginTransaction().replace(R.id.cardCheckContainer, fragment, TAG_BALANCE_CHECK).commitAllowingStateLoss();
-    }
-
-    public static void updateBalanceCheckFragment(FragmentManager fm) {
-        BalanceCheckFragment fragment = (BalanceCheckFragment) fm.findFragmentByTag(TAG_BALANCE_CHECK);
-        if (fragment != null) {
-            fragment.updateContent();
+    public static void showBalanceCheckFragment(FragmentManager fm, BalanceEntry balanceEntry) {
+        BalanceCheckFragment f = (BalanceCheckFragment) fm.findFragmentByTag(FragmentController.TAG_BALANCE_CHECK);
+        if (f == null) {
+            f = new BalanceCheckFragment();
+            fm.beginTransaction().replace(R.id.cardCheckContainer, f, TAG_BALANCE_CHECK).commitNow();
         }
+        f.setCurrentBalanceData(balanceEntry);
     }
 
     public static void showSettingsFragment(FragmentManager fm) {

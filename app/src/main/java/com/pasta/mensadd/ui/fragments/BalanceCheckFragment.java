@@ -2,7 +2,6 @@ package com.pasta.mensadd.ui.fragments;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.cardcheck.CardCheckService;
+import com.pasta.mensadd.cardcheck.BalanceCheckService;
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.database.repository.BalanceEntryRepository;
@@ -30,18 +29,7 @@ public class BalanceCheckFragment extends Fragment {
     private TextView mViewCardBalance;
     private TextView mViewLastTransaction;
     private boolean mIsVisible;
-    private CardCheckService mCardCheckService;
     private BalanceCheckViewModel mBalanceCheckViewModel;
-
-    public static BalanceCheckFragment newInstance(CardCheckService cardCheckService) {
-        BalanceCheckFragment fragment = new BalanceCheckFragment();
-        fragment.setCardCheckService(cardCheckService);
-        return fragment;
-    }
-
-    public void setCardCheckService(CardCheckService cardCheckService) {
-        mCardCheckService = cardCheckService;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -54,32 +42,30 @@ public class BalanceCheckFragment extends Fragment {
         Button closeBalanceCheckButton = view.findViewById(R.id.closeBalanceCheckButton);
         closeBalanceCheckButton.setOnClickListener((v) -> animateView(false));
         Button saveBalanceCheckButton = view.findViewById(R.id.saveBalanceButton);
-        saveBalanceCheckButton.setOnClickListener((v) -> {
-            mBalanceCheckViewModel.getLastBalanceEntry().observe(getViewLifecycleOwner(), new Observer<BalanceEntry>() {
-                @Override
-                public void onChanged(BalanceEntry balanceEntry) {
-                    if (balanceEntry.getCardBalance() == mCardCheckService.getBalanceEntry().getCardBalance()) {
-                        Toast.makeText(requireContext(), getString(R.string.balance_already_saved), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(requireContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
-                        mBalanceCheckViewModel.insertBalanceEntry(mCardCheckService.getBalanceEntry());
-                    }
-                    mBalanceCheckViewModel.getLastBalanceEntry().removeObserver(this);
-                    animateView(false);
+        Observer<BalanceEntry> latestBalanceObserver = new Observer<BalanceEntry>() {
+            @Override
+            public void onChanged(BalanceEntry balanceEntry) {
+                if (balanceEntry.getCardBalance() == mBalanceCheckViewModel.getCurrentBalanceEntry().getCardBalance()) {
+                    Toast.makeText(requireContext(), getString(R.string.balance_already_saved), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
+                    mBalanceCheckViewModel.insertBalanceEntry(mBalanceCheckViewModel.getCurrentBalanceEntry());
                 }
-            });
-        });
+                mBalanceCheckViewModel.getLastBalanceEntry().removeObserver(this);
+                animateView(false);
+            }
+        };
+        saveBalanceCheckButton.setOnClickListener((v) -> mBalanceCheckViewModel.getLastBalanceEntry().observe(getViewLifecycleOwner(), latestBalanceObserver));
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        updateContent();
     }
 
     public void animateView(boolean show) {
-        View view = getView();
+        View view = requireView();
         view.measure(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         if (show) {
             view.setTranslationY(view.getTranslationY() + view.getMeasuredHeight());
@@ -91,11 +77,12 @@ public class BalanceCheckFragment extends Fragment {
         }
     }
 
-    public void updateContent() {
+    public void setCurrentBalanceData(BalanceEntry balanceEntry) {
+        mBalanceCheckViewModel.setCurrentBalanceEntry(balanceEntry);
         if (!mIsVisible) {
             animateView(true);
         }
-        mViewCardBalance.setText(getString(R.string.balance_check_balance, mCardCheckService.getCurrentBalanceAsString()));
-        mViewLastTransaction.setText(getString(R.string.balance_check_last_transaction, mCardCheckService.getLastTransactionAsString()));
+        mViewCardBalance.setText(getString(R.string.balance_check_balance, BalanceCheckService.formatAsString(balanceEntry.getCardBalance())));
+        mViewLastTransaction.setText(getString(R.string.balance_check_last_transaction, BalanceCheckService.formatAsString(balanceEntry.getLastTransaction())));
     }
 }

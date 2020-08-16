@@ -21,10 +21,8 @@ import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.cardcheck.AutostartRegister;
-import com.pasta.mensadd.cardcheck.CardCheckService;
+import com.pasta.mensadd.cardcheck.BalanceCheckService;
 import com.pasta.mensadd.cardcheck.OnCardLoadedCallback;
-import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.database.repository.CanteenRepository;
@@ -39,19 +37,19 @@ import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
 public class MainActivity extends AppCompatActivity
         implements BottomNavigation.OnMenuItemSelectionListener {
 
-    public static boolean NFC_SUPPORTED;
+    private boolean isNfcSupported;
     private BottomNavigation mBottomNav;
     private TextView mHeadingToolbar;
     private ImageView mAppLogoToolbar;
-    private NfcAdapter mNfcAdapter;
     private Toolbar mToolbar;
-    private CardCheckService mCardCheckService;
-
+    private BalanceCheckService mBalanceCheckService;
     private PermissionsManager mPermissionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        isNfcSupported = NfcAdapter.getDefaultAdapter(this.getApplicationContext()) != null;
 
         PreferenceService preferenceService = new PreferenceService(this);
         String darkMode = preferenceService.getDarkModeSetting();
@@ -64,7 +62,7 @@ public class MainActivity extends AppCompatActivity
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
         Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_access_token));
-        setContentView(R.layout.activity_main);
+
         CanteenRepository canteenRepository = new CanteenRepository(
                 AppDatabase.getInstance(this),
                 NetworkController.getInstance(this),
@@ -75,6 +73,8 @@ public class MainActivity extends AppCompatActivity
 
         mBottomNav = findViewById(R.id.bottomNavigation);
         mBottomNav.setMenuItemSelectionListener(this);
+        mBottomNav.inflateMenu(isNfcSupported ? R.menu.bottom_menu : R.menu.bottom_menu_no_nfc);
+
         mToolbar = findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
@@ -82,44 +82,32 @@ public class MainActivity extends AppCompatActivity
                 getSupportActionBar().setTitle(null);
             }
         }
-
         mHeadingToolbar = findViewById(R.id.heading_toolbar);
         mAppLogoToolbar = findViewById(R.id.toolbarImage);
-
-
         boolean isDecember = Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER;
         mAppLogoToolbar.setImageDrawable(getResources().getDrawable(isDecember ? R.drawable.banner_christmas : R.drawable.banner));
-
-        if (getSupportFragmentManager().findFragmentById(R.id.mainContainer) == null) {
-            FragmentController.showCanteenListFragment(getSupportFragmentManager());
-        }
 
         preferenceService.removePreference("first_start");
         preferenceService.removePreference("pref_show_tut");
 
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this.getApplicationContext());
-        NFC_SUPPORTED = (mNfcAdapter != null);
-
-        if (NFC_SUPPORTED) {
-            mCardCheckService = new CardCheckService(this);
-            if (!preferenceService.isNfcAutostartRegistered()) {
-                AutostartRegister.register(this.getPackageManager(), true);
-                preferenceService.setNfcAutostartRegistered(true);
-                preferenceService.setNfcAutostartSetting(true);
-            }
+        if (isNfcSupported) {
+            mBalanceCheckService = new BalanceCheckService();
+            mBalanceCheckService.registerNfcAutostart(this, preferenceService);
             if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
                 onNewIntent(getIntent());
             }
         }
 
-        mBottomNav.inflateMenu(NFC_SUPPORTED ? R.menu.bottom_menu : R.menu.bottom_menu_no_nfc);
+        if (getSupportFragmentManager().findFragmentById(R.id.mainContainer) == null) {
+            FragmentController.showCanteenListFragment(getSupportFragmentManager());
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (NFC_SUPPORTED) {
-            mCardCheckService.setUpCardCheck(mNfcAdapter);
+        if (isNfcSupported) {
+            mBalanceCheckService.setUpCardCheck(this);
         }
     }
 
@@ -200,10 +188,10 @@ public class MainActivity extends AppCompatActivity
         super.onNewIntent(intent);
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            mCardCheckService.loadCard(tag, new OnCardLoadedCallback() {
+            mBalanceCheckService.loadCard(tag, new OnCardLoadedCallback() {
                 @Override
                 public void onCardLoadSuccess(BalanceEntry balanceEntry) {
-                    updateCardCheckFragment();
+                    FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), balanceEntry);
                 }
 
                 @Override
@@ -214,16 +202,6 @@ public class MainActivity extends AppCompatActivity
             });
         }
     }
-
-
-    private void updateCardCheckFragment() {
-        if (getSupportFragmentManager().findFragmentByTag(FragmentController.TAG_BALANCE_CHECK) == null) {
-            FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), mCardCheckService);
-        } else {
-            FragmentController.updateBalanceCheckFragment(getSupportFragmentManager());
-        }
-    }
-
 
     public void requestLocationPermission(PermissionsListener permissionsListener) {
         mPermissionManager = new PermissionsManager(permissionsListener);
