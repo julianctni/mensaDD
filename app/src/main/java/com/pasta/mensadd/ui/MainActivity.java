@@ -22,7 +22,7 @@ import com.mapbox.mapboxsdk.Mapbox;
 import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.balancecheck.BalanceCheckService;
-import com.pasta.mensadd.balancecheck.OnCardLoadedCallback;
+import com.pasta.mensadd.balancecheck.CardLoadedCallback;
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.database.repository.CanteenRepository;
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity
         super.onNewIntent(intent);
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            mBalanceCheckService.loadCard(tag, new OnCardLoadedCallback() {
+            mBalanceCheckService.loadCard(tag, new CardLoadedCallback() {
                 @Override
                 public void onCardLoadSuccess(BalanceEntry balanceEntry) {
                     FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), balanceEntry);

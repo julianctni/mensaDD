@@ -31,7 +31,7 @@ public class BalanceCheckService {
         return euros + "." + centsStr;
     }
 
-    public void loadCard(Tag tag, OnCardLoadedCallback onCardLoadedCallback) {
+    public void loadCard(Tag tag, CardLoadedCallback cardLoadedCallback) {
         IsoDep tech = IsoDep.get(tag);
         try {
             tech.connect();
@@ -46,12 +46,12 @@ public class BalanceCheckService {
                 float cardBalance = (float) valueData.value / 1000;
                 float lastTransaction = (float) valueData.lastTransaction / 1000;
                 BalanceEntry balanceEntry = new BalanceEntry(new Date().getTime(), cardBalance, lastTransaction);
-                onCardLoadedCallback.onCardLoadSuccess(balanceEntry);
+                cardLoadedCallback.onCardLoadSuccess(balanceEntry);
             } else
-                onCardLoadedCallback.onCardLoadError(true);
+                cardLoadedCallback.onCardLoadError(true);
             tech.close();
         } catch (DesfireException ex) {
-            onCardLoadedCallback.onCardLoadError(false);
+            cardLoadedCallback.onCardLoadError(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
