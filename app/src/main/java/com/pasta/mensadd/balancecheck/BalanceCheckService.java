@@ -1,4 +1,4 @@
-package com.pasta.mensadd.cardcheck;
+package com.pasta.mensadd.balancecheck;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -10,10 +10,10 @@ import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcA;
 
 import com.pasta.mensadd.PreferenceService;
-import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
-import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
-import com.pasta.mensadd.cardcheck.cardreader.Readers;
-import com.pasta.mensadd.cardcheck.cardreader.ValueData;
+import com.pasta.mensadd.balancecheck.card.desfire.DesfireException;
+import com.pasta.mensadd.balancecheck.card.desfire.DesfireProtocol;
+import com.pasta.mensadd.balancecheck.cardreader.Readers;
+import com.pasta.mensadd.balancecheck.cardreader.ValueData;
 import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.ui.MainActivity;
 

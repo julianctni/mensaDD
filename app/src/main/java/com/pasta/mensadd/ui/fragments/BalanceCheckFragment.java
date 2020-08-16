@@ -17,7 +17,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.cardcheck.BalanceCheckService;
+import com.pasta.mensadd.balancecheck.BalanceCheckService;
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.database.repository.BalanceEntryRepository;

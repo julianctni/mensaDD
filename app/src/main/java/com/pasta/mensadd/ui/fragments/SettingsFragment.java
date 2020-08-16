@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.pasta.mensadd.ui.MainActivity;
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.cardcheck.AutostartRegister;
+import com.pasta.mensadd.balancecheck.AutostartRegister;
 import com.pasta.mensadd.ui.FragmentController;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {

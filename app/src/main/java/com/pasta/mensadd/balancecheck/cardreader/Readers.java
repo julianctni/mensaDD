@@ -20,16 +20,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.pasta.mensadd.cardcheck.cardreader;
+package com.pasta.mensadd.balancecheck.cardreader;
 
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.util.Log;
 
 
-import com.pasta.mensadd.cardcheck.card.ValueHolder;
-import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
-import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
+import com.pasta.mensadd.balancecheck.card.ValueHolder;
+import com.pasta.mensadd.balancecheck.card.desfire.DesfireException;
+import com.pasta.mensadd.balancecheck.card.desfire.DesfireProtocol;
 
 import java.io.IOException;
 

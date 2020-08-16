@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.pasta.mensadd.cardcheck;
+package com.pasta.mensadd.balancecheck;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -28,9 +28,9 @@ import android.util.Log;
 import android.view.WindowManager;
 
 
-import com.pasta.mensadd.cardcheck.card.desfire.DesfireException;
-import com.pasta.mensadd.cardcheck.card.desfire.DesfireFileSettings;
-import com.pasta.mensadd.cardcheck.card.desfire.DesfireProtocol;
+import com.pasta.mensadd.balancecheck.card.desfire.DesfireException;
+import com.pasta.mensadd.balancecheck.card.desfire.DesfireFileSettings;
+import com.pasta.mensadd.balancecheck.card.desfire.DesfireProtocol;
 
 import org.w3c.dom.Node;
 

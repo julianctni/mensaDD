@@ -1,10 +1,10 @@
 /*
- * ValueData.java
+ * DesfireRecord.java
  *
- * Copyright (C) 2014 Jakob Wenzel
+ * Copyright (C) 2011 Eric Butler
  *
  * Authors:
- * Jakob Wenzel <jakobwenzel92@gmail.com>
+ * Eric Butler <eric@codebutler.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,27 +20,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.pasta.mensadd.cardcheck.cardreader;
+package com.pasta.mensadd.balancecheck.card.desfire;
 
-import java.io.Serializable;
+public class DesfireRecord {
+    private byte[] mData;
 
-/**
- * Stores Data read from a card
- */
-public class ValueData implements Serializable {
-	/**
-	 * Current value on card, in tenths of Euro cents.
-	 */
-	public int value;
-	/**
-	 * Last transaction, in tenths of Euro cents. null if not supported by card.
-	 */
-	public Integer lastTransaction;
+    public DesfireRecord (byte[] data) {
+        mData = data;
+    }
 
-	public ValueData(int value, Integer lastTransaction) {
-		this.value = value;
-		this.lastTransaction = lastTransaction;
-	}
-	public ValueData() {
-	}
+    public byte[] getData () {
+        return mData;
+    }
 }

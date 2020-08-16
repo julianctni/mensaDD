@@ -1,6 +1,5 @@
-package com.pasta.mensadd.cardcheck;
+package com.pasta.mensadd.balancecheck;
 
-import com.pasta.mensadd.cardcheck.cardreader.ValueData;
 import com.pasta.mensadd.database.entity.BalanceEntry;
 
 public interface OnCardLoadedCallback {

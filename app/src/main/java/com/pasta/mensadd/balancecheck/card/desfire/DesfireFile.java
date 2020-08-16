@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.pasta.mensadd.cardcheck.card.desfire;
+package com.pasta.mensadd.balancecheck.card.desfire;
 
 import android.annotation.SuppressLint;
 import android.os.Parcel;

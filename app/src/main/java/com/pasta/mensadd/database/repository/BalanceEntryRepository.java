@@ -2,7 +2,6 @@ package com.pasta.mensadd.database.repository;
 
 import androidx.lifecycle.LiveData;
 
-import com.pasta.mensadd.cardcheck.OnCardDataStoredCallback;
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.dao.BalanceEntryDao;
 import com.pasta.mensadd.database.entity.BalanceEntry;
