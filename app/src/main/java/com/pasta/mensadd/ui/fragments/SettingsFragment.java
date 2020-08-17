@@ -55,7 +55,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         setDividerHeight(0);
         MainActivity activity = (MainActivity) getActivity();
         if (activity != null)
-            activity.updateToolbar(-1, getString(R.string.nav_settings));
+            activity.setToolbarContent(getString(R.string.nav_settings));
     }
 
     @Override

@@ -52,8 +52,8 @@ public class ImprintFragment extends Fragment implements View.OnClickListener {
         banner.setOnClickListener(this);
         MainActivity activity = (MainActivity) getActivity();
         if (activity != null)
-            activity.updateToolbar(-1, getString(R.string.pref_imprint));
-        Toolbar toolbar = requireActivity().findViewById(R.id.toolbar);
+            activity.setToolbarContent(getString(R.string.pref_imprint));
+        Toolbar toolbar = requireActivity().findViewById(R.id.toolbar_mainActivity);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
         return view;

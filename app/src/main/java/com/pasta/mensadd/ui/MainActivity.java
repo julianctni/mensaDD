@@ -1,12 +1,10 @@
 package com.pasta.mensadd.ui;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,8 +37,6 @@ public class MainActivity extends AppCompatActivity
 
     private boolean isNfcSupported;
     private BottomNavigation mBottomNav;
-    private TextView mHeadingToolbar;
-    private ImageView mAppLogoToolbar;
     private Toolbar mToolbar;
     private BalanceCheckService mBalanceCheckService;
     private PermissionsManager mPermissionManager;
@@ -71,21 +67,12 @@ public class MainActivity extends AppCompatActivity
         CanteensViewModelFactory canteensViewModelFactory = new CanteensViewModelFactory(canteenRepository);
         new ViewModelProvider(this, canteensViewModelFactory).get(CanteensViewModel.class);
 
-        mBottomNav = findViewById(R.id.bottomNavigation);
+        mBottomNav = findViewById(R.id.bottomNav_mainActivity);
         mBottomNav.setMenuItemSelectionListener(this);
         mBottomNav.inflateMenu(isNfcSupported ? R.menu.bottom_menu : R.menu.bottom_menu_no_nfc);
 
-        mToolbar = findViewById(R.id.toolbar);
-        if (mToolbar != null) {
-            setSupportActionBar(mToolbar);
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(null);
-            }
-        }
-        mHeadingToolbar = findViewById(R.id.heading_toolbar);
-        mAppLogoToolbar = findViewById(R.id.toolbarImage);
-        boolean isDecember = Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER;
-        mAppLogoToolbar.setImageDrawable(getResources().getDrawable(isDecember ? R.drawable.banner_christmas : R.drawable.banner));
+        mToolbar = findViewById(R.id.toolbar_mainActivity);
+        setToolbarContent("");
 
         preferenceService.removePreference("first_start");
         preferenceService.removePreference("pref_show_tut");
@@ -98,7 +85,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        if (getSupportFragmentManager().findFragmentById(R.id.mainContainer) == null) {
+        if (getSupportFragmentManager().findFragmentById(R.id.layout_mainActivity_main) == null) {
             FragmentController.showCanteenListFragment(getSupportFragmentManager());
         }
     }
@@ -117,23 +104,23 @@ public class MainActivity extends AppCompatActivity
         switch (id) {
             case R.id.nav_mensa:
                 FragmentController.showCanteenListFragment(getSupportFragmentManager());
-                updateToolbar(id, "");
+                setToolbarContent("");
                 break;
             case R.id.nav_news:
                 FragmentController.showNewsFragment(getSupportFragmentManager());
-                updateToolbar(id, getString(R.string.nav_news));
+                setToolbarContent(getString(R.string.nav_news));
                 break;
             case R.id.nav_map:
                 FragmentController.showMapFragment(getSupportFragmentManager());
-                updateToolbar(id, getString(R.string.nav_map));
+                setToolbarContent(getString(R.string.nav_map));
                 break;
             case R.id.nav_card_history:
                 FragmentController.showBalanceHistoryFragment(getSupportFragmentManager());
-                updateToolbar(id, getString(R.string.nav_card_history));
+                setToolbarContent(getString(R.string.nav_card_history));
                 break;
             case R.id.show_preferences:
                 FragmentController.showSettingsFragment(getSupportFragmentManager());
-                updateToolbar(id, getString(R.string.nav_settings));
+                setToolbarContent(getString(R.string.nav_settings));
                 break;
         }
         mToolbar.setNavigationIcon(null);
@@ -143,40 +130,36 @@ public class MainActivity extends AppCompatActivity
     public void onMenuItemReselect(int id, int position, boolean b) {
     }
 
-    public void updateToolbar(int id, String title) {
-        if (id == R.id.nav_mensa) {
-            mAppLogoToolbar.setVisibility(View.VISIBLE);
-            mHeadingToolbar.setVisibility(View.GONE);
-        } else {
-            mAppLogoToolbar.setVisibility(View.GONE);
-            mHeadingToolbar.setText(title);
-            mHeadingToolbar.setVisibility(View.VISIBLE);
-        }
+    public void setToolbarContent(String title) {
+        boolean isDecember = Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER;
+        Drawable logo = getResources().getDrawable(isDecember ? R.drawable.banner_christmas : R.drawable.banner);
+        mToolbar.setTitle(title.isEmpty() ? null : title);
+        mToolbar.setLogo(title.isEmpty() ? logo : null);
     }
 
     @Override
     public void onBackPressed() {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.mainContainer);
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.layout_mainActivity_main);
         if (currentFragment == null || currentFragment.getTag() == null) {
             return;
         }
         String currentFragmentTag = currentFragment.getTag();
         if (mBottomNav.getSelectedIndex() == 0) {
             if (currentFragmentTag.equals(FragmentController.TAG_MEAL_WEEK)) {
-                updateToolbar(R.id.nav_mensa, "");
+                setToolbarContent("");
                 super.onBackPressed();
             } else {
                 this.finishAffinity();
             }
         } else if (mBottomNav.getSelectedIndex() == 1 && currentFragmentTag.equals(FragmentController.TAG_MEAL_WEEK)) {
-            updateToolbar(R.id.nav_map, getString(R.string.nav_map));
+            setToolbarContent(getString(R.string.nav_map));
             super.onBackPressed();
         } else if (currentFragmentTag.equals(FragmentController.TAG_IMPRINT)) {
-            updateToolbar(R.id.show_preferences, getString(R.string.nav_settings));
+            setToolbarContent(getString(R.string.nav_settings));
             super.onBackPressed();
         } else {
             FragmentController.showCanteenListFragment(getSupportFragmentManager());
-            updateToolbar(R.id.nav_mensa, "");
+            setToolbarContent("");
             mBottomNav.setSelectedIndex(0, true);
         }
         mToolbar.setNavigationIcon(null);

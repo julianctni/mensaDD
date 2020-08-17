@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +28,7 @@ import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.database.repository.CanteenRepository;
 import com.pasta.mensadd.database.repository.MealRepository;
 import com.pasta.mensadd.networking.NetworkController;
+import com.pasta.mensadd.ui.MainActivity;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModelFactory;
@@ -62,7 +62,7 @@ public class MealWeekFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         ViewPager mViewPager = view.findViewById(R.id.mealViewPager);
-        mToolbar = requireActivity().findViewById(R.id.toolbar);
+        mToolbar = requireActivity().findViewById(R.id.toolbar_mainActivity);
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         mToolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
         CanteensViewModel canteensViewModel = new ViewModelProvider(requireActivity()).get(CanteensViewModel.class);
@@ -78,10 +78,12 @@ public class MealWeekFragment extends Fragment {
         );
         MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(mealRepository, canteenRepository, canteensViewModel.getSelectedCanteen());
         mMealsViewModel = new ViewModelProvider(this, mealsViewModelFactory).get(MealsViewModel.class);
-        TextView header = view.getRootView().findViewById(R.id.heading_toolbar);
-        header.setText(mMealsViewModel.getCanteen().getName());
-        header.setVisibility(View.VISIBLE);
-        view.getRootView().findViewById(R.id.toolbarImage).setVisibility(View.GONE);
+        //TextView header = view.getRootView().findViewById(R.id.text_toolbar_mainActivity);
+        //header.setText(mMealsViewModel.getCanteen().getName());
+        //header.setVisibility(View.VISIBLE);
+        //view.getRootView().findViewById(R.id.image_toolbar_mainActivity).setVisibility(View.GONE);
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity.setToolbarContent(mMealsViewModel.getCanteen().getName());
         mViewPager.setVisibility(View.VISIBLE);
         if (mViewPager.getAdapter() == null) {
             MealDayPagerAdapter mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
