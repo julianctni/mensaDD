@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.ui.fragments.BalanceCheckFragment;
 import com.pasta.mensadd.ui.fragments.BalanceHistoryFragment;
 import com.pasta.mensadd.ui.fragments.CanteenListFragment;
@@ -43,16 +44,13 @@ public class FragmentController {
         createAnimatedTransaction(fm).replace(R.id.mainContainer, f, TAG_NEWS).addToBackStack(null).commit();
     }
 
-    public static void showBalanceCheckFragment(FragmentManager fm, String current, String lastTransaction) {
-        BalanceCheckFragment fragment = BalanceCheckFragment.newInstance(current, lastTransaction);
-        fm.beginTransaction().replace(R.id.cardCheckContainer, fragment, TAG_BALANCE_CHECK).commitAllowingStateLoss();
-    }
-
-    public static void updateBalanceCheckFragment(FragmentManager fm, String current, String lastTransaction) {
-        BalanceCheckFragment fragment = (BalanceCheckFragment) fm.findFragmentByTag(TAG_BALANCE_CHECK);
-        if (fragment != null) {
-            fragment.updateContent(current, lastTransaction);
+    public static void showBalanceCheckFragment(FragmentManager fm, BalanceEntry balanceEntry) {
+        BalanceCheckFragment f = (BalanceCheckFragment) fm.findFragmentByTag(FragmentController.TAG_BALANCE_CHECK);
+        if (f == null) {
+            f = new BalanceCheckFragment();
+            fm.beginTransaction().replace(R.id.layout_mainActivity_balanceCheck, f, TAG_BALANCE_CHECK).commitNow();
         }
+        f.setCurrentBalanceData(balanceEntry);
     }
 
     public static void showSettingsFragment(FragmentManager fm) {
@@ -77,7 +75,7 @@ public class FragmentController {
         createAnimatedTransaction(fm).replace(R.id.mainContainer, f, TAG_BALANCE_HISTORY).commit();
     }
 
-    public static FragmentTransaction createAnimatedTransaction(FragmentManager fm){
+    public static FragmentTransaction createAnimatedTransaction(FragmentManager fm) {
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         return transaction;

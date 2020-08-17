@@ -21,7 +21,9 @@ public class BalanceEntryRepository {
     }
 
     public void insertBalanceEntry(BalanceEntry balanceEntry) {
-        mAppDatabase.getTransactionExecutor().execute(() -> mBalanceEntryDao.insertBalanceEntry(balanceEntry));
+        mAppDatabase.getTransactionExecutor().execute(() -> {
+            mBalanceEntryDao.insertBalanceEntry(balanceEntry);
+        });
     }
 
     public LiveData<BalanceEntry> getLatestBalanceEntry() {

@@ -1,4 +1,4 @@
-package com.pasta.mensadd.cardcheck.card.desfire;
+package com.pasta.mensadd.balancecheck.card.desfire;
 
 /**
  * Created by Jakob Wenzel on 16.11.13.

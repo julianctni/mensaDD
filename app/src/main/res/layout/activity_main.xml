@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/CoordinatorLayout01"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -21,8 +19,8 @@
             android:layout_gravity="start"
             android:layout_marginStart="0dp"
             android:contentDescription="@string/content_app_logo"
-            android:tint="@android:color/white"
             android:src="@drawable/banner"
+            android:tint="@android:color/white"
             android:visibility="visible" />
 
         <TextView
@@ -39,82 +37,28 @@
     <RelativeLayout
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
+        android:id="@+id/layout_mainActivity_balanceCheck"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="-6dp"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
         app:layout_anchor="@id/bottomNavigation"
-        app:layout_behavior="com.pasta.mensadd.CardCheckBehavior">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:id="@+id/cardCheckContainer"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_alignParentBottom="true"
-                android:background="#EEEEEE"
-                android:elevation="10dp"
-                android:visibility="visible"
-                tools:targetApi="lollipop" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/balanceButtonsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_anchor="@id/cardCheckContainer"
-            app:layout_anchorGravity="top|right|end">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/saveBalanceButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_outline_save_24"
-                app:tint="@color/white"
-                android:visibility="gone"
-                app:backgroundTint="@color/balance_check_save_button"
-                app:fabSize="normal"
-                app:useCompatPadding="true" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/hideBalanceButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@id/saveBalanceButton"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="64dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_baseline_clear_24"
-                app:tint="@color/white"
-                android:visibility="gone"
-                app:backgroundTint="@color/balance_check_cancel_button"
-                app:fabSize="mini"
-                app:useCompatPadding="true" />
-        </RelativeLayout>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        app:layout_dodgeInsetEdges="bottom" />
 
     <it.sephiroth.android.library.bottomnavigation.BottomNavigation
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/fragment_background"
         android:elevation="8dp"
         app:bbn_badgeProvider="@string/bbn_badgeProvider"
         app:bbn_entries="@menu/bottom_menu"
         app:bbn_scrollEnabled="true"
-        app:layout_behavior="@string/bbn_phone_view_behavior" />
+        app:layout_behavior="@string/bbn_default_view_behavior"
+        app:layout_insetEdge="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

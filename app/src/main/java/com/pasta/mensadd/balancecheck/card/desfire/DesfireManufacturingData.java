@@ -20,12 +20,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.pasta.mensadd.cardcheck.card.desfire;
+package com.pasta.mensadd.balancecheck.card.desfire;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.pasta.mensadd.cardcheck.Utils;
+import com.pasta.mensadd.balancecheck.Utils;
 
 import org.w3c.dom.Element;
 

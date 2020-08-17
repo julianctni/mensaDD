@@ -32,5 +32,5 @@
     <color name="meal_icon">#B4B4B4</color>
     <color name="tab_text_selected">#EDEDED</color>
     <color name="tab_text">#AAEDEDED</color>
-    <color name="balance_check_background">@color/cyan_super_dark</color>
+    <color name="balanceCheck_background">@color/cyan_super_dark</color>
 </resources>

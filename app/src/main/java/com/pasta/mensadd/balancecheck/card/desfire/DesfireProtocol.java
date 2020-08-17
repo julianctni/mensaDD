@@ -20,11 +20,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.pasta.mensadd.cardcheck.card.desfire;
+package com.pasta.mensadd.balancecheck.card.desfire;
 
 import android.nfc.tech.IsoDep;
 
-import com.pasta.mensadd.cardcheck.Utils;
+import com.pasta.mensadd.balancecheck.Utils;
 
 import org.apache.commons.lang3.ArrayUtils;
 

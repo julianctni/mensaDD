@@ -7,7 +7,7 @@
     android:layout_marginHorizontal="10dp"
     android:layout_marginVertical="8dp"
     android:longClickable="false"
-    android:visibility="visible"
+    android:visibility="gone"
     card_view:cardBackgroundColor="@color/cyan_dark"
     card_view:cardCornerRadius="8dp">
 
