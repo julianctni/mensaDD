@@ -37,11 +37,11 @@ public class BalanceCheckFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_balance_check, container, false);
         BalanceCheckViewModelFactory balanceCheckViewModelFactory = new BalanceCheckViewModelFactory(new BalanceEntryRepository(AppDatabase.getInstance(requireContext())));
         mBalanceCheckViewModel = new ViewModelProvider(this, balanceCheckViewModelFactory).get(BalanceCheckViewModel.class);
-        mViewCardBalance = view.findViewById(R.id.balanceContent);
-        mViewLastTransaction = view.findViewById(R.id.lastTransactionContent);
-        Button closeBalanceCheckButton = view.findViewById(R.id.closeBalanceCheckButton);
+        mViewCardBalance = view.findViewById(R.id.text_balanceCheck_balance);
+        mViewLastTransaction = view.findViewById(R.id.text_balanceCheck_lastTransaction);
+        Button closeBalanceCheckButton = view.findViewById(R.id.btn_balanceCheck_close);
         closeBalanceCheckButton.setOnClickListener((v) -> animateView(false));
-        Button saveBalanceCheckButton = view.findViewById(R.id.saveBalanceButton);
+        Button saveBalanceCheckButton = view.findViewById(R.id.btn_balanceCheck_save);
         Observer<BalanceEntry> latestBalanceObserver = new Observer<BalanceEntry>() {
             @Override
             public void onChanged(BalanceEntry balanceEntry) {

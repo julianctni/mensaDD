@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,8 +19,8 @@
             android:layout_gravity="start"
             android:layout_marginStart="0dp"
             android:contentDescription="@string/content_app_logo"
-            android:tint="@android:color/white"
             android:src="@drawable/banner"
+            android:tint="@android:color/white"
             android:visibility="visible" />
 
         <TextView
@@ -42,13 +41,12 @@
         android:layout_marginTop="?attr/actionBarSize" />
 
     <RelativeLayout
-        android:id="@+id/cardCheckContainer"
+        android:id="@+id/layout_mainActivity_balanceCheck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         app:layout_anchor="@id/bottomNavigation"
-        app:layout_dodgeInsetEdges="bottom">
-    </RelativeLayout>
+        app:layout_dodgeInsetEdges="bottom" />
 
     <it.sephiroth.android.library.bottomnavigation.BottomNavigation
         android:id="@+id/bottomNavigation"
@@ -57,10 +55,10 @@
         android:layout_gravity="bottom"
         android:background="@color/fragment_background"
         android:elevation="8dp"
-        app:layout_insetEdge="bottom"
         app:bbn_badgeProvider="@string/bbn_badgeProvider"
         app:bbn_entries="@menu/bottom_menu"
         app:bbn_scrollEnabled="true"
-        app:layout_behavior="@string/bbn_default_view_behavior" />
+        app:layout_behavior="@string/bbn_default_view_behavior"
+        app:layout_insetEdge="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

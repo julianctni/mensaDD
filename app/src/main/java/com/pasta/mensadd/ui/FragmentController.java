@@ -48,7 +48,7 @@ public class FragmentController {
         BalanceCheckFragment f = (BalanceCheckFragment) fm.findFragmentByTag(FragmentController.TAG_BALANCE_CHECK);
         if (f == null) {
             f = new BalanceCheckFragment();
-            fm.beginTransaction().replace(R.id.cardCheckContainer, f, TAG_BALANCE_CHECK).commitNow();
+            fm.beginTransaction().replace(R.id.layout_mainActivity_balanceCheck, f, TAG_BALANCE_CHECK).commitNow();
         }
         f.setCurrentBalanceData(balanceEntry);
     }
