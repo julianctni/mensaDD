@@ -28,7 +28,6 @@ import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.database.repository.CanteenRepository;
 import com.pasta.mensadd.database.repository.MealRepository;
 import com.pasta.mensadd.networking.ApiServiceClient;
-import com.pasta.mensadd.networking.NetworkController;
 import com.pasta.mensadd.ui.MainActivity;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
