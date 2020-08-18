@@ -17,15 +17,15 @@ public class News {
     private String link;
     private String category;
     private String date;
-    private String heading;
-    private String contentShort;
+    private String title;
+    private String content;
 
-    public News(String id, String category, String date, String heading, String contentShort, String link) {
+    public News(String id, String category, String date, String title, String content, String link) {
         this.id = id;
         this.category = category;
         this.date = date;
-        this.heading = heading;
-        this.contentShort = contentShort;
+        this.title = title;
+        this.content = content;
         this.link = link;
     }
 
@@ -37,12 +37,12 @@ public class News {
         return date;
     }
 
-    public String getHeading() {
-        return heading;
+    public String getTitle() {
+        return title;
     }
 
-    public String getContentShort() {
-        return contentShort;
+    public String getContent() {
+        return content;
     }
 
     public String getLink() {

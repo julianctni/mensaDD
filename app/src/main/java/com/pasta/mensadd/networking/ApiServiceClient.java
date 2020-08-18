@@ -1,6 +1,7 @@
 package com.pasta.mensadd.networking;
 
 import com.pasta.mensadd.database.entity.Canteen;
+import com.pasta.mensadd.database.entity.News;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
@@ -45,6 +46,10 @@ public class ApiServiceClient {
 
     public Call<ApiResponse<Canteen>> fetchCanteens() {
         return apiService.getCanteens();
+    }
+
+    public Call<ApiResponse<News>> fetchNews() {
+        return apiService.getNews();
     }
 
 }

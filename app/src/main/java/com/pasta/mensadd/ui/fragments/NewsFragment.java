@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.repository.NewsRepository;
-import com.pasta.mensadd.networking.NetworkController;
+import com.pasta.mensadd.networking.ApiServiceClient;
 import com.pasta.mensadd.ui.adapter.NewsListAdapter;
 import com.pasta.mensadd.ui.viewmodel.NewsViewModel;
 import com.pasta.mensadd.ui.viewmodel.NewsViewModelFactory;
@@ -34,7 +34,13 @@ public class NewsFragment extends Fragment {
         newsListRecyclerView.setAdapter(newsListAdapter);
         NewsViewModelFactory newsViewModelFactory = new NewsViewModelFactory(
                 new NewsRepository(AppDatabase.getInstance(requireContext()),
-                        NetworkController.getInstance(requireContext())));
+                        ApiServiceClient.getInstance(
+                                getString(R.string.api_base_url),
+                                getString(R.string.api_user),
+                                getString(R.string.api_key)
+                        )
+                )
+        );
         NewsViewModel newsViewModel = new ViewModelProvider(this, newsViewModelFactory).get(NewsViewModel.class);
         newsViewModel.isRefreshing().observe(getViewLifecycleOwner(), isRefreshing -> {
             ProgressBar progressBar = view.findViewById(R.id.newsListProgressBar);
