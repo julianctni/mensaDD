@@ -18,18 +18,19 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.ui.adapter.MealListAdapter;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static com.pasta.mensadd.database.repository.MealRepository.DATE_FORMAT;
+import java.util.Locale;
 
 public class MealDayFragment extends Fragment {
 
     private static final String TAG_PAGER_POSITION = "pagerPosition";
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMAN);
+    private static final int ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     private MealListAdapter mMealListAdapter;
     private int mPagerPositon = 10;
     private RecyclerView mRecyclerView;
     private CardView noFoodToday;
-    private static final int ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
 
     static MealDayFragment newInstance(int position) {
         MealDayFragment fragment = new MealDayFragment();

@@ -66,16 +66,17 @@ public class MealWeekFragment extends Fragment {
         mToolbar = requireActivity().findViewById(R.id.toolbar_mainActivity);
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         mToolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
+        ApiServiceClient apiServiceClient = ApiServiceClient.getInstance(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key));
         CanteensViewModel canteensViewModel = new ViewModelProvider(requireActivity()).get(CanteensViewModel.class);
         MealRepository mealRepository = new MealRepository(
                 AppDatabase.getInstance(requireContext()),
-                NetworkController.getInstance(requireContext()),
+                apiServiceClient,
                 canteensViewModel.getSelectedCanteen()
         );
         CanteenRepository canteenRepository = new CanteenRepository(
                 AppDatabase.getInstance(requireContext()),
                 new PreferenceService(requireContext()),
-                ApiServiceClient.getInstance(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key))
+                apiServiceClient
         );
         MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(mealRepository, canteenRepository, canteensViewModel.getSelectedCanteen());
         mMealsViewModel = new ViewModelProvider(this, mealsViewModelFactory).get(MealsViewModel.class);

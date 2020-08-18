@@ -34,7 +34,6 @@ public class CanteenRepository {
         mPreferenceService = preferenceService;
         mApiServiceClient = apiServiceClient;
         mIsRefreshing = new MutableLiveData<>();
-        fetchCanteens();
     }
 
     public void insertOrUpdateCanteens(List<Canteen> serverCanteens) {

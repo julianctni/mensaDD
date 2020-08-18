@@ -1,6 +1,7 @@
 package com.pasta.mensadd.networking;
 
 import com.pasta.mensadd.database.entity.Canteen;
+import com.pasta.mensadd.database.entity.Meal;
 import com.pasta.mensadd.database.entity.News;
 
 import okhttp3.Credentials;
@@ -50,6 +51,10 @@ public class ApiServiceClient {
 
     public Call<ApiResponse<News>> fetchNews() {
         return apiService.getNews();
+    }
+
+    public Call<ApiResponse<Meal>> fetchMeals(String canteenId) {
+        return apiService.getMeals(canteenId);
     }
 
 }

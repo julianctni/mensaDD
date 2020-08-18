@@ -18,7 +18,7 @@ public class Meal {
     private String details;
     private String imgLink;
     private String canteenId;
-    private String date;
+    private String day;
     private String location;
     private boolean vegetarian;
     private boolean vegan;
@@ -27,14 +27,14 @@ public class Meal {
     private boolean garlic;
     private boolean alcohol;
 
-    public Meal(String id, String name, String price, String details, String imgLink, String canteenId, String date, String location, boolean vegetarian, boolean vegan, boolean pork, boolean beef, boolean garlic, boolean alcohol) {
+    public Meal(String id, String name, String price, String details, String imgLink, String canteenId, String day, String location, boolean vegetarian, boolean vegan, boolean pork, boolean beef, boolean garlic, boolean alcohol) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.details = details;
         this.imgLink = imgLink;
         this.canteenId = canteenId;
-        this.date = date;
+        this.day = day;
         this.location = location;
         this.vegetarian = vegetarian;
         this.vegan = vegan;
@@ -88,8 +88,8 @@ public class Meal {
         return alcohol;
     }
 
-    public String getDate() {
-        return date;
+    public String getDay() {
+        return day;
     }
 
     public String getDetails() {
