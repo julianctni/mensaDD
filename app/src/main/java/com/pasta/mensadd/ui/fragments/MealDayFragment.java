@@ -66,13 +66,13 @@ public class MealDayFragment extends Fragment {
         String day = DATE_FORMAT.format(date);
         mMealsViewModel.getMealsByDay(day).observe(getViewLifecycleOwner(), meals -> {
             //noinspection ConstantConditions
-            showNoFoodToday(meals.isEmpty() && !mMealsViewModel.isRefreshing().getValue());
+            showNoFoodToday(meals.isEmpty() && !mMealsViewModel.isFetching().getValue());
             mMealListAdapter.submitList(meals);
         });
 
-        mMealsViewModel.isRefreshing().observe(getViewLifecycleOwner(), isRefreshing -> {
+        mMealsViewModel.isFetching().observe(getViewLifecycleOwner(), fetching -> {
             ProgressBar progressBar = view.findViewById(R.id.mealListProgressBar);
-            progressBar.setVisibility(isRefreshing ? View.VISIBLE : View.GONE);
+            progressBar.setVisibility(fetching ? View.VISIBLE : View.GONE);
         });
         mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> mMealListAdapter.setLastMealUpdate(canteen.getLastMealScraping()));
         return view;

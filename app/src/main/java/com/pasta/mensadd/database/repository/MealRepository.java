@@ -25,7 +25,7 @@ public class MealRepository {
     private MealDao mMealDao;
     private CanteenDao mCanteenDao;
     private ApiServiceClient mApiServiceClient;
-    private MutableLiveData<Boolean> mIsRefreshing;
+    private MutableLiveData<Boolean> mIsFetching;
     private AppDatabase mAppDatabase;
 
     public MealRepository(AppDatabase appDatabase, ApiServiceClient apiServiceClient, Canteen canteen) {
@@ -33,7 +33,7 @@ public class MealRepository {
         mMealDao = appDatabase.mealDao();
         mCanteenDao = appDatabase.canteenDao();
         mApiServiceClient = apiServiceClient;
-        mIsRefreshing = new MutableLiveData<>(false);
+        mIsFetching = new MutableLiveData<>(false);
         if (canteen.getLastMealUpdate() < Calendar.getInstance().getTimeInMillis() - FIFTEEN_MINUTES_MILLIS) {
             fetchMeals(canteen);
         }
@@ -44,11 +44,11 @@ public class MealRepository {
     }
 
     public LiveData<List<Meal>> getMealsByCanteenByDay(Canteen canteen, String day) {
-        return Transformations.switchMap(mIsRefreshing, (refreshState) -> mMealDao.getMealsByCanteenByDay(canteen.getId(), day));
+        return Transformations.switchMap(mIsFetching, (refreshState) -> mMealDao.getMealsByCanteenByDay(canteen.getId(), day));
     }
 
     public void fetchMeals(Canteen canteen) {
-        mIsRefreshing.setValue(true);
+        mIsFetching.setValue(true);
         mApiServiceClient.fetchMeals(canteen.getId()).enqueue(new Callback<ApiResponse<Meal>>() {
             @Override
             public void onResponse(Call<ApiResponse<Meal>> call, Response<ApiResponse<Meal>> response) {
@@ -56,19 +56,19 @@ public class MealRepository {
                 canteen.setLastMealUpdate(Calendar.getInstance().getTimeInMillis());
                 canteen.setLastMealScraping(response.body().getScrapedAt());
                 mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.updateCanteen(canteen));
-                mIsRefreshing.setValue(false);
+                mIsFetching.setValue(false);
             }
 
             @Override
             public void onFailure(Call<ApiResponse<Meal>> call, Throwable t) {
-                mIsRefreshing.setValue(false);
+                mIsFetching.setValue(false);
                 // TODO: Add error handling
             }
         });
     }
 
-    public LiveData<Boolean> isRefreshing() {
-        return mIsRefreshing;
+    public LiveData<Boolean> isFetching() {
+        return mIsFetching;
     }
 
 }

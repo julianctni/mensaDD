@@ -39,8 +39,8 @@ public class CanteensViewModel extends ViewModel {
         return mCanteenRepository.getCanteenById(id);
     }
 
-    public LiveData<Boolean> isRefreshing() {
-        return mCanteenRepository.isRefreshing();
+    public LiveData<Boolean> isFetching() {
+        return mCanteenRepository.isFetching();
     }
 
 }

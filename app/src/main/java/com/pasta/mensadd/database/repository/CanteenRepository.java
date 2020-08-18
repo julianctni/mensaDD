@@ -22,7 +22,7 @@ public class CanteenRepository {
     private static final int CANTEEN_UPDATE_INTERVAL = 10 * 60 * 60 * 1000;
     private CanteenDao mCanteenDao;
     private LiveData<List<Canteen>> mCanteens;
-    private MutableLiveData<Boolean> mIsRefreshing;
+    private MutableLiveData<Boolean> mIsFetching;
     private ApiServiceClient mApiServiceClient;
     private PreferenceService mPreferenceService;
     private AppDatabase mAppDatabase;
@@ -33,7 +33,7 @@ public class CanteenRepository {
         mCanteens = mCanteenDao.getCanteens();
         mPreferenceService = preferenceService;
         mApiServiceClient = apiServiceClient;
-        mIsRefreshing = new MutableLiveData<>();
+        mIsFetching = new MutableLiveData<>();
     }
 
     public void insertOrUpdateCanteens(List<Canteen> serverCanteens) {
@@ -66,18 +66,18 @@ public class CanteenRepository {
         return mCanteens;
     }
 
-    public LiveData<Boolean> isRefreshing() {
-        return mIsRefreshing;
+    public LiveData<Boolean> isFetching() {
+        return mIsFetching;
     }
 
     public void fetchCanteens() {
-        mIsRefreshing.setValue(true);
+        mIsFetching.setValue(true);
         mApiServiceClient.fetchCanteens().enqueue(new Callback<ApiResponse<Canteen>>() {
             @Override
             public void onResponse(Call<ApiResponse<Canteen>> call, Response<ApiResponse<Canteen>> response) {
                 insertOrUpdateCanteens(response.body().getData());
                 mPreferenceService.setLastCanteenUpdate(Calendar.getInstance().getTimeInMillis());
-                mIsRefreshing.setValue(false);
+                mIsFetching.setValue(false);
             }
 
             @Override

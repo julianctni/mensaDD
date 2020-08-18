@@ -52,9 +52,9 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
         canteenListRecyclerView.setAdapter(canteenListAdapter);
         canteenListRecyclerView.setLayoutManager(layoutParams);
         mCanteensViewModel.getCanteens().observe(getViewLifecycleOwner(), canteenListAdapter::submitList);
-        mCanteensViewModel.isRefreshing().observe(getViewLifecycleOwner(), refreshing -> {
+        mCanteensViewModel.isFetching().observe(getViewLifecycleOwner(), fetching -> {
             ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
-            progressBar.setVisibility(refreshing ? View.VISIBLE : View.GONE);
+            progressBar.setVisibility(fetching ? View.VISIBLE : View.GONE);
         });
         return view;
     }
