@@ -36,7 +36,7 @@ public class CanteenListAdapter extends ListAdapter<Canteen, CanteenListAdapter.
             return o.getName().equals(n.getName()) &&
                     o.getAddress().equals(n.getAddress()) &&
                     o.getHours().equals(n.getHours()) &&
-                    o.getListPriority() == n.getListPriority();
+                    o.getPriority() == n.getPriority();
         }
     };
 
