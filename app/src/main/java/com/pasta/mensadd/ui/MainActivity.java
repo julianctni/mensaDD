@@ -24,7 +24,7 @@ import com.pasta.mensadd.balancecheck.CardLoadedCallback;
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.BalanceEntry;
 import com.pasta.mensadd.database.repository.CanteenRepository;
-import com.pasta.mensadd.networking.NetworkController;
+import com.pasta.mensadd.networking.ApiServiceClient;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModelFactory;
 
@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity
 
         CanteenRepository canteenRepository = new CanteenRepository(
                 AppDatabase.getInstance(this),
-                NetworkController.getInstance(this),
-                preferenceService
+                preferenceService,
+                ApiServiceClient.getInstance(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key))
         );
         CanteensViewModelFactory canteensViewModelFactory = new CanteensViewModelFactory(canteenRepository);
         new ViewModelProvider(this, canteensViewModelFactory).get(CanteensViewModel.class);

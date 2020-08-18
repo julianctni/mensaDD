@@ -8,35 +8,31 @@ import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.dao.CanteenDao;
 import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.networking.ApiResponse;
-import com.pasta.mensadd.networking.CanteenService;
-import com.pasta.mensadd.networking.NetworkController;
+import com.pasta.mensadd.networking.ApiServiceClient;
 
 import java.util.Calendar;
 import java.util.List;
 
-import okhttp3.Credentials;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CanteenRepository {
 
     private static final int CANTEEN_UPDATE_INTERVAL = 10 * 60 * 60 * 1000;
     private CanteenDao mCanteenDao;
     private LiveData<List<Canteen>> mCanteens;
-    private NetworkController mNetworkController;
     private MutableLiveData<Boolean> mIsRefreshing;
+    private ApiServiceClient mApiServiceClient;
     private PreferenceService mPreferenceService;
     private AppDatabase mAppDatabase;
 
-    public CanteenRepository(AppDatabase appDatabase, NetworkController networkController, PreferenceService preferenceService) {
+    public CanteenRepository(AppDatabase appDatabase, PreferenceService preferenceService, ApiServiceClient apiServiceClient) {
         mAppDatabase = appDatabase;
         mCanteenDao = appDatabase.canteenDao();
         mCanteens = mCanteenDao.getCanteens();
-        mNetworkController = networkController;
         mPreferenceService = preferenceService;
+        mApiServiceClient = apiServiceClient;
         mIsRefreshing = new MutableLiveData<>();
         fetchCanteens();
     }
@@ -77,13 +73,7 @@ public class CanteenRepository {
 
     public void fetchCanteens() {
         mIsRefreshing.setValue(true);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://jvlian.uber.space/mensadd/api/v2/").addConverterFactory(GsonConverterFactory.create()).build();
-
-        String authToken = Credentials.basic("mensadd-app", "621df5bb-3947-4527-8bc0-b39b8736abf4");
-        CanteenService canteenService = retrofit.create(CanteenService.class);
-
-        Call<ApiResponse<Canteen>> fetchCanteensCall = canteenService.getCanteens(authToken);
-        fetchCanteensCall.enqueue(new Callback<ApiResponse<Canteen>>() {
+        mApiServiceClient.fetchCanteens().enqueue(new Callback<ApiResponse<Canteen>>() {
             @Override
             public void onResponse(Call<ApiResponse<Canteen>> call, Response<ApiResponse<Canteen>> response) {
                 insertOrUpdateCanteens(response.body().getData());
@@ -93,7 +83,7 @@ public class CanteenRepository {
 
             @Override
             public void onFailure(Call<ApiResponse<Canteen>> call, Throwable t) {
-
+                // TODO: Add error handling
             }
         });
     }

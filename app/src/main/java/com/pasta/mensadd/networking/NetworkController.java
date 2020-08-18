@@ -3,7 +3,6 @@ package com.pasta.mensadd.networking;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Cache;
@@ -46,11 +45,11 @@ public class NetworkController {
 
     private NetworkController(Context context) {
         mCtx = context;
-        URL_BASE = context.getString(R.string.url_base);
+        URL_BASE = context.getString(R.string.api_base_url);
         URL_GET_NEWS = context.getString(R.string.url_suffix_news);
         URL_GET_CANTEENS = context.getString(R.string.url_suffix_canteens);
         URL_GET_MEALS = context.getString(R.string.url_suffix_meals);
-        API_KEY = context.getString(R.string.mensadd_api_key);
+        API_KEY = context.getString(R.string.api_key);
         mRequestQueue = getRequestQueue();
         mRequestQueue.start();
     }

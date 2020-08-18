@@ -27,6 +27,7 @@ import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.database.repository.CanteenRepository;
 import com.pasta.mensadd.database.repository.MealRepository;
+import com.pasta.mensadd.networking.ApiServiceClient;
 import com.pasta.mensadd.networking.NetworkController;
 import com.pasta.mensadd.ui.MainActivity;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
@@ -73,8 +74,8 @@ public class MealWeekFragment extends Fragment {
         );
         CanteenRepository canteenRepository = new CanteenRepository(
                 AppDatabase.getInstance(requireContext()),
-                NetworkController.getInstance(requireContext()),
-                new PreferenceService(requireContext())
+                new PreferenceService(requireContext()),
+                ApiServiceClient.getInstance(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key))
         );
         MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(mealRepository, canteenRepository, canteensViewModel.getSelectedCanteen());
         mMealsViewModel = new ViewModelProvider(this, mealsViewModelFactory).get(MealsViewModel.class);
