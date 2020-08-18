@@ -8,11 +8,6 @@ import com.pasta.mensadd.database.dao.NewsDao;
 import com.pasta.mensadd.database.entity.News;
 import com.pasta.mensadd.networking.ApiResponse;
 import com.pasta.mensadd.networking.ApiServiceClient;
-import com.pasta.mensadd.networking.NetworkController;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -24,13 +19,13 @@ public class NewsRepository {
     private ApiServiceClient mApiServiceClient;
     private NewsDao mNewsDao;
     private AppDatabase mAppDatabase;
-    private MutableLiveData<Boolean> mIsRefreshing;
+    private MutableLiveData<Boolean> mIsFetching;
 
     public NewsRepository(AppDatabase appDatabase, ApiServiceClient apiServiceClient) {
         mAppDatabase = appDatabase;
         mNewsDao = appDatabase.newsDao();
         mApiServiceClient = apiServiceClient;
-        mIsRefreshing = new MutableLiveData<>();
+        mIsFetching = new MutableLiveData<>();
         fetchNews();
     }
 
@@ -42,22 +37,22 @@ public class NewsRepository {
         return mNewsDao.getNews();
     }
 
-    public LiveData<Boolean> isRefreshing() {
-        return mIsRefreshing;
+    public LiveData<Boolean> isFetching() {
+        return mIsFetching;
     }
 
     public void fetchNews() {
-        mIsRefreshing.setValue(true);
+        mIsFetching.setValue(true);
         mApiServiceClient.fetchNews().enqueue(new Callback<ApiResponse<News>>() {
             @Override
             public void onResponse(Call<ApiResponse<News>> call, Response<ApiResponse<News>> response) {
                 insertNews(response.body().getData());
-                mIsRefreshing.setValue(false);
+                mIsFetching.setValue(false);
             }
 
             @Override
             public void onFailure(Call<ApiResponse<News>> call, Throwable t) {
-                mIsRefreshing.setValue(false);
+                mIsFetching.setValue(false);
                 // TODO: Add error handling
             }
         });

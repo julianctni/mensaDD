@@ -42,9 +42,9 @@ public class NewsFragment extends Fragment {
                 )
         );
         NewsViewModel newsViewModel = new ViewModelProvider(this, newsViewModelFactory).get(NewsViewModel.class);
-        newsViewModel.isRefreshing().observe(getViewLifecycleOwner(), isRefreshing -> {
+        newsViewModel.isFetching().observe(getViewLifecycleOwner(), fetching -> {
             ProgressBar progressBar = view.findViewById(R.id.newsListProgressBar);
-            progressBar.setVisibility(isRefreshing ? View.VISIBLE : View.GONE);
+            progressBar.setVisibility(fetching ? View.VISIBLE : View.GONE);
         });
         newsViewModel.getNews().observe(getViewLifecycleOwner(), newsListAdapter::submitList);
         return view;
