@@ -79,6 +79,7 @@
     <string name="menu_show_position">Current position</string>
     <string name="menu_send_feedback">Send feedback</string>
     <string name="menu_set_favorite">Set favorite</string>
+    <string name="menu_refresh">Refresh</string>
     <string name="toast_enable_location">Please enable location services first, then retry.</string>
     <string name="toast_add_favorite">Canteen added to favorites.</string>
     <string name="toast_remove_favorite">Canteen removed from favorites.</string>

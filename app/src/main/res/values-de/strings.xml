@@ -61,6 +61,7 @@
     <string name="menu_show_position">Aktuelle Position</string>
     <string name="menu_send_feedback">Feedback senden</string>
     <string name="menu_set_favorite">Als Favorit setzen</string>
+    <string name="menu_refresh">Aktualisieren</string>
     <string name="toast_enable_location">Bitte GPS aktivieren und erneut versuchen.</string>
     <string name="toast_remove_favorite">Mensa aus Favoriten entfernt.</string>
     <string name="toast_add_favorite">Mensa zu Favoriten hinzugefügt.</string>
