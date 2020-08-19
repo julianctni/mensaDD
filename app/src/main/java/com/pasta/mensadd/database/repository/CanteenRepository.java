@@ -20,6 +20,7 @@ import retrofit2.Response;
 import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
 import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_SUCCESS;
 import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
+import static com.pasta.mensadd.networking.ApiServiceClient.NOT_FETCHING;
 
 public class CanteenRepository {
 
@@ -37,7 +38,7 @@ public class CanteenRepository {
         mCanteens = mCanteenDao.getCanteens();
         mPreferenceService = preferenceService;
         mApiServiceClient = apiServiceClient;
-        mFetchState = new MutableLiveData<>();
+        mFetchState = new MutableLiveData<>(NOT_FETCHING);
     }
 
     public void insertOrUpdateCanteens(List<Canteen> serverCanteens) {

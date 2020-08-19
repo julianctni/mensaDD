@@ -30,7 +30,7 @@ public class NewsRepository {
         mAppDatabase = appDatabase;
         mNewsDao = appDatabase.newsDao();
         mApiServiceClient = apiServiceClient;
-        mFetchState = new MutableLiveData<>();
+        mFetchState = new MutableLiveData<>(NOT_FETCHING);
     }
 
     public void insertNews(List<News> news) {
@@ -52,13 +52,11 @@ public class NewsRepository {
             public void onResponse(Call<ApiResponse<News>> call, Response<ApiResponse<News>> response) {
                 insertNews(response.body().getData());
                 mFetchState.setValue(FETCH_SUCCESS);
-                mFetchState.setValue(NOT_FETCHING);
             }
 
             @Override
             public void onFailure(Call<ApiResponse<News>> call, Throwable t) {
                 mFetchState.setValue(FETCH_ERROR);
-                mFetchState.setValue(NOT_FETCHING);
             }
         });
     }

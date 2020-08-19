@@ -26,7 +26,7 @@ import static com.pasta.mensadd.networking.ApiServiceClient.NOT_FETCHING;
 
 public class MealRepository {
 
-    public static final int FIFTEEN_MINUTES_MILLIS = 15 * 60 * 1000;
+    public static final int FIFTEEN_MINUTES_MILLIS = 0 * 60 * 1000;
     private MealDao mMealDao;
     private CanteenDao mCanteenDao;
     private ApiServiceClient mApiServiceClient;
@@ -49,7 +49,7 @@ public class MealRepository {
     }
 
     public LiveData<List<Meal>> getMealsByCanteenByDay(Canteen canteen, String day) {
-        return Transformations.switchMap(mFetchState, (refreshState) -> mMealDao.getMealsByCanteenByDay(canteen.getId(), day));
+        return Transformations.switchMap(mFetchState, (fetchState) -> mMealDao.getMealsByCanteenByDay(canteen.getId(), day));
     }
 
     public void fetchMeals(Canteen canteen) {
@@ -62,13 +62,11 @@ public class MealRepository {
                 canteen.setLastMealScraping(response.body().getScrapedAt());
                 mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.updateCanteen(canteen));
                 mFetchState.setValue(FETCH_SUCCESS);
-                mFetchState.setValue(NOT_FETCHING);
             }
 
             @Override
             public void onFailure(Call<ApiResponse<Meal>> call, Throwable t) {
                 mFetchState.setValue(FETCH_ERROR);
-                mFetchState.setValue(NOT_FETCHING);
             }
         });
     }
