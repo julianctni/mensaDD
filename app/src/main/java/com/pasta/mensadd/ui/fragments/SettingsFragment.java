@@ -10,10 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import android.view.View;
 import android.widget.Toast;
 
+import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.ui.MainActivity;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.balancecheck.AutostartRegister;
@@ -25,25 +27,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         addPreferencesFromResource(R.xml.preferences);
-        findPreference(getString(R.string.pref_reset_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                //TODO: Implement app reset
-                //DatabaseController dbController = new DatabaseController(getContext());
-                //dbController.deleteAllData();
-                Toast.makeText(getContext(), getResources().getString(R.string.delete_data), Toast.LENGTH_LONG).show();
+        findPreference(getString(R.string.pref_reset_key)).setOnPreferenceClickListener(preference -> {
+            AppDatabase appDatabase = AppDatabase.getInstance(requireContext());
+            appDatabase.getTransactionExecutor().execute(appDatabase::clearAllTables);
+            PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().clear().apply();
+            Toast.makeText(getContext(), getResources().getString(R.string.delete_data), Toast.LENGTH_SHORT).show();
+            return false;
+        });
 
-                return false;
-            }
+        findPreference(getString(R.string.pref_imprint)).setOnPreferenceClickListener(preference -> {
+            FragmentController.showImprintFragment(getParentFragmentManager());
+            return false;
         });
-        findPreference(getString(R.string.pref_imprint)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                FragmentController.showImprintFragment(getFragmentManager());
-                //MainActivity.updateToolbar(-1, getString(R.string.pref_imprint));
-                return false;
-            }
-        });
+
         boolean nfcSupported = NfcAdapter.getDefaultAdapter(requireContext()) != null;
         findPreference(getString(R.string.pref_autostart_key)).setVisible(nfcSupported);
     }
