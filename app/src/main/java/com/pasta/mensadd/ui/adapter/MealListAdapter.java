@@ -157,7 +157,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
         }
 
         if (holder.mLastUpdate != null) {
-            DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
+            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault());
             holder.mLastUpdate.setText(mContext.getString(R.string.last_server_check, dateFormat.format(new Date(mLastUpdate))));
         }
     }
