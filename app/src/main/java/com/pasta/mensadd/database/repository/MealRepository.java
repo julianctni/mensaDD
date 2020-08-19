@@ -26,7 +26,7 @@ import static com.pasta.mensadd.networking.ApiServiceClient.NOT_FETCHING;
 
 public class MealRepository {
 
-    public static final int FIFTEEN_MINUTES_MILLIS = 0 * 60 * 1000;
+    public static final int FIFTEEN_MINUTES_MILLIS = 15 * 60 * 1000;
     private MealDao mMealDao;
     private CanteenDao mCanteenDao;
     private ApiServiceClient mApiServiceClient;
