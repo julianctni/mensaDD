@@ -84,6 +84,7 @@
     <string name="toast_remove_favorite">Canteen removed from favorites.</string>
     <string name="news_loading_progress">Loading news...</string>
     <string name="error_fetching_canteens">Could not fetch canteen data:  %1$s</string>
+    <string name="error_fetching_news">Could not fetch news:  %1$s</string>
     <string name="error_no_internet">No internet connection.</string>
     <string name="error_unknown">Unknown error.</string>
 

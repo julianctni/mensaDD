@@ -22,7 +22,7 @@ public class NewsViewModel extends ViewModel {
         return mNews;
     }
 
-    public LiveData<Boolean> isFetching() {
-        return mNewsRepository.isFetching();
+    public LiveData<Integer> getFetchState() {
+        return mNewsRepository.getFetchState();
     }
 }

@@ -1,5 +1,7 @@
 package com.pasta.mensadd.database.repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -15,18 +17,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
+import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_SUCCESS;
+import static com.pasta.mensadd.networking.ApiServiceClient.IDLE;
+import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
+
 public class NewsRepository {
     private ApiServiceClient mApiServiceClient;
     private NewsDao mNewsDao;
     private AppDatabase mAppDatabase;
-    private MutableLiveData<Boolean> mIsFetching;
+    private MutableLiveData<Integer> mFetchState;
 
     public NewsRepository(AppDatabase appDatabase, ApiServiceClient apiServiceClient) {
         mAppDatabase = appDatabase;
         mNewsDao = appDatabase.newsDao();
         mApiServiceClient = apiServiceClient;
-        mIsFetching = new MutableLiveData<>();
-        fetchNews();
+        mFetchState = new MutableLiveData<>();
     }
 
     public void insertNews(List<News> news) {
@@ -34,26 +40,28 @@ public class NewsRepository {
     }
 
     public LiveData<List<News>> getNews() {
+        fetchNews();
         return mNewsDao.getNews();
     }
 
-    public LiveData<Boolean> isFetching() {
-        return mIsFetching;
+    public LiveData<Integer> getFetchState() {
+        return mFetchState;
     }
 
     public void fetchNews() {
-        mIsFetching.setValue(true);
+        mFetchState.setValue(IS_FETCHING);
         mApiServiceClient.fetchNews().enqueue(new Callback<ApiResponse<News>>() {
             @Override
             public void onResponse(Call<ApiResponse<News>> call, Response<ApiResponse<News>> response) {
                 insertNews(response.body().getData());
-                mIsFetching.setValue(false);
+                mFetchState.setValue(FETCH_SUCCESS);
+                mFetchState.setValue(IDLE);
             }
 
             @Override
             public void onFailure(Call<ApiResponse<News>> call, Throwable t) {
-                mIsFetching.setValue(false);
-                // TODO: Add error handling
+                mFetchState.setValue(FETCH_ERROR);
+                mFetchState.setValue(IDLE);
             }
         });
     }

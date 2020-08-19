@@ -2,10 +2,12 @@ package com.pasta.mensadd.ui.fragments;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,12 +16,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.repository.NewsRepository;
 import com.pasta.mensadd.networking.ApiServiceClient;
 import com.pasta.mensadd.ui.adapter.NewsListAdapter;
 import com.pasta.mensadd.ui.viewmodel.NewsViewModel;
 import com.pasta.mensadd.ui.viewmodel.NewsViewModelFactory;
+
+import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
+import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
 
 public class NewsFragment extends Fragment {
 
@@ -42,9 +48,13 @@ public class NewsFragment extends Fragment {
                 )
         );
         NewsViewModel newsViewModel = new ViewModelProvider(this, newsViewModelFactory).get(NewsViewModel.class);
-        newsViewModel.isFetching().observe(getViewLifecycleOwner(), fetching -> {
+        newsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
             ProgressBar progressBar = view.findViewById(R.id.newsListProgressBar);
-            progressBar.setVisibility(fetching ? View.VISIBLE : View.GONE);
+            progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
+            if (fetchState == FETCH_ERROR) {
+                int errorMsgId = !Utils.isOnline(requireContext()) ? R.string.error_no_internet : R.string.error_unknown;
+                Toast.makeText(requireContext(), getString(R.string.error_fetching_news, getString(errorMsgId)), Toast.LENGTH_SHORT).show();
+            }
         });
         newsViewModel.getNews().observe(getViewLifecycleOwner(), newsListAdapter::submitList);
         return view;
