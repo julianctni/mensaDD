@@ -38,7 +38,6 @@ public class NewsRepository {
     }
 
     public LiveData<List<News>> getNews() {
-        fetchNews();
         return mNewsDao.getNews();
     }
 
@@ -46,7 +45,7 @@ public class NewsRepository {
         return mFetchState;
     }
 
-    public void fetchNews() {
+    public void fetchNews(boolean forceFetch) {
         mFetchState.setValue(IS_FETCHING);
         mApiServiceClient.fetchNews().enqueue(new Callback<ApiResponse<News>>() {
             @Override

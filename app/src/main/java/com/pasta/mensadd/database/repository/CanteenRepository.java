@@ -63,10 +63,6 @@ public class CanteenRepository {
     }
 
     public LiveData<List<Canteen>> getCanteens() {
-        long lastUpdate = mPreferenceService.getLastCanteenUpdate();
-        if (lastUpdate == 0 || Calendar.getInstance().getTimeInMillis() - lastUpdate > CANTEEN_UPDATE_INTERVAL) {
-            fetchCanteens();
-        }
         return mCanteens;
     }
 
@@ -74,7 +70,11 @@ public class CanteenRepository {
         return mFetchState;
     }
 
-    public void fetchCanteens() {
+    public void fetchCanteens(boolean forceFetching) {
+        long lastUpdate = mPreferenceService.getLastCanteenUpdate();
+        if (!forceFetching && (Calendar.getInstance().getTimeInMillis() - lastUpdate < CANTEEN_UPDATE_INTERVAL)) {
+            return;
+        }
         mFetchState.setValue(IS_FETCHING);
         mApiServiceClient.fetchCanteens().enqueue(new Callback<ApiResponse<Canteen>>() {
             @Override

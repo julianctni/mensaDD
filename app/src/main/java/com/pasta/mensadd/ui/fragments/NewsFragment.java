@@ -47,6 +47,7 @@ public class NewsFragment extends Fragment {
                 )
         );
         NewsViewModel newsViewModel = new ViewModelProvider(this, newsViewModelFactory).get(NewsViewModel.class);
+        newsViewModel.triggerNewsFetching(false);
         newsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
             ProgressBar progressBar = view.findViewById(R.id.newsListProgressBar);
             progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);

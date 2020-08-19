@@ -43,4 +43,8 @@ public class CanteensViewModel extends ViewModel {
         return mCanteenRepository.getFetchState();
     }
 
+    public void triggerCanteenFetching(boolean forceFetching) {
+        mCanteenRepository.fetchCanteens(forceFetching);
+    }
+
 }

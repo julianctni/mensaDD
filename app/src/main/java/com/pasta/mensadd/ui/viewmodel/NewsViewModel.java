@@ -25,4 +25,8 @@ public class NewsViewModel extends ViewModel {
     public LiveData<Integer> getFetchState() {
         return mNewsRepository.getFetchState();
     }
+
+    public void triggerNewsFetching(boolean forceFetch) {
+        mNewsRepository.fetchNews(forceFetch);
+    }
 }
