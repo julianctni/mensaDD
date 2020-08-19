@@ -21,7 +21,6 @@ import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.database.entity.Canteen;
-import com.pasta.mensadd.networking.ApiServiceClient;
 import com.pasta.mensadd.ui.FragmentController;
 import com.pasta.mensadd.ui.adapter.CanteenListAdapter;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
@@ -58,7 +57,7 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
         canteenListRecyclerView.setAdapter(canteenListAdapter);
         canteenListRecyclerView.setLayoutManager(layoutParams);
         mCanteensViewModel.getCanteens().observe(getViewLifecycleOwner(), canteenListAdapter::submitList);
-        mCanteensViewModel.isFetching().observe(getViewLifecycleOwner(), fetchState -> {
+        mCanteensViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
             ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
             progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
             if (fetchState == FETCH_ERROR) {

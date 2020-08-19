@@ -1,7 +1,5 @@
 package com.pasta.mensadd.database.repository;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -28,7 +26,7 @@ public class CanteenRepository {
     private static final int CANTEEN_UPDATE_INTERVAL = 10 * 60 * 60 * 1000;
     private CanteenDao mCanteenDao;
     private LiveData<List<Canteen>> mCanteens;
-    private MutableLiveData<Integer> mIsFetching;
+    private MutableLiveData<Integer> mFetchState;
     private ApiServiceClient mApiServiceClient;
     private PreferenceService mPreferenceService;
     private AppDatabase mAppDatabase;
@@ -39,7 +37,7 @@ public class CanteenRepository {
         mCanteens = mCanteenDao.getCanteens();
         mPreferenceService = preferenceService;
         mApiServiceClient = apiServiceClient;
-        mIsFetching = new MutableLiveData<>();
+        mFetchState = new MutableLiveData<>();
     }
 
     public void insertOrUpdateCanteens(List<Canteen> serverCanteens) {
@@ -72,23 +70,23 @@ public class CanteenRepository {
         return mCanteens;
     }
 
-    public LiveData<Integer> isFetching() {
-        return mIsFetching;
+    public LiveData<Integer> getFetchState() {
+        return mFetchState;
     }
 
     public void fetchCanteens() {
-        mIsFetching.setValue(IS_FETCHING);
+        mFetchState.setValue(IS_FETCHING);
         mApiServiceClient.fetchCanteens().enqueue(new Callback<ApiResponse<Canteen>>() {
             @Override
             public void onResponse(Call<ApiResponse<Canteen>> call, Response<ApiResponse<Canteen>> response) {
                 insertOrUpdateCanteens(response.body().getData());
                 mPreferenceService.setLastCanteenUpdate(Calendar.getInstance().getTimeInMillis());
-                mIsFetching.setValue(FETCH_SUCCESS);
+                mFetchState.setValue(FETCH_SUCCESS);
             }
 
             @Override
             public void onFailure(Call<ApiResponse<Canteen>> call, Throwable t) {
-                mIsFetching.setValue(FETCH_ERROR);
+                mFetchState.setValue(FETCH_ERROR);
             }
         });
     }
