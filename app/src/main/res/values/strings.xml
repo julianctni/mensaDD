@@ -86,8 +86,8 @@
     <string name="error_fetching_canteens">Could not fetch canteen data:  %1$s</string>
     <string name="error_fetching_news">Could not fetch news:  %1$s</string>
     <string name="error_fetching_meals">Could not fetch meals:  %1$s</string>
-    <string name="error_no_internet">No internet connection.</string>
-    <string name="error_unknown">Unknown error.</string>
+    <string name="error_no_internet">No internet connection</string>
+    <string name="error_unknown">Unknown error</string>
 
     <string name="toast_bacon" translatable="false">MAKE BAUCHSPECK GREAT AGAIN!</string>
     <string name="imprint_icon_bacon">The bacon icon was created by Jacob Halton from the Noun Project and slightly modified by myself.</string>
