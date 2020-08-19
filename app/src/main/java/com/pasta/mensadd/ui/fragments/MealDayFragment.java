@@ -22,7 +22,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_SUCCESS;
 import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
+import static com.pasta.mensadd.networking.ApiServiceClient.NOT_FETCHING;
 
 public class MealDayFragment extends Fragment {
 
@@ -68,7 +70,7 @@ public class MealDayFragment extends Fragment {
         String day = DATE_FORMAT.format(date);
         mMealsViewModel.getMealsByDay(day).observe(getViewLifecycleOwner(), meals -> {
             //noinspection ConstantConditions
-            showNoFoodToday(meals.isEmpty() && mMealsViewModel.getFetchState().getValue() != IS_FETCHING);
+            showNoFoodToday(meals.isEmpty() && (mMealsViewModel.getFetchState().getValue() == FETCH_SUCCESS || mMealsViewModel.getFetchState().getValue() == NOT_FETCHING));
             mMealListAdapter.submitList(meals);
         });
 
