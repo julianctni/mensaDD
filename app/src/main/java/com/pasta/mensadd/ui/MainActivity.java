@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity
         mBottomNav.inflateMenu(isNfcSupported ? R.menu.bottom_menu : R.menu.bottom_menu_no_nfc);
 
         mToolbar = findViewById(R.id.toolbar_mainActivity);
+        setSupportActionBar(mToolbar);
         setToolbarContent("");
 
         preferenceService.removePreference("first_start");
@@ -131,10 +133,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setToolbarContent(String title) {
-        boolean isDecember = Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER;
-        Drawable logo = getResources().getDrawable(isDecember ? R.drawable.banner_christmas : R.drawable.banner);
-        mToolbar.setTitle(title.isEmpty() ? null : title);
-        mToolbar.setLogo(title.isEmpty() ? logo : null);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            boolean isDecember = Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER;
+            Drawable logo = getResources().getDrawable(isDecember ? R.drawable.banner_christmas : R.drawable.banner);
+            actionBar.setTitle(title.isEmpty() ? null : title);
+            actionBar.setLogo(title.isEmpty() ? logo : null);
+        }
     }
 
     @Override

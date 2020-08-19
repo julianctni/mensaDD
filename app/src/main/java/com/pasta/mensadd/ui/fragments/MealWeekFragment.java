@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -126,6 +127,8 @@ public class MealWeekFragment extends Fragment {
                 View favButton = mToolbar.findViewById(R.id.set_canteen_favorite);
                 favButton.startAnimation(Utils.getFavoriteScaleOutAnimation(favButton));
                 return true;
+            case R.id.menu_item_meals_refresh:
+                mMealsViewModel.triggerMealFetching();
         }
         return super.onOptionsItemSelected(item);
     }

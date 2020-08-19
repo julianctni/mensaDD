@@ -6,6 +6,12 @@
         android:id="@+id/set_canteen_favorite"
         android:icon="@drawable/ic_baseline_favorite_border_24"
         android:title="@string/menu_set_favorite"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_item_meals_refresh"
+        android:icon="@drawable/ic_baseline_refresh_24"
+        android:title="@string/menu_set_favorite"
+        app:showAsAction="ifRoom" />
 
 </menu>

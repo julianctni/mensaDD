@@ -48,4 +48,8 @@ public class MealsViewModel extends ViewModel {
         return mMealRepository.getFetchState();
     }
 
+    public void triggerMealFetching() {
+        mMealRepository.fetchMeals(mCanteen);
+    }
+
 }

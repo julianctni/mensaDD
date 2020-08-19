@@ -9,11 +9,10 @@
         android:id="@+id/mealListProgressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="-4dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-6dp"
         android:indeterminate="true"
-        android:indeterminateTint="@color/pink"
+        android:indeterminateTint="@color/pink_dark"
         android:visibility="gone" />
 
     <androidx.cardview.widget.CardView
