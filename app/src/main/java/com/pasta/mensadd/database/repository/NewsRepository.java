@@ -17,8 +17,8 @@ import retrofit2.Response;
 
 import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
 import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_SUCCESS;
-import static com.pasta.mensadd.networking.ApiServiceClient.NOT_FETCHING;
 import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
+import static com.pasta.mensadd.networking.ApiServiceClient.NOT_FETCHING;
 
 public class NewsRepository {
     private ApiServiceClient mApiServiceClient;

@@ -17,5 +17,5 @@ public interface ApiService {
     Call<ApiResponse<News>> getNews();
 
     @GET("canteens/{canteenId}/meals")
-    Call<ApiResponse<Meal>> getMeals(@Path("canteenId")String canteenId);
+    Call<ApiResponse<Meal>> getMeals(@Path("canteenId") String canteenId);
 }

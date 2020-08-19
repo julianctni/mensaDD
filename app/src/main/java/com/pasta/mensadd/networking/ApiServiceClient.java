@@ -1,9 +1,5 @@
 package com.pasta.mensadd.networking;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
 import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.database.entity.Meal;
 import com.pasta.mensadd.database.entity.News;
@@ -21,6 +17,7 @@ public class ApiServiceClient {
     public final static int IS_FETCHING = 1;
     public final static int FETCH_ERROR = 2;
     public final static int FETCH_SUCCESS = 3;
+
     private static ApiServiceClient mInstance;
     private ApiService apiService;
 
@@ -52,7 +49,6 @@ public class ApiServiceClient {
         }
         return mInstance;
     }
-
 
 
     public Call<ApiResponse<Canteen>> fetchCanteens() {

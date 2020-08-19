@@ -4,9 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.database.repository.CanteenRepository;
-import com.pasta.mensadd.database.repository.MealRepository;
 
 public class CanteensViewModelFactory implements ViewModelProvider.Factory {
 

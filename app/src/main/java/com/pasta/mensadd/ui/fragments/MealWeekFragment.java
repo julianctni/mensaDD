@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,7 +42,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
-import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
 
 
 public class MealWeekFragment extends Fragment {

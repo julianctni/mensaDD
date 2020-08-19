@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.ui.adapter.MealListAdapter;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
 
@@ -24,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
 import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
 
 public class MealDayFragment extends Fragment {

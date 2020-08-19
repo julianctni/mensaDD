@@ -15,10 +15,6 @@ public class ApiResponse<T> {
         return scrapedAt;
     }
 
-    public void setScrapedAt(long scrapedAt) {
-        this.scrapedAt = scrapedAt;
-    }
-
     public List<T> getData() {
         return data;
     }
