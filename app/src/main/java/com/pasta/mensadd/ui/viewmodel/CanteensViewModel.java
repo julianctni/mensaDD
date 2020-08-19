@@ -39,7 +39,7 @@ public class CanteensViewModel extends ViewModel {
         return mCanteenRepository.getCanteenById(id);
     }
 
-    public LiveData<Boolean> isFetching() {
+    public LiveData<Integer> isFetching() {
         return mCanteenRepository.isFetching();
     }
 

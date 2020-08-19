@@ -83,9 +83,10 @@
     <string name="toast_add_favorite">Canteen added to favorites.</string>
     <string name="toast_remove_favorite">Canteen removed from favorites.</string>
     <string name="news_loading_progress">Loading news...</string>
-    <string name="toast_loading_news_fail">Could not load news because of missing internet connection.</string>
-    <string name="toast_loading_canteens_fail">Could not load canteens because of missing internet connection.</string>
-    <string name="toast_loading_meals_fail">Could not load meals because of missing internet connection.</string>
+    <string name="error_fetching_canteens">Could not fetch canteen data:  %1$s</string>
+    <string name="error_no_internet">No internet connection.</string>
+    <string name="error_unknown">Unknown error.</string>
+
     <string name="toast_bacon" translatable="false">MAKE BAUCHSPECK GREAT AGAIN!</string>
     <string name="imprint_icon_bacon">The bacon icon was created by Jacob Halton from the Noun Project and slightly modified by myself.</string>
     <string name="last_server_check">Last update: %1$s</string>

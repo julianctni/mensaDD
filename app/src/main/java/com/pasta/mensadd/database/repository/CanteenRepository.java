@@ -1,5 +1,7 @@
 package com.pasta.mensadd.database.repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -17,12 +19,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
+import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_SUCCESS;
+import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
+
 public class CanteenRepository {
 
     private static final int CANTEEN_UPDATE_INTERVAL = 10 * 60 * 60 * 1000;
     private CanteenDao mCanteenDao;
     private LiveData<List<Canteen>> mCanteens;
-    private MutableLiveData<Boolean> mIsFetching;
+    private MutableLiveData<Integer> mIsFetching;
     private ApiServiceClient mApiServiceClient;
     private PreferenceService mPreferenceService;
     private AppDatabase mAppDatabase;
@@ -66,23 +72,23 @@ public class CanteenRepository {
         return mCanteens;
     }
 
-    public LiveData<Boolean> isFetching() {
+    public LiveData<Integer> isFetching() {
         return mIsFetching;
     }
 
     public void fetchCanteens() {
-        mIsFetching.setValue(true);
+        mIsFetching.setValue(IS_FETCHING);
         mApiServiceClient.fetchCanteens().enqueue(new Callback<ApiResponse<Canteen>>() {
             @Override
             public void onResponse(Call<ApiResponse<Canteen>> call, Response<ApiResponse<Canteen>> response) {
                 insertOrUpdateCanteens(response.body().getData());
                 mPreferenceService.setLastCanteenUpdate(Calendar.getInstance().getTimeInMillis());
-                mIsFetching.setValue(false);
+                mIsFetching.setValue(FETCH_SUCCESS);
             }
 
             @Override
             public void onFailure(Call<ApiResponse<Canteen>> call, Throwable t) {
-                // TODO: Add error handling
+                mIsFetching.setValue(FETCH_ERROR);
             }
         });
     }
