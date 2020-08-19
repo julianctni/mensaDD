@@ -1,7 +1,5 @@
 package com.pasta.mensadd.database.repository;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -19,7 +17,7 @@ import retrofit2.Response;
 
 import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
 import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_SUCCESS;
-import static com.pasta.mensadd.networking.ApiServiceClient.IDLE;
+import static com.pasta.mensadd.networking.ApiServiceClient.NOT_FETCHING;
 import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
 
 public class NewsRepository {
@@ -55,13 +53,13 @@ public class NewsRepository {
             public void onResponse(Call<ApiResponse<News>> call, Response<ApiResponse<News>> response) {
                 insertNews(response.body().getData());
                 mFetchState.setValue(FETCH_SUCCESS);
-                mFetchState.setValue(IDLE);
+                mFetchState.setValue(NOT_FETCHING);
             }
 
             @Override
             public void onFailure(Call<ApiResponse<News>> call, Throwable t) {
                 mFetchState.setValue(FETCH_ERROR);
-                mFetchState.setValue(IDLE);
+                mFetchState.setValue(NOT_FETCHING);
             }
         });
     }

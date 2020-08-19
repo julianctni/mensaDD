@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -15,12 +16,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.ui.adapter.MealListAdapter;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
+import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
 
 public class MealDayFragment extends Fragment {
 
@@ -66,13 +71,13 @@ public class MealDayFragment extends Fragment {
         String day = DATE_FORMAT.format(date);
         mMealsViewModel.getMealsByDay(day).observe(getViewLifecycleOwner(), meals -> {
             //noinspection ConstantConditions
-            showNoFoodToday(meals.isEmpty() && !mMealsViewModel.isFetching().getValue());
+            showNoFoodToday(meals.isEmpty() && mMealsViewModel.getFetchState().getValue() != IS_FETCHING);
             mMealListAdapter.submitList(meals);
         });
 
-        mMealsViewModel.isFetching().observe(getViewLifecycleOwner(), fetching -> {
+        mMealsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
             ProgressBar progressBar = view.findViewById(R.id.mealListProgressBar);
-            progressBar.setVisibility(fetching ? View.VISIBLE : View.GONE);
+            progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
         });
         mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> mMealListAdapter.setLastMealUpdate(canteen.getLastMealScraping()));
         return view;

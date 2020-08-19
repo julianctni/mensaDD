@@ -44,8 +44,8 @@ public class MealsViewModel extends ViewModel {
         return meals.get(day);
     }
 
-    public LiveData<Boolean> isFetching() {
-        return mMealRepository.isFetching();
+    public LiveData<Integer> getFetchState() {
+        return mMealRepository.getFetchState();
     }
 
 }

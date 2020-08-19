@@ -9,6 +9,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +41,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
+import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
 
 
 public class MealWeekFragment extends Fragment {
@@ -79,10 +84,12 @@ public class MealWeekFragment extends Fragment {
         );
         MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(mealRepository, canteenRepository, canteensViewModel.getSelectedCanteen());
         mMealsViewModel = new ViewModelProvider(this, mealsViewModelFactory).get(MealsViewModel.class);
-        //TextView header = view.getRootView().findViewById(R.id.text_toolbar_mainActivity);
-        //header.setText(mMealsViewModel.getCanteen().getName());
-        //header.setVisibility(View.VISIBLE);
-        //view.getRootView().findViewById(R.id.image_toolbar_mainActivity).setVisibility(View.GONE);
+        mMealsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
+            if (fetchState == FETCH_ERROR) {
+                int errorMsgId = !Utils.isOnline(requireContext()) ? R.string.error_no_internet : R.string.error_unknown;
+                Toast.makeText(requireContext(), getString(R.string.error_fetching_meals, getString(errorMsgId)), Toast.LENGTH_SHORT).show();
+            }
+        });
         MainActivity mainActivity = (MainActivity) requireActivity();
         mainActivity.setToolbarContent(mMealsViewModel.getCanteen().getName());
         mViewPager.setVisibility(View.VISIBLE);

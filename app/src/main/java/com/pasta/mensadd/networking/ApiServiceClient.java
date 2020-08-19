@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiServiceClient {
 
-    public final static int IDLE = -1;
+    public final static int NOT_FETCHING = -1;
     public final static int IS_FETCHING = 1;
     public final static int FETCH_ERROR = 2;
     public final static int FETCH_SUCCESS = 3;
