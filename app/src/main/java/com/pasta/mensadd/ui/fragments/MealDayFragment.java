@@ -18,18 +18,21 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.ui.adapter.MealListAdapter;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-import static com.pasta.mensadd.database.repository.MealRepository.DATE_FORMAT;
+import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
 
 public class MealDayFragment extends Fragment {
 
     private static final String TAG_PAGER_POSITION = "pagerPosition";
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMAN);
+    private static final int ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     private MealListAdapter mMealListAdapter;
     private int mPagerPositon = 10;
     private RecyclerView mRecyclerView;
     private CardView noFoodToday;
-    private static final int ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
 
     static MealDayFragment newInstance(int position) {
         MealDayFragment fragment = new MealDayFragment();
@@ -65,13 +68,13 @@ public class MealDayFragment extends Fragment {
         String day = DATE_FORMAT.format(date);
         mMealsViewModel.getMealsByDay(day).observe(getViewLifecycleOwner(), meals -> {
             //noinspection ConstantConditions
-            showNoFoodToday(meals.isEmpty() && !mMealsViewModel.isRefreshing().getValue());
+            showNoFoodToday(meals.isEmpty() && mMealsViewModel.getFetchState().getValue() != IS_FETCHING);
             mMealListAdapter.submitList(meals);
         });
 
-        mMealsViewModel.isRefreshing().observe(getViewLifecycleOwner(), isRefreshing -> {
+        mMealsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
             ProgressBar progressBar = view.findViewById(R.id.mealListProgressBar);
-            progressBar.setVisibility(isRefreshing ? View.VISIBLE : View.GONE);
+            progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
         });
         mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> mMealListAdapter.setLastMealUpdate(canteen.getLastMealScraping()));
         return view;

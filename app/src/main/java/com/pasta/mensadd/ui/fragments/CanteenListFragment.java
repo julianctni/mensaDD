@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -18,10 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.ui.FragmentController;
 import com.pasta.mensadd.ui.adapter.CanteenListAdapter;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
+
+import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
+import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
 
 public class CanteenListFragment extends Fragment implements View.OnClickListener, CanteenListAdapter.OnFavoriteClickListener, CanteenListAdapter.OnCanteenClickListener {
 
@@ -52,9 +57,13 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
         canteenListRecyclerView.setAdapter(canteenListAdapter);
         canteenListRecyclerView.setLayoutManager(layoutParams);
         mCanteensViewModel.getCanteens().observe(getViewLifecycleOwner(), canteenListAdapter::submitList);
-        mCanteensViewModel.isRefreshing().observe(getViewLifecycleOwner(), refreshing -> {
+        mCanteensViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
             ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
-            progressBar.setVisibility(refreshing ? View.VISIBLE : View.GONE);
+            progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
+            if (fetchState == FETCH_ERROR) {
+                int errorMsgId = !Utils.isOnline(requireContext()) ? R.string.error_no_internet : R.string.error_unknown;
+                Toast.makeText(requireContext(), getString(R.string.error_fetching_canteens, getString(errorMsgId)), Toast.LENGTH_SHORT).show();
+            }
         });
         return view;
     }

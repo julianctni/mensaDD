@@ -16,6 +16,9 @@ public interface NewsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNews(News news);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertNews(List<News> news);
+
     @Query("SELECT * FROM table_news ORDER BY id DESC")
     LiveData<List<News>> getNews();
 

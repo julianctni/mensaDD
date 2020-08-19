@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,7 +28,7 @@ import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.database.repository.CanteenRepository;
 import com.pasta.mensadd.database.repository.MealRepository;
-import com.pasta.mensadd.networking.NetworkController;
+import com.pasta.mensadd.networking.ApiServiceClient;
 import com.pasta.mensadd.ui.MainActivity;
 import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
@@ -39,6 +40,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
 
 
 public class MealWeekFragment extends Fragment {
@@ -65,23 +68,26 @@ public class MealWeekFragment extends Fragment {
         mToolbar = requireActivity().findViewById(R.id.toolbar_mainActivity);
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         mToolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
+        ApiServiceClient apiServiceClient = ApiServiceClient.getInstance(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key));
         CanteensViewModel canteensViewModel = new ViewModelProvider(requireActivity()).get(CanteensViewModel.class);
         MealRepository mealRepository = new MealRepository(
                 AppDatabase.getInstance(requireContext()),
-                NetworkController.getInstance(requireContext()),
+                apiServiceClient,
                 canteensViewModel.getSelectedCanteen()
         );
         CanteenRepository canteenRepository = new CanteenRepository(
                 AppDatabase.getInstance(requireContext()),
-                NetworkController.getInstance(requireContext()),
-                new PreferenceService(requireContext())
+                new PreferenceService(requireContext()),
+                apiServiceClient
         );
         MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(mealRepository, canteenRepository, canteensViewModel.getSelectedCanteen());
         mMealsViewModel = new ViewModelProvider(this, mealsViewModelFactory).get(MealsViewModel.class);
-        //TextView header = view.getRootView().findViewById(R.id.text_toolbar_mainActivity);
-        //header.setText(mMealsViewModel.getCanteen().getName());
-        //header.setVisibility(View.VISIBLE);
-        //view.getRootView().findViewById(R.id.image_toolbar_mainActivity).setVisibility(View.GONE);
+        mMealsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
+            if (fetchState == FETCH_ERROR) {
+                int errorMsgId = !Utils.isOnline(requireContext()) ? R.string.error_no_internet : R.string.error_unknown;
+                Toast.makeText(requireContext(), getString(R.string.error_fetching_meals, getString(errorMsgId)), Toast.LENGTH_SHORT).show();
+            }
+        });
         MainActivity mainActivity = (MainActivity) requireActivity();
         mainActivity.setToolbarContent(mMealsViewModel.getCanteen().getName());
         mViewPager.setVisibility(View.VISIBLE);

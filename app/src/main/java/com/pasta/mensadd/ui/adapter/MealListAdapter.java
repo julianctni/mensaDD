@@ -5,7 +5,6 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -21,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -34,8 +32,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.database.entity.Meal;
-import com.pasta.mensadd.networking.NetworkController;
-import com.pasta.mensadd.networking.callbacks.LoadImageCallback;
+import com.pasta.mensadd.networking.MealImageLoader;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -80,6 +79,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
         mPreferenceService = new PreferenceService(context);
     }
 
+    @NotNull
     @Override
     public MealViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int layoutId = viewType == TYPE_LAST_UPDATE ? R.layout.item_meal_list_last : R.layout.item_meal_list;
@@ -90,7 +90,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (position == getCurrentList().size()-1) {
+        if (position == getCurrentList().size() - 1) {
             return TYPE_LAST_UPDATE;
         } else {
             return TYPE_MEAL;
@@ -166,9 +166,8 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
         mLastUpdate = lastMealUpdate;
     }
 
-    public class MealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, LoadImageCallback {
+    public class MealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private LinearLayout mHeaderLayout;
-        private CardView mMealCard;
         private TextView mName;
         private TextView mLocation;
         private TextView mPrice;
@@ -189,7 +188,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
 
         private MealViewHolder(View itemView) {
             super(itemView);
-            mMealCard = itemView.findViewById(R.id.mealCard);
+            CardView mealCard = itemView.findViewById(R.id.mealCard);
             mHeaderLayout = itemView.findViewById(R.id.mealListItemHeader);
             mMealDetails = itemView.findViewById(R.id.mealDetails);
             mName = itemView.findViewById(R.id.mealName);
@@ -210,7 +209,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
             mShareButton.setBackgroundTintList(ColorStateList.valueOf(mContext.getResources().getColor(R.color.pink)));
             mShareButton.setOnClickListener(this);
             //mMealImage.setOnClickListener(this);
-            mMealCard.setOnClickListener(this);
+            mealCard.setOnClickListener(this);
             mLastUpdate = itemView.findViewById(R.id.lastCanteenUpdateText);
         }
 
@@ -264,13 +263,26 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
                     if (mContext != null)
                         mMealImageStatus.setText(mContext.getText(R.string.meals_loading_image));
                     String url = getItem(getAdapterPosition()).getImgLink();
-                    if (url.length() > 1) {
+                    if (url != null) {
                         expandLayout(mMealDetails);
                         mMealImageStatus.setText(mContext.getText(R.string.meals_loading_image));
                         mMealImageProgress.setVisibility(View.VISIBLE);
                         mMealImageStatus.setVisibility(View.VISIBLE);
                         mMealImage.setVisibility(View.GONE);
-                        NetworkController.getInstance(mContext).fetchMealImage(url, this);
+                        MealImageLoader.fetchImage(url, (success, bitmap) -> {
+                            if (success) {
+                                mMealImage.setImageBitmap(bitmap);
+                                mMealImageProgress.setVisibility(View.GONE);
+                                mMealImageStatus.setVisibility(View.GONE);
+                                mMealImage.setVisibility(View.VISIBLE);
+                            } else {
+                                mMealImageProgress.setVisibility(View.GONE);
+                                mMealImage.setVisibility(View.GONE);
+                                mMealImageStatus.setText(mContext.getText(R.string.meals_no_image));
+                                mMealImageStatus.setVisibility(View.VISIBLE);
+                            }
+                            expandLayout(mMealDetails);
+                        });
                     } else {
                         mMealImageProgress.setVisibility(View.GONE);
                         mMealImage.setVisibility(View.GONE);
@@ -353,36 +365,13 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
 
         private ValueAnimator slideAnimator(final View v, int start, int end) {
             ValueAnimator animator = ValueAnimator.ofInt(start, end);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    int value = (Integer) valueAnimator.getAnimatedValue();
-                    ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
-                    layoutParams.height = value;
-                    v.setLayoutParams(layoutParams);
-                }
+            animator.addUpdateListener(valueAnimator -> {
+                int value = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
+                layoutParams.height = value;
+                v.setLayoutParams(layoutParams);
             });
             return animator;
-        }
-
-        @Override
-        public void onResponseMessage(int responseType, String message, Bitmap bitmap) {
-            if (responseType == NetworkController.SUCCESS) {
-                mMealImage.setImageBitmap(bitmap);
-                mMealImageProgress.setVisibility(View.GONE);
-                mMealImageStatus.setVisibility(View.GONE);
-                mMealImage.setVisibility(View.VISIBLE);
-            } else {
-                mMealImageProgress.setVisibility(View.GONE);
-                mMealImage.setVisibility(View.GONE);
-                if (mContext != null)
-                    mMealImageStatus.setText(mContext.getText(R.string.meals_no_image));
-                mMealImageStatus.setVisibility(View.VISIBLE);
-            }
-            if (responseType == NetworkController.NO_INTERNET) {
-                Toast.makeText(mContext, mContext.getString(R.string.img_load_no_connection), Toast.LENGTH_SHORT).show();
-            }
-            expandLayout(mMealDetails);
         }
     }
 }

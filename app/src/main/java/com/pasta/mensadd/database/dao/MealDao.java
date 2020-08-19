@@ -59,7 +59,7 @@ public interface MealDao {
 
 
 
-    @Query("SELECT * FROM table_meals WHERE canteenId = :canteenId and date = :day")
+    @Query("SELECT * FROM table_meals WHERE canteenId = :canteenId and day = :day")
     LiveData<List<Meal>> getMealsByCanteenByDay(String canteenId, String day);
 
 }

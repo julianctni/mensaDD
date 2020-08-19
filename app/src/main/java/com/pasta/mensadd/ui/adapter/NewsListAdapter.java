@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.database.entity.Meal;
-import com.pasta.mensadd.ui.fragments.NewsFragment;
 import com.pasta.mensadd.database.entity.News;
-
-import java.util.ArrayList;
 
 
 public class NewsListAdapter extends ListAdapter<News, NewsListAdapter.ViewHolder> {
@@ -36,9 +31,9 @@ public class NewsListAdapter extends ListAdapter<News, NewsListAdapter.ViewHolde
 
         @Override
         public boolean areContentsTheSame(@NonNull News o, @NonNull News n) {
-            return o.getHeading().equals(n.getHeading()) &&
+            return o.getTitle().equals(n.getTitle()) &&
                     o.getCategory().equals(n.getCategory()) &&
-                    o.getContentShort().equals(n.getContentShort());
+                    o.getContent().equals(n.getContent());
         }
     };
 
@@ -57,8 +52,8 @@ public class NewsListAdapter extends ListAdapter<News, NewsListAdapter.ViewHolde
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         News item = getItem(position);
-        holder.mHeading.setText(item.getHeading());
-        holder.mText.setText(item.getContentShort());
+        holder.mHeading.setText(item.getTitle());
+        holder.mText.setText(item.getContent());
         holder.mDate.setText(item.getDate());
         holder.mCategory.setText(item.getCategory());
     }
@@ -100,7 +95,7 @@ public class NewsListAdapter extends ListAdapter<News, NewsListAdapter.ViewHolde
     private void shareNews(News news) {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        String shareText = news.getHeading() + "\n\n" + news.getContentShort() + "\n\n" + news.getLink() + "\n\n#news #mensaDD";
+        String shareText = news.getTitle() + "\n\n" + news.getContent() + "\n\n" + news.getLink() + "\n\n#news #mensaDD";
 
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         shareIntent.setType("text/plain");
