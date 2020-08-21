@@ -17,14 +17,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.pasta.mensadd.AppDatabase;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
-import com.pasta.mensadd.AppDatabase;
+import com.pasta.mensadd.domain.ApiService;
 import com.pasta.mensadd.domain.news.NewsRepository;
-import com.pasta.mensadd.network.ApiServiceClient;
+import com.pasta.mensadd.network.ServiceGenerator;
 
-import static com.pasta.mensadd.network.ApiServiceClient.FETCH_ERROR;
-import static com.pasta.mensadd.network.ApiServiceClient.IS_FETCHING;
+import static com.pasta.mensadd.network.ServiceGenerator.FETCH_ERROR;
+import static com.pasta.mensadd.network.ServiceGenerator.IS_FETCHING;
 
 public class NewsFragment extends Fragment {
 
@@ -42,11 +43,7 @@ public class NewsFragment extends Fragment {
         newsListRecyclerView.setAdapter(newsListAdapter);
         NewsViewModelFactory newsViewModelFactory = new NewsViewModelFactory(
                 new NewsRepository(AppDatabase.getInstance(requireContext()),
-                        ApiServiceClient.getInstance(
-                                getString(R.string.api_base_url),
-                                getString(R.string.api_user),
-                                getString(R.string.api_key)
-                        )
+                        ServiceGenerator.createService(ApiService.class)
                 )
         );
         mNewsViewModel = new ViewModelProvider(this, newsViewModelFactory).get(NewsViewModel.class);

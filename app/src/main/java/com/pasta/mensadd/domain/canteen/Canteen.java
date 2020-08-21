@@ -5,14 +5,11 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.pasta.mensadd.domain.meal.Meal;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 @Entity(tableName = "table_canteens")
 public class Canteen {
 
+    @Ignore
+    private static final int FAVORITE_PRIORITY_EXTRA = 9999999;
     @NonNull
     @PrimaryKey
     private String id;
@@ -24,11 +21,6 @@ public class Canteen {
     private long lastMealUpdate;
     private long lastMealScraping;
     private int priority;
-
-    @Ignore
-    private HashMap<String, ArrayList<Meal>> mealMap = new HashMap<>();
-    @Ignore
-    private static final int FAVORITE_PRIORITY_EXTRA = 9999999;
 
     public Canteen(String id, String name, String hours, String address, double posLat, double posLong, int priority) {
         this.id = id;
@@ -44,20 +36,12 @@ public class Canteen {
         return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public long getLastMealUpdate() {
         return lastMealUpdate;
     }
 
     public void setLastMealUpdate(long lastUpdate) {
         lastMealUpdate = lastUpdate;
-    }
-
-    public HashMap<String, ArrayList<Meal>> getMealMap() {
-        return mealMap;
     }
 
     public int getPriority() {
@@ -82,6 +66,10 @@ public class Canteen {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getPosLat() {

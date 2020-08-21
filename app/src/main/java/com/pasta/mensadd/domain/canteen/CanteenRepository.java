@@ -3,10 +3,10 @@ package com.pasta.mensadd.domain.canteen;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.AppDatabase;
+import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.network.ApiResponse;
-import com.pasta.mensadd.network.ApiServiceClient;
+import com.pasta.mensadd.domain.ApiService;
 
 import java.util.Calendar;
 import java.util.List;
@@ -15,10 +15,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.pasta.mensadd.network.ApiServiceClient.FETCH_ERROR;
-import static com.pasta.mensadd.network.ApiServiceClient.FETCH_SUCCESS;
-import static com.pasta.mensadd.network.ApiServiceClient.IS_FETCHING;
-import static com.pasta.mensadd.network.ApiServiceClient.NOT_FETCHING;
+import static com.pasta.mensadd.network.ServiceGenerator.FETCH_ERROR;
+import static com.pasta.mensadd.network.ServiceGenerator.FETCH_SUCCESS;
+import static com.pasta.mensadd.network.ServiceGenerator.IS_FETCHING;
+import static com.pasta.mensadd.network.ServiceGenerator.NOT_FETCHING;
 
 public class CanteenRepository {
 
@@ -26,16 +26,16 @@ public class CanteenRepository {
     private CanteenDao mCanteenDao;
     private LiveData<List<Canteen>> mCanteens;
     private MutableLiveData<Integer> mFetchState;
-    private ApiServiceClient mApiServiceClient;
     private PreferenceService mPreferenceService;
     private AppDatabase mAppDatabase;
+    private ApiService mApiService;
 
-    public CanteenRepository(AppDatabase appDatabase, PreferenceService preferenceService, ApiServiceClient apiServiceClient) {
+    public CanteenRepository(AppDatabase appDatabase, PreferenceService preferenceService, ApiService apiService) {
         mAppDatabase = appDatabase;
         mCanteenDao = appDatabase.canteenDao();
         mCanteens = mCanteenDao.getCanteens();
         mPreferenceService = preferenceService;
-        mApiServiceClient = apiServiceClient;
+        mApiService = apiService;
         mFetchState = new MutableLiveData<>(NOT_FETCHING);
     }
 
@@ -83,7 +83,7 @@ public class CanteenRepository {
             return;
         }
         mFetchState.setValue(IS_FETCHING);
-        mApiServiceClient.fetchCanteens().enqueue(new Callback<ApiResponse<Canteen>>() {
+        mApiService.getCanteens().enqueue(new Callback<ApiResponse<Canteen>>() {
             @Override
             public void onResponse(Call<ApiResponse<Canteen>> call, Response<ApiResponse<Canteen>> response) {
                 insertOrUpdateCanteens(response.body().getData());

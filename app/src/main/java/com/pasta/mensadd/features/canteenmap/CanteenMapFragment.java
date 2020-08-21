@@ -44,9 +44,10 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.AppDatabase;
+import com.pasta.mensadd.domain.ApiService;
 import com.pasta.mensadd.domain.canteen.Canteen;
 import com.pasta.mensadd.domain.canteen.CanteenRepository;
-import com.pasta.mensadd.network.ApiServiceClient;
+import com.pasta.mensadd.network.ServiceGenerator;
 import com.pasta.mensadd.FragmentController;
 import com.pasta.mensadd.MainActivity;
 
@@ -85,7 +86,7 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
         CanteenRepository canteenRepository = new CanteenRepository(
                 AppDatabase.getInstance(requireContext()),
                 preferenceService,
-                ApiServiceClient.getInstance(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key))
+                ServiceGenerator.createService(ApiService.class)
         );
         CanteenMapViewModelFactory canteenMapViewModelFactory = new CanteenMapViewModelFactory(canteenRepository);
         mCanteenMapViewModel = new ViewModelProvider(this, canteenMapViewModelFactory).get(CanteenMapViewModel.class);

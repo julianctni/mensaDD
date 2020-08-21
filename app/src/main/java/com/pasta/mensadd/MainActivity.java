@@ -20,6 +20,7 @@ import com.mapbox.mapboxsdk.Mapbox;
 import com.pasta.mensadd.features.balancecheck.BalanceCheckService;
 import com.pasta.mensadd.features.balancecheck.CardLoadedCallback;
 import com.pasta.mensadd.domain.balanceentry.BalanceEntry;
+import com.pasta.mensadd.network.ServiceGenerator;
 
 import java.util.Calendar;
 
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         isNfcSupported = NfcAdapter.getDefaultAdapter(this.getApplicationContext()) != null;
-
+        ServiceGenerator.init(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key));
         PreferenceService preferenceService = new PreferenceService(this);
         String darkMode = preferenceService.getDarkModeSetting();
 

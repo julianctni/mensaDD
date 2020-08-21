@@ -25,9 +25,10 @@ import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.AppDatabase;
+import com.pasta.mensadd.domain.ApiService;
 import com.pasta.mensadd.domain.canteen.CanteenRepository;
 import com.pasta.mensadd.domain.meal.MealRepository;
-import com.pasta.mensadd.network.ApiServiceClient;
+import com.pasta.mensadd.network.ServiceGenerator;
 import com.pasta.mensadd.MainActivity;
 
 import java.text.SimpleDateFormat;
@@ -37,7 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.pasta.mensadd.network.ApiServiceClient.FETCH_ERROR;
+import static com.pasta.mensadd.network.ServiceGenerator.FETCH_ERROR;
 import static com.pasta.mensadd.features.meallist.MealsViewModel.ARGS_KEY_CANTEEN_ID;
 
 
@@ -75,16 +76,15 @@ public class MealWeekFragment extends Fragment {
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         mToolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
         String canteenId = getArguments() != null ? getArguments().getString(ARGS_KEY_CANTEEN_ID) : "";
-        ApiServiceClient apiServiceClient = ApiServiceClient.getInstance(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key));
         MealRepository mealRepository = new MealRepository(
                 AppDatabase.getInstance(requireContext()),
-                apiServiceClient,
+                ServiceGenerator.createService(ApiService.class),
                 canteenId
         );
         CanteenRepository canteenRepository = new CanteenRepository(
                 AppDatabase.getInstance(requireContext()),
                 new PreferenceService(requireContext()),
-                apiServiceClient
+                ServiceGenerator.createService(ApiService.class)
         );
         Bundle bundle = getArguments() == null ? savedInstanceState : getArguments();
         MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(this, bundle, mealRepository, canteenRepository);
