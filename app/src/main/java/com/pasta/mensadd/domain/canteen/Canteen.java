@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NotNull;
+
 @Entity(tableName = "table_canteens")
 public class Canteen {
 
@@ -22,7 +24,8 @@ public class Canteen {
     private long lastMealScraping;
     private int priority;
 
-    public Canteen(String id, String name, String hours, String address, double posLat, double posLong, int priority) {
+    public Canteen(@NotNull String id, String name, String hours,
+                   String address, double posLat, double posLong, int priority) {
         this.id = id;
         this.name = name;
         this.hours = hours;
@@ -32,6 +35,7 @@ public class Canteen {
         this.priority = priority;
     }
 
+    @NotNull
     public String getId() {
         return id;
     }
@@ -81,7 +85,9 @@ public class Canteen {
     }
 
     public void setAsFavorite(boolean favorite) {
-        this.priority = favorite ? this.priority + FAVORITE_PRIORITY_EXTRA : this.priority - FAVORITE_PRIORITY_EXTRA;
+        this.priority = favorite
+                ? this.priority + FAVORITE_PRIORITY_EXTRA
+                : this.priority - FAVORITE_PRIORITY_EXTRA;
     }
 
     public boolean isFavorite() {

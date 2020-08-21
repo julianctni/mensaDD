@@ -20,7 +20,8 @@ public class News {
     private String title;
     private String content;
 
-    public News(String id, String category, String date, String title, String content, String link) {
+    public News(String id, String category, String date,
+                String title, String content, String link) {
         this.id = id;
         this.category = category;
         this.date = date;
@@ -49,7 +50,9 @@ public class News {
         return link;
     }
 
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 
 
 }

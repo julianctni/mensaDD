@@ -29,7 +29,7 @@ public interface MealDao {
     @Transaction
     default void insertOrUpdateMeal(Meal meal) {
         long id = insertMeal(meal);
-        if (id == -1l) {
+        if (id == -1L) {
             updateMeal(meal);
         }
     }
@@ -39,7 +39,7 @@ public interface MealDao {
         List<Long> insertResults = insertMeals(meals);
         List<Meal> updateList = new ArrayList<>();
         for (int i = 0; i < insertResults.size(); i++) {
-            if (insertResults.get(i) == -1l) {
+            if (insertResults.get(i) == -1L) {
                 updateList.add(meals.get(i));
             }
         }
@@ -47,13 +47,6 @@ public interface MealDao {
             updateMeals(updateList);
         }
     }
-
-    @Transaction
-    default void insertOrUpdateAll(List<Meal> meals) {
-
-    }
-
-
 
     @Query("SELECT * FROM table_meals WHERE canteenId = :canteenId and day = :day")
     LiveData<List<Meal>> getMealsByCanteenByDay(String canteenId, String day);

@@ -9,6 +9,8 @@ import androidx.room.PrimaryKey;
 
 import com.pasta.mensadd.domain.canteen.Canteen;
 
+import org.jetbrains.annotations.NotNull;
+
 @Entity(tableName = "table_meals", foreignKeys = @ForeignKey(entity = Canteen.class, parentColumns = "id", childColumns = "canteenId", onDelete = ForeignKey.CASCADE))
 public class Meal {
 
@@ -29,7 +31,10 @@ public class Meal {
     private boolean garlic;
     private boolean alcohol;
 
-    public Meal(String id, String name, String price, String details, String imgLink, String canteenId, String day, String location, boolean vegetarian, boolean vegan, boolean pork, boolean beef, boolean garlic, boolean alcohol) {
+    public Meal(@NotNull String id, String name, String price, String details,
+                String imgLink, String canteenId, String day, String location,
+                boolean vegetarian, boolean vegan, boolean pork, boolean beef,
+                boolean garlic, boolean alcohol) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -46,11 +51,12 @@ public class Meal {
         this.alcohol = alcohol;
     }
 
+    @NotNull
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NotNull String id) {
         this.id = id;
     }
 
@@ -107,6 +113,10 @@ public class Meal {
     }
 
     public String formatDetails(String content) {
-        return content.isEmpty() ? content : Html.fromHtml("&#149;").toString() + " " + content.replace(", ", "\n" + Html.fromHtml("&#149;").toString() + " ");
+        return content.isEmpty()
+                ? content
+                : Html.fromHtml("&#149;").toString() + " " +
+                    content.replace(", ", "\n" +
+                    Html.fromHtml("&#149;").toString() + " ");
     }
 }

@@ -15,9 +15,6 @@ import java.util.List;
 public interface CanteenDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long insertCanteen(Canteen canteen);
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
     List<Long> insertCanteens(List<Canteen> canteens);
 
     @Update
@@ -31,7 +28,7 @@ public interface CanteenDao {
         List<Long> insertResults = insertCanteens(canteens);
         List<Canteen> updateList = new ArrayList<>();
         for (int i = 0; i < insertResults.size(); i++) {
-            if (insertResults.get(i) == -1l) {
+            if (insertResults.get(i) == -1L) {
                 updateList.add(canteens.get(i));
             }
         }
@@ -39,9 +36,6 @@ public interface CanteenDao {
             updateCanteens(updateList);
         }
     }
-
-    @Query("DELETE FROM table_canteens")
-    void deleteAllCanteens();
 
     @Query("SELECT * FROM table_canteens ORDER BY priority DESC")
     LiveData<List<Canteen>> getCanteens();
