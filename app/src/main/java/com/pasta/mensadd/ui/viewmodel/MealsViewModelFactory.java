@@ -1,28 +1,31 @@
 package com.pasta.mensadd.ui.viewmodel;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
+import android.os.Bundle;
 
-import com.pasta.mensadd.database.entity.Canteen;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AbstractSavedStateViewModelFactory;
+import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.ViewModel;
+import androidx.savedstate.SavedStateRegistryOwner;
+
 import com.pasta.mensadd.database.repository.CanteenRepository;
 import com.pasta.mensadd.database.repository.MealRepository;
 
-public class MealsViewModelFactory implements ViewModelProvider.Factory {
+public class MealsViewModelFactory extends AbstractSavedStateViewModelFactory {
 
     private MealRepository mMealRepository;
     private CanteenRepository mCanteenRepository;
-    private String mCanteenId;
 
-    public MealsViewModelFactory(MealRepository mealRepository, CanteenRepository canteenRepository, String canteenId) {
+    public MealsViewModelFactory(SavedStateRegistryOwner savedStateRegistryOwner, Bundle bundle, MealRepository mealRepository, CanteenRepository canteenRepository) {
+        super(savedStateRegistryOwner, bundle);
         mMealRepository = mealRepository;
         mCanteenRepository = canteenRepository;
-        mCanteenId = canteenId;
     }
+
 
     @NonNull
     @Override
-    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new MealsViewModel(mMealRepository, mCanteenRepository, mCanteenId);
+    protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
+        return (T) new MealsViewModel(mMealRepository, mCanteenRepository, handle);
     }
 }

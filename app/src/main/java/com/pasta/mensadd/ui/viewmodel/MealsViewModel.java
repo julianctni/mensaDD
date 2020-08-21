@@ -2,6 +2,7 @@ package com.pasta.mensadd.ui.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
 import com.pasta.mensadd.database.entity.Canteen;
@@ -15,16 +16,18 @@ import java.util.Map;
 
 public class MealsViewModel extends ViewModel {
 
+
+    public static final String ARGS_KEY_CANTEEN_ID = "arg_canteen_id";
     private MealRepository mMealRepository;
     private CanteenRepository mCanteenRepository;
     private Map<String, LiveData<List<Meal>>> meals = new HashMap<>();
     private String mCanteenId;
     private MutableLiveData<Boolean> mCanteenIsFavorite;
 
-    public MealsViewModel(MealRepository mealRepository, CanteenRepository canteenRepository, String canteenId) {
+    public MealsViewModel(MealRepository mealRepository, CanteenRepository canteenRepository, SavedStateHandle savedStateHandle) {
         mMealRepository = mealRepository;
         mCanteenRepository = canteenRepository;
-        mCanteenId = canteenId;
+        mCanteenId = savedStateHandle.get(ARGS_KEY_CANTEEN_ID);
         mCanteenIsFavorite = new MutableLiveData<>(false);
     }
 

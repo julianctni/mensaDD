@@ -40,10 +40,10 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
+import static com.pasta.mensadd.ui.viewmodel.MealsViewModel.ARGS_KEY_CANTEEN_ID;
 
 
 public class MealWeekFragment extends Fragment {
-    private static final String ARGS_KEY_CANTEEN_ID = "arg_canteen_id";
     private static final int PAGE_COUNT = 5;
     private Toolbar mToolbar;
     private MealsViewModel mMealsViewModel;
@@ -88,7 +88,8 @@ public class MealWeekFragment extends Fragment {
                 new PreferenceService(requireContext()),
                 apiServiceClient
         );
-        MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(mealRepository, canteenRepository, canteenId);
+        Bundle bundle = getArguments() == null ? savedInstanceState : getArguments();
+        MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(this, bundle, mealRepository, canteenRepository);
         mMealsViewModel = new ViewModelProvider(this, mealsViewModelFactory).get(MealsViewModel.class);
         mViewPager.setVisibility(View.VISIBLE);
         if (mViewPager.getAdapter() == null) {
