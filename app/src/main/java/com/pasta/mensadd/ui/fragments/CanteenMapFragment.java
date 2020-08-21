@@ -41,11 +41,16 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.Canteen;
+import com.pasta.mensadd.database.repository.CanteenRepository;
+import com.pasta.mensadd.networking.ApiServiceClient;
 import com.pasta.mensadd.ui.FragmentController;
 import com.pasta.mensadd.ui.MainActivity;
-import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
+import com.pasta.mensadd.ui.viewmodel.CanteenMapViewModel;
+import com.pasta.mensadd.ui.viewmodel.CanteenMapViewModelFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -65,7 +70,7 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
 
     private LocationComponent mLocationComponent;
 
-    private CanteensViewModel mCanteensViewModel;
+    private CanteenMapViewModel mCanteenMapViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,7 +83,14 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-        mCanteensViewModel = new ViewModelProvider(requireActivity()).get(CanteensViewModel.class);
+        PreferenceService preferenceService = new PreferenceService(requireContext());
+        CanteenRepository canteenRepository = new CanteenRepository(
+                AppDatabase.getInstance(requireContext()),
+                preferenceService,
+                ApiServiceClient.getInstance(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key))
+        );
+        CanteenMapViewModelFactory canteenMapViewModelFactory = new CanteenMapViewModelFactory(canteenRepository);
+        mCanteenMapViewModel = new ViewModelProvider(this, canteenMapViewModelFactory).get(CanteenMapViewModel.class);
 
         setHasOptionsMenu(true);
         mMapView = view.findViewById(R.id.mapview);
@@ -89,11 +101,11 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
         MaterialButton buttonClose = view.findViewById(R.id.mapViewCloseButton);
         buttonClose.setOnClickListener(button -> mInfoCard.setVisibility(View.GONE));
         MaterialButton buttonMeals = view.findViewById(R.id.mapViewToMealsButton);
-        buttonMeals.setOnClickListener(button -> FragmentController.showMealWeekFragment(getParentFragmentManager()));
+        buttonMeals.setOnClickListener(button -> FragmentController.showMealWeekFragment(getParentFragmentManager(), mCanteenMapViewModel.getSelectedCanteenId()));
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(mapboxMap -> {
             mMap = mapboxMap;
-            mCanteensViewModel.getCanteens().observe(requireActivity(), canteens ->
+            mCanteenMapViewModel.getCanteens().observe(requireActivity(), canteens ->
                     initMap(mapboxMap, canteens));
         });
         return view;
@@ -113,17 +125,17 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
             SymbolManager symbolManager = new SymbolManager(mMapView, map, style);
             List<SymbolOptions> canteenSymbols = new ArrayList<>();
             symbolManager.setIconAllowOverlap(true);
-            symbolManager.addClickListener(symbol ->
-                    mCanteensViewModel.getCanteenById(Objects.requireNonNull(symbol.getData()).getAsString()).observe(requireActivity(), canteen -> {
-                        mCanteenName.setText(canteen.getName());
-                        mCanteenAddress.setText(canteen.getAddress());
-                        mCanteenHours.setText(canteen.getHours());
-                        if (mInfoCard.getVisibility() == View.GONE) {
-                            mInfoCard.setVisibility(View.VISIBLE);
-                            mCanteensViewModel.setSelectedCanteen(canteen);
-                        }
-                    })
-            );
+            symbolManager.addClickListener(symbol -> {
+                mCanteenMapViewModel.setSelectedCanteenId(Objects.requireNonNull(symbol.getData()).getAsString());
+                mCanteenMapViewModel.getCanteenById(mCanteenMapViewModel.getSelectedCanteenId()).observe(requireActivity(), canteen -> {
+                    mCanteenName.setText(canteen.getName());
+                    mCanteenAddress.setText(canteen.getAddress());
+                    mCanteenHours.setText(canteen.getHours());
+                    if (mInfoCard.getVisibility() == View.GONE) {
+                        mInfoCard.setVisibility(View.VISIBLE);
+                    }
+                });
+            });
             LatLngBounds.Builder bounds = new LatLngBounds.Builder();
             for (Canteen c : canteens) {
 

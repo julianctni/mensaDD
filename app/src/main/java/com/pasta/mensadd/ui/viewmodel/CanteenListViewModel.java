@@ -8,13 +8,12 @@ import com.pasta.mensadd.database.repository.CanteenRepository;
 
 import java.util.List;
 
-public class CanteensViewModel extends ViewModel {
+public class CanteenListViewModel extends ViewModel {
 
     private CanteenRepository mCanteenRepository;
     private LiveData<List<Canteen>> mCanteens;
-    private Canteen mSelectedCanteen;
 
-    public CanteensViewModel(CanteenRepository canteenRepository) {
+    public CanteenListViewModel(CanteenRepository canteenRepository) {
         mCanteenRepository = canteenRepository;
         mCanteens = canteenRepository.getCanteens();
     }
@@ -25,14 +24,6 @@ public class CanteensViewModel extends ViewModel {
 
     public LiveData<List<Canteen>> getCanteens() {
         return mCanteens;
-    }
-
-    public Canteen getSelectedCanteen() {
-        return mSelectedCanteen;
-    }
-
-    public void setSelectedCanteen(Canteen selectedCanteen) {
-        mSelectedCanteen = selectedCanteen;
     }
 
     public LiveData<Canteen> getCanteenById(String id) {

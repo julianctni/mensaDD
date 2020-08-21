@@ -12,17 +12,17 @@ public class MealsViewModelFactory implements ViewModelProvider.Factory {
 
     private MealRepository mMealRepository;
     private CanteenRepository mCanteenRepository;
-    private Canteen mCanteen;
+    private String mCanteenId;
 
-    public MealsViewModelFactory(MealRepository mealRepository, CanteenRepository canteenRepository, Canteen canteen) {
+    public MealsViewModelFactory(MealRepository mealRepository, CanteenRepository canteenRepository, String canteenId) {
         mMealRepository = mealRepository;
         mCanteenRepository = canteenRepository;
-        mCanteen = canteen;
+        mCanteenId = canteenId;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new MealsViewModel(mMealRepository, mCanteenRepository, mCanteen);
+        return (T) new MealsViewModel(mMealRepository, mCanteenRepository, mCanteenId);
     }
 }

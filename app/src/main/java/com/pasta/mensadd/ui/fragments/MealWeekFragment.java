@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,12 +25,10 @@ import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.database.AppDatabase;
-import com.pasta.mensadd.database.entity.Canteen;
 import com.pasta.mensadd.database.repository.CanteenRepository;
 import com.pasta.mensadd.database.repository.MealRepository;
 import com.pasta.mensadd.networking.ApiServiceClient;
 import com.pasta.mensadd.ui.MainActivity;
-import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModel;
 import com.pasta.mensadd.ui.viewmodel.MealsViewModelFactory;
 
@@ -46,10 +43,20 @@ import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
 
 
 public class MealWeekFragment extends Fragment {
-
+    private static final String ARGS_KEY_CANTEEN_ID = "arg_canteen_id";
     private static final int PAGE_COUNT = 5;
     private Toolbar mToolbar;
     private MealsViewModel mMealsViewModel;
+    private boolean mFavoriteClicked = false;
+    private MenuItem mFavMenuItem;
+
+    public static MealWeekFragment newInstance(String canteenId) {
+        MealWeekFragment mealWeekFragment = new MealWeekFragment();
+        Bundle args = new Bundle();
+        args.putString(ARGS_KEY_CANTEEN_ID, canteenId);
+        mealWeekFragment.setArguments(args);
+        return mealWeekFragment;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -69,34 +76,25 @@ public class MealWeekFragment extends Fragment {
         mToolbar = requireActivity().findViewById(R.id.toolbar_mainActivity);
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         mToolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
+        String canteenId = getArguments() != null ? getArguments().getString(ARGS_KEY_CANTEEN_ID) : "";
         ApiServiceClient apiServiceClient = ApiServiceClient.getInstance(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key));
-        CanteensViewModel canteensViewModel = new ViewModelProvider(requireActivity()).get(CanteensViewModel.class);
         MealRepository mealRepository = new MealRepository(
                 AppDatabase.getInstance(requireContext()),
                 apiServiceClient,
-                canteensViewModel.getSelectedCanteen()
+                canteenId
         );
         CanteenRepository canteenRepository = new CanteenRepository(
                 AppDatabase.getInstance(requireContext()),
                 new PreferenceService(requireContext()),
                 apiServiceClient
         );
-        MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(mealRepository, canteenRepository, canteensViewModel.getSelectedCanteen());
+        MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(mealRepository, canteenRepository, canteenId);
         mMealsViewModel = new ViewModelProvider(this, mealsViewModelFactory).get(MealsViewModel.class);
-        mMealsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
-            if (fetchState == FETCH_ERROR) {
-                int errorMsgId = !Utils.isOnline(requireContext()) ? R.string.error_no_internet : R.string.error_unknown;
-                Toast.makeText(requireContext(), getString(R.string.error_fetching_meals, getString(errorMsgId)), Toast.LENGTH_SHORT).show();
-            }
-        });
-        MainActivity mainActivity = (MainActivity) requireActivity();
-        mainActivity.setToolbarContent(mMealsViewModel.getCanteen().getName());
         mViewPager.setVisibility(View.VISIBLE);
         if (mViewPager.getAdapter() == null) {
             MealDayPagerAdapter mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
             mViewPager.setAdapter(mPagerAdapter);
         }
-
 
     }
 
@@ -104,28 +102,37 @@ public class MealWeekFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.fragment_meals_menu, menu);
-        if (mMealsViewModel.getCanteen().isFavorite()) {
-            menu.findItem(R.id.set_canteen_favorite).setIcon(R.drawable.ic_baseline_favorite_24);
-            menu.findItem(R.id.set_canteen_favorite).getIcon().setColorFilter(ContextCompat.getColor(this.getContext(), R.color.pink_dark), PorterDuff.Mode.SRC_IN);
-        } else {
-            menu.findItem(R.id.set_canteen_favorite).setIcon(R.drawable.ic_baseline_favorite_border_24);
-            menu.findItem(R.id.set_canteen_favorite).getIcon().setColorFilter(ContextCompat.getColor(this.getContext(), R.color.white), PorterDuff.Mode.SRC_IN);
-        }
+        mFavMenuItem = menu.findItem(R.id.set_canteen_favorite);
+        startObservingModel();
+    }
+
+    public void startObservingModel() {
+        mMealsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
+            if (fetchState == FETCH_ERROR) {
+                int errorMsgId = !Utils.isOnline(requireContext()) ? R.string.error_no_internet : R.string.error_unknown;
+                Toast.makeText(requireContext(), getString(R.string.error_fetching_meals, getString(errorMsgId)), Toast.LENGTH_SHORT).show();
+            }
+        });
+        mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), (canteen) -> {
+            ((MainActivity) requireActivity()).setToolbarContent(canteen.getName());
+            int iconId = canteen.isFavorite() ? R.drawable.ic_baseline_favorite_24 : R.drawable.ic_baseline_favorite_border_24;
+            int colorId = canteen.isFavorite() ? R.color.pink_dark : R.color.white;
+            mFavMenuItem.setIcon(iconId);
+            mFavMenuItem.getIcon().setColorFilter(ContextCompat.getColor(requireContext(), colorId), PorterDuff.Mode.SRC_IN);
+            if (mFavoriteClicked) {
+                View favButton = mToolbar.findViewById(R.id.set_canteen_favorite);
+                favButton.startAnimation(Utils.getFavoriteScaleOutAnimation(favButton));
+                mFavoriteClicked = false;
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.set_canteen_favorite:
-                Canteen canteen = mMealsViewModel.getCanteen();
-                int favIconId = canteen.isFavorite() ? R.drawable.ic_baseline_favorite_border_24 : R.drawable.ic_baseline_favorite_24;
-                int favIconColor = canteen.isFavorite() ? R.color.white : R.color.pink_dark;
-                item.setIcon(favIconId);
-                item.getIcon().setColorFilter(ContextCompat.getColor(this.getContext(), favIconColor), PorterDuff.Mode.SRC_IN);
-                canteen.setAsFavorite(!canteen.isFavorite());
-                mMealsViewModel.updateCanteen(canteen);
-                View favButton = mToolbar.findViewById(R.id.set_canteen_favorite);
-                favButton.startAnimation(Utils.getFavoriteScaleOutAnimation(favButton));
+                mMealsViewModel.toggleCanteenAsFavorite();
+                mFavoriteClicked = true;
                 return true;
             case R.id.menu_item_meals_refresh:
                 mMealsViewModel.triggerMealFetching();

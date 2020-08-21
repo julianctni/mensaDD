@@ -66,8 +66,8 @@ public class FragmentController {
         fm.beginTransaction().addToBackStack(null).replace(MAIN_CONTAINER_ID, f, TAG_IMPRINT).commit();
     }
 
-    public static void showMealWeekFragment(FragmentManager fm) {
-        createAnimatedTransaction(fm).addToBackStack("").replace(MAIN_CONTAINER_ID, new MealWeekFragment(), TAG_MEAL_WEEK).commit();
+    public static void showMealWeekFragment(FragmentManager fm, String canteenId) {
+        createAnimatedTransaction(fm).addToBackStack("").replace(MAIN_CONTAINER_ID, MealWeekFragment.newInstance(canteenId), TAG_MEAL_WEEK).commit();
     }
 
     public static void showBalanceHistoryFragment(FragmentManager fm) {

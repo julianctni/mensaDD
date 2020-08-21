@@ -33,40 +33,47 @@ public class MealRepository {
     private MutableLiveData<Integer> mFetchState;
     private AppDatabase mAppDatabase;
 
-    public MealRepository(AppDatabase appDatabase, ApiServiceClient apiServiceClient, Canteen canteen) {
+    public MealRepository(AppDatabase appDatabase, ApiServiceClient apiServiceClient, String canteenId) {
         mAppDatabase = appDatabase;
         mMealDao = appDatabase.mealDao();
         mCanteenDao = appDatabase.canteenDao();
         mApiServiceClient = apiServiceClient;
         mFetchState = new MutableLiveData<>(NOT_FETCHING);
-        if (canteen.getLastMealUpdate() < Calendar.getInstance().getTimeInMillis() - FIFTEEN_MINUTES_MILLIS) {
-            fetchMeals(canteen);
-        }
+        mAppDatabase.getQueryExecutor().execute(() -> {
+            if (mCanteenDao.getLastMealUpdate(canteenId) < Calendar.getInstance().getTimeInMillis() - FIFTEEN_MINUTES_MILLIS) {
+                fetchMeals(canteenId);
+            }
+        });
+
     }
 
-    public void insertOrUpdateMeals(List<Meal> meals) {
-        mAppDatabase.getTransactionExecutor().execute(() -> mMealDao.insertOrUpdateMeals(meals));
+
+    public void insertOrUpdateMeals(List<Meal> meals, String canteenId, long scrapedAt) {
+        mAppDatabase.getTransactionExecutor().execute(() -> {
+            mMealDao.insertOrUpdateMeals(meals);
+            Canteen canteen = mCanteenDao.getCanteenByIdSync(canteenId);
+            canteen.setLastMealScraping(scrapedAt);
+            canteen.setLastMealUpdate(Calendar.getInstance().getTimeInMillis());
+            mCanteenDao.updateCanteen(canteen);
+        });
     }
 
-    public LiveData<List<Meal>> getMealsByCanteenByDay(Canteen canteen, String day) {
-        return Transformations.switchMap(mFetchState, (fetchState) -> mMealDao.getMealsByCanteenByDay(canteen.getId(), day));
+    public LiveData<List<Meal>> getMealsByCanteenByDay(String canteenId, String day) {
+        return Transformations.switchMap(mFetchState, (fetchState) -> mMealDao.getMealsByCanteenByDay(canteenId, day));
     }
 
-    public void fetchMeals(Canteen canteen) {
-        mFetchState.setValue(IS_FETCHING);
-        mApiServiceClient.fetchMeals(canteen.getId()).enqueue(new Callback<ApiResponse<Meal>>() {
+    public void fetchMeals(String canteenId) {
+        mFetchState.postValue(IS_FETCHING);
+        mApiServiceClient.fetchMeals(canteenId).enqueue(new Callback<ApiResponse<Meal>>() {
             @Override
             public void onResponse(Call<ApiResponse<Meal>> call, Response<ApiResponse<Meal>> response) {
-                insertOrUpdateMeals(response.body().getData());
-                canteen.setLastMealUpdate(Calendar.getInstance().getTimeInMillis());
-                canteen.setLastMealScraping(response.body().getScrapedAt());
-                mAppDatabase.getTransactionExecutor().execute(() -> mCanteenDao.updateCanteen(canteen));
-                mFetchState.setValue(FETCH_SUCCESS);
+                insertOrUpdateMeals(response.body().getData(), canteenId, response.body().getScrapedAt());
+                mFetchState.postValue(FETCH_SUCCESS);
             }
 
             @Override
             public void onFailure(Call<ApiResponse<Meal>> call, Throwable t) {
-                mFetchState.setValue(FETCH_ERROR);
+                mFetchState.postValue(FETCH_ERROR);
             }
         });
     }

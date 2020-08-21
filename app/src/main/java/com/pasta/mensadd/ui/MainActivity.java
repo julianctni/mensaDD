@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
@@ -22,12 +21,7 @@ import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.balancecheck.BalanceCheckService;
 import com.pasta.mensadd.balancecheck.CardLoadedCallback;
-import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.BalanceEntry;
-import com.pasta.mensadd.database.repository.CanteenRepository;
-import com.pasta.mensadd.networking.ApiServiceClient;
-import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
-import com.pasta.mensadd.ui.viewmodel.CanteensViewModelFactory;
 
 import java.util.Calendar;
 
@@ -59,14 +53,6 @@ public class MainActivity extends AppCompatActivity
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
         Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_access_token));
-
-        CanteenRepository canteenRepository = new CanteenRepository(
-                AppDatabase.getInstance(this),
-                preferenceService,
-                ApiServiceClient.getInstance(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key))
-        );
-        CanteensViewModelFactory canteensViewModelFactory = new CanteensViewModelFactory(canteenRepository);
-        new ViewModelProvider(this, canteensViewModelFactory).get(CanteensViewModel.class);
 
         mBottomNav = findViewById(R.id.bottomNav_mainActivity);
         mBottomNav.setMenuItemSelectionListener(this);

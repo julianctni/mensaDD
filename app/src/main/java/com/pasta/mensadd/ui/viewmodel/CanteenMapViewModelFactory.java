@@ -6,17 +6,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.pasta.mensadd.database.repository.CanteenRepository;
 
-public class CanteensViewModelFactory implements ViewModelProvider.Factory {
+public class CanteenMapViewModelFactory extends CanteenListViewModelFactory {
 
-    private CanteenRepository mCanteenRepository;
-
-    public CanteensViewModelFactory(CanteenRepository canteenRepository) {
-        mCanteenRepository = canteenRepository;
+    public CanteenMapViewModelFactory(CanteenRepository canteenRepository) {
+        super(canteenRepository);
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new CanteensViewModel(mCanteenRepository);
+        return (T) new CanteenMapViewModel(mCanteenRepository);
     }
 }

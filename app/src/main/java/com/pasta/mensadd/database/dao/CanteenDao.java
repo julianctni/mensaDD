@@ -9,7 +9,6 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.pasta.mensadd.database.entity.Canteen;
-import com.pasta.mensadd.database.entity.Meal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,5 +53,8 @@ public interface CanteenDao {
 
     @Query("SELECT * FROM table_canteens WHERE id = :canteenId")
     LiveData<Canteen> getCanteenById(String canteenId);
+
+    @Query("SELECT lastMealUpdate FROM table_canteens WHERE id = :canteenId")
+    long getLastMealUpdate(String canteenId);
 
 }

@@ -20,10 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
+import com.pasta.mensadd.database.AppDatabase;
 import com.pasta.mensadd.database.entity.Canteen;
+import com.pasta.mensadd.database.repository.CanteenRepository;
+import com.pasta.mensadd.networking.ApiServiceClient;
 import com.pasta.mensadd.ui.FragmentController;
 import com.pasta.mensadd.ui.adapter.CanteenListAdapter;
-import com.pasta.mensadd.ui.viewmodel.CanteensViewModel;
+import com.pasta.mensadd.ui.viewmodel.CanteenListViewModel;
+import com.pasta.mensadd.ui.viewmodel.CanteenListViewModelFactory;
 
 import static com.pasta.mensadd.networking.ApiServiceClient.FETCH_ERROR;
 import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
@@ -31,7 +35,7 @@ import static com.pasta.mensadd.networking.ApiServiceClient.IS_FETCHING;
 public class CanteenListFragment extends Fragment implements View.OnClickListener, CanteenListAdapter.OnFavoriteClickListener, CanteenListAdapter.OnCanteenClickListener {
 
     private CardView mTutorialCard;
-    private CanteensViewModel mCanteensViewModel;
+    private CanteenListViewModel mCanteenListViewModel;
     private PackageInfo mPackageInfo;
     private PreferenceService mPreferenceService;
 
@@ -46,7 +50,13 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
             e.printStackTrace();
         }
         mPreferenceService = new PreferenceService(requireContext());
-        mCanteensViewModel = new ViewModelProvider(requireActivity()).get(CanteensViewModel.class);
+        CanteenRepository canteenRepository = new CanteenRepository(
+                AppDatabase.getInstance(requireContext()),
+                mPreferenceService,
+                ApiServiceClient.getInstance(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key))
+        );
+        CanteenListViewModelFactory canteenListViewModelFactory = new CanteenListViewModelFactory(canteenRepository);
+        mCanteenListViewModel = new ViewModelProvider(this, canteenListViewModelFactory).get(CanteenListViewModel.class);
         mTutorialCard = view.findViewById(R.id.tutorialCard);
         RecyclerView canteenListRecyclerView = view.findViewById(R.id.canteenList);
         view.findViewById(R.id.latestUpdatesCloseButton).setOnClickListener(this);
@@ -56,9 +66,9 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
         canteenListAdapter.setOnCanteenClickListener(this);
         canteenListRecyclerView.setAdapter(canteenListAdapter);
         canteenListRecyclerView.setLayoutManager(layoutParams);
-        mCanteensViewModel.triggerCanteenFetching(false);
-        mCanteensViewModel.getCanteens().observe(getViewLifecycleOwner(), canteenListAdapter::submitList);
-        mCanteensViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
+        mCanteenListViewModel.triggerCanteenFetching(false);
+        mCanteenListViewModel.getCanteens().observe(getViewLifecycleOwner(), canteenListAdapter::submitList);
+        mCanteenListViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
             ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
             progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
             if (fetchState == FETCH_ERROR) {
@@ -95,14 +105,13 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
     @Override
     public void onFavoriteClick(Canteen canteen) {
         canteen.setAsFavorite(!canteen.isFavorite());
-        mCanteensViewModel.updateCanteen(canteen);
+        mCanteenListViewModel.updateCanteen(canteen);
     }
 
     @Override
     public void onCanteenClick(Canteen canteen) {
         canteen.increasePriority();
-        mCanteensViewModel.updateCanteen(canteen);
-        mCanteensViewModel.setSelectedCanteen(canteen);
-        FragmentController.showMealWeekFragment(getParentFragmentManager());
+        mCanteenListViewModel.updateCanteen(canteen);
+        FragmentController.showMealWeekFragment(getParentFragmentManager(), canteen.getId());
     }
 }

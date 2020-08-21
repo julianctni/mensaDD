@@ -1,6 +1,7 @@
 package com.pasta.mensadd.ui.viewmodel;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.pasta.mensadd.database.entity.Canteen;
@@ -17,29 +18,27 @@ public class MealsViewModel extends ViewModel {
     private MealRepository mMealRepository;
     private CanteenRepository mCanteenRepository;
     private Map<String, LiveData<List<Meal>>> meals = new HashMap<>();
-    private Canteen mCanteen;
+    private String mCanteenId;
+    private MutableLiveData<Boolean> mCanteenIsFavorite;
 
-    public MealsViewModel(MealRepository mealRepository, CanteenRepository canteenRepository, Canteen canteen) {
+    public MealsViewModel(MealRepository mealRepository, CanteenRepository canteenRepository, String canteenId) {
         mMealRepository = mealRepository;
         mCanteenRepository = canteenRepository;
-        mCanteen = canteen;
-    }
-
-    public Canteen getCanteen() {
-        return mCanteen;
+        mCanteenId = canteenId;
+        mCanteenIsFavorite = new MutableLiveData<>(false);
     }
 
     public LiveData<Canteen> getCanteenAsLiveData() {
-        return mCanteenRepository.getCanteenById(mCanteen.getId());
+        return mCanteenRepository.getCanteenById(mCanteenId);
     }
 
-    public void updateCanteen(Canteen canteen) {
-        mCanteenRepository.updateCanteen(canteen);
+    public void toggleCanteenAsFavorite() {
+        mCanteenRepository.toggleCanteenFavorite(mCanteenId);
     }
 
     public LiveData<List<Meal>> getMealsByDay(String day) {
         if (!meals.containsKey(day)) {
-            meals.put(day, mMealRepository.getMealsByCanteenByDay(mCanteen, day));
+            meals.put(day, mMealRepository.getMealsByCanteenByDay(mCanteenId, day));
         }
         return meals.get(day);
     }
@@ -49,7 +48,7 @@ public class MealsViewModel extends ViewModel {
     }
 
     public void triggerMealFetching() {
-        mMealRepository.fetchMeals(mCanteen);
+        mMealRepository.fetchMeals(mCanteenId);
     }
 
 }

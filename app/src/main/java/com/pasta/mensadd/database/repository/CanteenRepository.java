@@ -41,6 +41,14 @@ public class CanteenRepository {
         mFetchState = new MutableLiveData<>(NOT_FETCHING);
     }
 
+    public void toggleCanteenFavorite(String canteenId) {
+        mAppDatabase.getTransactionExecutor().execute(() -> {
+            Canteen canteen = mCanteenDao.getCanteenByIdSync(canteenId);
+            canteen.setAsFavorite(!canteen.isFavorite());
+            mCanteenDao.updateCanteen(canteen);
+        });
+    }
+
     public void insertOrUpdateCanteens(List<Canteen> serverCanteens) {
         mAppDatabase.getTransactionExecutor().execute(() -> {
             for (Canteen serverCanteen : serverCanteens) {
