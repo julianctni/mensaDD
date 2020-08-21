@@ -20,9 +20,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.pasta.mensadd.network.ServiceGenerator.FETCH_SUCCESS;
-import static com.pasta.mensadd.network.ServiceGenerator.IS_FETCHING;
-import static com.pasta.mensadd.network.ServiceGenerator.NOT_FETCHING;
+import static com.pasta.mensadd.domain.ApiRepository.FETCH_SUCCESS;
+import static com.pasta.mensadd.domain.ApiRepository.IS_FETCHING;
+import static com.pasta.mensadd.domain.ApiRepository.NOT_FETCHING;
 
 public class MealDayFragment extends Fragment {
 

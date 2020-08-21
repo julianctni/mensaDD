@@ -27,8 +27,9 @@ import com.pasta.mensadd.domain.canteen.CanteenRepository;
 import com.pasta.mensadd.network.ServiceGenerator;
 import com.pasta.mensadd.FragmentController;
 
-import static com.pasta.mensadd.network.ServiceGenerator.FETCH_ERROR;
-import static com.pasta.mensadd.network.ServiceGenerator.IS_FETCHING;
+import static com.pasta.mensadd.domain.ApiRepository.FETCH_ERROR;
+import static com.pasta.mensadd.domain.ApiRepository.IS_FETCHING;
+
 
 public class CanteenListFragment extends Fragment implements View.OnClickListener, CanteenListAdapter.OnFavoriteClickListener, CanteenListAdapter.OnCanteenClickListener {
 

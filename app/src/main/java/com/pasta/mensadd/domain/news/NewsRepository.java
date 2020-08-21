@@ -1,10 +1,10 @@
 package com.pasta.mensadd.domain.news;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.pasta.mensadd.AppDatabase;
 import com.pasta.mensadd.domain.ApiService;
+import com.pasta.mensadd.domain.ApiRepository;
 import com.pasta.mensadd.network.ApiResponse;
 
 import java.util.List;
@@ -13,22 +13,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.pasta.mensadd.network.ServiceGenerator.FETCH_ERROR;
-import static com.pasta.mensadd.network.ServiceGenerator.FETCH_SUCCESS;
-import static com.pasta.mensadd.network.ServiceGenerator.IS_FETCHING;
-import static com.pasta.mensadd.network.ServiceGenerator.NOT_FETCHING;
-
-public class NewsRepository {
-    private ApiService mApiService;
+public class NewsRepository extends ApiRepository {
     private NewsDao mNewsDao;
-    private AppDatabase mAppDatabase;
-    private MutableLiveData<Integer> mFetchState;
 
     public NewsRepository(AppDatabase appDatabase, ApiService apiService) {
-        mAppDatabase = appDatabase;
+        super(appDatabase, apiService);
         mNewsDao = appDatabase.newsDao();
-        mApiService = apiService;
-        mFetchState = new MutableLiveData<>(NOT_FETCHING);
     }
 
     public void insertNews(List<News> news) {

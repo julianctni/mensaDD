@@ -1,11 +1,11 @@
 package com.pasta.mensadd.domain.meal;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.pasta.mensadd.AppDatabase;
 import com.pasta.mensadd.domain.ApiService;
+import com.pasta.mensadd.domain.ApiRepository;
 import com.pasta.mensadd.domain.canteen.Canteen;
 import com.pasta.mensadd.domain.canteen.CanteenDao;
 import com.pasta.mensadd.network.ApiResponse;
@@ -17,26 +17,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.pasta.mensadd.network.ServiceGenerator.FETCH_ERROR;
-import static com.pasta.mensadd.network.ServiceGenerator.FETCH_SUCCESS;
-import static com.pasta.mensadd.network.ServiceGenerator.IS_FETCHING;
-import static com.pasta.mensadd.network.ServiceGenerator.NOT_FETCHING;
-
-public class MealRepository {
+public class MealRepository extends ApiRepository {
 
     public static final int FIFTEEN_MINUTES_MILLIS = 15 * 60 * 1000;
     private MealDao mMealDao;
     private CanteenDao mCanteenDao;
-    private ApiService mApiService;
-    private MutableLiveData<Integer> mFetchState;
-    private AppDatabase mAppDatabase;
 
     public MealRepository(AppDatabase appDatabase, ApiService apiService, String canteenId) {
-        mAppDatabase = appDatabase;
-        mMealDao = appDatabase.mealDao();
-        mCanteenDao = appDatabase.canteenDao();
-        mApiService = apiService;
-        mFetchState = new MutableLiveData<>(NOT_FETCHING);
+        super(appDatabase, apiService);
+        mMealDao = mAppDatabase.mealDao();
+        mCanteenDao = mAppDatabase.canteenDao();
         mAppDatabase.getQueryExecutor().execute(() -> {
             if (mCanteenDao.getLastMealUpdate(canteenId) < Calendar.getInstance().getTimeInMillis() - FIFTEEN_MINUTES_MILLIS) {
                 fetchMeals(canteenId);

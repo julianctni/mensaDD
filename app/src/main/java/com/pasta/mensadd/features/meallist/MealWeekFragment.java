@@ -21,15 +21,15 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import com.pasta.mensadd.AppDatabase;
+import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
-import com.pasta.mensadd.AppDatabase;
 import com.pasta.mensadd.domain.ApiService;
 import com.pasta.mensadd.domain.canteen.CanteenRepository;
 import com.pasta.mensadd.domain.meal.MealRepository;
 import com.pasta.mensadd.network.ServiceGenerator;
-import com.pasta.mensadd.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.pasta.mensadd.network.ServiceGenerator.FETCH_ERROR;
+import static com.pasta.mensadd.domain.ApiRepository.FETCH_ERROR;
 import static com.pasta.mensadd.features.meallist.MealsViewModel.ARGS_KEY_CANTEEN_ID;
 
 

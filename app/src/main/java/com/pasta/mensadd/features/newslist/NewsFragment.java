@@ -24,8 +24,8 @@ import com.pasta.mensadd.domain.ApiService;
 import com.pasta.mensadd.domain.news.NewsRepository;
 import com.pasta.mensadd.network.ServiceGenerator;
 
-import static com.pasta.mensadd.network.ServiceGenerator.FETCH_ERROR;
-import static com.pasta.mensadd.network.ServiceGenerator.IS_FETCHING;
+import static com.pasta.mensadd.domain.ApiRepository.FETCH_ERROR;
+import static com.pasta.mensadd.domain.ApiRepository.IS_FETCHING;
 
 public class NewsFragment extends Fragment {
 
