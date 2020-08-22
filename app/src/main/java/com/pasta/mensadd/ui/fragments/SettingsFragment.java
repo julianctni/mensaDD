@@ -12,7 +12,9 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.pasta.mensadd.database.AppDatabase;
@@ -42,6 +44,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         boolean nfcSupported = NfcAdapter.getDefaultAdapter(requireContext()) != null;
         findPreference(getString(R.string.pref_autostart_key)).setVisible(nfcSupported);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        view.setBackgroundColor(getResources().getColor(R.color.fragment_background));
+        return view;
     }
 
     @Override
