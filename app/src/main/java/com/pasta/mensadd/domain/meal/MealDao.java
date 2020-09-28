@@ -38,7 +38,7 @@ public interface MealDao {
     void removeDeprecatedMeals(List<String> mealIds);
 
     @Transaction
-    default void insertOrUpdateMeals(List<Meal> meals) {
+    default void insertOrUpdateMeals(String canteenId, List<Meal> meals) {
         List<Long> insertResults = insertMeals(meals);
         List<Meal> updateList = new ArrayList<>();
         for (int i = 0; i < insertResults.size(); i++) {
@@ -49,7 +49,7 @@ public interface MealDao {
         if (!updateList.isEmpty()) {
             updateMeals(updateList);
         }
-        List<String> mealIds = getMealIdsByCanteen(meals.get(0).getCanteenId());
+        List<String> mealIds = getMealIdsByCanteen(canteenId);
         for (Meal meal : meals) {
             mealIds.remove(meal.getId());
         }

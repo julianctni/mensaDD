@@ -38,7 +38,7 @@ public class MealRepository extends ApiRepository {
 
     public void insertOrUpdateMeals(List<Meal> meals, String canteenId, long scrapedAt) {
         mAppDatabase.getTransactionExecutor().execute(() -> {
-            mMealDao.insertOrUpdateMeals(meals);
+            mMealDao.insertOrUpdateMeals(canteenId, meals);
             Canteen canteen = mCanteenDao.getCanteenByIdSync(canteenId);
             canteen.setLastMealScraping(scrapedAt);
             canteen.setLastMealUpdate(Calendar.getInstance().getTimeInMillis());
