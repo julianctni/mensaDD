@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
+import com.pasta.mensadd.R;
+
 public class PreferenceService {
 
     private SharedPreferences mSharedPreferences;
