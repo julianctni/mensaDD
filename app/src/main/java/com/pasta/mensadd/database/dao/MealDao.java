@@ -38,6 +38,9 @@ public interface MealDao {
         }
     }
 
+    @Query("DELETE FROM table_meals WHERE id IN (:mealIds)")
+    void removeDeprecatedMeals(List<String> mealIds);
+
     @Transaction
     default void insertOrUpdateMeals(List<Meal> meals) {
         List<Long> insertResults = insertMeals(meals);
@@ -50,16 +53,16 @@ public interface MealDao {
         if (!updateList.isEmpty()) {
             updateMeals(updateList);
         }
+        List<String> mealIds = getMealIdsByCanteen(meals.get(0).getCanteenId());
+        for (Meal meal : meals) {
+            mealIds.remove(meal.getId());
+        }
+        removeDeprecatedMeals(mealIds);
     }
-
-    @Transaction
-    default void insertOrUpdateAll(List<Meal> meals) {
-
-    }
-
-
 
     @Query("SELECT * FROM table_meals WHERE canteenId = :canteenId and day = :day")
     LiveData<List<Meal>> getMealsByCanteenByDay(String canteenId, String day);
 
+    @Query("SELECT id FROM table_meals WHERE canteenId = :canteenId")
+    List<String> getMealIdsByCanteen(String canteenId);
 }
