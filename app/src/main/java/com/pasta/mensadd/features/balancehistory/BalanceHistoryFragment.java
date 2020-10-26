@@ -16,6 +16,7 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.AppDatabase;
 import com.pasta.mensadd.domain.balanceentry.BalanceEntry;
 import com.pasta.mensadd.domain.balanceentry.BalanceEntryRepository;
+import com.pasta.mensadd.features.balancecheck.BalanceCheckService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.SubcolumnValue;
+import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
@@ -81,29 +83,32 @@ public class BalanceHistoryFragment extends Fragment {
         BalanceHistoryViewModelFactory balanceHistoryViewModelFactory = new BalanceHistoryViewModelFactory(new BalanceEntryRepository(AppDatabase.getInstance(requireContext())));
         BalanceHistoryViewModel balanceHistoryViewModel = new ViewModelProvider(this, balanceHistoryViewModelFactory).get(BalanceHistoryViewModel.class);
         balanceHistoryViewModel.getBalanceEntries().observe(getViewLifecycleOwner(), balanceEntries -> {
-            updateBalanceHistory(true, balanceEntries);
+            updateBalanceHistory(balanceEntries);
+        });
+
+        balanceHistoryViewModel.getLatestBalanceEntry().observe(getViewLifecycleOwner(), balanceEntry -> {
+            if (balanceEntry == null) {
+                mCurrentBalance.setText(getString(R.string.balance_check_explanation));
+                mCurrentLastTransaction.setVisibility(View.GONE);
+            } else {
+                mCurrentBalance.setText(getString(R.string.balance_check_balance, BalanceCheckService.formatAsString(balanceEntry.getCardBalance())));
+                mCurrentLastTransaction.setText(getString(R.string.balance_check_last_transaction, BalanceCheckService.formatAsString(balanceEntry.getLastTransaction())));
+                mCurrentBalance.setVisibility(View.VISIBLE);
+                mCurrentLastTransaction.setVisibility(View.VISIBLE);
+            }
         });
 
         return v;
     }
 
-    public String formatMoneyString(String value) {
-        String[] split = value.split("\\.");
-        String euro = split[0];
-        String cent = split[1];
-        if (cent.length() < 2)
-            cent += "0";
-        return euro + "," + cent + "€";
-    }
-
-
     public void setUpBalanceChart(List<BalanceEntry> balanceEntries) {
         List<PointValue> values = new ArrayList<>();
         List<AxisValue> axisValues = new ArrayList<>();
+        float mMaxBalance = 0;
         for (int i = 0; i < balanceEntries.size(); i++) {
             values.add(new PointValue(i, balanceEntries.get(i).getCardBalance()));
-            //if (mBalance.get(i) > mMaxBalance)
-            //mMaxBalance = mBalance.get(i);
+            if (balanceEntries.get(i).getCardBalance() > mMaxBalance)
+                mMaxBalance = balanceEntries.get(i).getCardBalance();
             Date date = new Date(balanceEntries.get(i).getTimestamp());
             axisValues.add(new AxisValue(i).setLabel(mDateFormat.format(date)));
         }
@@ -118,7 +123,6 @@ public class BalanceHistoryFragment extends Fragment {
         Axis axisY = new Axis().setHasLines(true).setMaxLabelChars(4).setFormatter(new SimpleAxisValueFormatter().setAppendedText("€".toCharArray()));
         Axis axisX = new Axis(axisValues).setMaxLabelChars(5);
 
-
         data.setAxisYLeft(axisY);
         data.setAxisXBottom(axisX);
         data.setLines(lines);
@@ -126,7 +130,15 @@ public class BalanceHistoryFragment extends Fragment {
         for (int j = 0; j < line.getValues().size(); j++) {
             line.getValues().get(j).setTarget(j, balanceEntries.get(j).getCardBalance());
         }
+        mBalanceChart.setViewportCalculationEnabled(false);
         mBalanceChart.setLineChartData(data);
+        final Viewport vCurrent = mBalanceChart.getMaximumViewport();
+        vCurrent.bottom = 0;
+        vCurrent.top = mMaxBalance * 1.1f;
+        vCurrent.left = 0;
+        vCurrent.right = balanceEntries.size()-1;
+        mBalanceChart.setCurrentViewport(vCurrent);
+        mBalanceChart.setMaximumViewport(vCurrent);
     }
 
     public void setUpTransactionsChart(List<BalanceEntry> balanceEntries) {
@@ -159,7 +171,7 @@ public class BalanceHistoryFragment extends Fragment {
         }
     }
 
-    public void updateBalanceHistory(boolean firstSetup, List<BalanceEntry> balanceEntries) {
+    public void updateBalanceHistory(List<BalanceEntry> balanceEntries) {
 
 
         if (balanceEntries.size() > 1) {
@@ -167,23 +179,11 @@ public class BalanceHistoryFragment extends Fragment {
             setUpTransactionsChart(balanceEntries);
             noBalanceText.setVisibility(View.GONE);
             noTransactionText.setVisibility(View.GONE);
-            if (firstSetup)
-                animateGraphs();
         } else {
             if (balanceEntries.isEmpty()) {
                 mCurrentBalance.setText(getString(R.string.balance_check_explanation));
             }
         }
-    }
-
-    public void animateGraphs() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mBalanceChart.startDataAnimation();
-                mTransactionChart.startDataAnimation();
-            }
-        }, 500);
     }
 
 }

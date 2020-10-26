@@ -44,6 +44,8 @@
         android:layout_below="@id/text_balanceCheck_lastTransaction"
         android:layout_alignParentEnd="true"
         android:text="@string/button_save_balance_values"
+        android:enabled="false"
+        android:alpha="0.5"
         android:textColor="@color/white" />
 
 </RelativeLayout>

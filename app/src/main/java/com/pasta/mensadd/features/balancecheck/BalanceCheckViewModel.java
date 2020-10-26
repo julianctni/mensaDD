@@ -9,16 +9,23 @@ import com.pasta.mensadd.domain.balanceentry.BalanceEntryRepository;
 public class BalanceCheckViewModel extends ViewModel {
 
     private BalanceEntryRepository mBalanceEntryRepository;
-    private LiveData<BalanceEntry> mLatestBalanceEntry;
+    private LiveData<BalanceEntry> mLatestBalanceEntryLive;
+    private BalanceEntry mLatestBalanceEntry;
     private BalanceEntry mCurrentBalanceEntry;
 
     public BalanceCheckViewModel(BalanceEntryRepository balanceEntryRepository) {
         mBalanceEntryRepository = balanceEntryRepository;
-        mLatestBalanceEntry = mBalanceEntryRepository.getLatestBalanceEntry();
+        mLatestBalanceEntryLive = mBalanceEntryRepository.getLatestBalanceEntry();
     }
 
-    public void insertBalanceEntry(BalanceEntry balanceEntry) {
-        mBalanceEntryRepository.insertBalanceEntry(balanceEntry);
+    public boolean insertBalanceEntry(BalanceEntry balanceEntry) {
+        if (mLatestBalanceEntry != null && mLatestBalanceEntry.getCardBalance() == mCurrentBalanceEntry.getCardBalance()
+                && mLatestBalanceEntry.getLastTransaction() == mCurrentBalanceEntry.getLastTransaction()) {
+            return false;
+        } else {
+            mBalanceEntryRepository.insertBalanceEntry(balanceEntry);
+            return true;
+        }
     }
 
     public void setCurrentBalanceEntry(BalanceEntry balanceEntry) {
@@ -29,7 +36,12 @@ public class BalanceCheckViewModel extends ViewModel {
         return mCurrentBalanceEntry;
     }
 
-    public LiveData<BalanceEntry> getLastBalanceEntry() {
-        return mLatestBalanceEntry;
+    public LiveData<BalanceEntry> getLastBalanceEntryLive() {
+        return mLatestBalanceEntryLive;
     }
+
+    public void setLatestBalanceEntry(BalanceEntry balanceEntry) {
+        this.mLatestBalanceEntry = balanceEntry;
+    }
+
 }

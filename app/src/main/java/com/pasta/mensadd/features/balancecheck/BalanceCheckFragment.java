@@ -2,6 +2,7 @@ package com.pasta.mensadd.features.balancecheck;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.pasta.mensadd.R;
 import com.pasta.mensadd.AppDatabase;
+import com.pasta.mensadd.R;
 import com.pasta.mensadd.domain.balanceentry.BalanceEntry;
 import com.pasta.mensadd.domain.balanceentry.BalanceEntryRepository;
 
@@ -42,17 +43,21 @@ public class BalanceCheckFragment extends Fragment {
         Observer<BalanceEntry> latestBalanceObserver = new Observer<BalanceEntry>() {
             @Override
             public void onChanged(BalanceEntry balanceEntry) {
-                if (balanceEntry.getCardBalance() == mBalanceCheckViewModel.getCurrentBalanceEntry().getCardBalance()) {
-                    Toast.makeText(requireContext(), getString(R.string.balance_already_saved), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(requireContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
-                    mBalanceCheckViewModel.insertBalanceEntry(mBalanceCheckViewModel.getCurrentBalanceEntry());
-                }
-                mBalanceCheckViewModel.getLastBalanceEntry().removeObserver(this);
-                animateView(false);
+                mBalanceCheckViewModel.setLatestBalanceEntry(balanceEntry);
+                saveBalanceCheckButton.setEnabled(true);
+                saveBalanceCheckButton.setAlpha(1.0f);
             }
         };
-        saveBalanceCheckButton.setOnClickListener((v) -> mBalanceCheckViewModel.getLastBalanceEntry().observe(getViewLifecycleOwner(), latestBalanceObserver));
+        mBalanceCheckViewModel.getLastBalanceEntryLive().observe(getViewLifecycleOwner(), latestBalanceObserver);
+        saveBalanceCheckButton.setOnClickListener((v) -> {
+            boolean insertResult = mBalanceCheckViewModel.insertBalanceEntry(mBalanceCheckViewModel.getCurrentBalanceEntry());
+            if (insertResult) {
+                Toast.makeText(requireContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.balance_already_saved), Toast.LENGTH_SHORT).show();
+            }
+            animateView(false);
+        });
         return view;
     }
 
