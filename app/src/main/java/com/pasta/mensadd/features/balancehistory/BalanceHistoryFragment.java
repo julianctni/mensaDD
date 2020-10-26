@@ -172,8 +172,6 @@ public class BalanceHistoryFragment extends Fragment {
     }
 
     public void updateBalanceHistory(List<BalanceEntry> balanceEntries) {
-
-
         if (balanceEntries.size() > 1) {
             setUpBalanceChart(balanceEntries);
             setUpTransactionsChart(balanceEntries);

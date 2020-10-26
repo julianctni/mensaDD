@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar mToolbar;
     private BalanceCheckService mBalanceCheckService;
     private PermissionsManager mPermissionManager;
+    private PreferenceService mPreferenceService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         isNfcSupported = NfcAdapter.getDefaultAdapter(this.getApplicationContext()) != null;
         ServiceGenerator.init(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key));
-        PreferenceService preferenceService = new PreferenceService(this);
-        String darkMode = preferenceService.getDarkModeSetting();
+        mPreferenceService = new PreferenceService(this);
+        String darkMode = mPreferenceService.getDarkModeSetting();
 
         if (darkMode.equals(getString(R.string.pref_dark_mode_yes))) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -64,26 +65,27 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(mToolbar);
         setToolbarContent("");
 
-        preferenceService.removePreference("first_start");
-        preferenceService.removePreference("pref_show_tut");
-
-        if (isNfcSupported) {
-            mBalanceCheckService = new BalanceCheckService();
-            mBalanceCheckService.registerNfcAutostart(this, preferenceService);
-            if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
-                onNewIntent(getIntent());
-            }
-        }
+        mPreferenceService.removePreference("first_start");
+        mPreferenceService.removePreference("pref_show_tut");
 
         if (getSupportFragmentManager().findFragmentById(R.id.layout_mainActivity_main) == null) {
             FragmentController.showCanteenListFragment(getSupportFragmentManager());
         }
+        if (isNfcSupported) {
+            mBalanceCheckService = new BalanceCheckService();
+            mBalanceCheckService.registerNfcAutostart(this, mPreferenceService);
+        }
+
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (isNfcSupported) {
+            if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
+                onNewIntent(getIntent());
+            }
             mBalanceCheckService.setUpCardCheck(this);
         }
     }
