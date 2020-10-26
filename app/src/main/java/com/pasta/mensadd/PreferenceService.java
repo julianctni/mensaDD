@@ -13,6 +13,7 @@ public class PreferenceService {
     private static final String LAST_CANTEEN_UPDATE = "last_canteen_update";
     private static final String BACON_FEATURE = "pref_bacon";
     public static final String TRANSFERED_LEGACY_PRIO = "transfered_legacy_prio";
+    public static final String SHOW_LATEST_UPDATES = "show_latest_updates_";
 
     public PreferenceService(Context context) {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);

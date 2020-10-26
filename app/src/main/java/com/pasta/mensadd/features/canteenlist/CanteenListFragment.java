@@ -33,7 +33,7 @@ import static com.pasta.mensadd.domain.ApiRepository.IS_FETCHING;
 
 public class CanteenListFragment extends Fragment implements View.OnClickListener, CanteenListAdapter.OnFavoriteClickListener, CanteenListAdapter.OnCanteenClickListener {
 
-    private CardView mTutorialCard;
+    private CardView mLatestUpdatesCard;
     private CanteenListViewModel mCanteenListViewModel;
     private PackageInfo mPackageInfo;
     private PreferenceService mPreferenceService;
@@ -56,7 +56,7 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
         );
         CanteenListViewModelFactory canteenListViewModelFactory = new CanteenListViewModelFactory(canteenRepository);
         mCanteenListViewModel = new ViewModelProvider(this, canteenListViewModelFactory).get(CanteenListViewModel.class);
-        mTutorialCard = view.findViewById(R.id.tutorialCard);
+        mLatestUpdatesCard = view.findViewById(R.id.latestUpdatesCard);
         RecyclerView canteenListRecyclerView = view.findViewById(R.id.canteenList);
         view.findViewById(R.id.latestUpdatesCloseButton).setOnClickListener(this);
         LinearLayoutManager layoutParams = new LinearLayoutManager(requireActivity());
@@ -75,28 +75,24 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
                 Toast.makeText(requireContext(), getString(R.string.error_fetching_canteens, getString(errorMsgId)), Toast.LENGTH_SHORT).show();
             }
         });
+        showLatestUpdatesCard();
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        showTutorial();
-    }
-
-    void showTutorial() {
-        if (mPackageInfo != null && mPreferenceService.getBooleanPreference("pref_show_tut_" + mPackageInfo.versionCode, true)) {
-            mTutorialCard.setVisibility(View.VISIBLE);
+    void showLatestUpdatesCard() {
+        if (mPackageInfo != null && mPreferenceService.getBooleanPreference(PreferenceService.SHOW_LATEST_UPDATES + mPackageInfo.versionCode, true)) {
+            mLatestUpdatesCard.setVisibility(View.VISIBLE);
             mPreferenceService.removePreference("pref_show_tut_" + (mPackageInfo.versionCode - 1));
+            mPreferenceService.removePreference(PreferenceService.SHOW_LATEST_UPDATES + (mPackageInfo.versionCode - 1));
         }
     }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.latestUpdatesCloseButton) {
-            mTutorialCard.setVisibility(View.GONE);
+            mLatestUpdatesCard.setVisibility(View.GONE);
             if (mPackageInfo != null) {
-                mPreferenceService.setBooleanPreference("pref_show_tut_" + mPackageInfo.versionCode, false);
+                mPreferenceService.setBooleanPreference(PreferenceService.SHOW_LATEST_UPDATES + mPackageInfo.versionCode, false);
             }
         }
     }

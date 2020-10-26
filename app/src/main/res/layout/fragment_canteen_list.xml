@@ -14,7 +14,7 @@
         android:indeterminateTint="@color/pink_dark"
         android:visibility="gone" />
 
-    <include layout="@layout/tutorial"/>
+    <include layout="@layout/card_latest_updates"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/canteenList"

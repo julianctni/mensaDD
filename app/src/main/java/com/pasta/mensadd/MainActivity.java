@@ -22,6 +22,7 @@ import com.pasta.mensadd.features.balancecheck.CardLoadedCallback;
 import com.pasta.mensadd.domain.balanceentry.BalanceEntry;
 import com.pasta.mensadd.network.ServiceGenerator;
 
+import java.io.File;
 import java.util.Calendar;
 
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Delete old non-room database
+        getApplicationContext().deleteDatabase("mensadd.db");
         setContentView(R.layout.activity_main);
         isNfcSupported = NfcAdapter.getDefaultAdapter(this.getApplicationContext()) != null;
         ServiceGenerator.init(getString(R.string.api_base_url), getString(R.string.api_user), getString(R.string.api_key));
