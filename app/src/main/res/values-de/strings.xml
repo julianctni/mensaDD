@@ -48,7 +48,7 @@
     <string name="send_feedback_mail">Feedback E-Mail verfassen</string>
     <string name="canteens_loading_progress">Mensen werden geladen...</string>
     <string name="delete_data">Daten wurden erfolgreich gelöscht.</string>
-    <string name="app_version">Version 3.1 / Aug 2020</string>
+    <string name="app_version">Version 4.0 / Okt 2020</string>
     <string name="pref_veg_meals_title">Grüne Gerichte</string>
     <string name="pref_veg_meals_summary">Färbe vegane und vegetarische Gerichte grün ein.</string>
     <string name="meals_no_image">kein Bild verfügbar</string>

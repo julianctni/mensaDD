@@ -36,7 +36,6 @@
         </provider>
 
 
-        <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService"/>
         <activity-alias
             android:name=".ActivityAlias"
             android:targetActivity=".MainActivity"

@@ -11,7 +11,7 @@ import com.pasta.mensadd.domain.canteen.Canteen;
 
 import org.jetbrains.annotations.NotNull;
 
-@Entity(tableName = "table_meals", foreignKeys = @ForeignKey(entity = Canteen.class, parentColumns = "id", childColumns = "canteenId", onDelete = ForeignKey.CASCADE))
+@Entity(tableName = "table_meals"/*, foreignKeys = @ForeignKey(entity = Canteen.class, parentColumns = "id", childColumns = "canteenId", onDelete = ForeignKey.CASCADE)*/)
 public class Meal {
 
     @NonNull
