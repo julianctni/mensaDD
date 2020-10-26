@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 
 import com.pasta.mensadd.AppDatabase;
 import com.pasta.mensadd.PreferenceService;
-import com.pasta.mensadd.domain.ApiService;
 import com.pasta.mensadd.domain.ApiRepository;
+import com.pasta.mensadd.domain.ApiService;
 import com.pasta.mensadd.network.ApiResponse;
 
 import java.util.Calendar;
@@ -14,6 +14,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.pasta.mensadd.PreferenceService.TRANSFERED_LEGACY_PRIO;
 
 public class CanteenRepository extends ApiRepository {
 
@@ -46,7 +48,14 @@ public class CanteenRepository extends ApiRepository {
                     serverCanteen.setLastMealUpdate(localCanteen.getLastMealUpdate());
                     serverCanteen.setPriority(localCanteen.getPriority());
                 }
+                if (!mPreferenceService.getBooleanPreference(TRANSFERED_LEGACY_PRIO, false)) {
+                    int oldPriority = mPreferenceService.getCanteenLegacyPriority(serverCanteen.getId());
+                    if (oldPriority != -1) {
+                        serverCanteen.setPriority(oldPriority);
+                    }
+                }
             }
+            mPreferenceService.setBooleanPreference(TRANSFERED_LEGACY_PRIO, true);
             mCanteenDao.insertOrUpdateCanteens(serverCanteens);
         });
     }

@@ -22,8 +22,7 @@ import java.util.concurrent.Executors;
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;
-    public static final Executor dbExecutor = Executors.newSingleThreadExecutor();
-    private static final String DB_NAME = "mensadd_database";
+    private static final String DB_NAME = "mensadd_v4.0_database";
 
     public abstract CanteenDao canteenDao();
     public abstract MealDao mealDao();

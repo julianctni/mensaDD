@@ -5,15 +5,14 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
-import com.pasta.mensadd.R;
-
 public class PreferenceService {
 
     private SharedPreferences mSharedPreferences;
     private Context mContext;
 
-    private static final String LAST_CANTEEN_UPDATE = "lastCanteenUpdate";
+    private static final String LAST_CANTEEN_UPDATE = "last_canteen_update";
     private static final String BACON_FEATURE = "pref_bacon";
+    public static final String TRANSFERED_LEGACY_PRIO = "transfered_legacy_prio";
 
     public PreferenceService(Context context) {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -66,5 +65,11 @@ public class PreferenceService {
 
     public void setBooleanPreference(String key, boolean value) {
         mSharedPreferences.edit().putBoolean(key, value).apply();
+    }
+
+    public int getCanteenLegacyPriority(String canteenId) {
+        int priority = mSharedPreferences.getInt("priority_" + canteenId, -1);
+        mSharedPreferences.edit().remove("priority_" + canteenId).apply();
+        return priority;
     }
 }
