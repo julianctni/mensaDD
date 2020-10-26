@@ -1,15 +1,17 @@
 package com.pasta.mensadd.features.canteenmap;
 
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,9 +28,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.JsonPrimitive;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
@@ -39,8 +45,10 @@ import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.AppDatabase;
@@ -57,8 +65,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 
-public class CanteenMapFragment extends Fragment implements PermissionsListener {
+
+public class CanteenMapFragment extends Fragment implements PermissionsListener, MapboxMap.OnMapClickListener {
     private MapView mMapView;
     private MapboxMap mMap;
 
@@ -67,9 +78,19 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
     private TextView mCanteenHours;
     private LinearLayout mInfoCard;
 
+    private ValueAnimator markerAnimator;
+    private boolean markerSelected = false;
+
     private LocationComponent mLocationComponent;
 
     private CanteenMapViewModel mCanteenMapViewModel;
+
+    private static final String SELECTED_CANTEEN_MARKER = "s-marker";
+    private static final String SELECTED_CANTEEN_MARKER_LAYER = "s-marker-layer";
+    private static final String CANTEEN_MARKER_LAYER = "marker-layer";
+    private static final String CANTEEN_MARKER_IMAGE = "marker-image";
+    private static final String CANTEEN_MARKER_SOURCE = "marker-source";
+    private static final String CANTEEN_ID = "canteen-id";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,7 +119,10 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
         mCanteenName = view.findViewById(R.id.mapInfoCardCanteenName);
         mInfoCard = view.findViewById(R.id.mapInfoCard);
         MaterialButton buttonClose = view.findViewById(R.id.mapViewCloseButton);
-        buttonClose.setOnClickListener(button -> mInfoCard.setVisibility(View.GONE));
+        buttonClose.setOnClickListener(button -> {
+            mInfoCard.setVisibility(View.GONE);
+            deselectMarker((SymbolLayer) mMap.getStyle().getLayer(SELECTED_CANTEEN_MARKER_LAYER));
+        });
         MaterialButton buttonMeals = view.findViewById(R.id.mapViewToMealsButton);
         buttonMeals.setOnClickListener(button -> FragmentController.showMealWeekFragment(getParentFragmentManager(), mCanteenMapViewModel.getSelectedCanteenId()));
         mMapView.onCreate(savedInstanceState);
@@ -119,33 +143,127 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
             styleUrl = getResources().getString(R.string.mapbox_style_url_dark);
         }
         map.setStyle(styleUrl, style -> {
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.map_marker);
-            Objects.requireNonNull(map.getStyle()).addImage("mensa-marker", bm);
-            SymbolManager symbolManager = new SymbolManager(mMapView, map, style);
-            List<SymbolOptions> canteenSymbols = new ArrayList<>();
-            symbolManager.setIconAllowOverlap(true);
-            symbolManager.addClickListener(symbol -> {
-                mCanteenMapViewModel.setSelectedCanteenId(Objects.requireNonNull(symbol.getData()).getAsString());
-                mCanteenMapViewModel.getCanteenById(mCanteenMapViewModel.getSelectedCanteenId()).observe(requireActivity(), canteen -> {
-                    mCanteenName.setText(canteen.getName());
-                    mCanteenAddress.setText(canteen.getAddress());
-                    mCanteenHours.setText(canteen.getHours());
-                    if (mInfoCard.getVisibility() == View.GONE) {
-                        mInfoCard.setVisibility(View.VISIBLE);
-                    }
-                });
-            });
+            List<Feature> canteenCoordinates = new ArrayList<>();
             LatLngBounds.Builder bounds = new LatLngBounds.Builder();
-            for (Canteen c : canteens) {
 
-                JsonPrimitive jsonId = new JsonPrimitive(c.getId());
+            for (Canteen c : canteens) {
                 LatLng position = new LatLng(c.getPosLat(), c.getPosLong());
                 bounds.include(position);
-                canteenSymbols.add(new SymbolOptions().withLatLng(position).withIconImage("mensa-marker").withData(jsonId));
+                Feature feature = Feature.fromGeometry(
+                        Point.fromLngLat(c.getPosLong(), c.getPosLat()));
+                feature.addStringProperty(CANTEEN_ID, c.getId());
+                canteenCoordinates.add(feature);
             }
+
+            style.addSource(new GeoJsonSource(CANTEEN_MARKER_SOURCE,
+                    FeatureCollection.fromFeatures(canteenCoordinates)));
+
+            style.addImage(CANTEEN_MARKER_IMAGE, BitmapFactory.decodeResource(
+                    this.getResources(), R.drawable.map_marker));
+
+            style.addLayer(new SymbolLayer(CANTEEN_MARKER_LAYER, CANTEEN_MARKER_SOURCE)
+                    .withProperties(PropertyFactory.iconImage(CANTEEN_MARKER_IMAGE),
+                            iconAllowOverlap(true),
+                            iconOffset(new Float[]{0f, -9f})));
+
+            style.addSource(new GeoJsonSource(SELECTED_CANTEEN_MARKER));
+
+            style.addLayer(new SymbolLayer(SELECTED_CANTEEN_MARKER_LAYER, SELECTED_CANTEEN_MARKER)
+                    .withProperties(PropertyFactory.iconImage(CANTEEN_MARKER_IMAGE),
+                            iconAllowOverlap(true),
+                            iconOffset(new Float[]{0f, -9f})));
+
+            mMap.addOnMapClickListener(this);
             mMap.easeCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 50), 1500);
-            symbolManager.create(canteenSymbols);
+
+            mCanteenMapViewModel.getSelectedCanteen().observe(getViewLifecycleOwner(), canteen -> {
+                if (canteen == null) {
+                    return;
+                }
+
+                GeoJsonSource source = style.getSourceAs(SELECTED_CANTEEN_MARKER);
+                if (source != null) {
+                    Feature feature = Feature.fromGeometry(
+                            Point.fromLngLat(canteen.getPosLong(), canteen.getPosLat()));
+                    feature.addStringProperty(CANTEEN_ID, canteen.getId());
+                    source.setGeoJson(FeatureCollection.fromFeatures(
+                            new Feature[]{feature}));
+                }
+                selectMarker((SymbolLayer) mMap.getStyle().getLayer(SELECTED_CANTEEN_MARKER_LAYER));
+                CameraPosition cp = new CameraPosition.Builder().zoom(12).padding(0,0,0,400).target(new LatLng(canteen.getPosLat(), canteen.getPosLong())).build();
+                mMap.easeCamera(CameraUpdateFactory.newCameraPosition(cp));
+                mCanteenName.setText(canteen.getName());
+                mCanteenAddress.setText(canteen.getAddress());
+                mCanteenHours.setText(canteen.getHours());
+                if (mInfoCard.getVisibility() == View.GONE) {
+                    mInfoCard.setVisibility(View.VISIBLE);
+                }
+            });
         });
+    }
+
+    @Override
+    public boolean onMapClick(@NonNull LatLng point) {
+        Style style = mMap.getStyle();
+        if (style != null) {
+            final SymbolLayer selectedMarkerSymbolLayer =
+                    (SymbolLayer) style.getLayer(SELECTED_CANTEEN_MARKER_LAYER);
+
+            final PointF pixel = mMap.getProjection().toScreenLocation(point);
+            List<Feature> features = mMap.queryRenderedFeatures(pixel, CANTEEN_MARKER_LAYER);
+            List<Feature> selectedFeature = mMap.queryRenderedFeatures(
+                    pixel, SELECTED_CANTEEN_MARKER_LAYER);
+
+            if (selectedFeature.size() > 0 && markerSelected) {
+                return false;
+            }
+
+            if (features.isEmpty()) {
+                if (markerSelected) {
+                    deselectMarker(selectedMarkerSymbolLayer);
+                    mInfoCard.setVisibility(View.GONE);
+                }
+                return false;
+            }
+
+            GeoJsonSource source = style.getSourceAs(SELECTED_CANTEEN_MARKER);
+            if (source != null) {
+                source.setGeoJson(FeatureCollection.fromFeatures(
+                        new Feature[]{Feature.fromGeometry(features.get(0).geometry())}));
+            }
+
+            if (markerSelected) {
+                deselectMarker(selectedMarkerSymbolLayer);
+            }
+
+            if (features.size() > 0) {
+                String canteenId = features.get(0).getStringProperty(CANTEEN_ID);
+                mCanteenMapViewModel.setSelectedCanteenId(Objects.requireNonNull(canteenId));
+            }
+        }
+        return true;
+    }
+
+    private void selectMarker(final SymbolLayer iconLayer) {
+        markerAnimator = new ValueAnimator();
+        markerAnimator.setObjectValues(1f, 1.5f);
+        markerAnimator.setDuration(200);
+        markerAnimator.addUpdateListener(animator -> iconLayer.setProperties(
+                PropertyFactory.iconSize((float) animator.getAnimatedValue())
+        ));
+        markerAnimator.start();
+        markerSelected = true;
+    }
+
+    private void deselectMarker(final SymbolLayer iconLayer) {
+        markerAnimator.setObjectValues(1.5f, 1f);
+        markerAnimator.setDuration(200);
+        markerAnimator.addUpdateListener(animator -> iconLayer.setProperties(
+                PropertyFactory.iconSize((float) animator.getAnimatedValue())
+        ));
+        markerAnimator.start();
+        markerSelected = false;
+        mCanteenMapViewModel.setSelectedCanteenId(null);
     }
 
     @SuppressLint("MissingPermission")
@@ -203,8 +321,6 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
     public void onPause() {
         super.onPause();
         mMapView.onPause();
-        // mMapZoom = (int) mMap.getCameraPosition().zoom;
-        // mMapCenter = mMap.getCameraPosition().target;
     }
 
     @Override
@@ -225,6 +341,12 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
         mMapView.onDestroy();
         if (mLocationComponent != null)
             mLocationComponent.onDestroy();
+        if (mMap != null) {
+            mMap.removeOnMapClickListener(this);
+        }
+        if (markerAnimator != null) {
+            markerAnimator.cancel();
+        }
     }
 
     @Override
@@ -281,4 +403,6 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener 
         snackbar.setAction(getString(R.string.location_permission_missing_check), v -> requestLocationPermission());
         snackbar.show();
     }
+
+
 }
