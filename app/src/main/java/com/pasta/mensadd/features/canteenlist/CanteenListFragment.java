@@ -4,6 +4,7 @@ package com.pasta.mensadd.features.canteenlist;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,12 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
         mCanteenListViewModel.getCanteens().observe(getViewLifecycleOwner(), canteenListAdapter::submitList);
         mCanteenListViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
             ProgressBar progressBar = view.findViewById(R.id.canteenListProgressBar);
-            progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
+            if (progressBar.getVisibility() == View.VISIBLE && fetchState != IS_FETCHING) {
+                Handler handler = new Handler();
+                handler.postDelayed(() -> progressBar.setVisibility(View.GONE), 2000);
+            } else {
+                progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
+            }
             if (fetchState == FETCH_ERROR) {
                 int errorMsgId = !Utils.isOnline(requireContext()) ? R.string.error_no_internet : R.string.error_unknown;
                 Toast.makeText(requireContext(), getString(R.string.error_fetching_canteens, getString(errorMsgId)), Toast.LENGTH_SHORT).show();

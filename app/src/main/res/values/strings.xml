@@ -92,13 +92,14 @@
 
     <string name="toast_bacon" translatable="false">MAKE BAUCHSPECK GREAT AGAIN!</string>
     <string name="imprint_icon_bacon">The bacon icon was created by Jacob Halton from the Noun Project and slightly modified by myself.</string>
-    <string name="last_server_check">Last update: %1$s</string>
+    <string name="last_server_check">Last server-side update: %1$s</string>
     <string name="dots" translatable="false">...</string>
     <string name="button_close">Close</string>
     <string name="button_meals">Meals</string>
     <string name="button_save_balance_values">Save</string>
     <string name="today">today</string>
     <string name="tomorrow">tomorrow</string>
+    <string name="yesterday">yesterday</string>
     <string name="location_permission_missing">Permission for location access is needed.</string>
     <string name="location_permission_missing_check">Retry</string>
     <string name="latest_updates_heading">What\'s new?</string>

@@ -2,6 +2,7 @@ package com.pasta.mensadd.features.newslist;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,7 +51,12 @@ public class NewsFragment extends Fragment {
         mNewsViewModel.triggerNewsFetching(false);
         mNewsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
             ProgressBar progressBar = view.findViewById(R.id.newsListProgressBar);
-            progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
+            if (progressBar.getVisibility() == View.VISIBLE && fetchState != IS_FETCHING) {
+                Handler handler = new Handler();
+                handler.postDelayed(() -> progressBar.setVisibility(View.GONE), 2000);
+            } else {
+                progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
+            }
             if (fetchState == FETCH_ERROR) {
                 int errorMsgId = !Utils.isOnline(requireContext()) ? R.string.error_no_internet : R.string.error_unknown;
                 Toast.makeText(requireContext(), getString(R.string.error_fetching_news, getString(errorMsgId)), Toast.LENGTH_SHORT).show();

@@ -2,6 +2,7 @@ package com.pasta.mensadd.features.meallist;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +75,12 @@ public class MealDayFragment extends Fragment {
 
         mMealsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
             ProgressBar progressBar = view.findViewById(R.id.mealListProgressBar);
-            progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
+            if (progressBar.getVisibility() == View.VISIBLE && fetchState != IS_FETCHING) {
+                Handler handler = new Handler();
+                handler.postDelayed(() -> progressBar.setVisibility(View.GONE), 2000);
+            } else {
+                progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
+            }
         });
         mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> mMealListAdapter.setLastMealUpdate(canteen.getLastMealScraping()));
         return view;

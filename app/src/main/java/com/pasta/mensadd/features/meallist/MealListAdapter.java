@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -157,8 +158,18 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
         }
 
         if (holder.mLastUpdate != null) {
-            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault());
-            holder.mLastUpdate.setText(mContext.getString(R.string.last_server_check, dateFormat.format(new Date(mLastUpdate))));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(mLastUpdate);
+            String date;
+            if (calendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
+                date = mContext.getString(R.string.today);
+            } else if (calendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 1) {
+                date = mContext.getString(R.string.yesterday);
+            } else {
+                date = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(new Date(mLastUpdate));
+            }
+            DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
+            holder.mLastUpdate.setText(mContext.getString(R.string.last_server_check, date +", " + dateFormat.format(new Date(mLastUpdate))));
         }
     }
 
