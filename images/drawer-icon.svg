@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -15,7 +13,7 @@
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.3 (unknown)"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    sodipodi:docname="drawer-icon.svg"
    inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/drawable-xxhdpi/banner.png"
    inkscape:export-xdpi="23.779133"
@@ -27,17 +25,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.12374369"
-     inkscape:cx="-1605.5582"
-     inkscape:cy="-6899.8082"
+     inkscape:zoom="0.29714044"
+     inkscape:cx="-803.63993"
+     inkscape:cy="1549.6387"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1865"
-     inkscape:window-height="1056"
-     inkscape:window-x="55"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="1920"
+     inkscape:window-height="1052"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0" />
   <defs
      id="defs4">
     <clipPath
@@ -162,12 +161,12 @@
     <circle
        inkscape:export-ydpi="58.434784"
        inkscape:export-xdpi="58.434784"
-       style="opacity:1;fill:#2e394d;fill-opacity:1;stroke:#000000;stroke-width:0.40000001;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4328)"
+       style="opacity:1;fill:#2e394d;fill-opacity:1;stroke:#000000;stroke-width:0.4;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4328)"
        id="path4136"
-       cx="-537.0575"
-       cy="1135.0541"
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/mipmap-mdpi/ic_launcher.png"
        r="328.57144"
-       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/mipmap-mdpi/ic_launcher.png" />
+       cy="1135.0541"
+       cx="-537.0575" />
     <path
        inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/mipmap-mdpi/ic_launcher.png"
        inkscape:export-ydpi="5.4782605"
@@ -477,5 +476,23 @@
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="saaass" />
     </g>
+    <rect
+       style="fill:#2e394d;fill-opacity:1;stroke:#000000;stroke-width:0.555645;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:1.66693, 1.66693;stroke-dashoffset:0.666774;paint-order:markers fill stroke"
+       id="rect898"
+       width="647.07593"
+       height="647.07593"
+       x="-2118.7747"
+       y="1148.6375"
+       inkscape:export-xdpi="71.1464"
+       inkscape:export-ydpi="71.1464" />
+    <path
+       inkscape:export-filename="/home/julian/dev/mensaDD/app/src/main/res/mipmap-mdpi/ic_launcher.png"
+       inkscape:export-ydpi="71.1464"
+       inkscape:export-xdpi="71.1464"
+       style="fill:none;fill-rule:evenodd;stroke:#fefefe;stroke-width:47.8111;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -1951.7209,1634.2764 c 0,0 -59.3853,-300.4666 47.3805,-325.6766 66.3139,-15.6584 113.0971,113.3761 116.8036,167.7541 6.2191,91.2398 29.5505,-184.0207 94.3898,-173.1693 112.7751,18.8738 57.1589,338.2347 57.1589,338.2347"
+       id="path4230-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="casac" />
   </g>
 </svg>
