@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
 
     private static final int TYPE_MEAL = 1;
     private static final int TYPE_LAST_UPDATE = 2;
+    private static final String BAUCHSPECK = "Bauchspeck";
 
     private static final DiffUtil.ItemCallback<Meal> DIFF_CALLBACK = new DiffUtil.ItemCallback<Meal>() {
         @Override
@@ -134,7 +136,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
         if (item.isAlcohol()) holder.mAlcohol.setVisibility(View.VISIBLE);
         else holder.mAlcohol.setVisibility(View.GONE);
 
-        if (item.getName().contains("Bauchspeck") && mPreferenceService.isBaconFeatureEnabled())
+        if (item.getName().contains(BAUCHSPECK) && mPreferenceService.isBaconFeatureEnabled())
             holder.mBacon.setVisibility(View.VISIBLE);
         else
             holder.mBacon.setVisibility(View.GONE);
@@ -168,6 +170,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
             } else {
                 date = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(new Date(mLastUpdate));
             }
+            Log.i("ADAPTER", mLastUpdate+"");
             DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
             holder.mLastUpdate.setText(mContext.getString(R.string.last_server_check, date +", " + dateFormat.format(new Date(mLastUpdate))));
         }

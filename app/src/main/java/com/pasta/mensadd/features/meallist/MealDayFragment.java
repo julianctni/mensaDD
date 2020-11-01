@@ -3,6 +3,7 @@ package com.pasta.mensadd.features.meallist;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +83,9 @@ public class MealDayFragment extends Fragment {
                 progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
             }
         });
-        mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> mMealListAdapter.setLastMealUpdate(canteen.getLastMealScraping()));
+        mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> {
+            mMealListAdapter.setLastMealUpdate(canteen.getLastMealScraping());
+        });
         return view;
     }
 

@@ -17,10 +17,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.pasta.mensadd.AppDatabase;
 import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.PreferenceService;
@@ -32,10 +35,8 @@ import com.pasta.mensadd.domain.meal.MealRepository;
 import com.pasta.mensadd.network.ServiceGenerator;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import static com.pasta.mensadd.domain.ApiRepository.FETCH_ERROR;
@@ -43,7 +44,6 @@ import static com.pasta.mensadd.features.meallist.MealsViewModel.ARGS_KEY_CANTEE
 
 
 public class MealWeekFragment extends Fragment {
-    private static final int PAGE_COUNT = 5;
     private Toolbar mToolbar;
     private MealsViewModel mMealsViewModel;
     private boolean mFavoriteClicked = false;
@@ -71,10 +71,10 @@ public class MealWeekFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        ViewPager mViewPager = view.findViewById(R.id.mealViewPager);
+        ViewPager2 mViewPager = view.findViewById(R.id.mealViewPager);
         mToolbar = requireActivity().findViewById(R.id.toolbar_mainActivity);
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        mToolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
+        mToolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
         String canteenId = getArguments() != null ? getArguments().getString(ARGS_KEY_CANTEEN_ID) : "";
         MealRepository mealRepository = new MealRepository(
                 AppDatabase.getInstance(requireContext()),
@@ -89,23 +89,25 @@ public class MealWeekFragment extends Fragment {
         Bundle bundle = getArguments() == null ? savedInstanceState : getArguments();
         MealsViewModelFactory mealsViewModelFactory = new MealsViewModelFactory(this, bundle, mealRepository, canteenRepository);
         mMealsViewModel = new ViewModelProvider(this, mealsViewModelFactory).get(MealsViewModel.class);
-        mViewPager.setVisibility(View.VISIBLE);
-        if (mViewPager.getAdapter() == null) {
-            MealDayPagerAdapter mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager());
-            mViewPager.setAdapter(mPagerAdapter);
-        }
-
+        mViewPager.setOffscreenPageLimit(2);
+        MealDayPagerAdapter mPagerAdapter = new MealDayPagerAdapter(getChildFragmentManager(), getLifecycle());
+        mViewPager.setAdapter(mPagerAdapter);
+        TabLayout mTabLayout = view.findViewById(R.id.pager_tab_strip);
+        new TabLayoutMediator(mTabLayout, mViewPager,
+                (tab, position) -> tab.setText(getTabText(position))
+        ).attach();
     }
 
+
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        super.onCreateOptionsMenu(menu, menuInflater);
-        menuInflater.inflate(R.menu.fragment_meals_menu, menu);
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_meals_menu, menu);
         mFavMenuItem = menu.findItem(R.id.set_canteen_favorite);
         startObservingModel();
     }
 
-    public void startObservingModel() {
+    private void startObservingModel() {
         mMealsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
             if (fetchState == FETCH_ERROR) {
                 int errorMsgId = !Utils.isOnline(requireContext()) ? R.string.error_no_internet : R.string.error_unknown;
@@ -128,64 +130,59 @@ public class MealWeekFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.set_canteen_favorite:
-                mMealsViewModel.toggleCanteenAsFavorite();
-                mFavoriteClicked = true;
-                return true;
-            case R.id.menu_item_meals_refresh:
-                mMealsViewModel.triggerMealFetching();
+        int id = item.getItemId();
+        if (id == R.id.set_canteen_favorite) {
+            mMealsViewModel.toggleCanteenAsFavorite();
+            mFavoriteClicked = true;
+            return true;
+        } else if (id == R.id.menu_item_meals_refresh) {
+            mMealsViewModel.triggerMealFetching();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    class MealDayPagerAdapter extends FragmentPagerAdapter {
-        private final List<MealDayFragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+    private String getTabText(int position) {
+        Locale locale;
+        String dateFormat;
+        if (Locale.getDefault().getLanguage().equals("de")) {
+            locale = Locale.GERMANY;
+            dateFormat = "EEE, dd.MM.";
+        } else {
+            locale = Locale.ENGLISH;
+            dateFormat = "EEE, MM-dd";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, locale);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, position);
+        String title;
+        if (position == 0) {
+            title = getString(R.string.today);
+        } else if (position == 1) {
+            title = getString(R.string.tomorrow);
+        } else {
+            title = sdf.format(cal.getTime());
+        }
+        return title;
+    }
 
+    static class MealDayPagerAdapter extends FragmentStateAdapter {
+        private static final int PAGE_COUNT = 5;
 
-        MealDayPagerAdapter(FragmentManager fm) {
-            super(fm);
-            Locale locale;
-            String dateFormat;
-            if (Locale.getDefault().getLanguage().equals("de")) {
-                locale = Locale.GERMANY;
-                dateFormat = "EEE, dd.MM.";
-            } else {
-                locale = Locale.ENGLISH;
-                dateFormat = "EEE, MM-dd";
-            }
-            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, locale);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-            for (int d = 0; d <= PAGE_COUNT; d++) {
-                mFragmentList.add(MealDayFragment.newInstance(d));
-                String title = "";
-                if (d == 0) {
-                    title = getString(R.string.today);
-                } else if (d == 1) {
-                    title = getString(R.string.tomorrow);
-                } else {
-                    title = sdf.format(cal.getTime());
-                }
-                mFragmentTitleList.add(title);
-                cal.add(Calendar.DATE, 1);
-            }
+        public MealDayPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+            super(fragmentManager, lifecycle);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            return MealDayFragment.newInstance(position);
         }
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return PAGE_COUNT;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
         }
     }
 

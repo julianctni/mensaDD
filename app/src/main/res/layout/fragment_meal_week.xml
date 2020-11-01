@@ -1,29 +1,29 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <androidx.viewpager.widget.ViewPager
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/pager_tab_strip"
+        app:tabMode="scrollable"
+        app:tabContentStart="72dp"
+        app:tabIndicatorColor="@color/pink_dark"
+        app:tabTextColor="@color/tab_text"
+        app:tabIndicatorHeight="4dp"
+        app:tabSelectedTextColor="@color/tab_text_selected"
+        app:tabIndicatorFullWidth="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="@color/colorPrimary"
+        android:elevation="2dp"
+        android:textColor="#ffffff" />
+
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/mealViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/pager_tab_strip"
-            app:tabMode="scrollable"
-            app:tabContentStart="72dp"
-            app:tabIndicatorColor="@color/pink_dark"
-            app:tabTextColor="@color/tab_text"
-            app:tabIndicatorHeight="4dp"
-            app:tabSelectedTextColor="@color/tab_text_selected"
-            app:tabIndicatorFullWidth="false"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="@color/colorPrimary"
-            android:elevation="2dp"
-            android:textColor="#ffffff" />
-    </androidx.viewpager.widget.ViewPager>
-
-</RelativeLayout>
+</LinearLayout>

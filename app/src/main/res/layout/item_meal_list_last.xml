@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/lastCanteenUpdateText"
-        android:textColor="@color/card_content_text"
+        android:textColor="@color/mealList_lastServerUpdate"
         android:paddingTop="6dp"
         android:paddingBottom="64dp"
         android:layout_width="match_parent"
