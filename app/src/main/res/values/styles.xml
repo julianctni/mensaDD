@@ -9,24 +9,12 @@
         <item name="alertDialogTheme">@style/Theme.MaterialComponents.DayNight.Dialog.Alert</item>
     </style>
 
-<!--
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
-
-    <!--
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowAllowEnterTransitionOverlap">true</item>
-        <item name="android:windowAllowReturnTransitionOverlap">true</item>
-        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
-        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
-    </style>-->
-
-
+    <style name="refreshProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:layout_height">18dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginBottom">-8dp</item>
+        <item name="android:layout_marginTop">-8dp</item>
+        <item name="android:indeterminateTint">@color/pink_dark</item>
+        <item name="android:indeterminate">true</item>
+    </style>
 </resources>

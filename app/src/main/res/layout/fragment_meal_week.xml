@@ -15,10 +15,8 @@
         app:tabIndicatorFullWidth="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
         android:background="@color/colorPrimary"
-        android:elevation="2dp"
-        android:textColor="#ffffff" />
+        android:elevation="2dp" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/mealViewPager"
