@@ -5,10 +5,7 @@
     android:id="@+id/mealCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
+    android:layout_margin="8dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
@@ -35,8 +32,6 @@
                     android:id="@+id/mealLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:includeFontPadding="false"
                     android:textColor="@color/card_header_text"
                     android:textAllCaps="true"
                     android:textSize="14sp"
@@ -47,7 +42,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/card_header_text"
-                    android:includeFontPadding="false"
                     android:textSize="18sp"/>
             </LinearLayout>
 
@@ -87,8 +81,6 @@
                             android:id="@+id/mealImageStatus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableStart="@drawable/ic_outline_image_24"
-                            android:drawableTint="@color/card_header_text"
                             android:drawablePadding="6dp"
                             android:gravity="center_vertical"
                             android:paddingBottom="8dp"
@@ -99,7 +91,9 @@
                             android:textColor="@color/card_header_text"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:visibility="visible" />
+                            android:visibility="visible"
+                            app:drawableStartCompat="@drawable/ic_outline_image_24"
+                            app:drawableTint="@color/card_header_text" />
 
                         <ProgressBar
                             android:id="@+id/mealImageProgressBar"
@@ -130,86 +124,84 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/mealDetails"
-                android:padding="12dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="10dp">
 
                 <TextView
                     android:id="@+id/mealPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_centerVertical="true"
                     android:gravity="center"
                     android:textColor="@color/card_content_text"
-                    android:textSize="15sp"
-                    android:textStyle="normal" />
+                    android:textSize="14sp" />
 
                 <LinearLayout
                     android:id="@+id/mealIcons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/vegetarian"
                         android:layout_width="wrap_content"
-                        android:layout_height="25dp"
+                        android:layout_height="24dp"
                         android:adjustViewBounds="true"
-                        android:tint="@color/meal_icon"
                         android:paddingStart="8dp"
                         android:paddingBottom="2dp"
-                        android:src="@drawable/ic_vegeterian" />
+                        android:src="@drawable/ic_vegeterian"
+                        app:tint="@color/meal_icon" />
 
                     <ImageView
                         android:id="@+id/bacon"
                         android:layout_width="wrap_content"
-                        android:layout_height="25dp"
+                        android:layout_height="24dp"
                         android:adjustViewBounds="true"
-                        android:paddingLeft="6dp"
                         android:paddingStart="6dp"
-                        android:tint="#8f3946"
-                        android:src="@drawable/ic_bacon" />
+                        android:src="@drawable/ic_bacon"
+                        app:tint="#8f3946" />
 
                     <ImageView
                         android:id="@+id/pork"
                         android:layout_width="wrap_content"
-                        android:layout_height="25dp"
+                        android:layout_height="24dp"
                         android:adjustViewBounds="true"
-                        android:tint="@color/meal_icon"
                         android:paddingStart="8dp"
                         android:paddingBottom="1dp"
-                        android:src="@drawable/ic_pork" />
+                        android:src="@drawable/ic_pork"
+                        app:tint="@color/meal_icon" />
 
                     <ImageView
                         android:id="@+id/beef"
                         android:layout_width="wrap_content"
-                        android:layout_height="25dp"
+                        android:layout_height="24dp"
                         android:adjustViewBounds="true"
-                        android:tint="@color/meal_icon"
                         android:paddingStart="8dp"
                         android:paddingBottom="1dp"
-                        android:src="@drawable/ic_beef" />
+                        android:src="@drawable/ic_beef"
+                        app:tint="@color/meal_icon" />
 
                     <ImageView
                         android:id="@+id/alcohol"
                         android:layout_width="wrap_content"
-                        android:layout_height="25dp"
+                        android:layout_height="24dp"
                         android:adjustViewBounds="true"
-                        android:tint="@color/meal_icon"
                         android:paddingStart="8dp"
                         android:paddingTop="2dp"
-                        android:src="@drawable/ic_alcohol" />
+                        android:src="@drawable/ic_alcohol"
+                        app:tint="@color/meal_icon" />
 
                     <ImageView
                         android:id="@+id/garlic"
                         android:layout_width="wrap_content"
-                        android:layout_height="25dp"
+                        android:layout_height="24dp"
                         android:adjustViewBounds="true"
                         android:paddingStart="8dp"
                         android:paddingTop="2dp"
-                        android:tint="@color/meal_icon"
-                        android:src="@drawable/ic_garlik" />
+                        android:src="@drawable/ic_garlik"
+                        app:tint="@color/meal_icon" />
 
                 </LinearLayout>
 
@@ -218,10 +210,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@id/mealPrice"
-                    android:layout_toLeftOf="@id/mealIcons"
                     android:layout_toStartOf="@id/mealIcons"
                     android:textColor="@color/meal_icon"
-                    android:gravity="center"
+                    android:layout_centerVertical="true"
                     android:includeFontPadding="false"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
@@ -245,6 +236,7 @@
             app:fabSize="normal"
             app:layout_anchor="@id/mealImageContainer"
             app:layout_anchorGravity="bottom|right|end"
-            app:useCompatPadding="true" />
+            app:useCompatPadding="true"
+            android:focusable="true" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.cardview.widget.CardView>
