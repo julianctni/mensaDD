@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pasta.mensadd.AppDatabase;
+import com.pasta.mensadd.PullToRefreshFragment;
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.domain.ApiService;
@@ -28,7 +29,7 @@ import com.pasta.mensadd.network.ServiceGenerator;
 import static com.pasta.mensadd.domain.ApiRepository.FETCH_ERROR;
 import static com.pasta.mensadd.domain.ApiRepository.IS_FETCHING;
 
-public class NewsFragment extends Fragment {
+public class NewsFragment extends PullToRefreshFragment {
 
     private NewsViewModel mNewsViewModel;
 
@@ -36,12 +37,12 @@ public class NewsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-        setHasOptionsMenu(true);
         LinearLayoutManager layoutParams = new LinearLayoutManager(requireActivity());
-        RecyclerView newsListRecyclerView = view.findViewById(R.id.newsList);
+        mRecyclerView = view.findViewById(R.id.newsList);
         NewsListAdapter newsListAdapter = new NewsListAdapter(this.requireContext());
-        newsListRecyclerView.setLayoutManager(layoutParams);
-        newsListRecyclerView.setAdapter(newsListAdapter);
+        mRecyclerView.setAdapter(newsListAdapter);
+        mRefreshText = view.findViewById(R.id.newsListRefreshText);
+        super.setUpPullToRefresh(R.string.news_wanna_refresh, R.string.news_release_to_refresh);
         NewsViewModelFactory newsViewModelFactory = new NewsViewModelFactory(
                 new NewsRepository(AppDatabase.getInstance(requireContext()),
                         ServiceGenerator.createService(ApiService.class)
@@ -67,17 +68,8 @@ public class NewsFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        super.onCreateOptionsMenu(menu, menuInflater);
-        menuInflater.inflate(R.menu.fragment_news_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_news_refresh:
-                mNewsViewModel.triggerNewsFetching(true);
-        }
-        return super.onOptionsItemSelected(item);
+    public void onRefresh() {
+        super.onRefresh();
+        mNewsViewModel.triggerNewsFetching(true);
     }
 }

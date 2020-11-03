@@ -83,4 +83,8 @@
     <string name="location_permission_missing_check">Erneut fragen</string>
     <string name="latest_updates_heading">Was ist neu?</string>
     <string name="latest_updates_content">Die Kartenansicht wurde überarbeitet. Und es gibt jetzt einen Dark Mode! Außerdem wurden diverse weitere Design-Anpassungen vorgenommen, zum Teil sichtbar, zum Teil unter der Haube.\n\nNa dann, bon appétit!</string>
+    <string name="meals_wanna_refresh">Speisepläne aktualisieren?</string>
+    <string name="meals_release_to_refresh">Zum Aktualisieren loslassen!</string>
+    <string name="news_wanna_refresh">Neuigkeiten aktualisieren?</string>
+    <string name="news_release_to_refresh">Zum Aktualisieren loslassen!</string>
 </resources>

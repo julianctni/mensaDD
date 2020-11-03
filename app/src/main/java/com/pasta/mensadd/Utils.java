@@ -1,5 +1,6 @@
 package com.pasta.mensadd;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -9,6 +10,8 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by julian on 13.02.18.
@@ -113,5 +116,12 @@ public class Utils {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
+    }
+
+    public static ValueAnimator createPullToRefreshAnimator(RecyclerView recyclerView) {
+        ValueAnimator animator = ValueAnimator.ofInt(recyclerView.getPaddingTop(), 0);
+        animator.addUpdateListener(valueAnimator -> recyclerView.setPadding(0, (int) valueAnimator.getAnimatedValue(), 0, 0));
+        animator.setDuration(200);
+        return animator;
     }
 }

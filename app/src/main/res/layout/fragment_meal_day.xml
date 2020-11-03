@@ -7,8 +7,18 @@
 
     <ProgressBar
         android:id="@+id/mealListProgressBar"
-        style="@style/refreshProgressBar"
-        android:visibility="gone" />
+        android:visibility="gone"
+        style="@style/refreshProgressBar" />
+
+    <TextView
+        android:id="@+id/mealListRefreshText"
+        android:layout_height="70dp"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:text="@string/meals_wanna_refresh"
+        android:visibility="invisible"
+        android:layout_below="@id/mealListProgressBar"
+        android:textAlignment="center" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/noFoodToday"
@@ -19,7 +29,6 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:longClickable="false"
         android:visibility="gone"
-        android:layout_below="@id/mealListProgressBar"
         card_view:cardCornerRadius="6dp"
         card_view:contentPadding="20dp">
 
@@ -34,7 +43,7 @@
                 android:layout_marginTop="10dp"
                 android:contentDescription="@string/meals_no_food_icon"
                 android:src="@drawable/ic_sentiment_neutral_black"
-                android:tint="@color/card_content_text" />
+                card_view:tint="@color/card_content_text" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -48,8 +57,6 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mealList"
-        android:layout_below="@id/mealListProgressBar"
-        android:layout_marginTop="2dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

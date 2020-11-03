@@ -135,9 +135,6 @@ public class MealWeekFragment extends Fragment {
             mMealsViewModel.toggleCanteenAsFavorite();
             mFavoriteClicked = true;
             return true;
-        } else if (id == R.id.menu_item_meals_refresh) {
-            mMealsViewModel.triggerMealFetching();
-            return true;
         }
         return super.onOptionsItemSelected(item);
     }

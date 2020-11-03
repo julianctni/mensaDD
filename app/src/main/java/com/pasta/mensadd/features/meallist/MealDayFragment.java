@@ -3,7 +3,6 @@ package com.pasta.mensadd.features.meallist;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,9 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.pasta.mensadd.PullToRefreshFragment;
 import com.pasta.mensadd.R;
 
 import java.text.SimpleDateFormat;
@@ -26,15 +23,15 @@ import static com.pasta.mensadd.domain.ApiRepository.FETCH_SUCCESS;
 import static com.pasta.mensadd.domain.ApiRepository.IS_FETCHING;
 import static com.pasta.mensadd.domain.ApiRepository.NOT_FETCHING;
 
-public class MealDayFragment extends Fragment {
+public class MealDayFragment extends PullToRefreshFragment {
 
     private static final String TAG_PAGER_POSITION = "pagerPosition";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMAN);
     private static final int ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     private MealListAdapter mMealListAdapter;
-    private int mPagerPositon = 10;
-    private RecyclerView mRecyclerView;
+    private int mPagerPosition = 10;
     private CardView noFoodToday;
+    private MealsViewModel mMealsViewModel;
 
     static MealDayFragment newInstance(int position) {
         MealDayFragment fragment = new MealDayFragment();
@@ -48,7 +45,7 @@ public class MealDayFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mPagerPositon = getArguments().getInt(TAG_PAGER_POSITION);
+            mPagerPosition = getArguments().getInt(TAG_PAGER_POSITION);
         }
     }
 
@@ -57,16 +54,16 @@ public class MealDayFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(false);
         View view = inflater.inflate(R.layout.fragment_meal_day, container, false);
-        MealsViewModel mMealsViewModel = new ViewModelProvider(requireParentFragment()).get(MealsViewModel.class);
+        mMealsViewModel = new ViewModelProvider(requireParentFragment()).get(MealsViewModel.class);
+        mRefreshText = view.findViewById(R.id.mealListRefreshText);
         mRecyclerView = view.findViewById(R.id.mealList);
         noFoodToday = view.findViewById(R.id.noFoodToday);
         mMealListAdapter = new MealListAdapter(this.getContext());
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mMealListAdapter);
         mRecyclerView.setNestedScrollingEnabled(true);
-
+        super.setUpPullToRefresh(R.string.meals_wanna_refresh, R.string.meals_release_to_refresh);
         Date date = new Date();
-        date.setTime(date.getTime() + mPagerPositon * ONE_DAY_IN_MILLIS);
+        date.setTime(date.getTime() + mPagerPosition * ONE_DAY_IN_MILLIS);
         String day = DATE_FORMAT.format(date);
         mMealsViewModel.getMealsByDay(day).observe(getViewLifecycleOwner(), meals -> {
             //noinspection ConstantConditions
@@ -83,14 +80,18 @@ public class MealDayFragment extends Fragment {
                 progressBar.setVisibility(fetchState == IS_FETCHING ? View.VISIBLE : View.GONE);
             }
         });
-        mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> {
-            mMealListAdapter.setLastMealUpdate(canteen.getLastMealScraping());
-        });
+        mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> mMealListAdapter.setLastMealUpdate(canteen.getLastMealScraping()));
         return view;
     }
 
     private void showNoFoodToday(boolean showNoFoodToday) {
         mRecyclerView.setVisibility(showNoFoodToday ? View.GONE : View.VISIBLE);
         noFoodToday.setVisibility(showNoFoodToday ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        mMealsViewModel.triggerMealFetching();
     }
 }

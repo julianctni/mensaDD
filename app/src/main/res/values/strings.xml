@@ -104,4 +104,8 @@
     <string name="location_permission_missing_check">Retry</string>
     <string name="latest_updates_heading">What\'s new?</string>
     <string name="latest_updates_content">The map view has been revised. And there is now a Dark Mode! Moreover, several further design adjustments were made, some visible, some under the hood.\n\nWell then, bon appétit!</string>
+    <string name="meals_wanna_refresh">Wanna refresh meal plan?</string>
+    <string name="meals_release_to_refresh">Release to refresh meal plan!</string>
+    <string name="news_wanna_refresh">Wanna refresh news?</string>
+    <string name="news_release_to_refresh">Release to refresh news!</string>
 </resources>
