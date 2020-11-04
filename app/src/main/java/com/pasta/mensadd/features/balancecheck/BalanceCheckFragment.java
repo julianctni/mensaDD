@@ -80,7 +80,7 @@ public class BalanceCheckFragment extends Fragment {
 
     public void setCurrentBalanceData(BalanceEntry balanceEntry) {
         mBalanceCheckViewModel.setCurrentBalanceEntry(balanceEntry);
-        mViewCardBalance.setText(getString(R.string.balance_check_balance, BalanceCheckService.formatAsString(balanceEntry.getCardBalance())));
+        mViewCardBalance.setText(BalanceCheckService.formatAsString(balanceEntry.getCardBalance()));
         mViewLastTransaction.setText(getString(R.string.balance_check_last_transaction, BalanceCheckService.formatAsString(balanceEntry.getLastTransaction())));
         if (!mIsVisible) {
             animateView(true);

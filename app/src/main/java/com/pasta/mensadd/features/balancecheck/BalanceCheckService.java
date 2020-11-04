@@ -28,7 +28,7 @@ public class BalanceCheckService {
         String centsStr = Integer.toString(cents);
         if (cents < 10)
             centsStr = "0" + centsStr;
-        return euros + "." + centsStr;
+        return euros + "," + centsStr;
     }
 
     public void loadCard(Tag tag, CardLoadedCallback cardLoadedCallback) {

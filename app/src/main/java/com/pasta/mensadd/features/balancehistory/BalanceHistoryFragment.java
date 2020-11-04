@@ -91,7 +91,7 @@ public class BalanceHistoryFragment extends Fragment {
                 mCurrentBalance.setText(getString(R.string.balance_check_explanation));
                 mCurrentLastTransaction.setVisibility(View.GONE);
             } else {
-                mCurrentBalance.setText(getString(R.string.balance_check_balance, BalanceCheckService.formatAsString(balanceEntry.getCardBalance())));
+                mCurrentBalance.setText(BalanceCheckService.formatAsString(balanceEntry.getCardBalance()));
                 mCurrentLastTransaction.setText(getString(R.string.balance_check_last_transaction, BalanceCheckService.formatAsString(balanceEntry.getLastTransaction())));
                 mCurrentBalance.setVisibility(View.VISIBLE);
                 mCurrentLastTransaction.setVisibility(View.VISIBLE);
