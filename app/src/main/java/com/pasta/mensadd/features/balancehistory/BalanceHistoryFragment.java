@@ -88,8 +88,8 @@ public class BalanceHistoryFragment extends Fragment {
 
         balanceHistoryViewModel.getLatestBalanceEntry().observe(getViewLifecycleOwner(), balanceEntry -> {
             if (balanceEntry == null) {
-                mCurrentBalance.setText(getString(R.string.balance_check_explanation));
-                mCurrentLastTransaction.setVisibility(View.GONE);
+                mCurrentLastTransaction.setText(getString(R.string.balance_check_explanation));
+                mCurrentBalance.setVisibility(View.GONE);
             } else {
                 mCurrentBalance.setText(BalanceCheckService.formatAsString(balanceEntry.getCardBalance()));
                 mCurrentLastTransaction.setText(getString(R.string.balance_check_last_transaction, BalanceCheckService.formatAsString(balanceEntry.getLastTransaction())));
