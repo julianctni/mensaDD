@@ -11,6 +11,7 @@ import android.graphics.PointF;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -128,6 +129,9 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
             styleUrl = getResources().getString(R.string.mapbox_style_url_dark);
         }
+        int m = 8 * (int) requireContext().getResources().getDisplayMetrics().density;
+        map.getUiSettings().setLogoMargins(m, 0, 0, m);
+        map.getUiSettings().setAttributionMargins(map.getUiSettings().getAttributionMarginLeft() + m/2, 0, 0, m);
         map.setStyle(styleUrl, style -> {
             List<Feature> canteenCoordinates = new ArrayList<>();
             LatLngBounds.Builder bounds = new LatLngBounds.Builder();

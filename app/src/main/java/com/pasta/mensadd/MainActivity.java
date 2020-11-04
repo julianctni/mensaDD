@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
         Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_access_token));
-
+        Mapbox.getTelemetry().setUserTelemetryRequestState(false);
         mBottomNav = findViewById(R.id.bottomNav_mainActivity);
         mBottomNav.setMenuItemSelectionListener(this);
         mBottomNav.inflateMenu(isNfcSupported ? R.menu.bottom_menu : R.menu.bottom_menu_no_nfc);
