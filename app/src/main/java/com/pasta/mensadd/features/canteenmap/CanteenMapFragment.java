@@ -11,22 +11,20 @@ import android.graphics.PointF;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
@@ -34,7 +32,6 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
@@ -49,15 +46,15 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.pasta.mensadd.AppDatabase;
+import com.pasta.mensadd.FragmentController;
+import com.pasta.mensadd.MainActivity;
 import com.pasta.mensadd.PreferenceService;
 import com.pasta.mensadd.R;
-import com.pasta.mensadd.AppDatabase;
 import com.pasta.mensadd.domain.ApiService;
 import com.pasta.mensadd.domain.canteen.Canteen;
 import com.pasta.mensadd.domain.canteen.CanteenRepository;
 import com.pasta.mensadd.network.ServiceGenerator;
-import com.pasta.mensadd.FragmentController;
-import com.pasta.mensadd.MainActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -70,27 +67,22 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 
 
 public class CanteenMapFragment extends Fragment implements PermissionsListener, MapboxMap.OnMapClickListener {
-    private MapView mMapView;
-    private MapboxMap mMap;
-
-    private TextView mCanteenName;
-    private TextView mCanteenAddress;
-    private TextView mCanteenHours;
-    private LinearLayout mInfoCard;
-
-    private ValueAnimator markerAnimator;
-    private boolean markerSelected = false;
-
-    private LocationComponent mLocationComponent;
-
-    private CanteenMapViewModel mCanteenMapViewModel;
-
     private static final String SELECTED_CANTEEN_MARKER = "s-marker";
     private static final String SELECTED_CANTEEN_MARKER_LAYER = "s-marker-layer";
     private static final String CANTEEN_MARKER_LAYER = "marker-layer";
     private static final String CANTEEN_MARKER_IMAGE = "marker-image";
     private static final String CANTEEN_MARKER_SOURCE = "marker-source";
     private static final String CANTEEN_ID = "canteen-id";
+    private MapView mMapView;
+    private MapboxMap mMap;
+    private TextView mCanteenName;
+    private TextView mCanteenAddress;
+    private TextView mCanteenHours;
+    private CardView mInfoCard;
+    private ValueAnimator markerAnimator;
+    private boolean markerSelected = false;
+    private LocationComponent mLocationComponent;
+    private CanteenMapViewModel mCanteenMapViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,13 +110,7 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
         mCanteenHours = view.findViewById(R.id.mapInfoCardCanteenHours);
         mCanteenName = view.findViewById(R.id.mapInfoCardCanteenName);
         mInfoCard = view.findViewById(R.id.mapInfoCard);
-        MaterialButton buttonClose = view.findViewById(R.id.mapViewCloseButton);
-        buttonClose.setOnClickListener(button -> {
-            mInfoCard.setVisibility(View.GONE);
-            deselectMarker((SymbolLayer) mMap.getStyle().getLayer(SELECTED_CANTEEN_MARKER_LAYER));
-        });
-        MaterialButton buttonMeals = view.findViewById(R.id.mapViewToMealsButton);
-        buttonMeals.setOnClickListener(button -> FragmentController.showMealWeekFragment(getParentFragmentManager(), mCanteenMapViewModel.getSelectedCanteenId()));
+        mInfoCard.setOnClickListener(button -> FragmentController.showMealWeekFragment(getParentFragmentManager(), mCanteenMapViewModel.getSelectedCanteenId()));
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(mapboxMap -> {
             mMap = mapboxMap;
@@ -190,7 +176,7 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
                             new Feature[]{feature}));
                 }
                 selectMarker((SymbolLayer) mMap.getStyle().getLayer(SELECTED_CANTEEN_MARKER_LAYER));
-                CameraPosition cp = new CameraPosition.Builder().zoom(12).padding(0,0,0,400).target(new LatLng(canteen.getPosLat(), canteen.getPosLong())).build();
+                CameraPosition cp = new CameraPosition.Builder().zoom(12).padding(0, 0, 0, 400).target(new LatLng(canteen.getPosLat(), canteen.getPosLong())).build();
                 mMap.easeCamera(CameraUpdateFactory.newCameraPosition(cp));
                 mCanteenName.setText(canteen.getName());
                 mCanteenAddress.setText(canteen.getAddress());

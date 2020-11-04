@@ -74,7 +74,6 @@
     <string name="imprint_icon_bacon">Das Bauchspeck-Icon wurde von Jacob Halton von \"The Noun Project\" erstellt und leicht von mir abgeändert.</string>
     <string name="last_server_check">Stand von %1$s</string>
     <string name="button_close">Schließen</string>
-    <string name="button_meals">Speiseplan</string>
     <string name="button_save_balance_values">Speichern</string>
     <string name="today">heute</string>
     <string name="tomorrow">morgen</string>

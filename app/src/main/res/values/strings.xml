@@ -95,7 +95,6 @@
     <string name="last_server_check">Last server-side update: %1$s</string>
     <string name="dots" translatable="false">...</string>
     <string name="button_close">Close</string>
-    <string name="button_meals">Meals</string>
     <string name="button_save_balance_values">Save</string>
     <string name="today">today</string>
     <string name="tomorrow">tomorrow</string>
