@@ -40,7 +40,7 @@
     <string name="balance_check_last_transactions">Last transactions</string>
     <string name="balance_check_not_enough_data">Not enough data available.</string>
     <string name="balance_check_footnote">The balance data is only stored on your device. If you uninstall the application all data is gone. In order to manually reset all data, go to settings.</string>
-    <string name="app_version">Version 4.0 / Oct 2020</string>
+    <string name="app_version">Version 4.0 / Nov 2020</string>
     <string name="imprint_developer" translatable="false">Julian Catoni</string>
     <string name="meals_no_food_icon" translatable="false">no_food_today</string>
     <string name="meals_loading_progress">Loading meals...</string>
