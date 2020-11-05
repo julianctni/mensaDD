@@ -2,6 +2,7 @@ package com.pasta.mensadd;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ public class PullToRefreshFragment extends Fragment {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+
                 ValueAnimator animator = Utils.createPullToRefreshAnimator(mRecyclerView);
                 if (newState != RecyclerView.SCROLL_STATE_DRAGGING && mRecyclerView.getPaddingTop() > 0 && mRecyclerView.getPaddingTop() < pullRefreshThreshold ) {
                     animator.start();
@@ -56,7 +58,10 @@ public class PullToRefreshFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0 && mRecyclerView.getPaddingTop() > 0) {
-                    mRecyclerView.setPadding(0, Math.max(0, mRecyclerView.getPaddingTop()) - dy, 0, 0);
+                    mRecyclerView.setPadding(0, Math.max(0, mRecyclerView.getPaddingTop() - dy), 0, 0);
+                    if (mRecyclerView.getPaddingTop() < pullRefreshThreshold) {
+                        mRefreshText.setText(mWannaRefreshText);
+                    }
                 }
                 if (mRecyclerView.getPaddingTop() < 5) {
                     mRefreshText.setVisibility(View.INVISIBLE);

@@ -21,6 +21,9 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.domain.balanceentry.BalanceEntry;
 import com.pasta.mensadd.domain.balanceentry.BalanceEntryRepository;
 
+import static com.pasta.mensadd.features.balancecheck.BalanceCheckViewModel.ARGS_KEY_CURRENT_BALANCE;
+import static com.pasta.mensadd.features.balancecheck.BalanceCheckViewModel.ARGS_KEY_LAST_TRANSACTION;
+
 public class BalanceCheckFragment extends Fragment {
 
     private TextView mViewCardBalance;
@@ -28,11 +31,22 @@ public class BalanceCheckFragment extends Fragment {
     private boolean mIsVisible;
     private BalanceCheckViewModel mBalanceCheckViewModel;
 
+
+    public static BalanceCheckFragment getInstance(float balance, float lastTransaction) {
+        BalanceCheckFragment balanceCheckFragment = new BalanceCheckFragment();
+        Bundle args = new Bundle();
+        args.putFloat(ARGS_KEY_CURRENT_BALANCE, balance);
+        args.putFloat(ARGS_KEY_LAST_TRANSACTION, lastTransaction);
+        balanceCheckFragment.setArguments(args);
+        return balanceCheckFragment;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_balance_check, container, false);
-        BalanceCheckViewModelFactory balanceCheckViewModelFactory = new BalanceCheckViewModelFactory(new BalanceEntryRepository(AppDatabase.getInstance(requireContext())));
+        Bundle bundle = getArguments() == null ? savedInstanceState : getArguments();
+        BalanceCheckViewModelFactory balanceCheckViewModelFactory = new BalanceCheckViewModelFactory(this, bundle, new BalanceEntryRepository(AppDatabase.getInstance(requireContext())));
         mBalanceCheckViewModel = new ViewModelProvider(this, balanceCheckViewModelFactory).get(BalanceCheckViewModel.class);
         mViewCardBalance = view.findViewById(R.id.text_balanceCheck_balance);
         mViewLastTransaction = view.findViewById(R.id.text_balanceCheck_lastTransaction);
@@ -49,7 +63,7 @@ public class BalanceCheckFragment extends Fragment {
         };
         mBalanceCheckViewModel.getLastBalanceEntryLive().observe(getViewLifecycleOwner(), latestBalanceObserver);
         saveBalanceCheckButton.setOnClickListener((v) -> {
-            boolean insertResult = mBalanceCheckViewModel.insertBalanceEntry(mBalanceCheckViewModel.getCurrentBalanceEntry());
+            boolean insertResult = mBalanceCheckViewModel.insertNewBalanceEntry();
             if (insertResult) {
                 Toast.makeText(requireContext(), getString(R.string.balance_saved), Toast.LENGTH_SHORT).show();
             } else {
@@ -57,6 +71,8 @@ public class BalanceCheckFragment extends Fragment {
             }
             animateView(false);
         });
+        mViewCardBalance.setText(BalanceCheckService.formatAsString(mBalanceCheckViewModel.getCurrentBalance()));
+        mViewLastTransaction.setText(getString(R.string.balance_check_last_transaction, BalanceCheckService.formatAsString(mBalanceCheckViewModel.getLastTransaction())));
         return view;
     }
 
@@ -78,12 +94,18 @@ public class BalanceCheckFragment extends Fragment {
         }
     }
 
-    public void setCurrentBalanceData(BalanceEntry balanceEntry) {
-        mBalanceCheckViewModel.setCurrentBalanceEntry(balanceEntry);
-        mViewCardBalance.setText(BalanceCheckService.formatAsString(balanceEntry.getCardBalance()));
-        mViewLastTransaction.setText(getString(R.string.balance_check_last_transaction, BalanceCheckService.formatAsString(balanceEntry.getLastTransaction())));
+    public void setCurrentBalanceData(float balance, float lastTransaction) {
+        mBalanceCheckViewModel.setCurrentBalanceData(balance, lastTransaction);
+        mViewCardBalance.setText(BalanceCheckService.formatAsString(balance));
+        mViewLastTransaction.setText(getString(R.string.balance_check_last_transaction, BalanceCheckService.formatAsString(lastTransaction)));
         if (!mIsVisible) {
             animateView(true);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mBalanceCheckViewModel.saveCurrentBalanceData();
     }
 }

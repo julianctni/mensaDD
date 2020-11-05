@@ -5,6 +5,7 @@ import android.text.Html;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.pasta.mensadd.domain.canteen.Canteen;
@@ -31,6 +32,9 @@ public class Meal {
     private boolean garlic;
     private boolean alcohol;
 
+    @Ignore
+    public static String EMPTY_MEAL = "emptyMeal";
+
     public Meal(@NotNull String id, String name, String price, String details,
                 String imgLink, String canteenId, String day, String location,
                 boolean vegetarian, boolean vegan, boolean pork, boolean beef,
@@ -49,6 +53,14 @@ public class Meal {
         this.beef = beef;
         this.garlic = garlic;
         this.alcohol = alcohol;
+    }
+
+    private Meal() {
+        this.id = EMPTY_MEAL;
+    }
+
+    public static Meal getEmptyMeal() {
+        return new Meal();
     }
 
     @NotNull

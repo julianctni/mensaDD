@@ -44,11 +44,12 @@ public class FragmentController {
         createAnimatedTransaction(fm).replace(MAIN_CONTAINER_ID, f, TAG_NEWS).addToBackStack(null).commit();
     }
 
-    public static void showBalanceCheckFragment(FragmentManager fm, BalanceEntry balanceEntry) {
+    public static void showBalanceCheckFragment(FragmentManager fm, float balance, float lastTransaction) {
         BalanceCheckFragment f = (BalanceCheckFragment) fm.findFragmentByTag(FragmentController.TAG_BALANCE_CHECK);
-        if (f == null) f = new BalanceCheckFragment();
-        fm.beginTransaction().replace(R.id.layout_mainActivity_balanceCheck, f, TAG_BALANCE_CHECK).commitNow();
-        f.setCurrentBalanceData(balanceEntry);
+        if (f == null) f = BalanceCheckFragment.getInstance(balance, lastTransaction);
+        else f.setCurrentBalanceData(balance, lastTransaction);
+        fm.beginTransaction().replace(R.id.layout_mainActivity_balanceCheck, f, TAG_BALANCE_CHECK).commit();
+        //f.setCurrentBalanceData(balanceEntry);
     }
 
     public static void showSettingsFragment(FragmentManager fm) {

@@ -10,7 +10,7 @@
         android:id="@+id/lastCanteenUpdateText"
         android:textColor="@color/mealList_lastServerUpdate"
         android:paddingTop="6dp"
-        android:paddingBottom="64dp"
+        android:paddingBottom="256dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"/>

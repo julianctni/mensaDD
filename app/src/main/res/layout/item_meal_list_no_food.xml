@@ -1,34 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/noFoodToday"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/fragment_background"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/mealListProgressBar"
-        android:visibility="gone"
-        style="@style/refreshProgressBar" />
-
-    <TextView
-        android:id="@+id/mealListRefreshText"
-        android:layout_height="70dp"
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:text="@string/meals_wanna_refresh"
-        android:visibility="invisible"
-        android:layout_below="@id/mealListProgressBar"
-        android:textAlignment="center" />
-    <!--
     <androidx.cardview.widget.CardView
-        android:id="@+id/noFoodToday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        card_view:cardBackgroundColor="@color/card_content"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_margin="8dp"
         android:longClickable="false"
-        android:visibility="gone"
-        card_view:cardCornerRadius="6dp"
+        card_view:cardBackgroundColor="@color/card_content"
+        card_view:cardCornerRadius="8dp"
         card_view:contentPadding="20dp">
 
         <LinearLayout
@@ -48,16 +32,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/meals_no_food"
-                android:textColor="@color/card_content_text"
                 android:textAlignment="center"
+                android:textColor="@color/card_content_text"
                 android:textSize="24sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-    -->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mealList"
+    <TextView
+        android:id="@+id/lastCanteenUpdateText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:paddingTop="6dp"
+        android:paddingBottom="256dp"
+        android:textAlignment="center"
+        android:textColor="@color/mealList_lastServerUpdate" />
+</LinearLayout>

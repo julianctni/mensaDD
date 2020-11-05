@@ -36,4 +36,5 @@
     <color name="mealList_lastServerUpdate">#888888</color>
     <color name="progressbar">#52141e</color>
     <color name="map_info_card_background">#111111</color>
+    <color name="meal_image_status_background">#3A3A3A</color>
 </resources>

@@ -14,8 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.pasta.mensadd.PullToRefreshFragment;
 import com.pasta.mensadd.R;
+import com.pasta.mensadd.domain.meal.Meal;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -30,7 +32,7 @@ public class MealDayFragment extends PullToRefreshFragment {
     private static final int ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     private MealListAdapter mMealListAdapter;
     private int mPagerPosition = 10;
-    private CardView noFoodToday;
+    //private CardView noFoodToday;
     private MealsViewModel mMealsViewModel;
 
     static MealDayFragment newInstance(int position) {
@@ -57,7 +59,7 @@ public class MealDayFragment extends PullToRefreshFragment {
         mMealsViewModel = new ViewModelProvider(requireParentFragment()).get(MealsViewModel.class);
         mRefreshText = view.findViewById(R.id.mealListRefreshText);
         mRecyclerView = view.findViewById(R.id.mealList);
-        noFoodToday = view.findViewById(R.id.noFoodToday);
+        //noFoodToday = view.findViewById(R.id.noFoodToday);
         mMealListAdapter = new MealListAdapter(this.getContext());
         mRecyclerView.setAdapter(mMealListAdapter);
         mRecyclerView.setNestedScrollingEnabled(true);
@@ -67,8 +69,14 @@ public class MealDayFragment extends PullToRefreshFragment {
         String day = DATE_FORMAT.format(date);
         mMealsViewModel.getMealsByDay(day).observe(getViewLifecycleOwner(), meals -> {
             //noinspection ConstantConditions
-            showNoFoodToday(meals.isEmpty() && (mMealsViewModel.getFetchState().getValue() == FETCH_SUCCESS || mMealsViewModel.getFetchState().getValue() == NOT_FETCHING));
-            mMealListAdapter.submitList(meals);
+            //showNoFoodToday(meals.isEmpty() && (mMealsViewModel.getFetchState().getValue() == FETCH_SUCCESS || mMealsViewModel.getFetchState().getValue() == NOT_FETCHING));
+            if (meals.isEmpty() && (mMealsViewModel.getFetchState().getValue() == FETCH_SUCCESS || mMealsViewModel.getFetchState().getValue() == NOT_FETCHING)) {
+                ArrayList<Meal> emptyList = new ArrayList<>();
+                emptyList.add(Meal.getEmptyMeal());
+                mMealListAdapter.submitList(emptyList);
+            } else {
+                mMealListAdapter.submitList(meals);
+            }
         });
 
         mMealsViewModel.getFetchState().observe(getViewLifecycleOwner(), fetchState -> {
@@ -84,10 +92,11 @@ public class MealDayFragment extends PullToRefreshFragment {
         return view;
     }
 
+    /*
     private void showNoFoodToday(boolean showNoFoodToday) {
         mRecyclerView.setVisibility(showNoFoodToday ? View.GONE : View.VISIBLE);
         noFoodToday.setVisibility(showNoFoodToday ? View.VISIBLE : View.GONE);
-    }
+    }*/
 
     @Override
     public void onRefresh() {

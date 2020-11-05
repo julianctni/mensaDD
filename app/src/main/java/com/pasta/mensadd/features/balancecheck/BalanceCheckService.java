@@ -45,8 +45,8 @@ public class BalanceCheckService {
             if (valueData != null) {
                 float cardBalance = (float) valueData.value / 1000;
                 float lastTransaction = (float) valueData.lastTransaction / 1000;
-                BalanceEntry balanceEntry = new BalanceEntry(new Date().getTime(), cardBalance, lastTransaction);
-                cardLoadedCallback.onCardLoadSuccess(balanceEntry);
+                //BalanceEntry balanceEntry = new BalanceEntry(new Date().getTime(), cardBalance, lastTransaction);
+                cardLoadedCallback.onCardLoadSuccess(cardBalance, lastTransaction);
             } else
                 cardLoadedCallback.onCardLoadError(true);
             tech.close();

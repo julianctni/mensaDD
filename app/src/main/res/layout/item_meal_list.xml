@@ -84,7 +84,7 @@
                             android:drawablePadding="6dp"
                             android:gravity="center_vertical"
                             android:paddingBottom="8dp"
-                            android:layout_marginStart="12dp"
+                            android:paddingStart="12dp"
                             android:paddingTop="8dp"
                             android:text="@string/meals_no_image"
                             android:textAllCaps="true"
@@ -92,6 +92,7 @@
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:visibility="visible"
+                            android:background="@color/meal_image_status_background"
                             app:drawableStartCompat="@drawable/ic_outline_image_24"
                             app:drawableTint="@color/card_header_text" />
 

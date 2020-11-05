@@ -50,6 +50,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
 
     private static final int TYPE_MEAL = 1;
     private static final int TYPE_LAST_UPDATE = 2;
+    private static final int TYPE_NO_MEALS = 3;
     private static final String BAUCHSPECK = "Bauchspeck";
 
     private static final DiffUtil.ItemCallback<Meal> DIFF_CALLBACK = new DiffUtil.ItemCallback<Meal>() {
@@ -85,7 +86,21 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
     @NotNull
     @Override
     public MealViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        int layoutId = viewType == TYPE_LAST_UPDATE ? R.layout.item_meal_list_last : R.layout.item_meal_list;
+        int layoutId;
+        switch(viewType) {
+            case TYPE_LAST_UPDATE:
+                layoutId = R.layout.item_meal_list_last;
+                break;
+            case TYPE_MEAL:
+                layoutId = R.layout.item_meal_list;
+                break;
+            case TYPE_NO_MEALS:
+                layoutId = R.layout.item_meal_list_no_food;
+                break;
+            default:
+                layoutId = TYPE_MEAL;
+        }
+        //int layoutId = viewType == TYPE_LAST_UPDATE ? R.layout.item_meal_list_last : R.layout.item_meal_list;
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 layoutId, parent, false);
         return new MealViewHolder(v);
@@ -93,7 +108,9 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (position == getCurrentList().size() - 1) {
+        if (getCurrentList().get(0).getId() == Meal.EMPTY_MEAL) {
+            return TYPE_NO_MEALS;
+        } else if (position == getCurrentList().size() - 1) {
             return TYPE_LAST_UPDATE;
         } else {
             return TYPE_MEAL;
@@ -103,62 +120,63 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
     @Override
     public void onBindViewHolder(@NonNull MealListAdapter.MealViewHolder holder, int position) {
         Meal item = getItem(position);
-        holder.mName.setText(item.getName());
-        holder.mPrice.setText(item.getPrice());
-        if (item.getDetails().isEmpty()) {
-            holder.mMealContent.setVisibility(View.GONE);
-        } else {
-            holder.mMealContent.setVisibility(View.VISIBLE);
-            holder.mMealContent.setText(item.formatDetails(item.getDetails()));
+        if (item.getId() != Meal.EMPTY_MEAL) {
+            holder.mName.setText(item.getName());
+            holder.mPrice.setText(item.getPrice());
+            if (item.getDetails().isEmpty()) {
+                holder.mMealContent.setVisibility(View.GONE);
+            } else {
+                holder.mMealContent.setVisibility(View.VISIBLE);
+                holder.mMealContent.setText(item.formatDetails(item.getDetails()));
+            }
+
+            if (item.getLocation().length() > 0) {
+                holder.mLocation.setText(item.getLocation());
+                holder.mLocation.setVisibility(View.VISIBLE);
+            } else
+                holder.mLocation.setVisibility(View.GONE);
+
+            if (item.isVegan()) holder.mVegan.setVisibility(View.VISIBLE);
+            else holder.mVegan.setVisibility(View.GONE);
+
+            if (item.isVegetarian()) holder.mVegetarian.setVisibility(View.VISIBLE);
+            else holder.mVegetarian.setVisibility(View.GONE);
+
+            if (item.isPork()) holder.mPork.setVisibility(View.VISIBLE);
+            else holder.mPork.setVisibility(View.GONE);
+
+            if (item.isBeef()) holder.mBeef.setVisibility(View.VISIBLE);
+            else holder.mBeef.setVisibility(View.GONE);
+
+            if (item.isGarlic()) holder.mGarlic.setVisibility(View.VISIBLE);
+            else holder.mGarlic.setVisibility(View.GONE);
+
+            if (item.isAlcohol()) holder.mAlcohol.setVisibility(View.VISIBLE);
+            else holder.mAlcohol.setVisibility(View.GONE);
+
+            if (item.getName().contains(BAUCHSPECK) && mPreferenceService.isBaconFeatureEnabled())
+                holder.mBacon.setVisibility(View.VISIBLE);
+            else
+                holder.mBacon.setVisibility(View.GONE);
+
+            if (mPreferenceService.isGreenVeggieMealsEnabled() && (item.isVegan() || item.isVegetarian())) {
+                holder.mHeaderLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_header_vegeterian));
+                holder.mName.setTextColor(mContext.getResources().getColor(R.color.card_text_light));
+                holder.mLocation.setTextColor(mContext.getResources().getColor(R.color.card_text_light));
+            } else {
+                holder.mHeaderLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_header));
+                holder.mName.setTextColor(mContext.getResources().getColor(R.color.card_header_text));
+                holder.mLocation.setTextColor(mContext.getResources().getColor(R.color.card_header_text));
+            }
+
+            if (mExpandStates.indexOfKey(position) >= 0 && mExpandStates.get(position)) {
+                holder.mMealDetails.setVisibility(View.VISIBLE);
+                holder.mShareButton.setVisibility(View.VISIBLE);
+            } else {
+                holder.mMealDetails.setVisibility(View.GONE);
+                holder.mShareButton.setVisibility(View.GONE);
+            }
         }
-
-        if (item.getLocation().length() > 0) {
-            holder.mLocation.setText(item.getLocation());
-            holder.mLocation.setVisibility(View.VISIBLE);
-        } else
-            holder.mLocation.setVisibility(View.GONE);
-
-        if (item.isVegan()) holder.mVegan.setVisibility(View.VISIBLE);
-        else holder.mVegan.setVisibility(View.GONE);
-
-        if (item.isVegetarian()) holder.mVegetarian.setVisibility(View.VISIBLE);
-        else holder.mVegetarian.setVisibility(View.GONE);
-
-        if (item.isPork()) holder.mPork.setVisibility(View.VISIBLE);
-        else holder.mPork.setVisibility(View.GONE);
-
-        if (item.isBeef()) holder.mBeef.setVisibility(View.VISIBLE);
-        else holder.mBeef.setVisibility(View.GONE);
-
-        if (item.isGarlic()) holder.mGarlic.setVisibility(View.VISIBLE);
-        else holder.mGarlic.setVisibility(View.GONE);
-
-        if (item.isAlcohol()) holder.mAlcohol.setVisibility(View.VISIBLE);
-        else holder.mAlcohol.setVisibility(View.GONE);
-
-        if (item.getName().contains(BAUCHSPECK) && mPreferenceService.isBaconFeatureEnabled())
-            holder.mBacon.setVisibility(View.VISIBLE);
-        else
-            holder.mBacon.setVisibility(View.GONE);
-
-        if (mPreferenceService.isGreenVeggieMealsEnabled() && (item.isVegan() || item.isVegetarian())) {
-            holder.mHeaderLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_header_vegeterian));
-            holder.mName.setTextColor(mContext.getResources().getColor(R.color.card_text_light));
-            holder.mLocation.setTextColor(mContext.getResources().getColor(R.color.card_text_light));
-        } else {
-            holder.mHeaderLayout.setBackgroundColor(mContext.getResources().getColor(R.color.card_header));
-            holder.mName.setTextColor(mContext.getResources().getColor(R.color.card_header_text));
-            holder.mLocation.setTextColor(mContext.getResources().getColor(R.color.card_header_text));
-        }
-
-        if (mExpandStates.indexOfKey(position) >= 0 && mExpandStates.get(position)) {
-            holder.mMealDetails.setVisibility(View.VISIBLE);
-            holder.mShareButton.setVisibility(View.VISIBLE);
-        } else {
-            holder.mMealDetails.setVisibility(View.GONE);
-            holder.mShareButton.setVisibility(View.GONE);
-        }
-
         if (holder.mLastUpdate != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(mLastUpdate);
@@ -170,7 +188,6 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
             } else {
                 date = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(new Date(mLastUpdate));
             }
-            Log.i("ADAPTER", mLastUpdate+"");
             DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
             holder.mLastUpdate.setText(mContext.getString(R.string.last_server_check, date +", " + dateFormat.format(new Date(mLastUpdate))));
         }
@@ -202,28 +219,29 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
 
         private MealViewHolder(View itemView) {
             super(itemView);
-            CardView mealCard = itemView.findViewById(R.id.mealCard);
-            mHeaderLayout = itemView.findViewById(R.id.mealListItemHeader);
-            mMealDetails = itemView.findViewById(R.id.mealDetails);
-            mName = itemView.findViewById(R.id.mealName);
-            mLocation = itemView.findViewById(R.id.mealLocation);
-            mPrice = itemView.findViewById(R.id.mealPrice);
-            mMealImageStatus = itemView.findViewById(R.id.mealImageStatus);
-            mPork = itemView.findViewById(R.id.pork);
-            mBeef = itemView.findViewById(R.id.beef);
-            mVegan = itemView.findViewById(R.id.vegan);
-            mVegetarian = itemView.findViewById(R.id.vegetarian);
-            mAlcohol = itemView.findViewById(R.id.alcohol);
-            mGarlic = itemView.findViewById(R.id.garlic);
-            mBacon = itemView.findViewById(R.id.bacon);
-            mMealContent = itemView.findViewById(R.id.mealContent);
-            mMealImage = itemView.findViewById(R.id.mealImage);
-            mMealImageProgress = itemView.findViewById(R.id.mealImageProgressBar);
-            mShareButton = itemView.findViewById(R.id.shareButton);
-            mShareButton.setBackgroundTintList(ColorStateList.valueOf(mContext.getResources().getColor(R.color.pink)));
-            mShareButton.setOnClickListener(this);
-            //mMealImage.setOnClickListener(this);
-            mealCard.setOnClickListener(this);
+            if (itemView.getId() != R.id.noFoodToday) {
+                CardView mealCard = itemView.findViewById(R.id.mealCard);
+                mHeaderLayout = itemView.findViewById(R.id.mealListItemHeader);
+                mMealDetails = itemView.findViewById(R.id.mealDetails);
+                mName = itemView.findViewById(R.id.mealName);
+                mLocation = itemView.findViewById(R.id.mealLocation);
+                mPrice = itemView.findViewById(R.id.mealPrice);
+                mMealImageStatus = itemView.findViewById(R.id.mealImageStatus);
+                mPork = itemView.findViewById(R.id.pork);
+                mBeef = itemView.findViewById(R.id.beef);
+                mVegan = itemView.findViewById(R.id.vegan);
+                mVegetarian = itemView.findViewById(R.id.vegetarian);
+                mAlcohol = itemView.findViewById(R.id.alcohol);
+                mGarlic = itemView.findViewById(R.id.garlic);
+                mBacon = itemView.findViewById(R.id.bacon);
+                mMealContent = itemView.findViewById(R.id.mealContent);
+                mMealImage = itemView.findViewById(R.id.mealImage);
+                mMealImageProgress = itemView.findViewById(R.id.mealImageProgressBar);
+                mShareButton = itemView.findViewById(R.id.shareButton);
+                //mShareButton.setBackgroundTintList(ColorStateList.valueOf(mContext.getResources().getColor(R.color.pink)));
+                mShareButton.setOnClickListener(this);
+                mealCard.setOnClickListener(this);
+            }
             mLastUpdate = itemView.findViewById(R.id.lastCanteenUpdateText);
         }
 

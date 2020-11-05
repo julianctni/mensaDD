@@ -168,8 +168,8 @@ public class MainActivity extends AppCompatActivity
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             mBalanceCheckService.loadCard(tag, new CardLoadedCallback() {
                 @Override
-                public void onCardLoadSuccess(BalanceEntry balanceEntry) {
-                    FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), balanceEntry);
+                public void onCardLoadSuccess(float balance, float lastTransaction) {
+                    FragmentController.showBalanceCheckFragment(getSupportFragmentManager(), balance, lastTransaction);
                 }
 
                 @Override
