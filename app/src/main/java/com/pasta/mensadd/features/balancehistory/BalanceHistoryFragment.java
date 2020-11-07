@@ -44,6 +44,7 @@ public class BalanceHistoryFragment extends Fragment {
     private TextView mCurrentLastTransaction;
     private TextView noBalanceText;
     private TextView noTransactionText;
+    private TextView mCurrentBalanceEUR;
     private LineChartView mBalanceChart;
     private ColumnChartView mTransactionChart;
 
@@ -70,6 +71,7 @@ public class BalanceHistoryFragment extends Fragment {
         mBalanceChart = v.findViewById(R.id.lineChart);
         mTransactionChart = v.findViewById(R.id.columnChart);
         mCurrentBalance = v.findViewById(R.id.currentBalance);
+        mCurrentBalanceEUR = v.findViewById(R.id.currentBalanceEUR);
         mCurrentLastTransaction = v.findViewById(R.id.currentLastTransaction);
         noBalanceText = v.findViewById(R.id.notEnoughDataForLine);
         noTransactionText = v.findViewById(R.id.notEnoughDataForColumn);
@@ -90,10 +92,12 @@ public class BalanceHistoryFragment extends Fragment {
             if (balanceEntry == null) {
                 mCurrentLastTransaction.setText(getString(R.string.balance_check_explanation));
                 mCurrentBalance.setVisibility(View.GONE);
+                mCurrentBalanceEUR.setVisibility(View.GONE);
             } else {
                 mCurrentBalance.setText(BalanceCheckService.formatAsString(balanceEntry.getCardBalance()));
                 mCurrentLastTransaction.setText(getString(R.string.balance_check_last_transaction, BalanceCheckService.formatAsString(balanceEntry.getLastTransaction())));
                 mCurrentBalance.setVisibility(View.VISIBLE);
+                mCurrentBalanceEUR.setVisibility(View.VISIBLE);
                 mCurrentLastTransaction.setVisibility(View.VISIBLE);
             }
         });

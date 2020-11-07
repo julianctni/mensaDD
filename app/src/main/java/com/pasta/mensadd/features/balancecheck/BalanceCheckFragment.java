@@ -76,9 +76,14 @@ public class BalanceCheckFragment extends Fragment {
         return view;
     }
 
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (!mIsVisible) {
+            animateView(true);
+        }
     }
 
     public void animateView(boolean show) {
