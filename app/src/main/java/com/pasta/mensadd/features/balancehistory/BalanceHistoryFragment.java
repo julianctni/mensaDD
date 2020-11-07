@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.pasta.mensadd.R;
 import com.pasta.mensadd.AppDatabase;
+import com.pasta.mensadd.Utils;
 import com.pasta.mensadd.domain.balanceentry.BalanceEntry;
 import com.pasta.mensadd.domain.balanceentry.BalanceEntryRepository;
 import com.pasta.mensadd.features.balancecheck.BalanceCheckService;
@@ -45,6 +46,7 @@ public class BalanceHistoryFragment extends Fragment {
     private TextView noBalanceText;
     private TextView noTransactionText;
     private TextView mCurrentBalanceEUR;
+    private TextView mLastCheckTime;
     private LineChartView mBalanceChart;
     private ColumnChartView mTransactionChart;
 
@@ -72,6 +74,7 @@ public class BalanceHistoryFragment extends Fragment {
         mTransactionChart = v.findViewById(R.id.columnChart);
         mCurrentBalance = v.findViewById(R.id.currentBalance);
         mCurrentBalanceEUR = v.findViewById(R.id.currentBalanceEUR);
+        mLastCheckTime = v.findViewById(R.id.text_balanceHistory_lastCheckTime);
         mCurrentLastTransaction = v.findViewById(R.id.currentLastTransaction);
         noBalanceText = v.findViewById(R.id.notEnoughDataForLine);
         noTransactionText = v.findViewById(R.id.notEnoughDataForColumn);
@@ -93,12 +96,15 @@ public class BalanceHistoryFragment extends Fragment {
                 mCurrentLastTransaction.setText(getString(R.string.balance_check_explanation));
                 mCurrentBalance.setVisibility(View.GONE);
                 mCurrentBalanceEUR.setVisibility(View.GONE);
+                mLastCheckTime.setVisibility(View.GONE);
             } else {
                 mCurrentBalance.setText(BalanceCheckService.formatAsString(balanceEntry.getCardBalance()));
                 mCurrentLastTransaction.setText(getString(R.string.balance_check_last_transaction, BalanceCheckService.formatAsString(balanceEntry.getLastTransaction())));
+                mLastCheckTime.setText(Utils.formatTimestamp(requireContext(), balanceEntry.getTimestamp()));
                 mCurrentBalance.setVisibility(View.VISIBLE);
                 mCurrentBalanceEUR.setVisibility(View.VISIBLE);
                 mCurrentLastTransaction.setVisibility(View.VISIBLE);
+                mLastCheckTime.setVisibility(View.VISIBLE);
             }
         });
 

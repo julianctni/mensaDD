@@ -34,7 +34,7 @@
     <string name="balance_already_saved">Balance has already been saved.</string>
     <string name="balance_check_card_not_supported">Card not supported.</string>
     <string name="balance_check_fail">Card could not be read.</string>
-    <string name="balance_check_last_check">Last balance check</string>
+    <string name="balance_check_last_check">Latest entry</string>
     <string name="balance_check_history">Balance history</string>
     <string name="balance_check_last_transactions">Last transactions</string>
     <string name="balance_check_not_enough_data">Not enough data available.</string>

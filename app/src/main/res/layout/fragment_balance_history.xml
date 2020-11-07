@@ -27,7 +27,7 @@
 
                 <TextView
                     android:id="@+id/text_balanceHistory_lastCheck"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:textStyle="bold"
@@ -35,6 +35,16 @@
                     android:textColor="@color/card_content_text"
                     android:textSize="20sp" />
 
+                <TextView
+                    android:id="@+id/text_balanceHistory_lastCheckTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBaseline="@id/text_balanceHistory_lastCheck"
+                    android:visibility="gone"
+                    android:textStyle="bold"
+                    android:textColor="@color/balance_history_last_check_time"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/currentBalance"

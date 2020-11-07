@@ -40,4 +40,5 @@
     <color name="progressbar">@color/pink_dark</color>
     <color name="map_info_card_background">@color/white</color>
     <color name="meal_image_status_background">#F6F6F6</color>
+    <color name="balance_history_last_check_time">#bbbbbb</color>
 </resources>

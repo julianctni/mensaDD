@@ -13,6 +13,11 @@ import android.view.animation.Transformation;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Created by julian on 13.02.18.
  */
@@ -123,5 +128,20 @@ public class Utils {
         animator.addUpdateListener(valueAnimator -> recyclerView.setPadding(0, (int) valueAnimator.getAnimatedValue(), 0, 0));
         animator.setDuration(200);
         return animator;
+    }
+
+    public static String formatTimestamp(Context context, long timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp);
+        String date;
+        if (calendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
+            date = context.getString(R.string.today);
+        } else if (calendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 1) {
+            date = context.getString(R.string.yesterday);
+        } else {
+            date = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault()).format(new Date(timestamp));
+        }
+        DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
+        return date + ", " + timeFormat.format(new Date(timestamp));
     }
 }
