@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -23,6 +22,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -85,6 +85,8 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
     private boolean markerSelected = false;
     private LocationComponent mLocationComponent;
     private CanteenMapViewModel mCanteenMapViewModel;
+    private LatLngBounds mInitialMapBounds;
+    private PreferenceService mPreferenceService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,10 +99,10 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-        PreferenceService preferenceService = new PreferenceService(requireContext());
+        mPreferenceService = new PreferenceService(requireContext());
         CanteenRepository canteenRepository = new CanteenRepository(
                 AppDatabase.getInstance(requireContext()),
-                preferenceService,
+                mPreferenceService,
                 ServiceGenerator.createService(ApiService.class)
         );
         CanteenMapViewModelFactory canteenMapViewModelFactory = new CanteenMapViewModelFactory(canteenRepository);
@@ -119,6 +121,19 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
             mCanteenMapViewModel.getCanteens().observe(requireActivity(), canteens ->
                     initMap(mapboxMap, canteens));
         });
+        if (mPreferenceService.getMapShowDialogPref()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.dialog_map_section_text)
+                    .setTitle(R.string.dialog_map_section_title);
+            builder.setPositiveButton(R.string.dialog_button_okay, (dialog, id) -> {
+                mPreferenceService.setMapShowDialogPref(false);
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+
         return view;
     }
 
@@ -136,15 +151,25 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
         map.getUiSettings().setAttributionGravity(Gravity.BOTTOM + Gravity.END);
         map.setStyle(styleUrl, style -> {
             List<Feature> canteenCoordinates = new ArrayList<>();
-            LatLngBounds.Builder bounds = new LatLngBounds.Builder();
-
+            LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
+            String mapCenterPref = mPreferenceService.getMapCenterPref();
             for (Canteen c : canteens) {
                 LatLng position = new LatLng(c.getPosLat(), c.getPosLong());
-                bounds.include(position);
+                if (mapCenterPref.equals(getString(R.string.pref_map_center_all))) {
+                    latLngBoundsBuilder.include(position);
+                } else if (mapCenterPref.equals(getString(R.string.pref_map_center_fav)) && c.getPriority() > 1) {
+                    latLngBoundsBuilder.include(position);
+                } else if (mapCenterPref.equals(getString(R.string.pref_map_center_dd)) && c.getAddress().contains("01")) {
+                    latLngBoundsBuilder.include((position));
+                }
                 Feature feature = Feature.fromGeometry(
                         Point.fromLngLat(c.getPosLong(), c.getPosLat()));
                 feature.addStringProperty(CANTEEN_ID, c.getId());
                 canteenCoordinates.add(feature);
+            }
+
+            if (!canteens.isEmpty()) {
+                mInitialMapBounds = latLngBoundsBuilder.build();
             }
 
             style.addSource(new GeoJsonSource(CANTEEN_MARKER_SOURCE,
@@ -166,7 +191,10 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
                             iconOffset(new Float[]{0f, -9f})));
 
             mMap.addOnMapClickListener(this);
-            mMap.easeCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 50), 1500);
+
+            if (mInitialMapBounds != null) {
+                mMap.easeCamera(CameraUpdateFactory.newLatLngBounds(mInitialMapBounds, 150), 1500);
+            }
 
             mCanteenMapViewModel.getSelectedCanteen().observe(getViewLifecycleOwner(), canteen -> {
                 if (canteen == null) {
@@ -182,7 +210,9 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
                             new Feature[]{feature}));
                 }
                 selectMarker((SymbolLayer) mMap.getStyle().getLayer(SELECTED_CANTEEN_MARKER_LAYER));
-                CameraPosition cp = new CameraPosition.Builder().zoom(12).padding(0, 0, 0, 400).target(new LatLng(canteen.getPosLat(), canteen.getPosLong())).build();
+                double currentZoom = mMap.getCameraPosition().zoom;
+                double newZoom = currentZoom > 12 ? currentZoom : 12;
+                CameraPosition cp = new CameraPosition.Builder().zoom(newZoom).padding(0, 0, 0, 400).target(new LatLng(canteen.getPosLat(), canteen.getPosLong())).build();
                 mMap.easeCamera(CameraUpdateFactory.newCameraPosition(cp));
                 mCanteenName.setText(canteen.getName());
                 mCanteenAddress.setText(canteen.getAddress());
@@ -351,6 +381,11 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.show_location) {
             toggleGps();
+            return true;
+        } else if (item.getItemId() == R.id.reset_map) {
+            if (mInitialMapBounds != null) {
+                mMap.easeCamera(CameraUpdateFactory.newLatLngBounds(mInitialMapBounds, 150), 800);
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

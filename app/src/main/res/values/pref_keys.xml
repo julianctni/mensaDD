@@ -6,4 +6,16 @@
     <string name="pref_key_autostart_set" translatable="false">autostart_set</string>
     <string name="pref_reset_key" translatable="false">pref_reset</string>
     <string name="pref_dark_mode_key" translatable="false">pref_dark_mode</string>
+    <string name="pref_dark_mode_yes" translatable="false">dark</string>
+    <string name="pref_dark_mode_no" translatable="false">light</string>
+    <string name="pref_dark_mode_auto" translatable="false">auto</string>
+    <string name="pref_map_center_key" translatable="false">pref_map_center</string>
+    <string name="pref_map_center_fav" translatable="false">dark</string>
+    <string name="pref_map_center_all" translatable="false">light</string>
+    <string name="pref_map_center_dd" translatable="false">auto</string>
+    <string-array name="pref_map_center_values">
+        <item>@string/pref_map_center_fav</item>
+        <item>@string/pref_map_center_all</item>
+        <item>@string/pref_map_center_dd</item>
+    </string-array>
 </resources>

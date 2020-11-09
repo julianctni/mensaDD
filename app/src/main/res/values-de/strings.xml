@@ -36,13 +36,19 @@
     <string name="meals_loading_progress">Speiseplan wird geladen...</string>
     <string name="pref_reset_summary">Lösche alle lokal gespeicherten Speisepläne, Favoriten und Guthabendaten.</string>
     <string name="pref_reset_title">Daten löschen</string>
+    <string name="pref_map_center_title">Kartenausschnitt</string>
+    <string name="pref_map_center_summary">Wähle, welche Mensen im initialen Kartenausschnitt sichtbar sein sollen.</string>
     <string name="pref_dark_mode_title">Nachtmodus</string>
     <string name="pref_dark_mode_summary">Wähle zwischen hellem, dunklem oder systemweitem Farbmodus.</string>
-    <string name="pref_dark_mode_follow_system_summary">Das Farbschema wird automatisch entsprechend den Systemeinstellungen angepasst.</string>
     <string-array name="pref_dark_mode_entries">
         <item>Dunkel</item>
         <item>Hell</item>
         <item>Systemeinstellung</item>
+    </string-array>
+    <string-array name="pref_map_center_entries">
+        <item>Lieblingsmensen (Favoriten + am häufigsten angeklickt) </item>
+        <item>Alle Mensen</item>
+        <item>Dresdner Mensen (inkl. Tharandt)</item>
     </string-array>
     <string name="send_feedback_mail">Feedback E-Mail verfassen</string>
     <string name="canteens_loading_progress">Mensen werden geladen...</string>
@@ -58,6 +64,7 @@
     <string name="image_meal">Foto des Gerichts</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_show_position">Aktuelle Position</string>
+    <string name="menu_reset_map_zoom">Karte zurücksetzen</string>
     <string name="menu_send_feedback">Feedback senden</string>
     <string name="menu_set_favorite">Als Favorit setzen</string>
     <string name="menu_refresh">Aktualisieren</string>
@@ -85,4 +92,7 @@
     <string name="meals_release_to_refresh">Zum Aktualisieren loslassen!</string>
     <string name="news_wanna_refresh">Neuigkeiten aktualisieren?</string>
     <string name="news_release_to_refresh">Zum Aktualisieren loslassen!</string>
+    <string name="dialog_map_section_title">Kartenausschnitt</string>
+    <string name="dialog_map_section_text">Standardmäßig ist der initiale Kartenausschnitt so gewählt, dass alle Dresdner Mensen (inkl. Tharandt) sichtbar sind. In den App-Einstellungen können alternative Varianten gewählt werden.</string>
+    <string name="dialog_button_okay">Okay</string>
 </resources>

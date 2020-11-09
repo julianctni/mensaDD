@@ -6,6 +6,14 @@
         android:id="@+id/show_location"
         android:icon="@drawable/ic_my_location_white_24dp"
         android:title="@string/menu_show_position"
-        app:showAsAction="always" />
+        app:iconTint="@color/white"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/reset_map"
+        android:icon="@drawable/ic_baseline_zoom_out_map_24"
+        android:title="@string/menu_reset_map_zoom"
+        app:iconTint="@color/white"
+        app:showAsAction="ifRoom" />
 
 </menu>

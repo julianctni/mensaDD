@@ -25,6 +25,15 @@
         android:icon="@drawable/ic_outline_color_lens_24"/>
 
     <ListPreference
+        android:key="@string/pref_map_center_key"
+        android:title="@string/pref_map_center_title"
+        android:summary="@string/pref_map_center_summary"
+        android:entries="@array/pref_map_center_entries"
+        android:entryValues="@array/pref_map_center_values"
+        android:defaultValue="@string/pref_map_center_dd"
+        android:icon="@drawable/ic_baseline_not_listed_location_24"/>
+
+    <ListPreference
         android:key="@string/pref_dark_mode_key"
         android:title="@string/pref_dark_mode_title"
         android:summary="@string/pref_dark_mode_summary"
