@@ -86,10 +86,10 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
     }
 
     void showLatestUpdatesCard() {
-        if (mPackageInfo != null && mPreferenceService.getBooleanPreference(PreferenceService.SHOW_LATEST_UPDATES + mPackageInfo.versionCode, true)) {
+        if (mPackageInfo != null && mPreferenceService.getBooleanPreference(PreferenceService.SHOW_LATEST_UPDATES + mPackageInfo.versionName, true)) {
             mLatestUpdatesCard.setVisibility(View.VISIBLE);
-            mPreferenceService.removePreference("pref_show_tut_" + (mPackageInfo.versionCode - 1));
-            mPreferenceService.removePreference(PreferenceService.SHOW_LATEST_UPDATES + (mPackageInfo.versionCode - 1));
+            //mPreferenceService.removePreference("pref_show_tut_" + (mPackageInfo.versionCode - 1));
+            //mPreferenceService.removePreference(PreferenceService.SHOW_LATEST_UPDATES + (mPackageInfo.versionCode - 1));
         }
     }
 
@@ -98,7 +98,7 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
         if (view.getId() == R.id.latestUpdatesCloseButton) {
             mLatestUpdatesCard.setVisibility(View.GONE);
             if (mPackageInfo != null) {
-                mPreferenceService.setBooleanPreference(PreferenceService.SHOW_LATEST_UPDATES + mPackageInfo.versionCode, false);
+                mPreferenceService.setBooleanPreference(PreferenceService.SHOW_LATEST_UPDATES + mPackageInfo.versionName, false);
             }
         }
     }
