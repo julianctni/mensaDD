@@ -32,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    def room_version = "2.2.5"
+    def room_version = "2.2.6"
     def archLifecycleVersion = '2.2.0'
 
     implementation "androidx.room:room-runtime:$room_version"
