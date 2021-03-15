@@ -53,7 +53,7 @@
     <string name="send_feedback_mail">Feedback E-Mail verfassen</string>
     <string name="canteens_loading_progress">Mensen werden geladen...</string>
     <string name="delete_data">Daten wurden erfolgreich gelöscht.</string>
-    <string name="app_version">Version 4.0 / Nov 2020</string>
+    <string name="app_version">Version 4.0 / März 2021</string>
     <string name="pref_veg_meals_title">Grüne Gerichte</string>
     <string name="pref_veg_meals_summary">Färbe vegane und vegetarische Gerichte grün ein.</string>
     <string name="meals_no_image">kein Bild verfügbar</string>
@@ -87,7 +87,7 @@
     <string name="location_permission_missing">Berechtigung für GPS-Zugriff wird benötigt.</string>
     <string name="location_permission_missing_check">Erneut fragen</string>
     <string name="latest_updates_heading">Was ist neu?</string>
-    <string name="latest_updates_content">Die Kartenansicht wurde überarbeitet. Und es gibt jetzt einen Dark Mode! Außerdem wurden diverse weitere Design-Anpassungen vorgenommen, zum Teil sichtbar, zum Teil unter der Haube.\n\nNa dann, bon appétit!</string>
+    <string name="latest_updates_content">Die Kartenansicht wurde überarbeitet. Und es gibt jetzt einen Dark Mode! Außerdem wurden diverse weitere Design-Anpassungen vorgenommen, zum Teil sichtbar, zum Teil unter der Haube.\n\nBon appétit!</string>
     <string name="meals_wanna_refresh">Speisepläne aktualisieren?</string>
     <string name="meals_release_to_refresh">Zum Aktualisieren loslassen!</string>
     <string name="news_wanna_refresh">Neuigkeiten aktualisieren?</string>
