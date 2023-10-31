@@ -8,7 +8,7 @@ import com.pasta.mensadd.domain.balanceentry.BalanceEntryRepository;
 
 public class BalanceHistoryViewModelFactory implements ViewModelProvider.Factory {
 
-    private BalanceEntryRepository mBalanceEntryRepository;
+    private final BalanceEntryRepository mBalanceEntryRepository;
 
     public BalanceHistoryViewModelFactory(BalanceEntryRepository balanceEntryRepository) {
         mBalanceEntryRepository = balanceEntryRepository;

@@ -13,7 +13,7 @@ import com.pasta.mensadd.domain.balanceentry.BalanceEntryRepository;
 
 public class BalanceCheckViewModelFactory extends AbstractSavedStateViewModelFactory {
 
-    private BalanceEntryRepository mBalanceEntryRepository;
+    private final BalanceEntryRepository mBalanceEntryRepository;
 
     public BalanceCheckViewModelFactory(SavedStateRegistryOwner savedStateRegistryOwner, Bundle bundle,  BalanceEntryRepository balanceEntryRepository) {
         super(savedStateRegistryOwner, bundle);

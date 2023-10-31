@@ -22,6 +22,8 @@ import com.pasta.mensadd.R;
 import com.pasta.mensadd.features.balancecheck.AutostartRegister;
 import com.pasta.mensadd.FragmentController;
 
+import java.util.Objects;
+
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        view.setBackgroundColor(getResources().getColor(R.color.fragment_background));
+        Objects.requireNonNull(view).setBackgroundColor(getResources().getColor(R.color.fragment_background));
         return view;
     }
 
@@ -69,7 +71,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.pref_autostart_key)) && getActivity() != null) {
+        if (Objects.equals(key, getString(R.string.pref_autostart_key)) && getActivity() != null) {
             AutostartRegister.register(getActivity().getPackageManager(), sharedPreferences.getBoolean(key, false));
         } else if (key.equals(getString(R.string.pref_dark_mode_key))) {
             String value = sharedPreferences.getString(key, getString(R.string.pref_dark_mode_auto));

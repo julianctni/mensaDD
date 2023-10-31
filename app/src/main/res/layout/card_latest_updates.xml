@@ -9,13 +9,13 @@
     android:longClickable="false"
     android:visibility="gone"
     card_view:cardBackgroundColor="@color/cyan_dark"
-    card_view:cardCornerRadius="8dp">
+    card_view:cardCornerRadius="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/latestUpdatesHeading"

@@ -13,13 +13,13 @@ public class BalanceCheckViewModel extends ViewModel {
 
     public static final String ARGS_KEY_CURRENT_BALANCE = "arg_current_balance";
     public static final String ARGS_KEY_LAST_TRANSACTION = "arg_last_transaction";
-    private BalanceEntryRepository mBalanceEntryRepository;
-    private LiveData<BalanceEntry> mLatestBalanceEntryLive;
+    private final BalanceEntryRepository mBalanceEntryRepository;
+    private final LiveData<BalanceEntry> mLatestBalanceEntryLive;
     private BalanceEntry mLatestBalanceEntry;
     //private BalanceEntry mCurrentBalanceEntry;
     private float mCurrentBalance;
     private float mLastTransaction;
-    private SavedStateHandle mSavedStateHandle;
+    private final SavedStateHandle mSavedStateHandle;
 
     public BalanceCheckViewModel(BalanceEntryRepository balanceEntryRepository, SavedStateHandle savedStateHandle) {
         mBalanceEntryRepository = balanceEntryRepository;

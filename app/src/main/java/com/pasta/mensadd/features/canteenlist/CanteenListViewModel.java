@@ -10,8 +10,8 @@ import java.util.List;
 
 public class CanteenListViewModel extends ViewModel {
 
-    private CanteenRepository mCanteenRepository;
-    private LiveData<List<Canteen>> mCanteens;
+    private final CanteenRepository mCanteenRepository;
+    private final LiveData<List<Canteen>> mCanteens;
 
     public CanteenListViewModel(CanteenRepository canteenRepository) {
         mCanteenRepository = canteenRepository;

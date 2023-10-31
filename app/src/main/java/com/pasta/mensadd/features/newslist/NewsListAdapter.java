@@ -21,7 +21,7 @@ import com.pasta.mensadd.domain.news.News;
 
 public class NewsListAdapter extends ListAdapter<News, NewsListAdapter.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
 
     private static final DiffUtil.ItemCallback<News> DIFF_CALLBACK = new DiffUtil.ItemCallback<News>() {
         @Override
@@ -42,6 +42,7 @@ public class NewsListAdapter extends ListAdapter<News, NewsListAdapter.ViewHolde
         mContext = context;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
@@ -82,9 +83,9 @@ public class NewsListAdapter extends ListAdapter<News, NewsListAdapter.ViewHolde
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.newsShareButton){
-                shareNews(getItem(getAdapterPosition()));
+                shareNews(getItem(getBindingAdapterPosition()));
             } else if (v.getId() == R.id.newsDetailsButton){
-                openDetailsInBrowser(getItem(getAdapterPosition()));
+                openDetailsInBrowser(getItem(getBindingAdapterPosition()));
             }
 
         }

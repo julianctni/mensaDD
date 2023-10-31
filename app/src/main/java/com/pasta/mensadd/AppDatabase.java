@@ -15,9 +15,6 @@ import com.pasta.mensadd.domain.canteen.CanteenDao;
 import com.pasta.mensadd.domain.meal.Meal;
 import com.pasta.mensadd.domain.news.News;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
 @Database(entities = {Canteen.class, Meal.class, News.class, BalanceEntry.class}, version = 7, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 

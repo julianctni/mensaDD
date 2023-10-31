@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -23,7 +24,7 @@ public class CanteenListAdapter extends ListAdapter<Canteen, CanteenListAdapter.
 
     private OnFavoriteClickListener mOnFavoriteClickListener;
     private OnCanteenClickListener mOnCanteenClickListener;
-    private Context mContext;
+    private final Context mContext;
 
     private static final DiffUtil.ItemCallback<Canteen> DIFF_CALLBACK = new DiffUtil.ItemCallback<Canteen>() {
         @Override
@@ -60,10 +61,10 @@ public class CanteenListAdapter extends ListAdapter<Canteen, CanteenListAdapter.
         holder.mAddress.setText(item.getAddress());
         holder.mHours.setText(item.getHours());
         if (item.isFavorite()) {
-            holder.mFavorite.setImageDrawable(mContext.getDrawable(R.drawable.ic_baseline_favorite_24));
+            holder.mFavorite.setImageDrawable(AppCompatResources.getDrawable(mContext, R.drawable.ic_baseline_favorite_24));
             holder.mFavorite.setColorFilter(ContextCompat.getColor(mContext, R.color.pink_dark));
         } else {
-            holder.mFavorite.setImageDrawable(mContext.getDrawable(R.drawable.ic_baseline_favorite_border_24));
+            holder.mFavorite.setImageDrawable(AppCompatResources.getDrawable(mContext, R.drawable.ic_baseline_favorite_border_24));
             holder.mFavorite.setColorFilter(ContextCompat.getColor(mContext, R.color.card_header_text));
         }
     }
@@ -97,17 +98,17 @@ public class CanteenListAdapter extends ListAdapter<Canteen, CanteenListAdapter.
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.canteenItemFav) {
-                boolean isFavorite = getItem(getAdapterPosition()).isFavorite();
-                mOnFavoriteClickListener.onFavoriteClick(getItem(getAdapterPosition()));
+                boolean isFavorite = getItem(getBindingAdapterPosition()).isFavorite();
+                mOnFavoriteClickListener.onFavoriteClick(getItem(getBindingAdapterPosition()));
                 int favIconId = isFavorite ? R.drawable.ic_baseline_favorite_border_24 : R.drawable.ic_baseline_favorite_24;
                 int favIconColor = isFavorite ? R.color.card_header_text : R.color.pink_dark;
 
-                mFavorite.setImageDrawable(mContext.getDrawable(favIconId));
+                mFavorite.setImageDrawable(AppCompatResources.getDrawable(mContext, favIconId));
                 mFavorite.setColorFilter(ContextCompat.getColor(mContext, favIconColor));
                 mFavorite.startAnimation(Utils.getFavoriteScaleOutAnimation(mFavorite));
             } else {
                 try {
-                    mOnCanteenClickListener.onCanteenClick(getItem(getAdapterPosition()));
+                    mOnCanteenClickListener.onCanteenClick(getItem(getBindingAdapterPosition()));
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
             }

@@ -10,7 +10,7 @@ import com.pasta.mensadd.features.canteenlist.CanteenListViewModel;
 
 public class CanteenMapViewModel extends CanteenListViewModel {
 
-    private MutableLiveData<String> mSelectedCanteenIdLive;
+    private final MutableLiveData<String> mSelectedCanteenIdLive;
     private String mSelectedCanteenId;
 
     public CanteenMapViewModel(CanteenRepository canteenRepository) {

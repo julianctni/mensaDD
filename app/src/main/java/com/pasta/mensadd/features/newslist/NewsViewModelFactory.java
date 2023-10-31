@@ -8,7 +8,7 @@ import com.pasta.mensadd.domain.news.NewsRepository;
 
 public class NewsViewModelFactory implements ViewModelProvider.Factory {
 
-    private NewsRepository mNewsRepository;
+    private final NewsRepository mNewsRepository;
 
     public NewsViewModelFactory(NewsRepository newsRepository) {
         mNewsRepository = newsRepository;

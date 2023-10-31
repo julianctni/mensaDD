@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pasta.mensadd.PullToRefreshFragment;
@@ -65,7 +64,7 @@ public class MealDayFragment extends PullToRefreshFragment {
         mRecyclerView.setNestedScrollingEnabled(true);
         super.setUpPullToRefresh(R.string.meals_wanna_refresh, R.string.meals_release_to_refresh);
         Date date = new Date();
-        date.setTime(date.getTime() + mPagerPosition * ONE_DAY_IN_MILLIS);
+        date.setTime(date.getTime() + (long) mPagerPosition * ONE_DAY_IN_MILLIS);
         String day = DATE_FORMAT.format(date);
         mMealsViewModel.getMealsByDay(day).observe(getViewLifecycleOwner(), meals -> {
             //noinspection ConstantConditions
@@ -91,12 +90,6 @@ public class MealDayFragment extends PullToRefreshFragment {
         mMealsViewModel.getCanteenAsLiveData().observe(getViewLifecycleOwner(), canteen -> mMealListAdapter.setLastMealUpdate(canteen.getLastMealScraping()));
         return view;
     }
-
-    /*
-    private void showNoFoodToday(boolean showNoFoodToday) {
-        mRecyclerView.setVisibility(showNoFoodToday ? View.GONE : View.VISIBLE);
-        noFoodToday.setVisibility(showNoFoodToday ? View.VISIBLE : View.GONE);
-    }*/
 
     @Override
     public void onRefresh() {

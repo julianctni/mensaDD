@@ -10,8 +10,8 @@ import java.util.List;
 
 public class NewsViewModel extends ViewModel {
 
-    private NewsRepository mNewsRepository;
-    private LiveData<List<News>> mNews;
+    private final NewsRepository mNewsRepository;
+    private final LiveData<List<News>> mNews;
 
     public NewsViewModel(NewsRepository newsRepository) {
         mNewsRepository = newsRepository;

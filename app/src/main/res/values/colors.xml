@@ -18,12 +18,12 @@
     <color name="card_meal_header_veg">#7fb29b</color>
     <color name="card_meal_header">#EBEBEB</color>
 
-    <color name="fragment_background">#FEFEFE</color>
-    <color name="bottom_nav_background">#F0F0F0</color>
+    <color name="fragment_background">#FAFAFA</color>
+    <color name="bottom_nav_background">#EAEAEA</color>
     <color name="bottom_nav_icon_active">@color/colorPrimaryDark</color>
     <color name="bottom_nav_icon_inactive">#888888</color>
     <color name="bottom_nav_ripple_color">#AAAAAA</color>
-    <color name="card_header">#EBEBEB</color>
+    <color name="card_header">#D9D9D9</color>
     <color name="card_header_text">#444444</color>
     <color name="card_content">#FFFFFF</color>
     <color name="card_content_text">#444444</color>

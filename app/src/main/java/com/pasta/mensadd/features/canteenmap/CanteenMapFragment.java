@@ -91,7 +91,6 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
     }
 
 
@@ -122,7 +121,7 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
                     initMap(mapboxMap, canteens));
         });
         if (mPreferenceService.getMapShowDialogPref()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
             builder.setMessage(R.string.dialog_map_section_text)
                     .setTitle(R.string.dialog_map_section_title);
             builder.setPositiveButton(R.string.dialog_button_okay, (dialog, id) -> {
@@ -209,7 +208,7 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
                     source.setGeoJson(FeatureCollection.fromFeatures(
                             new Feature[]{feature}));
                 }
-                selectMarker((SymbolLayer) mMap.getStyle().getLayer(SELECTED_CANTEEN_MARKER_LAYER));
+                selectMarker((SymbolLayer) Objects.requireNonNull(mMap.getStyle()).getLayer(SELECTED_CANTEEN_MARKER_LAYER));
                 double currentZoom = mMap.getCameraPosition().zoom;
                 double newZoom = currentZoom > 12 ? currentZoom : 12;
                 CameraPosition cp = new CameraPosition.Builder().zoom(newZoom).padding(0, 0, 0, 400).target(new LatLng(canteen.getPosLat(), canteen.getPosLong())).build();
@@ -290,10 +289,10 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
 
     @SuppressLint("MissingPermission")
     public void createAndStartLocationComponent() {
-        LocationComponentOptions locationComponentOptions = LocationComponentOptions.builder(Objects.requireNonNull(getContext())).build();
+        LocationComponentOptions locationComponentOptions = LocationComponentOptions.builder(requireContext()).build();
 
         LocationComponentActivationOptions locationComponentActivationOptions = LocationComponentActivationOptions
-                .builder(getContext(), Objects.requireNonNull(mMap.getStyle()))
+                .builder(requireContext(), Objects.requireNonNull(mMap.getStyle()))
                 .locationComponentOptions(locationComponentOptions)
                 .useDefaultLocationEngine(true)
                 .build();
@@ -311,7 +310,7 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
     }
 
     private void requestLocationComponent() {
-        if (!PermissionsManager.areLocationPermissionsGranted(Objects.requireNonNull(getContext()))) {
+        if (!PermissionsManager.areLocationPermissionsGranted(requireContext())) {
             requestLocationPermission();
         } else {
             createAndStartLocationComponent();
@@ -392,7 +391,7 @@ public class CanteenMapFragment extends Fragment implements PermissionsListener,
     }
 
     public boolean isLocationEnabled() {
-        LocationManager lm = (LocationManager) Objects.requireNonNull(getContext()).getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 

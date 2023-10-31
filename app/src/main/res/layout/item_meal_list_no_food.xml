@@ -12,7 +12,7 @@
         android:layout_margin="8dp"
         android:longClickable="false"
         card_view:cardBackgroundColor="@color/card_content"
-        card_view:cardCornerRadius="8dp"
+        card_view:cardCornerRadius="16dp"
         card_view:contentPadding="20dp">
 
         <LinearLayout

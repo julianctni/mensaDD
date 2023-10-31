@@ -4,19 +4,13 @@ package com.pasta.mensadd.features.newslist;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.pasta.mensadd.AppDatabase;
 import com.pasta.mensadd.PullToRefreshFragment;
@@ -37,7 +31,6 @@ public class NewsFragment extends PullToRefreshFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-        LinearLayoutManager layoutParams = new LinearLayoutManager(requireActivity());
         mRecyclerView = view.findViewById(R.id.newsList);
         NewsListAdapter newsListAdapter = new NewsListAdapter(this.requireContext());
         mRecyclerView.setAdapter(newsListAdapter);

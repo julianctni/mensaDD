@@ -48,6 +48,13 @@ public class ImprintFragment extends Fragment implements View.OnClickListener {
         licenseView.setMovementMethod(LinkMovementMethod.getInstance());
         licenseView.setText(Html
                 .fromHtml(getString(R.string.imprint_license)));
+
+        TextView privacyView = view.findViewById(R.id.imprintPrivacy);
+        privacyView.setText(Html.fromHtml(getString(R.string.imprint_privacy)));
+
+        licenseView.setMovementMethod(LinkMovementMethod.getInstance());
+        licenseView.setText(Html
+                .fromHtml(getString(R.string.imprint_license)));
         ImageView banner = view.findViewById(R.id.banner_imprint);
         banner.setOnClickListener(this);
         MainActivity activity = (MainActivity) getActivity();

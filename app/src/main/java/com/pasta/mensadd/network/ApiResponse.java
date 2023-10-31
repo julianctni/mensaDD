@@ -3,7 +3,7 @@ package com.pasta.mensadd.network;
 import java.util.List;
 
 public class ApiResponse<T> {
-    private long scrapedAt;
+    private final long scrapedAt;
     private List<T> data;
 
     public ApiResponse(long scrapedAt, List<T> data) {

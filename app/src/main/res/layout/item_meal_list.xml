@@ -10,7 +10,7 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:longClickable="false"
-    card_view:cardCornerRadius="8dp">
+    card_view:cardCornerRadius="16dp">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

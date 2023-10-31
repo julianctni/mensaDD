@@ -13,8 +13,8 @@ import com.pasta.mensadd.domain.meal.MealRepository;
 
 public class MealsViewModelFactory extends AbstractSavedStateViewModelFactory {
 
-    private MealRepository mMealRepository;
-    private CanteenRepository mCanteenRepository;
+    private final MealRepository mMealRepository;
+    private final CanteenRepository mCanteenRepository;
 
     public MealsViewModelFactory(SavedStateRegistryOwner savedStateRegistryOwner, Bundle bundle, MealRepository mealRepository, CanteenRepository canteenRepository) {
         super(savedStateRegistryOwner, bundle);

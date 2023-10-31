@@ -2,7 +2,6 @@ package com.pasta.mensadd;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -33,20 +32,20 @@ public class PullToRefreshFragment extends Fragment {
                 } else if (mRecyclerView.getPaddingTop() >= pullRefreshThreshold) {
                     animator.addListener(new Animator.AnimatorListener() {
                         @Override
-                        public void onAnimationStart(Animator animator) {
+                        public void onAnimationStart(@NonNull Animator animator) {
                         }
 
                         @Override
-                        public void onAnimationEnd(Animator animator) {
+                        public void onAnimationEnd(@NonNull Animator animator) {
                             onRefresh();
                         }
 
                         @Override
-                        public void onAnimationCancel(Animator animator) {
+                        public void onAnimationCancel(@NonNull Animator animator) {
                         }
 
                         @Override
-                        public void onAnimationRepeat(Animator animator) {
+                        public void onAnimationRepeat(@NonNull Animator animator) {
                         }
                     });
                     animator.start();

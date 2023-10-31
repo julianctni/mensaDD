@@ -2,7 +2,7 @@
     <string name="nav_food">Mensen</string>
     <string name="nav_map">Karte</string>
     <string name="nav_settings">Einstellungen</string>
-    <string name="pref_imprint">Impressum</string>
+    <string name="pref_imprint">Impressum &amp; Datenschutz</string>
     <string name="nav_license">Lizenzen</string>
     <string name="nav_card_history">Guthaben</string>
     <string name="nav_news">Neuigkeiten</string>
@@ -20,6 +20,8 @@
     <string name="imprint_license_header"><![CDATA[Lizenzen & Co.]]></string>
     <string name="imprint_general_header">Allgemeines</string>
     <string name="imprint_general">Für Ungenauigkeiten bei den Speiseplänen und anderen Angaben zu den Mensen übernehme ich keine Haftung.\n\nDie Speisepläne werden serverseitig von der Webseite des Studentenwerks heruntergeladen und ausgelesen.\n\nBei Fragen, Wünschen und Anregungen einfach eine Nachricht schreiben.</string>
+    <string name="imprint_privacy_header">Datenschutz</string>
+    <string name="imprint_privacy">Die App speichert keinerlei private Daten. Die Telemetrie von Mapbox wurde deaktiviert.<![CDATA[<br/><br/><a href="https://jvlian.uber.space/mensadd-privacy-policy.html">Datenschutzerklärung</a>]]></string>
     <string name="content_share">Teilen</string>
     <string name="content_share_hungry">#Hunger</string>
     <string name="img_load_no_connection">Bild konnte wegen fehlender Internetverbindung nicht geladen werden.</string>

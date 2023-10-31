@@ -3,7 +3,6 @@ package com.pasta.mensadd;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.pasta.mensadd.domain.balanceentry.BalanceEntry;
 import com.pasta.mensadd.features.balancecheck.BalanceCheckFragment;
 import com.pasta.mensadd.features.balancehistory.BalanceHistoryFragment;
 import com.pasta.mensadd.features.canteenlist.CanteenListFragment;

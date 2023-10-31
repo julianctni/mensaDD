@@ -88,8 +88,6 @@ public class CanteenListFragment extends Fragment implements View.OnClickListene
     void showLatestUpdatesCard() {
         if (mPackageInfo != null && mPreferenceService.getBooleanPreference(PreferenceService.SHOW_LATEST_UPDATES + mPackageInfo.versionName, true)) {
             mLatestUpdatesCard.setVisibility(View.VISIBLE);
-            //mPreferenceService.removePreference("pref_show_tut_" + (mPackageInfo.versionCode - 1));
-            //mPreferenceService.removePreference(PreferenceService.SHOW_LATEST_UPDATES + (mPackageInfo.versionCode - 1));
         }
     }
 

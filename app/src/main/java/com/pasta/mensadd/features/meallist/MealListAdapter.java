@@ -5,12 +5,10 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,9 +70,9 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
                     o.getPrice().equals(n.getPrice());
         }
     };
-    private Context mContext;
-    private PreferenceService mPreferenceService;
-    private SparseBooleanArray mExpandStates = new SparseBooleanArray();
+    private final Context mContext;
+    private final PreferenceService mPreferenceService;
+    private final SparseBooleanArray mExpandStates = new SparseBooleanArray();
     private long mLastUpdate;
 
     public MealListAdapter(Context context) {
@@ -85,22 +83,13 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
 
     @NotNull
     @Override
-    public MealViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        int layoutId;
-        switch(viewType) {
-            case TYPE_LAST_UPDATE:
-                layoutId = R.layout.item_meal_list_last;
-                break;
-            case TYPE_MEAL:
-                layoutId = R.layout.item_meal_list;
-                break;
-            case TYPE_NO_MEALS:
-                layoutId = R.layout.item_meal_list_no_food;
-                break;
-            default:
-                layoutId = TYPE_MEAL;
-        }
-        //int layoutId = viewType == TYPE_LAST_UPDATE ? R.layout.item_meal_list_last : R.layout.item_meal_list;
+    public MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        int layoutId = switch (viewType) {
+            case TYPE_LAST_UPDATE -> R.layout.item_meal_list_last;
+            case TYPE_MEAL -> R.layout.item_meal_list;
+            case TYPE_NO_MEALS -> R.layout.item_meal_list_no_food;
+            default -> TYPE_MEAL;
+        };
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 layoutId, parent, false);
         return new MealViewHolder(v);
@@ -108,7 +97,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (getCurrentList().get(0).getId() == Meal.EMPTY_MEAL) {
+        if (getCurrentList().get(0).getId().equals(Meal.EMPTY_MEAL)) {
             return TYPE_NO_MEALS;
         } else if (position == getCurrentList().size() - 1) {
             return TYPE_LAST_UPDATE;
@@ -120,7 +109,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
     @Override
     public void onBindViewHolder(@NonNull MealListAdapter.MealViewHolder holder, int position) {
         Meal item = getItem(position);
-        if (item.getId() != Meal.EMPTY_MEAL) {
+        if (!item.getId().equals(Meal.EMPTY_MEAL)) {
             holder.mName.setText(item.getName());
             holder.mPrice.setText(item.getPrice());
             if (item.getDetails().isEmpty()) {
@@ -215,7 +204,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
         private FloatingActionButton mShareButton;
         private ImageView mMealImage;
         private ProgressBar mMealImageProgress;
-        private TextView mLastUpdate;
+        private final TextView mLastUpdate;
 
         private MealViewHolder(View itemView) {
             super(itemView);
@@ -248,7 +237,7 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
 
         @SuppressLint("SetWorldReadable")
         private void shareMeal() {
-            Meal meal = getItem(getAdapterPosition());
+            Meal meal = getItem(getBindingAdapterPosition());
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             String shareText = meal.getName() + "\n" + meal.getPrice() + "\n#"
@@ -263,26 +252,23 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
             if (shareImagePref && meal.getImgLink().length() > 1) {
                 try {
                     String filename = Math.abs(meal.getName().hashCode()) + ".jpeg";
-                    if (mContext != null) {
-                        File file = new File(mContext.getFilesDir(), filename);
-                        FileOutputStream fOut = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                        fOut.flush();
-                        fOut.close();
-                        //file.setReadable(true, false);
-                        Uri fileUri = FileProvider.getUriForFile(mContext, "com.pasta.mensadd.fileprovider", file);
-                        shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-                        shareIntent.setType("image/jpeg");
-                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    }
+                    File file = new File(mContext.getFilesDir(), filename);
+                    FileOutputStream fOut = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                    fOut.flush();
+                    fOut.close();
+                    //file.setReadable(true, false);
+                    Uri fileUri = FileProvider.getUriForFile(mContext, "com.pasta.mensadd.fileprovider", file);
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                    shareIntent.setType("image/jpeg");
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
                 shareIntent.setType("text/plain");
             }
-            if (mContext != null)
-                mContext.startActivity(Intent.createChooser(shareIntent, mContext.getString(R.string.content_share)));
+            mContext.startActivity(Intent.createChooser(shareIntent, mContext.getString(R.string.content_share)));
         }
 
         @Override
@@ -292,9 +278,10 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
             } else {
                 mMealImage.getLayoutParams().width = mHeaderLayout.getMeasuredWidth();
                 if (mMealDetails.getVisibility() == View.GONE) {
-                    if (mContext != null)
+                    if (mContext != null) {
                         mMealImageStatus.setText(mContext.getText(R.string.meals_loading_image));
-                    String url = getItem(getAdapterPosition()).getImgLink();
+                    }
+                    String url = getItem(getBindingAdapterPosition()).getImgLink();
                     if (url != null) {
                         expandLayout(mMealDetails);
                         mMealImageStatus.setText(mContext.getText(R.string.meals_loading_image));
@@ -322,9 +309,9 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
                         mMealImageStatus.setVisibility(View.VISIBLE);
                         expandLayout(mMealDetails);
                     }
-                    mExpandStates.put(getAdapterPosition(), true);
+                    mExpandStates.put(getBindingAdapterPosition(), true);
                 } else {
-                    mExpandStates.put(getAdapterPosition(), false);
+                    mExpandStates.put(getBindingAdapterPosition(), false);
                     collapseLayout(mMealDetails);
                 }
             }
@@ -341,11 +328,11 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
             mAnimator.setDuration(200);
             mAnimator.addListener(new Animator.AnimatorListener() {
                 @Override
-                public void onAnimationStart(Animator animation) {
+                public void onAnimationStart(@NonNull Animator animation) {
                 }
 
                 @Override
-                public void onAnimationEnd(Animator animation) {
+                public void onAnimationEnd(@NonNull Animator animation) {
                     ScaleAnimation showAnim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                     showAnim.setDuration(180);
                     if (mShareButton.getVisibility() == View.GONE) {
@@ -355,11 +342,11 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
                 }
 
                 @Override
-                public void onAnimationCancel(Animator animation) {
+                public void onAnimationCancel(@NonNull Animator animation) {
                 }
 
                 @Override
-                public void onAnimationRepeat(Animator animation) {
+                public void onAnimationRepeat(@NonNull Animator animation) {
                 }
             });
             mAnimator.start();
@@ -371,24 +358,24 @@ public class MealListAdapter extends ListAdapter<Meal, MealListAdapter.MealViewH
             final ValueAnimator mAnimator = slideAnimator(v, finalHeight, 0);
             mAnimator.addListener(new Animator.AnimatorListener() {
                 @Override
-                public void onAnimationStart(Animator animation) {
+                public void onAnimationStart(@NonNull Animator animation) {
                     ScaleAnimation hideAnim = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                     hideAnim.setDuration(200);
                     mShareButton.startAnimation(hideAnim);
                 }
 
                 @Override
-                public void onAnimationEnd(Animator animation) {
+                public void onAnimationEnd(@NonNull Animator animation) {
                     v.setVisibility(View.GONE);
                     mShareButton.setVisibility(View.GONE);
                 }
 
                 @Override
-                public void onAnimationCancel(Animator animation) {
+                public void onAnimationCancel(@NonNull Animator animation) {
                 }
 
                 @Override
-                public void onAnimationRepeat(Animator animation) {
+                public void onAnimationRepeat(@NonNull Animator animation) {
                 }
             });
             mAnimator.setDuration(200);

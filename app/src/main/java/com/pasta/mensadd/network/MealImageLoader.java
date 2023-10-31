@@ -5,7 +5,10 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -21,15 +24,15 @@ public class MealImageLoader {
         Request request = new Request.Builder().url(url).build();
         imageClient.newCall(request).enqueue(new Callback() {
             @Override
-            public void onResponse(Call call, Response response) {
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.isSuccessful()) {
-                    Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                    Bitmap bitmap = BitmapFactory.decodeStream(Objects.requireNonNull(response.body()).byteStream());
                     new Handler(Looper.getMainLooper()).post(() -> callback.imageLoaded(true, bitmap));
                 }
             }
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 // TODO: Add error handling
             }
         });

@@ -14,11 +14,9 @@ import com.pasta.mensadd.features.balancecheck.card.desfire.DesfireException;
 import com.pasta.mensadd.features.balancecheck.card.desfire.DesfireProtocol;
 import com.pasta.mensadd.features.balancecheck.cardreader.Readers;
 import com.pasta.mensadd.features.balancecheck.cardreader.ValueData;
-import com.pasta.mensadd.domain.balanceentry.BalanceEntry;
 import com.pasta.mensadd.MainActivity;
 
 import java.io.IOException;
-import java.util.Date;
 
 public class BalanceCheckService {
 
@@ -59,7 +57,7 @@ public class BalanceCheckService {
 
     public void setUpCardCheck(MainActivity mainActivity) {
         PendingIntent mPendingIntent = PendingIntent.getActivity(mainActivity, 0,
-                new Intent(mainActivity, mainActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                new Intent(mainActivity, mainActivity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
         IntentFilter tech = new IntentFilter(
                 NfcAdapter.ACTION_TECH_DISCOVERED);
         IntentFilter[] mFilters = new IntentFilter[]{tech,};

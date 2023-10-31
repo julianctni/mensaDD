@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import static com.pasta.mensadd.domain.ApiRepository.FETCH_ERROR;
 import static com.pasta.mensadd.features.meallist.MealsViewModel.ARGS_KEY_CANTEEN_ID;
@@ -62,11 +63,6 @@ public class MealWeekFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_meal_week, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -119,7 +115,7 @@ public class MealWeekFragment extends Fragment {
             int iconId = canteen.isFavorite() ? R.drawable.ic_baseline_favorite_24 : R.drawable.ic_baseline_favorite_border_24;
             int colorId = canteen.isFavorite() ? R.color.pink_dark : R.color.white;
             mFavMenuItem.setIcon(iconId);
-            mFavMenuItem.getIcon().setColorFilter(ContextCompat.getColor(requireContext(), colorId), PorterDuff.Mode.SRC_IN);
+            Objects.requireNonNull(mFavMenuItem.getIcon()).setColorFilter(ContextCompat.getColor(requireContext(), colorId), PorterDuff.Mode.SRC_IN);
             if (mFavoriteClicked) {
                 View favButton = mToolbar.findViewById(R.id.set_canteen_favorite);
                 favButton.startAnimation(Utils.getFavoriteScaleOutAnimation(favButton));

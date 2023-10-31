@@ -7,8 +7,8 @@ import androidx.preference.PreferenceManager;
 
 public class PreferenceService {
 
-    private SharedPreferences mSharedPreferences;
-    private Context mContext;
+    private final SharedPreferences mSharedPreferences;
+    private final Context mContext;
 
     private static final String LAST_CANTEEN_UPDATE = "last_canteen_update";
     private static final String BACON_FEATURE = "pref_bacon";

@@ -1,60 +1,58 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 android {
-    compileSdkVersion 30
+    namespace "com.pasta.mensadd"
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.pasta.mensadd"
         minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 32
+        targetSdkVersion 34
+        versionCode 33
         versionName "4.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
-            //shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            //ndk {
-            //    debugSymbolLevel 'FULL'
-            //}
         }
     }
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 17
+        targetCompatibility = 17
     }
 
 }
 
-repositories {
-    mavenCentral()
-    google()
-}
-
 dependencies {
-    def room_version = "2.2.6"
-    def archLifecycleVersion = '2.2.0'
+    def room_version = '2.6.0'
+    def lifecycle_version = '2.6.2'
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
-    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
-    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.6.1'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.9.0'
     implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'org.apache.commons:commons-lang3:3.4'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'org.apache.commons:commons-lang3:3.13.0'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
     implementation 'it.sephiroth.android.library.bottomnavigation:bottom-navigation:3.0.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0';
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0';
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 }
